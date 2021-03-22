@@ -125,6 +125,7 @@ font-size: 23px;
 }
 
 #title{
+  padding-top: 20px;
   color: black;
   font-family: 'Ubuntu', sans-serif;
   font-weight: bold;
