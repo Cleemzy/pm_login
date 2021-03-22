@@ -1,7 +1,7 @@
 <div id="login" class="container">
   <p id="title" align="center">MGBI/ MONITORING</p>
    <p class="sign" align="center">Connexion</p>
-   <form action="https://www.youtube.com/watch?v=9HaB4cVSNnw" class="form1">
+   <form action="/rights" class="form1">
      <input class="un" type="text" align="center" placeholder="Utilisateur">
      <input class="pass" type="password" align="center" placeholder="Mot de passe">
      <button class="submit" align="center">Se connecter</button>

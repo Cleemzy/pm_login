@@ -1,0 +1,29 @@
+<div class="container">
+  <h1>Droits</h1>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Titre du droit/autorisation</th>
+
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <%= for right <- @rights do %>
+      <tr>
+        <td><%= right.title %></td>
+
+        <td>
+          <span><%= link "Afficher", to: Routes.right_path(@conn, :show, right) %></span>
+          <!-- <span><%= link "Edit", to: Routes.right_path(@conn, :edit, right) %></span> -->
+          <span><%= link "Supprimer", to: Routes.right_path(@conn, :delete, right), method: :delete, data: [confirm: "Are you sure?"] %></span>
+        </td>
+      </tr>
+      <% end %>
+    </tbody>
+  </table>
+
+  <span><%= link "Ajouter droit", to: Routes.right_path(@conn, :new) %></span>
+  <span><%= link "Droits", to: Routes.right_path(@conn, :index) %></span>
+</div>

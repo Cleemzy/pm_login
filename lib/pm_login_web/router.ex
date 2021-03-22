@@ -16,6 +16,8 @@ defmodule PmLoginWeb.Router do
   scope "/", PmLoginWeb do
     pipe_through :browser
 
+    resources "/rights", RightController
+
     get "/", PageController, :index
   end
 

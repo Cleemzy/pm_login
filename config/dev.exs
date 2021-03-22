@@ -4,7 +4,7 @@ use Mix.Config
 config :pm_login, PmLogin.Repo,
   username: "postgres",
   password: "postgres",
-  database: "users",
+  database: "pm_users",
   hostname: "localhost",
   show_sensitive_data_on_connection_error: true,
   pool_size: 10
