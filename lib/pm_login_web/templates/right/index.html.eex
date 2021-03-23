@@ -1,6 +1,7 @@
 <div class="container">
   <h1>Droits</h1>
-
+  <%= droits = is_list @rights %>
+  <p>droits:</p>
   <table>
     <thead>
       <tr>

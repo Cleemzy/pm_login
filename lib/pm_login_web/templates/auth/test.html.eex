@@ -1,5 +1,26 @@
-<p>Test d'authentification</p>
+<p>Utilisateur:</p>
 <p><%= @_csrf_token %></p>
-<p><%= @username %></p>
-<p><%= @password %></p>
+<p>username: <%= @user.username %></p>
+<p>password: <%= @user.password %></p>
 <%= my_var = :crypto.hash(:sha256, "popo") %>
+
+
+<table>
+  <thead>
+    <tr>
+      <th>Liste des users en tableau</th>
+    </tr>
+  </thead>
+  <tbody>
+    <%= for user <- @users do %>
+    <tr>
+      <td><%= user.username %></td>
+
+      <td><%= :crypto.hash(:sha256, user.password) %></td>
+    </tr>
+    <% end %>
+  </tbody>
+</table>
+
+
+<p>Check if function returns bool: <%= %></p>
