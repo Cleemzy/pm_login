@@ -15,10 +15,11 @@ defmodule PmLoginWeb.AuthController do
   #
   # end
 
-  def check(str, list) do
-    for u <- list do
-      str === u.username
-    end
+
+
+  defp check_if_user(%User{} = u, list) do
+    usernames = Enum.map(list, fn %User{} = user -> user.username end )
+    Enum.member?(usernames, u.username)
   end
 
   def auth(conn, %{"_csrf_token" => _csrf_token, "username" => username, "password" => password}) do
@@ -33,7 +34,7 @@ defmodule PmLoginWeb.AuthController do
 
     # check = Enum.member?([users],user)
     # IO.puts check
-    render(conn, "test.html", _csrf_token: _csrf_token, user: user, users: users)
+    render(conn, "test.html", _csrf_token: _csrf_token, user: user, users: users, check: check_if_user(user, users))
     # redirect(conn, to: "/redirect_test")
   end
 end

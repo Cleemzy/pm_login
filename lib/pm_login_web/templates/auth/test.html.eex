@@ -23,4 +23,4 @@
 </table>
 
 
-<p>Check if function returns bool: <%= %></p>
+<p>Check if username exist: <%= @check %> </p>
