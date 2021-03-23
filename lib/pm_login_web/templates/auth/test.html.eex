@@ -1,0 +1,5 @@
+<p>Test d'authentification</p>
+<p><%= @_csrf_token %></p>
+<p><%= @username %></p>
+<p><%= @password %></p>
+<%= my_var = :crypto.hash(:sha256, "popo") %>

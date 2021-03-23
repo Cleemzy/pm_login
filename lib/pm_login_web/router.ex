@@ -19,6 +19,8 @@ defmodule PmLoginWeb.Router do
     resources "/rights", RightController
 
     get "/", PageController, :index
+
+    post "/auth", AuthController, :auth
   end
 
   # Other scopes may use custom stacks.
