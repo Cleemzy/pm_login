@@ -6,4 +6,6 @@
      <input class="pass" type="password" name="password" align="center" placeholder="Mot de passe">
      <input type="hidden" name="_csrf_token" value="<%= Plug.CSRFProtection.get_csrf_token() %>">
      <button class="submit" align="center">Se connecter</button>
+   </form>
+   <a id="signup" href="<%= Routes.user_path(@conn, :new) %>">Inscription</a>
    </div>

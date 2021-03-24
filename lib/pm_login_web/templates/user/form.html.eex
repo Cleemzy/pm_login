@@ -1,0 +1,29 @@
+<%= form_for @changeset, @action, fn f -> %>
+  <%= if @changeset.action do %>
+    <div class="alert alert-danger">
+      <p>Oops, something went wrong! Please check the errors below.</p>
+    </div>
+  <% end %>
+
+
+  <%= label f, "Nom d'utilisateur" %>
+  <%= text_input f, :username, class: "un" %>
+  <%= error_tag f, :username %>
+
+  <%= label f, :email %>
+  <%= email_input f, :email, class: "un" %>
+  <%= error_tag f, :email %>
+
+  <%= label f, "Mot de passe" %>
+  <%= password_input f, :password, class: "pass" %>
+  <%= error_tag f, :password %>
+
+  <%= label f, "Confirmer mot de passe" %>
+  <%= password_input f, :password_confirm, class: "pass" %>
+  <%= error_tag f, :password %>
+
+
+    <%= submit "S'inscrire", class: "submit" %>
+
+
+<% end %>

@@ -24,3 +24,25 @@
 
 
 <p>Check if username exist: <%= @check %> </p>
+
+<p>Session Utilisateur: <%= Plug.Conn.get_session(@conn, :curr_user_uname) %></p>
+
+<span><%= link "Déconnexion", to: Routes.auth_path(@conn, :sign_out) %></span>
+
+
+<table>
+  <thead>
+    <tr>
+      <th>Liste des users récupérés en base</th>
+    </tr>
+  </thead>
+  <tbody>
+    <%= for u <- @user_list do %>
+    <tr>
+      <td><%= u.username %></td>
+
+      <td><%= u.password %></td>
+    </tr>
+    <% end %>
+  </tbody>
+</table>
