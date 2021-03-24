@@ -18,9 +18,7 @@
   <%= password_input f, :password, class: "pass" %>
   <%= error_tag f, :password %>
 
-  <%= label f, "Confirmer mot de passe" %>
-  <%= password_input f, :password_confirm, class: "pass" %>
-  <%= error_tag f, :password %>
+
 
 
     <%= submit "S'inscrire", class: "submit" %>
