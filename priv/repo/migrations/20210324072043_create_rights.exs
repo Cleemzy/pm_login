@@ -8,5 +8,6 @@ defmodule PmLogin.Repo.Migrations.CreateRights do
       timestamps()
     end
 
+    create unique_index(:rights, [:title])
   end
 end

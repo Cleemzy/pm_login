@@ -1,31 +1,25 @@
-<div class="container">
-  <h1>Droits</h1>
-  <%= droits = is_list @rights %>
-  <p>droits:</p>
-  <table>
-    <thead>
-      <tr>
-        <th>Titre du droit/autorisation</th>
+<h1>Droits/ autorisations</h1>
 
-        <th></th>
-      </tr>
-    </thead>
-    <tbody>
-      <%= for right <- @rights do %>
-      <tr>
-        <!-- <td><%= right.id %></td> -->
-        <td><%= right.title %></td>
+<table>
+  <thead>
+    <tr>
+      <th>Titre</th>
 
-        <td>
-          <span><%= link "Afficher", to: Routes.right_path(@conn, :show, right) %></span>
-          <!-- <span><%= link "Edit", to: Routes.right_path(@conn, :edit, right) %></span> -->
-          <span><%= link "Supprimer", to: Routes.right_path(@conn, :delete, right), method: :delete, data: [confirm: "Are you sure?"] %></span>
-        </td>
-      </tr>
-      <% end %>
-    </tbody>
-  </table>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+<%= for right <- @rights do %>
+    <tr>
+      <td><%= right.title %></td>
 
-  <span><%= link "Ajouter droit", to: Routes.right_path(@conn, :new) %></span>
-  <span><%= link "Droits", to: Routes.right_path(@conn, :index) %></span>
-</div>
+      <td>
+        <span><%= link "Afficher", to: Routes.right_path(@conn, :show, right) %></span>
+        <span><%= link "Supprimer", to: Routes.right_path(@conn, :delete, right), method: :delete, data: [confirm: "Are you sure?"] %></span>
+      </td>
+    </tr>
+<% end %>
+  </tbody>
+</table>
+
+<span><%= link "Nouveau droit", to: Routes.right_path(@conn, :new) %></span>
