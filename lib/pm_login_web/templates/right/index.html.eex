@@ -13,6 +13,7 @@
     <tbody>
       <%= for right <- @rights do %>
       <tr>
+        <!-- <td><%= right.id %></td> -->
         <td><%= right.title %></td>
 
         <td>

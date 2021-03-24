@@ -2,7 +2,7 @@
 <p><%= @_csrf_token %></p>
 <p>username: <%= @user.username %></p>
 <p>password: <%= @user.password %></p>
-<%= my_var = :crypto.hash(:sha256, "popo") %>
+<p>Paul has entered good password: <%= @good %></p>
 
 
 <table>
@@ -16,7 +16,7 @@
     <tr>
       <td><%= user.username %></td>
 
-      <td><%= :crypto.hash(:sha256, user.password) %></td>
+      <td><%= Bcrypt.hash_pwd_salt(user.password)%></td>
     </tr>
     <% end %>
   </tbody>
