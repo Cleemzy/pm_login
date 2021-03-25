@@ -11,7 +11,7 @@ defmodule PmLoginWeb.UserController do
 
   def new(conn, _params) do
     changeset = Login.change_user(%User{})
-    render(conn, "new.html", changeset: changeset, layout: {PmLoginWeb.LayoutView, "login_layout.html"})
+    render(conn, "new.html", changeset: changeset, layout: {PmLoginWeb.LayoutView, "register_layout.html"})
   end
 
   def create(conn, %{"user" => user_params}) do
@@ -22,7 +22,7 @@ defmodule PmLoginWeb.UserController do
         |> redirect(to: Routes.user_path(conn, :show, user))
 
       {:error, %Ecto.Changeset{} = changeset} ->
-        render(conn, "new.html", changeset: changeset, layout: {PmLoginWeb.LayoutView, "login_layout.html"})
+        render(conn, "new.html", changeset: changeset, layout: {PmLoginWeb.LayoutView, "register_layout.html"})
     end
   end
 

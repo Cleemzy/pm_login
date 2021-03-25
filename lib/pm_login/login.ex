@@ -151,6 +151,11 @@ defmodule PmLogin.Login do
     |> Repo.insert()
   end
 
+  def log_user(attrs \\ %{}) do
+    %User{}
+    |> User.authenticate(attrs)
+  end
+
   @doc """
   Updates a user.
 

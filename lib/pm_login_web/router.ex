@@ -19,10 +19,12 @@ defmodule PmLoginWeb.Router do
     resources "/rights", RightController
 
     resources "/users", UserController
-    
+
     get "/", PageController, :index
 
     post "/auth", AuthController, :auth
+
+    post "/test_auth", AuthController, :test_auth
 
     get "/signout", AuthController, :sign_out
   end
