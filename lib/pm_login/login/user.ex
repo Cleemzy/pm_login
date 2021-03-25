@@ -66,6 +66,4 @@ defmodule PmLogin.Login.User do
       _ -> changeset
     end
   end
-
 end
-#contribution on master
