@@ -3,6 +3,11 @@
 <ul>
 
   <li>
+    <strong>Inspect:</strong>
+    <%= inspect @user %>
+  </li>
+
+  <li>
     <strong>Username:</strong>
     <%= @user.username %>
   </li>
