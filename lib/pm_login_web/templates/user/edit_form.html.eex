@@ -1,0 +1,23 @@
+<%= form_for @changeset, @action, fn f -> %>
+  <%= if @changeset.action do %>
+    <div class="alert alert-danger">
+      <p>Vérifiez vos informations ci-dessous</p>
+    </div>
+  <% end %>
+
+  <%= label f, "Nom d'utilisateur" %>
+  <%= text_input f, :username, class: "un", id: "iu" %>
+  <%= error_tag f, :req_uname_error %>
+  <%= error_tag f, :username %>
+
+  <%= inspect @str_rights %>
+  <%= inspect @user %>
+  <%= for right <- @rights do %>
+  <p><%= right.id %></p>
+  <% end %>
+  <%= label f, "Droit" %>
+  <%= select f, :right_id, @str_rights , selected: [@user.right_id] %>
+
+  <%= submit "Confirmer", class: "submit", id: "signin" %>
+
+<% end %>
