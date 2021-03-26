@@ -3,6 +3,7 @@ defmodule PmLoginWeb.UserController do
 
   alias PmLogin.Login
   alias PmLogin.Login.User
+  alias PmLogin.Login.Right
   alias PmLogin.Login.Auth
 
   def index(conn, _params) do
@@ -36,7 +37,9 @@ defmodule PmLoginWeb.UserController do
   def edit(conn, %{"id" => id}) do
     user = Login.get_user!(id)
     changeset = Login.change_user(user)
-    render(conn, "edit.html", user: user, changeset: changeset)
+    rights = Login.list_rights
+    str_rights = Enum.map(rights, fn %Right{} = r -> {String.to_atom(r.title), r.id}  end)
+    render(conn, "edit.html", user: user, changeset: changeset, rights: rights, str_rights: str_rights)
   end
 
   def update(conn, %{"id" => id, "user" => user_params}) do

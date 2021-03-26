@@ -12,6 +12,6 @@ defmodule PmLogin.Repo.Migrations.CreateAuthView do
    end
 
    def down do
-     execute "DROP VIEW authorization;"
+     execute "DROP VIEW auth;"
    end
 end
