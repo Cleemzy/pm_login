@@ -170,7 +170,7 @@ defmodule PmLogin.Login do
   """
   def update_user(%User{} = user, attrs) do
     user
-    |> User.changeset(attrs)
+    |> User.right_changeset(attrs)
     |> Repo.update()
   end
 
@@ -204,7 +204,7 @@ defmodule PmLogin.Login do
   end
 
   alias PmLogin.Login.Auth
-  
+
   def list_all_auth do
     Repo.all(Auth)
   end

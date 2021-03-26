@@ -32,8 +32,8 @@ defmodule PmLogin.Login.User do
   def authenticate(user, attrs) do
     user
     |> cast(attrs, [:username, :password])
-    |> validate_required_username
-    |> validate_required_password
+    |> validate_required(:username, message: "Nom d'utilisateur ne doit pas être vide")
+    |> validate_required(:password, message: "Mot de passe ne peut pas être vide")
     |> check_if_user
     |> check_password
     |> apply_action(:login)
@@ -58,11 +58,11 @@ defmodule PmLogin.Login.User do
 
   defp check_password(changeset) do
     user_name = get_field(changeset, :username)
+    pwd = get_field(changeset, :password)
     list = Login.list_users
     user = Enum.find(list, fn %User{} = u -> u.username === user_name end )
 
-      if user != nil do
-        pwd = get_field(changeset, :password)
+      if user != nil and pwd != nil do
         str_pwd = to_string(pwd)
         checked = Bcrypt.verify_pass(str_pwd, user.password)
           case checked do
@@ -75,6 +75,11 @@ defmodule PmLogin.Login.User do
 
     end
 
+  def right_changeset(user, attrs) do
+    user
+    |> cast(attrs, [:right_id])
+  end
+  
   def changeset(user, attrs) do
     user
     |> cast(attrs, [:username, :email, :password])

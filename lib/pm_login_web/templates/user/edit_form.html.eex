@@ -5,19 +5,13 @@
     </div>
   <% end %>
 
-  <%= label f, "Nom d'utilisateur" %>
-  <%= text_input f, :username, class: "un", id: "iu" %>
-  <%= error_tag f, :req_uname_error %>
-  <%= error_tag f, :username %>
-
-  <%= inspect @str_rights %>
-  <%= inspect @user %>
-  <%= for right <- @rights do %>
-  <p><%= right.id %></p>
-  <% end %>
+  <h2><p id="names"><%= @user.username %></p></h2>
+  <h2><p id="names"><%= @user.email %></p></h2>
+<div class="row">
   <%= label f, "Droit" %>
   <%= select f, :right_id, @str_rights , selected: [@user.right_id] %>
-
+</div>
+  <br/>
   <%= submit "Confirmer", class: "submit", id: "signin" %>
 
 <% end %>
