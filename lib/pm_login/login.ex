@@ -202,4 +202,11 @@ defmodule PmLogin.Login do
   def change_user(%User{} = user, attrs \\ %{}) do
     User.changeset(user, attrs)
   end
+
+  alias PmLogin.Login.Auth
+  
+  def list_all_auth do
+    Repo.all(Auth)
+  end
+
 end

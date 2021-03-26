@@ -1,6 +1,5 @@
 defmodule PmLoginWeb.AuthController do
   use PmLoginWeb, :controller
-
   alias PmLogin.Login
   alias PmLogin.Login.User
 
@@ -35,8 +34,9 @@ defmodule PmLoginWeb.AuthController do
         users_list = Login.list_users
         us = Enum.find(users_list, fn %User{} = u -> u.username === user.username end )
         conn
+        |> put_flash(:info, "Bienvenue, "<>user.username<>" !")
         |> put_session(:curr_user_id, us.id)
-        |> render("test.html")
+        |> redirect(to: Routes.user_path(conn, :index))
         # conn
         # |> put_flash(:info, "User created successfully.")
         # |> redirect(to: "/test_auth")
@@ -77,6 +77,7 @@ defmodule PmLoginWeb.AuthController do
   def sign_out(conn, _params) do
     conn
     |> delete_session(:curr_user_id)
+    # |> configure_session(drop: :true)
     |> put_flash(:info, "Vous vous êtes déconnecté.")
     |> redirect(to: Routes.page_path(conn, :index))
   end

@@ -3,10 +3,12 @@ defmodule PmLoginWeb.UserController do
 
   alias PmLogin.Login
   alias PmLogin.Login.User
+  alias PmLogin.Login.Auth
 
   def index(conn, _params) do
-    users = Login.list_users()
-    render(conn, "index.html", users: users)
+    # users = Login.list_users()
+    auths = Login.list_all_auth
+    render(conn, "index.html", users: auths)
   end
 
   def new(conn, _params) do
