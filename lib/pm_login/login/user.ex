@@ -4,6 +4,7 @@ defmodule PmLogin.Login.User do
   alias PmLogin.Login.User
   alias PmLogin.Login
 
+
   schema "users" do
     field :email, :string
     field :password, :string
@@ -24,6 +25,10 @@ defmodule PmLogin.Login.User do
   # end
   #
   @doc false
+  def get_right!(right_id) do
+    Login.get_right!(right_id)
+  end
+
   def authenticate(user, attrs) do
     user
     |> cast(attrs, [:username, :password])
@@ -39,10 +44,16 @@ defmodule PmLogin.Login.User do
     list = Login.list_users
     usernames = Enum.map(list, fn %User{} = user -> user.username end )
     is_user = Enum.member?(usernames, username)
-    case is_user do
-      false -> add_error(changeset, :not_user, "Ce nom d'utlisateur n'existe pas")
-      _ -> changeset
+    if username != nil do
+        case is_user do
+          false -> add_error(changeset, :not_user, "Ce nom d'utlisateur n'existe pas")
+          _ -> changeset
+        end
+      else
+        changeset
     end
+
+
   end
 
   defp check_password(changeset) do
