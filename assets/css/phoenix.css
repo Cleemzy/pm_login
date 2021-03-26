@@ -107,6 +107,10 @@ background-color: #F3EBF6;
 font-family: 'Ubuntu', sans-serif;
 }
 
+.names{
+  font-family: 'Ubuntu', sans-serif !important;
+}
+
 #inscription label{
   text-align: left;
 }
@@ -161,6 +165,13 @@ font-size: 23px;
 #signup{
   text-align: center;
   display:block;
+}
+
+#names{
+  color: black;
+  font-family: 'Ubuntu', sans-serif;
+  font-weight: bold;
+  font-size: 25px;
 }
 
 #title{

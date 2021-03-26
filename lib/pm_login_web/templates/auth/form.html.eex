@@ -6,11 +6,13 @@
   <% end %>
 
   <%= text_input f, :username, class: "un", id: "iu", align: "center", placeholder: "Utilisateur" %>
+  <%= error_tag f, :username %>
   <%= error_tag f, :req_uname_error %>
   <%= error_tag f, :not_user %>
 
 
   <%= password_input f, :password, class: "pass", align: "center", placeholder: "Mot de passe" %>
+  <%= error_tag f, :password %>
   <%= error_tag f, :req_pass_error %>
   <%= error_tag f, :wrong_pass %>
 
