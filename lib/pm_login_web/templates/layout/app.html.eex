@@ -33,6 +33,9 @@
     </main>
   </body>
   <footer id="foot" class="container-fluid">
-    <p>copyright @Cleemzy / Project monitoring</p>
+    <div id="footcont" class="container">
+        <p>copyright @Cleemzy / Project monitoring</p>
+    </div>
+
   </footer>
 </html>
