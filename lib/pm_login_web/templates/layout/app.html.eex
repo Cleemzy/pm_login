@@ -32,4 +32,7 @@
       <%= @inner_content %>
     </main>
   </body>
+  <footer id="foot" class="container-fluid">
+    <p>copyright @Cleemzy / Project monitoring</p>
+  </footer>
 </html>
