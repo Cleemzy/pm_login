@@ -20,8 +20,8 @@
         <td><%= user.title %></td>
 
         <td>
-          <span><%= link "Afficher", to: Routes.user_path(@conn, :show, user) %></span>
-          <span><%= link "Modifier", to: Routes.user_path(@conn, :edit, user) %></span>
+          <!-- <span><%= link "Afficher", to: Routes.user_path(@conn, :show, user) %></span> -->
+          <span><%= link "Afficher", to: Routes.user_path(@conn, :edit, user) %></span>
           <span><%= link "Ejécter", to: Routes.user_path(@conn, :delete, user), method: :delete, data: [confirm: "Are you sure?"] %></span>
         </td>
       </tr>
