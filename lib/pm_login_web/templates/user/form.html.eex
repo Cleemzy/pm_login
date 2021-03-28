@@ -4,7 +4,6 @@
       <p>Vérifiez vos informations ci-dessous</p>
     </div>
   <% end %>
-  
   <%= label f, "Nom d'utilisateur" %>
   <%= text_input f, :username, class: "un", id: "iu" %>
   <%= error_tag f, :req_uname_error %>

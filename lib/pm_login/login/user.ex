@@ -79,7 +79,7 @@ defmodule PmLogin.Login.User do
     user
     |> cast(attrs, [:right_id])
   end
-  
+
   def changeset(user, attrs) do
     user
     |> cast(attrs, [:username, :email, :password])
@@ -92,6 +92,7 @@ defmodule PmLogin.Login.User do
     |> validate_confirmation(:email, message: "Ne correspond pas à l'adresse mail donnée")
     |> validate_confirmation(:password, message: "Les mots de passe ne correspondent pas")
     |> crypt_pass
+    |> put_default_right
   end
 
   defp apply_log_action(changeset) do
@@ -104,6 +105,10 @@ defmodule PmLogin.Login.User do
         true -> {:ok, changeset.changes}
         false -> {:error, changeset}
       end
+  end
+
+  defp put_default_right(changeset) do
+      put_change(changeset, :right_id, 4)
   end
 
   defp crypt_pass(changeset) do
