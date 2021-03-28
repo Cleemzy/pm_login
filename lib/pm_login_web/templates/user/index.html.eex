@@ -1,9 +1,11 @@
-<div class="container containers">
+
+  <!-- <div class="container containers"> -->
   <h1>Liste des utilisateurs</h1>
 
   <table>
     <thead>
       <tr>
+        <th></th>
         <th>Nom d'utilisateur</th>
         <th>Email</th>
         <th>Droit</th>
@@ -15,6 +17,7 @@
       <%= for user <- @users do %>
       <tr>
 
+        <td><img class="profile-pic-mini" src="<%= Routes.static_path(@conn, "/images/default_profile_pic.png") %>"/></td>
         <td><%= user.username %></td>
         <td><%= user.email %></td>
         <td><%= user.title %></td>
@@ -28,7 +31,4 @@
       <% end %>
     </tbody>
   </table>
-
-  <%= link "Se déconnecter", to: Routes.auth_path(@conn, :sign_out) %>
-
-</div>
+<span><%= link "Se déconnecter", to: Routes.auth_path(@conn, :sign_out) %></span>
