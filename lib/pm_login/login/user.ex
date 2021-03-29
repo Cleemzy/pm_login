@@ -93,6 +93,7 @@ defmodule PmLogin.Login.User do
     |> validate_confirmation(:password, message: "Les mots de passe ne correspondent pas")
     |> crypt_pass
     |> put_default_right
+    |> put_default_profile_picture
   end
 
   defp apply_log_action(changeset) do
@@ -109,6 +110,10 @@ defmodule PmLogin.Login.User do
 
   defp put_default_right(changeset) do
       put_change(changeset, :right_id, 4)
+  end
+
+  defp put_default_profile_picture(changeset) do
+      put_change(changeset, :profile_picture, "images/default_profile_pic.png")
   end
 
   defp crypt_pass(changeset) do

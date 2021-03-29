@@ -1,5 +1,5 @@
 
-  <!-- <div class="container containers"> -->
+
   <h1>Liste des utilisateurs</h1>
 
   <table>
@@ -8,7 +8,7 @@
         <th></th>
         <th>Nom d'utilisateur</th>
         <th>Email</th>
-        <th>Droit</th>
+        <th>Statut</th>
 
         <th></th>
       </tr>
@@ -17,7 +17,12 @@
       <%= for user <- @users do %>
       <tr>
 
-        <td><img class="profile-pic-mini" src="<%= Routes.static_path(@conn, "/images/default_profile_pic.png") %>"/></td>
+        <td style="width: 50px;">
+          <div class="col">
+            <img class="profile-pic-mini" src="<%= Routes.static_path(@conn, "/#{user.profile_picture}") %>"/>
+          </div>
+        </td>
+
         <td><%= user.username %></td>
         <td><%= user.email %></td>
         <td><%= user.title %></td>
@@ -25,10 +30,12 @@
         <td>
           <!-- <span><%= link "Afficher", to: Routes.user_path(@conn, :show, user) %></span> -->
           <span><%= link "Afficher", to: Routes.user_path(@conn, :edit, user) %></span>
-          <span><%= link "Ejécter", to: Routes.user_path(@conn, :delete, user), method: :delete, data: [confirm: "Are you sure?"] %></span>
+          <span><%= link "Ejécter", to: Routes.user_path(@conn, :delete, user), method: :delete, data: [confirm: "Are you sure?"], class: "delete" %></span>
         </td>
       </tr>
       <% end %>
     </tbody>
   </table>
+
+
 <span><%= link "Se déconnecter", to: Routes.auth_path(@conn, :sign_out) %></span>

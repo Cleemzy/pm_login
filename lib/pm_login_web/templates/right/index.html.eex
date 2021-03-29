@@ -3,6 +3,7 @@
 <table>
   <thead>
     <tr>
+
       <th>Titre</th>
 
       <th></th>
@@ -11,6 +12,8 @@
   <tbody>
 <%= for right <- @rights do %>
     <tr>
+
+
       <td><%= right.title %></td>
 
       <td>
