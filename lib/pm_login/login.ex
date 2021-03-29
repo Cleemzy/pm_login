@@ -174,6 +174,12 @@ defmodule PmLogin.Login do
     |> Repo.update()
   end
 
+  def update_profile(%User{} = user, attrs) do
+    user
+    |> User.profile_changeset(attrs)
+    |> Repo.update()
+  end
+
   @doc """
   Deletes a user.
 
@@ -208,5 +214,8 @@ defmodule PmLogin.Login do
   def list_all_auth do
     Repo.all(Auth)
   end
+
+  def get_auth!(id), do: Repo.get_by(Auth, id: "#{id}")
+
 
 end

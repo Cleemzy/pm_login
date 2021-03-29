@@ -20,6 +20,10 @@ defmodule PmLoginWeb.Router do
 
     resources "/users", UserController
 
+    get "/users/:id/edit_profile", UserController, :edit_profile
+
+    put "/users/:id", UserController, :update_profile
+
     get "/", PageController, :index
 
     post "/auth", AuthController, :auth

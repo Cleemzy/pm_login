@@ -31,6 +31,7 @@
           <!-- <span><%= link "Afficher", to: Routes.user_path(@conn, :show, user) %></span> -->
           <span><%= link "Afficher", to: Routes.user_path(@conn, :edit, user) %></span>
           <span><%= link "Ejécter", to: Routes.user_path(@conn, :delete, user), method: :delete, data: [confirm: "Are you sure?"], class: "delete" %></span>
+          <span><%= link "#{user.id}", to: Routes.user_path(@conn, :show, user)%></span>
         </td>
       </tr>
       <% end %>

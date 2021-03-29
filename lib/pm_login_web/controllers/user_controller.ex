@@ -30,8 +30,15 @@ defmodule PmLoginWeb.UserController do
   end
 
   def show(conn, %{"id" => id}) do
-    user = Login.get_user!(id)
+    # user = Login.get_user!(id)
+    user = Login.get_auth!(id)
     render(conn, "show.html", user: user)
+  end
+
+  def edit_profile(conn, %{"id" => id}) do
+    user = Login.get_user!(id)
+    changeset = Login.change_user(user)
+    render(conn, "edit_profile.html", user: user, changeset: changeset)
   end
 
   def edit(conn, %{"id" => id}) do
@@ -40,6 +47,20 @@ defmodule PmLoginWeb.UserController do
     rights = Login.list_rights
     str_rights = Enum.map(rights, fn %Right{} = r -> {String.to_atom(r.title), r.id}  end)
     render(conn, "edit.html", user: user, changeset: changeset, rights: rights, str_rights: str_rights)
+  end
+
+  def update_profile(conn, %{"id" => id, "user" => user_params}) do
+    user = Login.get_user!(id)
+
+    case Login.update_profile(user, user_params) do
+      {:ok, user} ->
+        conn
+        |> put_flash(:info, "Profile mise à jour.")
+        |> redirect(to: Routes.user_path(conn, :show, user))
+
+      {:error, %Ecto.Changeset{} = changeset} ->
+        render(conn, "edit_profile.html", user: user, changeset: changeset)
+    end
   end
 
   def update(conn, %{"id" => id, "user" => user_params}) do

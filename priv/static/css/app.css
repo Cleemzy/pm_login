@@ -307,12 +307,24 @@ justify-content: center;
   border-radius: 60%;
 }
 
+.profile-pic-pro{
+  width: 75%;
+  height: 85%;
+  margin-top: 20px;
+  border-style: groove;
+  border-radius: 60%;
+}
+
 #right-row{
   margin-top: 5%;
 }
 
 #right-row{
   margin-left: 5%;
+}
+
+.sublink{
+  font-size: 20px;
 }
 
 .delete{

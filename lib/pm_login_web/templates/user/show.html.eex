@@ -1,33 +1,27 @@
-<h1>Show User</h1>
 
-<ul>
+<div class="container profile-data">
 
-  <li>
-    <strong>Inspect:</strong>
-    <%= inspect @user %>
-  </li>
 
-  <li>
-    <strong>Username:</strong>
-    <%= @user.username %>
-  </li>
 
-  <li>
-    <strong>Profile picture:</strong>
-    <%= @user.profile_picture %>
-  </li>
 
-  <li>
-    <strong>Email:</strong>
-    <%= @user.email %>
-  </li>
+<div class="row">
+  <div class="col-6 col60">
+    <h1><%= @user.username %></h1>
+    <h2><p class="subtext"><%= @user.email %></p></h2>
+    <h2><p class="subtext"><%= @user.title %></p></h2>
+  </div>
+  <div id="pic-sqr-prof" class="col-6 col40">
+    <img class="profile-pic-pro" src="<%= Routes.static_path(@conn, "/#{@user.profile_picture}") %>"/>
+  </div>
+</div>
 
-  <li>
-    <strong>Password:</strong>
-    <%= @user.password %>
-  </li>
 
-</ul>
+<br/>
+  <%= link "Modifier informations",to: Routes.user_path(@conn, :edit_profile, @user), class: "submit sublink", id: "signin" %>
 
-<span><%= link "Edit", to: Routes.user_path(@conn, :edit, @user) %></span>
-<span><%= link "Back", to: Routes.user_path(@conn, :index) %></span>
+
+
+
+</div>
+
+<span><%= link "Retour", to: Routes.user_path(@conn, :index) %></span>

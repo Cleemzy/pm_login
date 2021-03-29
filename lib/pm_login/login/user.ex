@@ -75,6 +75,13 @@ defmodule PmLogin.Login.User do
 
     end
 
+  def profile_changeset(user, attrs) do
+    user
+    |> cast(attrs, [:username, :email, :profile_picture])
+    |> unique_constraint(:username, message: "Nom d'utilisateur déjà pris")
+    |> validate_format(:email, ~r/@/, message: "Format d'email non valide, ajoutez '@' par exemple ")
+  end
+
   def right_changeset(user, attrs) do
     user
     |> cast(attrs, [:right_id])
