@@ -53,17 +53,7 @@ defmodule PmLoginWeb.UserController do
     user = Login.get_user!(id)
     upload = user_params["photo"]
 
-    if upload != nil do
-      IO.inspect upload
-      extension = Path.extname(upload.filename)
-      profile_pic_path = "images/#{id}-profile#{extension}"
-      # File.cp(upload.path, Path.absname())
-
-      File.cp(upload.path, "../#{upload.filename}")
-
-    end
-
-    case Login.update_profile(user, user_params, conn) do
+    case Login.update_profile(user, user_params) do
       {:ok, user} ->
         conn
         |> put_flash(:info, "Profile mise à jour.")

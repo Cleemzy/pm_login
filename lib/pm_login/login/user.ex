@@ -78,29 +78,28 @@ defmodule PmLogin.Login.User do
 
 
 
-  def profile_changeset(user, attrs, conn) do
+  def profile_changeset(user, attrs) do
     user
     |> cast(attrs, [:username, :email])
     |> unique_constraint(:username, message: "Nom d'utilisateur déjà pris")
     |> validate_format(:email, ~r/@/, message: "Format d'email non valide, ajoutez '@' par exemple ")
     |> unique_constraint(:email, message: "Adresse email déjà pris")
-    # |> upload_profile_pic(attrs, conn)
+    |> upload_profile_pic(attrs)
   end
 
-  def upload_profile_pic(changeset, attrs, conn) do
-      upload = Map.get(attrs, "photo")
+  def upload_profile_pic(changeset, attrs) do
+      upload = attrs["photo"]
       case upload do
         nil -> changeset
 
         _ ->
         extension = Path.extname(upload.filename)
         username = get_field(changeset, :username)
-        # File.cp(upload.path, "/media/#{user.id}-profile#{extension}")
-        profile_pic_path = "images/#{username}-profile#{extension}"
-        # File.cp(upload.path, Routes.static_path(conn, "/#{profile_pic_path}"))
-        File.cp(upload.path, "/home/matthieu/Pictures")
+        profile_pic_path = "#{username}-profile#{extension}"
+        path_in_db = "images/#{profile_pic_path}"
+        File.cp(upload.path, "assets/static/images/#{profile_pic_path}")
 
-        put_change(changeset, :profile_picture, profile_pic_path)
+        put_change(changeset, :profile_picture, path_in_db )
       end
   end
 
