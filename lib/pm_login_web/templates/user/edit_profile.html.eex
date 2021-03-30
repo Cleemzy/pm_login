@@ -1,4 +1,4 @@
 
-<%= render "edit_form2.html", Map.put(assigns, :action, Routes.user_path(@conn, :update, @user)) %>
+<%= render "edit_form2.html", Map.put(assigns, :action, Routes.user_path(@conn, :update_profile, @user)) %>
 
 <span><%= link "Retour", to: Routes.user_path(@conn, :index) %></span>

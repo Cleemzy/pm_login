@@ -5,7 +5,7 @@
   <table>
     <thead>
       <tr>
-        <th></th>
+        <th style="width: 50px;">Profile</th>
         <th>Nom d'utilisateur</th>
         <th>Email</th>
         <th>Statut</th>
@@ -18,9 +18,7 @@
       <tr>
 
         <td style="width: 50px;">
-          <div class="col">
-            <img class="profile-pic-mini" src="<%= Routes.static_path(@conn, "/#{user.profile_picture}") %>"/>
-          </div>
+            <img class="profile-pic-mini" src="<%= Routes.static_path(@conn, "/#{user.profile_picture}") %>" width="50"/>
         </td>
 
         <td><%= user.username %></td>

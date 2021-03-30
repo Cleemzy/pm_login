@@ -190,6 +190,15 @@ font-size: 23px;
   width:40%;
 }
 
+.profile-pic-edit{
+  width: 80%;
+  height: auto;
+  margin-top: 20px;
+  border-style: groove;
+  border-color: gray;
+  border-radius: 50%;
+}
+
 #pic-sqr{
   text-align: center;
 }
@@ -294,22 +303,22 @@ justify-content: center;
 }
 
 .profile-pic-mini{
-  width: 100% static;
-  height: 100% static;
+  width: auto;
+  height: auto;
   border-style: groove;
   border-radius: 60%;
 }
 .profile-pic{
-  width: 70%;
-  height: 85%;
+  width: 100%;
+  height: auto;
   margin-top: 20px;
   border-style: groove;
   border-radius: 60%;
 }
 
 .profile-pic-pro{
-  width: 75%;
-  height: 85%;
+  width: 100%;
+  height: auto;
   margin-top: 20px;
   border-style: groove;
   border-radius: 60%;

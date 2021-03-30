@@ -3,7 +3,8 @@ defmodule PmLogin.Login.User do
   import Ecto.Changeset
   alias PmLogin.Login.User
   alias PmLogin.Login
-
+  alias Plug.Upload
+  alias PmLoginWeb.Router.Helpers, as: Routes
 
   schema "users" do
     field :email, :string
@@ -75,11 +76,32 @@ defmodule PmLogin.Login.User do
 
     end
 
-  def profile_changeset(user, attrs) do
+
+
+  def profile_changeset(user, attrs, conn) do
     user
-    |> cast(attrs, [:username, :email, :profile_picture])
+    |> cast(attrs, [:username, :email])
     |> unique_constraint(:username, message: "Nom d'utilisateur déjà pris")
     |> validate_format(:email, ~r/@/, message: "Format d'email non valide, ajoutez '@' par exemple ")
+    |> unique_constraint(:email, message: "Adresse email déjà pris")
+    # |> upload_profile_pic(attrs, conn)
+  end
+
+  def upload_profile_pic(changeset, attrs, conn) do
+      upload = Map.get(attrs, "photo")
+      case upload do
+        nil -> changeset
+
+        _ ->
+        extension = Path.extname(upload.filename)
+        username = get_field(changeset, :username)
+        # File.cp(upload.path, "/media/#{user.id}-profile#{extension}")
+        profile_pic_path = "images/#{username}-profile#{extension}"
+        # File.cp(upload.path, Routes.static_path(conn, "/#{profile_pic_path}"))
+        File.cp(upload.path, "/home/matthieu/Pictures")
+
+        put_change(changeset, :profile_picture, profile_pic_path)
+      end
   end
 
   def right_changeset(user, attrs) do

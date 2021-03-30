@@ -1,7 +1,7 @@
-<div class="container profile-data">
+<div class="container profile-data" style="padding-top: 10px;">
 
-
-<%= form_for @changeset, @action, fn f -> %>
+<!-- [as: :user_params, multipart: true] -->
+<%= form_for @changeset, @action, [multipart: true],fn f -> %>
   <%= if @changeset.action do %>
     <div class="alert alert-danger">
       <p>Vérifiez vos informations ci-dessous</p>
@@ -11,25 +11,30 @@
 <div class="row">
   <div class="col-6 col60">
     <h1><%= @user.username %></h1>
+    <%= text_input f, :username %>
+    <%= error_tag f, :username %>
     <h2><p class="subtext"><%= @user.email %></p></h2>
+    <%= text_input f, :email %>
+    <%= error_tag f, :email %>
   </div>
   <div id="pic-sqr" class="col-6 col40">
-    <img class="profile-pic" src="<%= Routes.static_path(@conn, "/#{@user.profile_picture}") %>"/>
+    <img class="profile-pic-edit" src="<%= Routes.static_path(@conn, "/#{@user.profile_picture}") %>"/>
   </div>
 </div>
 
 
 <div id="right-row" class="row">
+
   <div class="col-6 col60">
-    <%= label f, "Droit:" %>
+    <%= label f, "Changer photo de profile:" %>
   </div>
-  <div id="right-select" class="col-6 col40">
-    upload here
+  <div id="right-select" class="col-6 col40" style="margin-right: 5%;">
+   <%= file_input f, :photo, class: "form-control" %>
   </div>
 </div>
 
   <br/>
-  <%= submit "Modifier droit", class: "submit", id: "signin" %>
+  <%= submit "Appliquer modifications", class: "submit", id: "signin" %>
 
 <% end %>
 

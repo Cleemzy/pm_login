@@ -51,8 +51,19 @@ defmodule PmLoginWeb.UserController do
 
   def update_profile(conn, %{"id" => id, "user" => user_params}) do
     user = Login.get_user!(id)
+    upload = user_params["photo"]
 
-    case Login.update_profile(user, user_params) do
+    if upload != nil do
+      IO.inspect upload
+      extension = Path.extname(upload.filename)
+      profile_pic_path = "images/#{id}-profile#{extension}"
+      # File.cp(upload.path, Path.absname())
+
+      File.cp(upload.path, "../#{upload.filename}")
+
+    end
+
+    case Login.update_profile(user, user_params, conn) do
       {:ok, user} ->
         conn
         |> put_flash(:info, "Profile mise à jour.")
@@ -69,7 +80,7 @@ defmodule PmLoginWeb.UserController do
     case Login.update_user(user, user_params) do
       {:ok, user} ->
         conn
-        |> put_flash(:info, "User updated successfully.")
+        |> put_flash(:info, "Profile mise à jour.")
         |> redirect(to: Routes.user_path(conn, :show, user))
 
       {:error, %Ecto.Changeset{} = changeset} ->
@@ -83,6 +94,6 @@ defmodule PmLoginWeb.UserController do
 
     conn
     |> put_flash(:info, "User deleted successfully.")
-    |> redirect(to: Routes.user_path(conn, :index))
+    |> redirect(to: Routes.user_path(conn, :edit))
   end
 end

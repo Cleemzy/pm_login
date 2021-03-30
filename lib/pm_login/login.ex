@@ -174,9 +174,9 @@ defmodule PmLogin.Login do
     |> Repo.update()
   end
 
-  def update_profile(%User{} = user, attrs) do
+  def update_profile(%User{} = user, attrs, conn) do
     user
-    |> User.profile_changeset(attrs)
+    |> User.profile_changeset(attrs, conn)
     |> Repo.update()
   end
 
