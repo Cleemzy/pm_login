@@ -95,7 +95,7 @@ defmodule PmLogin.Login.User do
         _ ->
         extension = Path.extname(upload.filename)
         username = get_field(changeset, :username)
-        profile_pic_path = "#{username}-profile#{extension}"
+        profile_pic_path = "profiles/#{username}-profile#{extension}"
         path_in_db = "images/#{profile_pic_path}"
         File.cp(upload.path, "assets/static/images/#{profile_pic_path}")
 

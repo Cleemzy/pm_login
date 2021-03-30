@@ -21,7 +21,7 @@ defmodule PmLoginWeb.UserController do
     case Login.create_user(user_params) do
       {:ok, user} ->
         conn
-        |> put_flash(:info, "User created successfully.")
+        |> put_flash(:info, "Bienvenue, #{user.username}, vous vous êtes bien inscrit.")
         |> redirect(to: Routes.user_path(conn, :show, user))
 
       {:error, %Ecto.Changeset{} = changeset} ->
@@ -51,12 +51,11 @@ defmodule PmLoginWeb.UserController do
 
   def update_profile(conn, %{"id" => id, "user" => user_params}) do
     user = Login.get_user!(id)
-    upload = user_params["photo"]
 
     case Login.update_profile(user, user_params) do
       {:ok, user} ->
         conn
-        |> put_flash(:info, "Profile mise à jour.")
+        |> put_flash(:info, "Profile mis à jour.")
         |> redirect(to: Routes.user_path(conn, :show, user))
 
       {:error, %Ecto.Changeset{} = changeset} ->
@@ -70,8 +69,8 @@ defmodule PmLoginWeb.UserController do
     case Login.update_user(user, user_params) do
       {:ok, user} ->
         conn
-        |> put_flash(:info, "Profile mise à jour.")
-        |> redirect(to: Routes.user_path(conn, :show, user))
+        |> put_flash(:info, "Profile mis à jour.")
+        |> redirect(to: Routes.user_path(conn, :edit, user))
 
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "edit.html", user: user, changeset: changeset)

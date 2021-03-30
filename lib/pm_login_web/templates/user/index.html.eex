@@ -5,7 +5,7 @@
   <table>
     <thead>
       <tr>
-        <th style="width: 50px;">Profile</th>
+        <th style="width: 50px;"></th>
         <th>Nom d'utilisateur</th>
         <th>Email</th>
         <th>Statut</th>

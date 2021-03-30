@@ -180,6 +180,7 @@ font-size: 23px;
   max-width: 500px;
   padding-left: 5%;
   padding-right: 5%;
+  padding-bottom: 2%;
   /* width: 75%; */
 }
 .col60{
@@ -328,6 +329,7 @@ justify-content: center;
   max-width: 100px;
   max-height: 100px;
   margin-top: 20px;
+  margin-left: 30%;
   border-style: groove;
   border-radius: 60%;
 }
