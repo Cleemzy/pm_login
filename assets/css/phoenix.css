@@ -305,6 +305,8 @@ justify-content: center;
 .profile-pic-mini{
   width: auto;
   height: auto;
+  max-width: 50px;
+  max-height: 50px;
   border-style: groove;
   border-radius: 60%;
 }
