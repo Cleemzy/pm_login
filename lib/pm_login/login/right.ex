@@ -12,7 +12,7 @@ defmodule PmLogin.Login.Right do
   def changeset(right, attrs) do
     right
     |> cast(attrs, [:title])
-    |> validate_required([:title])
-    |> unique_constraint(:title)
+    |> validate_required(:title, message: "Entrez un titre")
+    |> unique_constraint(:title, message: "Titre de statut déjà existant")
   end
 end

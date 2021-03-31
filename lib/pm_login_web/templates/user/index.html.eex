@@ -1,11 +1,9 @@
-
-
   <h1>Liste des utilisateurs</h1>
 
   <table>
     <thead>
       <tr>
-        <th style="width: 50px;"></th>
+        <th></th>
         <th>Nom d'utilisateur</th>
         <th>Email</th>
         <th>Statut</th>
@@ -29,7 +27,6 @@
           <!-- <span><%= link "Afficher", to: Routes.user_path(@conn, :show, user) %></span> -->
           <span><%= link "Afficher", to: Routes.user_path(@conn, :edit, user) %></span>
           <span><%= link "Ejécter", to: Routes.user_path(@conn, :delete, user), method: :delete, data: [confirm: "Are you sure?"], class: "delete" %></span>
-          <span><%= link "#{user.id}", to: Routes.user_path(@conn, :show, user)%></span>
         </td>
       </tr>
       <% end %>

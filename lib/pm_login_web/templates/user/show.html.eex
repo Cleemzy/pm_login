@@ -15,11 +15,11 @@
 
 
 <br/>
-  <%= link "Modifier informations",to: Routes.user_path(@conn, :edit_profile, @user), class: "submit sublink", id: "signin" %>
+  <%= link "Modifier informations",to: Routes.user_path(@conn, :edit_profile, @user), class: "submit sublink modif", id: "signin" %>
 
 
 
 
 </div>
 
-<span><%= link "Retour", to: Routes.user_path(@conn, :index) %></span>
+<span><%= link "Accueil", to: Routes.user_path(@conn, :index) %></span>

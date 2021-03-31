@@ -17,8 +17,10 @@
             menuu
           </button>
           <ul class="nav__wrapper">
+            <li class="nav__item"><%= link "Utilisateurs", to: Routes.user_path(@conn, :list) %></li>
+            <li class="nav__item"><%= link "Droits/Statuts", to: Routes.right_path(@conn, :index) %></li>
             <li class="nav__item"><%= link "Accueil", to: Routes.user_path(@conn, :index) %></li>
-            <li class="nav__item"><%= link "Profil", to: Routes.user_path(@conn, :show, Plug.Conn.get_session(@conn, :curr_user_id))%></li>    
+            <li class="nav__item"><%= link "Profil", to: Routes.user_path(@conn, :show, Plug.Conn.get_session(@conn, :curr_user_id))%></li>
           </ul>
         </nav>
       </div>

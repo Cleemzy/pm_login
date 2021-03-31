@@ -22,6 +22,8 @@ defmodule PmLoginWeb.Router do
 
     get "/users/:id/edit_profile", UserController, :edit_profile
 
+    get "/list_users", UserController, :list
+
     put "/profile/:id", UserController, :update_profile
 
     patch "/profile/:id", UserController, :update_profile

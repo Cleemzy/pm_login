@@ -1,5 +1,5 @@
-<h1>Edit Right</h1>
+<h1>Modifier nom du statut/droit</h1>
 
 <%= render "form.html", Map.put(assigns, :action, Routes.right_path(@conn, :update, @right)) %>
 
-<span><%= link "Back", to: Routes.right_path(@conn, :index) %></span>
+<span><%= link "Retour", to: Routes.right_path(@conn, :index) %></span>

@@ -5,20 +5,55 @@ defmodule PmLoginWeb.RightController do
   alias PmLogin.Login.Right
 
   def index(conn, _params) do
-    rights = Login.list_rights()
-    render(conn, "index.html", rights: rights)
+    current_id = get_session(conn, :curr_user_id)
+    if current_id != nil do
+      current_user = Login.get_user!(current_id)
+      case current_user.right_id do
+        1 ->
+          rights = Login.list_rights()
+          render(conn, "index.html", rights: rights, layout: {PmLoginWeb.LayoutView, "admin_layout.html"})
+
+        _ ->
+        conn
+          |> put_flash(:error, "Désolé, vous n'êtes pas administrateur!")
+          |> redirect(to: Routes.user_path(conn, :index))
+      end
+
+    else
+      conn
+      |> put_flash(:error, "Connectez-vous d'abord!")
+      |> redirect(to: Routes.page_path(conn, :index))
+    end
+
   end
 
+
   def new(conn, _params) do
-    changeset = Login.change_right(%Right{})
-    render(conn, "new.html", changeset: changeset)
+    current_id = get_session(conn, :curr_user_id)
+    if current_id != nil do
+      current_user = Login.get_user!(current_id)
+      case current_user.right_id do
+        1 ->
+          changeset = Login.change_right(%Right{})
+          render(conn, "new.html", changeset: changeset, layout: {PmLoginWeb.LayoutView, "admin_layout.html"})
+        _ ->
+        conn
+          |> put_flash(:error, "Désolé, vous n'êtes pas administrateur!")
+          |> redirect(to: Routes.user_path(conn, :index))
+      end
+
+    else
+      conn
+      |> put_flash(:error, "Connectez-vous d'abord!")
+      |> redirect(to: Routes.page_path(conn, :index))
+    end
   end
 
   def create(conn, %{"right" => right_params}) do
     case Login.create_right(right_params) do
       {:ok, right} ->
         conn
-        |> put_flash(:info, "Right created successfully.")
+        |> put_flash(:info, "Statut crée.")
         |> redirect(to: Routes.right_path(conn, :show, right))
 
       {:error, %Ecto.Changeset{} = changeset} ->
@@ -27,14 +62,45 @@ defmodule PmLoginWeb.RightController do
   end
 
   def show(conn, %{"id" => id}) do
-    right = Login.get_right!(id)
-    render(conn, "show.html", right: right)
+    current_id = get_session(conn, :curr_user_id)
+    if current_id != nil do
+      current_user = Login.get_user!(current_id)
+      case current_user.right_id do
+        1 ->
+          right = Login.get_right!(id)
+          render(conn, "show.html", right: right, layout: {PmLoginWeb.LayoutView, "admin_layout.html"})
+        _ ->
+          conn
+          |> put_flash(:error, "Désolé, vous n'êtes pas administrateur!")
+          |> redirect(to: Routes.user_path(conn, :index))
+      end
+    else
+      conn
+      |> put_flash(:error, "Connectez-vous d'abord!")
+      |> redirect(to: Routes.page_path(conn, :index))
+    end
+
   end
 
   def edit(conn, %{"id" => id}) do
-    right = Login.get_right!(id)
-    changeset = Login.change_right(right)
-    render(conn, "edit.html", right: right, changeset: changeset)
+    current_id = get_session(conn, :curr_user_id)
+    if current_id != nil do
+      current_user = Login.get_user!(current_id)
+      case current_user.right_id do
+        1 ->
+          right = Login.get_right!(id)
+          changeset = Login.change_right(right)
+          render(conn, "edit.html", right: right, changeset: changeset, layout: {PmLoginWeb.LayoutView, "admin_layout.html"})
+        _ ->
+        conn
+        |> put_flash(:error, "Désolé, vous n'êtes pas administrateur!")
+        |> redirect(to: Routes.user_path(conn, :index))
+       end
+    else
+      conn
+      |> put_flash(:error, "Connectez-vous d'abord!")
+      |> redirect(to: Routes.page_path(conn, :index))
+    end
   end
 
   def update(conn, %{"id" => id, "right" => right_params}) do
@@ -52,11 +118,33 @@ defmodule PmLoginWeb.RightController do
   end
 
   def delete(conn, %{"id" => id}) do
-    right = Login.get_right!(id)
-    {:ok, _right} = Login.delete_right(right)
+    current_id = get_session(conn, :curr_user_id)
+    if current_id != nil do
+      current_user = Login.get_user!(current_id)
+      case current_user.right_id do
+        1 ->
+          right = Login.get_right!(id)
+          {:ok, _right} = Login.delete_right(right)
 
-    conn
-    |> put_flash(:info, "Right deleted successfully.")
-    |> redirect(to: Routes.right_path(conn, :index))
+          conn
+          |> put_flash(:info, "Statut supprimé")
+          |> redirect(to: Routes.right_path(conn, :index))
+
+        _ ->
+        conn
+        |> put_flash(:error, "Désolé, vous n'êtes pas administrateur!")
+        |> redirect(to: Routes.user_path(conn, :index))
+
+      end
+    else
+      conn
+      |> put_flash(:error, "Connectez-vous d'abord!")
+      |> redirect(to: Routes.page_path(conn, :index))
+    end
+    
+
   end
+
+
+
 end
