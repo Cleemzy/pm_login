@@ -1,3 +1,1 @@
 <h1>Bienvenue contributeur, </h1>
-
-<span><%= link "Se déconnecter", to: Routes.auth_path(@conn, :sign_out) %></span>

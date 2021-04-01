@@ -15,7 +15,7 @@
 
 
 <br/>
-  <%= link "Modifier informations",to: Routes.user_path(@conn, :edit_profile, @user), class: "submit sublink modif", id: "signin" %>
+  <%= link "Modifier informations",to: Routes.user_path(@conn, :edit_profile, @user), class: "btn btn-outline-dark btn-lg ", id: "signin" %>
 
 
 

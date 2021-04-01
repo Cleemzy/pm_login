@@ -10,13 +10,12 @@
   </head>
   <body>
     <header class="site-header">
-      <img class="profile-pic-header" src="<%= Routes.static_path(@conn, "/#{PmLogin.Login.get_profile_picture(Plug.Conn.get_session(@conn, :curr_user_id)) }") %>" width="50"/>
       <div class="wrapper site-header__wrapper">
-        <a href="#" class="brand">Mgbi</a>
+
+        <img class="profile-pic-header" src="<%= Routes.static_path(@conn, "/#{PmLogin.Login.get_profile_picture(Plug.Conn.get_session(@conn, :curr_user_id)) }") %>" width="50"/>
+        <%= link "Mgbi", to: Routes.user_path(@conn, :index), class: "brand" %>
         <nav class="nav">
-          <button class="nav__toggle" aria-expanded="false" type="button">
-            menuu
-          </button>
+          <input id="hamburger" type="image"  src="<%= Routes.static_path(@conn, "/images/hamburger.png") %>" class="nav__toggle">
           <ul class="nav__wrapper">
             <li class="nav__item"><%= link "Accueil", to: Routes.user_path(@conn, :index) %></li>
             <li class="nav__item"><%= link "Profil", to: Routes.user_path(@conn, :show, Plug.Conn.get_session(@conn, :curr_user_id))%></li>
@@ -24,10 +23,13 @@
         </nav>
       </div>
     </header>
-    <main role="main" class="container">
+    <main id="main" role="main" class="container">
       <p class="alert alert-info" role="alert"><%= get_flash(@conn, :info) %></p>
       <p class="alert alert-danger" role="alert"><%= get_flash(@conn, :error) %></p>
       <%= @inner_content %>
+      <br/>
+      <br/>
+      <span><%= link "Se déconnecter", to: Routes.auth_path(@conn, :sign_out), class: "btn btn-outline-danger btn-lg" %></span>
     </main>
   </body>
   <footer id="foot" class="container-fluid">

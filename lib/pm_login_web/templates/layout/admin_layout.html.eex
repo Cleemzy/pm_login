@@ -34,6 +34,9 @@
       <p class="alert alert-info" role="alert"><%= get_flash(@conn, :info) %></p>
       <p class="alert alert-danger" role="alert"><%= get_flash(@conn, :error) %></p>
       <%= @inner_content %>
+      <br/>
+      <br/>
+      <span><%= link "Se déconnecter", to: Routes.auth_path(@conn, :sign_out), class: "btn btn-outline-danger btn-lg" %></span>
     </main>
   </body>
   <footer id="foot" class="container-fluid">

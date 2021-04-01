@@ -17,8 +17,8 @@
       <td><%= right.title %></td>
 
       <td>
-        <span><%= link "Afficher", to: Routes.right_path(@conn, :show, right) %></span>
-        <span><%= link "Supprimer", to: Routes.right_path(@conn, :delete, right), method: :delete, data: [confirm: "Etes-vous sûr?"], class: "delete" %></span>
+        <span><%= link "Afficher", to: Routes.right_path(@conn, :show, right), class: "btn btn-info btn-lg" %></span>
+        <span><%= link "Supprimer", to: Routes.right_path(@conn, :delete, right), method: :delete, data: [confirm: "Etes-vous sûr?"], class: "btn btn-danger btn-lg" %></span>
       </td>
     </tr>
 <% end %>

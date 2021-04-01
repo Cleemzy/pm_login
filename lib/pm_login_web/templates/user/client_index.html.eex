@@ -1,3 +1,1 @@
 <h1>Bienvenue <%= @current_user.username %> ! Vous êtes sur la page d'accueil "client"</h1>
-
-<span><%= link "Se déconnecter", to: Routes.auth_path(@conn, :sign_out) %></span>
