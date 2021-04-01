@@ -25,7 +25,7 @@
 
         <td>
           <!-- <span><%= link "Afficher", to: Routes.user_path(@conn, :show, user) %></span> -->
-          <span><%= link "Afficher", to: Routes.user_path(@conn, :edit, user) %></span>
+          <span><%= link "Afficher", to: Routes.user_path(@conn, :edit, user), class: "button" %></span>
           <span><%= link "Ejécter", to: Routes.user_path(@conn, :delete, user), method: :delete, data: [confirm: "Are you sure?"], class: "delete" %></span>
         </td>
       </tr>

@@ -133,6 +133,15 @@ defmodule PmLogin.Login do
   """
   def get_user!(id), do: Repo.get!(User, id)
 
+  def get_profile_picture(id) do
+    user = get_user!(id)
+    profile_picture = user.profile_picture
+  end
+
+  def get_username(id) do
+    user = get_user!(id)
+    username = user.username
+  end
   @doc """
   Creates a user.
 
