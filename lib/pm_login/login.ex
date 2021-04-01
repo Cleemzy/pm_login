@@ -113,6 +113,14 @@ defmodule PmLogin.Login do
       [%User{}, ...]
 
   """
+
+  def archive_user(%User{} = user) do
+    params = %{"right_id" => 7}
+    user
+    |> User.archive_changeset(params)
+    |> Repo.update()
+  end
+
   def list_users do
     Repo.all(User)
   end
@@ -159,6 +167,8 @@ defmodule PmLogin.Login do
     |> User.changeset(attrs)
     |> Repo.insert()
   end
+
+
 
   def log_user(attrs \\ %{}) do
     %User{}
@@ -225,6 +235,5 @@ defmodule PmLogin.Login do
   end
 
   def get_auth!(id), do: Repo.get_by(Auth, id: "#{id}")
-
 
 end

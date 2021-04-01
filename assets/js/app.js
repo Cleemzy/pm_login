@@ -14,6 +14,14 @@ import "../css/app.scss"
 //
 import "phoenix_html"
 
+import swal from 'sweetalert';
+
+function alert_sweet() {
+        // return true or false, depending on whether you want to allow the `href` property to follow through or not
+        swal("Hello world!");
+    }
+
+
 let navToggle = document.querySelector(".nav__toggle");
 let navWrapper = document.querySelector(".nav__wrapper");
 navToggle.addEventListener("click", function () {

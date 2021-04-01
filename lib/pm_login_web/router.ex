@@ -28,6 +28,8 @@ defmodule PmLoginWeb.Router do
 
     patch "/profile/:id", UserController, :update_profile
 
+    put "/user/:id", UserController, :archive
+
     get "/", PageController, :index
 
     post "/auth", AuthController, :auth

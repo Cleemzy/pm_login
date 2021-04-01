@@ -16,6 +16,7 @@ defmodule PmLoginWeb.UserController do
             2 -> render(conn, "contributor_index.html", current_user: current_user)
             3 -> render(conn, "client_index.html", current_user: current_user)
             4 -> render(conn, "unattributed_index.html", current_user: current_user)
+            7 -> conn |> put_flash(:error, "Votre compte a été archivé!") |> redirect(to: Routes.page_path(conn, :index))
             _ -> redirect(conn, to: Routes.page_path(conn, :index))
         end
 
@@ -137,7 +138,7 @@ defmodule PmLoginWeb.UserController do
     case Login.update_profile(user, user_params) do
       {:ok, user} ->
         conn
-        |> put_flash(:info, "Profile mis à jour.")
+        |> put_flash(:info, "Profil mis à jour.")
         |> redirect(to: Routes.user_path(conn, :show, user))
 
       {:error, %Ecto.Changeset{} = changeset} ->
@@ -151,7 +152,7 @@ defmodule PmLoginWeb.UserController do
     case Login.update_user(user, user_params) do
       {:ok, user} ->
         conn
-        |> put_flash(:info, "Profile mis à jour.")
+        |> put_flash(:info, "Profil mis à jour.")
         |> redirect(to: Routes.user_path(conn, :edit, user))
 
       {:error, %Ecto.Changeset{} = changeset} ->
@@ -159,7 +160,7 @@ defmodule PmLoginWeb.UserController do
     end
   end
 
-  def delete(conn, %{"id" => id}) do
+  def archive(conn, %{"id" => id}) do
     current_id = get_session(conn, :curr_user_id)
 
     if current_id != nil do
@@ -167,10 +168,10 @@ defmodule PmLoginWeb.UserController do
       case current_user.right_id do
         1 ->
           user = Login.get_user!(id)
-          {:ok, _user} = Login.delete_user(user)
+          {:ok, _user} = Login.archive_user(user)
 
           conn
-          |> put_flash(:info, "#{user.username} éjecté(e).")
+          |> put_flash(:info, "Utilisateur #{user.username} archivé(e).")
           |> redirect(to: Routes.user_path(conn, :list))
 
         _ ->
@@ -186,4 +187,36 @@ defmodule PmLoginWeb.UserController do
     end
 
   end
+
+
+  def delete(conn, %{"id" => id}) do
+    current_id = get_session(conn, :curr_user_id)
+
+    if current_id != nil do
+      current_user = Login.get_user!(current_id)
+      case current_user.right_id do
+        1 ->
+          user = Login.get_user!(id)
+          {:ok, _user} = Login.delete_user(user)
+
+          conn
+          |> put_flash(:info, "Utilisateur #{user.username} archivé(e).")
+          |> redirect(to: Routes.user_path(conn, :list))
+
+        _ ->
+          conn
+          |> put_flash(:error, "Vous n'êtes pas administrateur!")
+          |> redirect(to: Routes.user_path(conn, :index))
+      end
+
+    else
+      conn
+      |> put_flash(:error, "Connectez-vous d'abord!")
+      |> redirect(to: Routes.user_path(conn, :index))
+    end
+
+  end
+
+
+
 end

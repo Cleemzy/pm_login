@@ -26,7 +26,7 @@
         <td>
           <!-- <span><%= link "Afficher", to: Routes.user_path(@conn, :show, user) %></span> -->
           <span><%= link "Afficher", to: Routes.user_path(@conn, :edit, user), class: "btn btn-info btn-lg" %></span>
-          <span><%= link "Ejécter", to: Routes.user_path(@conn, :delete, user), method: :delete, data: [confirm: "Etes-vous sûr?"], class: "btn btn-danger btn-lg" %></span>
+          <span><%= link "Archiver", to: Routes.user_path(@conn, :archive, user), method: :put, data: [confirm: "Etes-vous sûr?"], class: "btn btn-danger btn-lg" %></span>
         </td>
       </tr>
       <% end %>

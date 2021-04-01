@@ -30,6 +30,11 @@ defmodule PmLogin.Login.User do
     Login.get_right!(right_id)
   end
 
+  def archive_changeset(user, attrs) do
+    user
+    |> cast(attrs, [:right_id])
+  end
+
   def authenticate(user, attrs) do
     user
     |> cast(attrs, [:username, :password])
