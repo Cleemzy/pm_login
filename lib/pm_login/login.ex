@@ -21,6 +21,12 @@ defmodule PmLogin.Login do
     Repo.all(Right)
   end
 
+  # select * from rights where rights.id != 7;
+  def list_rights_without_archived do
+    query = from r in Right, where: r.id != 7, select: r
+    Repo.all(query)
+  end
+
   @doc """
   Gets a single right.
 

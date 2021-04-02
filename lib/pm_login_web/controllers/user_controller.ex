@@ -106,6 +106,12 @@ defmodule PmLoginWeb.UserController do
 
   end
 
+  # defp map_str_rights(%Right{} = r) do
+  #   if r.id != 7 do
+  #       {String.to_atom(r.title), r.id}
+  #   end
+  # end
+
   def edit(conn, %{"id" => id}) do
     current_id = get_session(conn, :curr_user_id)
     if current_id != nil do
@@ -115,8 +121,8 @@ defmodule PmLoginWeb.UserController do
       case current_user.right_id do
          1 ->
            changeset = Login.change_user(user)
-           rights = Login.list_rights
-           str_rights = Enum.map(rights, fn %Right{} = r -> {String.to_atom(r.title), r.id}  end)
+           rights = Login.list_rights_without_archived
+           str_rights = Enum.map(rights, fn (%Right{} = r)  -> {String.to_atom(r.title), r.id} end)
            render(conn, "edit.html", user: user, changeset: changeset, rights: rights, str_rights: str_rights, layout: {PmLoginWeb.LayoutView, "admin_layout.html"})
          _ ->
          conn
