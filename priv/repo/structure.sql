@@ -25,9 +25,42 @@ SET default_table_access_method = heap;
 --
 
 CREATE TABLE public.rights (
-    id integer NOT NULL,
-    title character varying(255) NOT NULL
+    id bigint NOT NULL,
+    title character varying(255),
+    inserted_at timestamp(0) without time zone NOT NULL,
+    updated_at timestamp(0) without time zone NOT NULL
 );
+
+
+--
+-- Name: users; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.users (
+    id bigint NOT NULL,
+    username character varying(255),
+    profile_picture character varying(255),
+    email character varying(255),
+    password character varying(255),
+    right_id bigint,
+    inserted_at timestamp(0) without time zone NOT NULL,
+    updated_at timestamp(0) without time zone NOT NULL
+);
+
+
+--
+-- Name: auth; Type: VIEW; Schema: public; Owner: -
+--
+
+CREATE VIEW public.auth AS
+ SELECT users.id,
+    users.username,
+    users.profile_picture,
+    users.email,
+    users.right_id,
+    rights.title
+   FROM (public.users
+     JOIN public.rights ON ((users.right_id = rights.id)));
 
 
 --
@@ -35,7 +68,6 @@ CREATE TABLE public.rights (
 --
 
 CREATE SEQUENCE public.rights_id_seq
-    AS integer
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -61,24 +93,10 @@ CREATE TABLE public.schema_migrations (
 
 
 --
--- Name: users; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE public.users (
-    id integer NOT NULL,
-    id_right integer NOT NULL,
-    username character varying(255) NOT NULL,
-    profile_picture character varying(255) NOT NULL,
-    encrypt_pass character varying(255) NOT NULL
-);
-
-
---
 -- Name: users_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
 CREATE SEQUENCE public.users_id_seq
-    AS integer
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -108,19 +126,11 @@ ALTER TABLE ONLY public.users ALTER COLUMN id SET DEFAULT nextval('public.users_
 
 
 --
--- Name: rights RIGHTS_pk; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: rights rights_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.rights
-    ADD CONSTRAINT "RIGHTS_pk" PRIMARY KEY (id);
-
-
---
--- Name: users USERS_pk; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.users
-    ADD CONSTRAINT "USERS_pk" PRIMARY KEY (id);
+    ADD CONSTRAINT rights_pkey PRIMARY KEY (id);
 
 
 --
@@ -132,30 +142,53 @@ ALTER TABLE ONLY public.schema_migrations
 
 
 --
--- Name: users users_profile_picture_key; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: users users_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.users
-    ADD CONSTRAINT users_profile_picture_key UNIQUE (profile_picture);
+    ADD CONSTRAINT users_pkey PRIMARY KEY (id);
 
 
 --
--- Name: users users_username_key; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: rights_title_index; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX rights_title_index ON public.rights USING btree (title);
+
+
+--
+-- Name: users_email_index; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX users_email_index ON public.users USING btree (email);
+
+
+--
+-- Name: users_right_id_index; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX users_right_id_index ON public.users USING btree (right_id);
+
+
+--
+-- Name: users_username_index; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX users_username_index ON public.users USING btree (username);
+
+
+--
+-- Name: users users_right_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.users
-    ADD CONSTRAINT users_username_key UNIQUE (username);
-
-
---
--- Name: users USERS_fk0; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.users
-    ADD CONSTRAINT "USERS_fk0" FOREIGN KEY (id_right) REFERENCES public.rights(id);
+    ADD CONSTRAINT users_right_id_fkey FOREIGN KEY (right_id) REFERENCES public.rights(id);
 
 
 --
 -- PostgreSQL database dump complete
 --
 
+INSERT INTO public."schema_migrations" (version) VALUES (20210324072043);
+INSERT INTO public."schema_migrations" (version) VALUES (20210324143626);
+INSERT INTO public."schema_migrations" (version) VALUES (20210326102201);
