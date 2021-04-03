@@ -2,7 +2,12 @@
 // The MiniCssExtractPlugin is used to separate it out into
 // its own CSS file.
 import "../css/app.scss"
+import { TestPrint } from "./functions"
+// import "require.js"
 
+export const App = {
+  test_print: TestPrint.test_print
+}
 // webpack automatically bundles all modules in your
 // entry points. Those entry points can be configured
 // in "webpack.config.js".

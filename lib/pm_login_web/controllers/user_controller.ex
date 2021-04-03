@@ -166,6 +166,33 @@ defmodule PmLoginWeb.UserController do
     end
   end
 
+  def restore(conn, %{"id" => id}) do
+    current_id = get_session(conn, :curr_user_id)
+
+    if current_id != nil do
+      current_user = Login.get_user!(current_id)
+      case current_user.right_id do
+        1 ->
+          user = Login.get_user!(id)
+          {:ok, _user} = Login.restore_user(user)
+
+          conn
+          |> put_flash(:info, "Utilisateur #{user.username} restauré(e).")
+          |> redirect(to: Routes.user_path(conn, :list))
+
+        _ ->
+          conn
+          |> put_flash(:error, "Vous n'êtes pas administrateur!")
+          |> redirect(to: Routes.user_path(conn, :index))
+      end
+
+    else
+      conn
+      |> put_flash(:error, "Connectez-vous d'abord!")
+      |> redirect(to: Routes.user_path(conn, :index))
+    end
+  end
+
   def archive(conn, %{"id" => id}) do
     current_id = get_session(conn, :curr_user_id)
 

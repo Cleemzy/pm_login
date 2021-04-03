@@ -30,6 +30,10 @@ defmodule PmLoginWeb.Router do
 
     put "/user/:id", UserController, :archive
 
+    patch "/user/:id", UserController, :archive
+
+    put "/user/restore/:id", UserController, :restore
+
     get "/", PageController, :index
 
     post "/auth", AuthController, :auth

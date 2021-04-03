@@ -119,6 +119,12 @@ defmodule PmLogin.Login do
       [%User{}, ...]
 
   """
+  def restore_user(%User{} = user) do
+    params = %{"right_id" => 4}
+    user
+    |> User.restore_changeset(params)
+    |> Repo.update()
+  end
 
   def archive_user(%User{} = user) do
     params = %{"right_id" => 7}

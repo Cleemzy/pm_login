@@ -8,10 +8,7 @@
     <link rel="stylesheet"  href="<%= Routes.static_path(@conn, "/css/app.css") %>"/>
     <script defer type="text/javascript" src="<%= Routes.static_path(@conn, "/js/app.js") %>"></script>
     <script type="text/javascript">
-    function alert_sweet(text) {
-            // return true or false, depending on whether you want to allow the `href` property to follow through or not
-            swal(`mon texte: ${text}`);
-        }
+      require("js/app".App.test_print());
     </script>
   </head>
   <body>
@@ -43,7 +40,7 @@
       <br/>
       <br/>
 
-      <span><%= link "test sweetalert", to: "#", class: "btn btn-outline-primary btn-lg", onclick: "return alert_sweet();" %></span>
+      <span><%= link "test sweetalert", to: "#", class: "btn btn-outline-primary btn-lg", onclick: "return test_print();" %></span>
       <span><%= link "Se déconnecter", to: Routes.auth_path(@conn, :sign_out), class: "btn btn-outline-danger btn-lg" %></span>
     </main>
   </body>
