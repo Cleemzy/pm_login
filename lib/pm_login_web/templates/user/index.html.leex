@@ -1,3 +1,4 @@
+<% alias PmLoginWeb.LiveComponent.ModalLive %>
   <h1>Liste des utilisateurs</h1>
 
   <table>
@@ -26,8 +27,7 @@
         <td>
           <span><%= link "Afficher", to: Routes.user_path(@socket, :edit, user), class: "btn btn-info btn-lg" %></span>
           <%= if user.right_id != 7 do %>
-          <span><%= link "Archiver",to: Routes.user_path(@socket, :archive, user),method: :put,data: [confirm: "Etes-vous sûr?"],class: "btn btn-danger btn-lg" %></span>
-          <span><%= link "Archiver_LV",to: "#",phx_click: "arch",phx_value_id: user.id,class: "btn btn-danger btn-lg" %></span>
+          <span><%= link "Archiver",to: "#",phx_click: "go-arch",phx_value_id: user.id,class: "btn btn-danger btn-lg" %></span>
           <% else %>
           <span class="btn btn-dark btn-lg">Archivé</span>
           <% end %>
@@ -36,3 +36,17 @@
       <% end %>
     </tbody>
   </table>
+
+  <%= if @show_modal do %>
+<%= live_component(@socket,
+                     ModalLive,
+                     id: "confirm-arch",
+                     title: "Archiver?",
+                     body: "Etes-vous sûr d'archiver cet utilisateur?",
+                     right_button: "OUI",
+                     right_button_action: "arch",
+                     right_button_param: @arch_id,
+                     left_button: "ANNULER",
+                     left_button_action: "cancel-arch")
+  %>
+<% end %>
