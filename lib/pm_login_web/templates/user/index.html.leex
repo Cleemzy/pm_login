@@ -27,7 +27,7 @@
         <td>
           <span><%= link "Afficher", to: Routes.user_path(@socket, :edit, user), class: "btn btn-info btn-lg" %></span>
           <%= if user.right_id != 7 do %>
-          <span><%= link "Archiver",to: "#",phx_click: "go-arch",phx_value_id: user.id,class: "btn btn-danger btn-lg" %></span>
+          <span><%= link("Archiver",to: "#",phx_click: "go-arch",phx_value_id: user.id,class: "btn btn-danger btn-lg")%></span>
           <% else %>
           <span class="btn btn-dark btn-lg">Archivé</span>
           <% end %>
