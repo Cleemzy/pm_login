@@ -1,0 +1,38 @@
+  <h1>Liste des utilisateurs</h1>
+
+  <table>
+    <thead>
+      <tr>
+        <th></th>
+        <th>Nom d'utilisateur</th>
+        <th>Email</th>
+        <th>Statut</th>
+
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <%= for user <- @users do %>
+      <tr>
+
+        <td style="width: 50px;">
+            <img class="profile-pic-mini" src="<%= Routes.static_path(@socket, "/#{user.profile_picture}") %>" width="50"/>
+        </td>
+
+        <td><%= user.username %></td>
+        <td><%= user.email %></td>
+        <td><%= user.title %></td>
+
+        <td>
+          <span><%= link "Afficher", to: Routes.user_path(@socket, :edit, user), class: "btn btn-info btn-lg" %></span>
+          <%= if user.right_id != 7 do %>
+          <span><%= link "Archiver",to: Routes.user_path(@socket, :archive, user),method: :put,data: [confirm: "Etes-vous sûr?"],class: "btn btn-danger btn-lg" %></span>
+          <span><%= link "Archiver_LV",to: "#",phx_click: "arch",phx_value_id: user.id,class: "btn btn-danger btn-lg" %></span>
+          <% else %>
+          <span class="btn btn-dark btn-lg">Archivé</span>
+          <% end %>
+        </td>
+      </tr>
+      <% end %>
+    </tbody>
+  </table>

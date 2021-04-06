@@ -32,13 +32,15 @@
         <%= label f, "Archivé(e)" %>
       </div>
       <div id="right-select" class="col-6 col40">
-        <%= link "Restorer",to: Routes.user_path(@conn, :restore, @user),method: :put,class: "btn btn-outline-dark btn-lg ",id: "signin" %>
+        <%= link "Restaurer",to: Routes.user_path(@conn, :restore, @user),method: :put,class: "btn btn-outline-dark btn-lg ",id: "signin" %>
       </div>
       <% end %>
 </div>
 
   <br/>
+  <%= if @user.right_id != 7 do %>
   <%= submit "Modifier droit", class: "submit", id: "signin" %>
+  <% end %>
 
 <% end %>
 

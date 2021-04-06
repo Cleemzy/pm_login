@@ -17,6 +17,9 @@ config :pm_login, PmLogin.Repo,
 # with webpack to recompile .js and .css sources.
 config :pm_login, PmLoginWeb.Endpoint,
   http: [port: 4000],
+  live_view: [
+     signing_salt: "khvY0K0OxhM6YcDiqjtJtfSgYOWlTqD4"
+   ],
   debug_errors: true,
   code_reloader: true,
   check_origin: false,
@@ -61,7 +64,8 @@ config :pm_login, PmLoginWeb.Endpoint,
       ~r"priv/static/.*(js|css|png|jpeg|jpg|gif|svg)$",
       ~r"priv/gettext/.*(po)$",
       ~r"lib/pm_login_web/(live|views)/.*(ex)$",
-      ~r"lib/pm_login_web/templates/.*(eex)$"
+      ~r"lib/pm_login_web/templates/.*(eex)$",
+      ~r"lib/pm_login_web/live/.*(eex)$"
     ]
   ]
 

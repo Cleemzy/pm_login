@@ -2,12 +2,9 @@
 // The MiniCssExtractPlugin is used to separate it out into
 // its own CSS file.
 import "../css/app.scss"
-import { TestPrint } from "./functions"
 // import "require.js"
 
-export const App = {
-  test_print: TestPrint.test_print
-}
+
 // webpack automatically bundles all modules in your
 // entry points. Those entry points can be configured
 // in "webpack.config.js".
@@ -18,14 +15,8 @@ export const App = {
 //     import socket from "./socket"
 //
 import "phoenix_html"
-
-import swal from 'sweetalert';
-
-function alert_sweet() {
-        // return true or false, depending on whether you want to allow the `href` property to follow through or not
-        swal("Hello world!");
-    }
-
+import {Socket} from "phoenix"
+import {LiveSocket} from "phoenix_live_view"
 
 let navToggle = document.querySelector(".nav__toggle");
 let navWrapper = document.querySelector(".nav__wrapper");
@@ -40,3 +31,8 @@ navToggle.addEventListener("click", function () {
     this.setAttribute("aria-expanded", "true");
   }
 });
+
+let csrfToken = document.querySelector("meta[name='csrf-token']").getAttribute("content")
+let liveSocket = new LiveSocket("/live", Socket, {params: {_csrf_token: csrfToken}})
+
+liveSocket.connect()

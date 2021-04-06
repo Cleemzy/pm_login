@@ -5,6 +5,7 @@ defmodule PmLoginWeb.UserController do
   alias PmLogin.Login.User
   alias PmLogin.Login.Right
   alias PmLogin.Login.Auth
+  alias Phoenix.LiveView
 
   def index(conn, _params) do
     current_id = get_session(conn, :curr_user_id)
@@ -38,7 +39,8 @@ defmodule PmLoginWeb.UserController do
       case current_user.right_id do
         1 ->
           auths = Login.list_all_auth
-          render(conn, "index.html", users: auths, layout: {PmLoginWeb.LayoutView, "admin_layout.html"})
+          LiveView.Controller.live_render(conn, PmLoginWeb.User.ListLive, session: %{"curr_user_id" => get_session(conn, :curr_user_id)})
+          # render(conn, "index.html", users: auths, layout: {PmLoginWeb.LayoutView, "admin_layout.html"})
         _ ->
         conn
           |> put_flash(:error, "Désolé, vous n'êtes pas administrateur!")
@@ -201,7 +203,7 @@ defmodule PmLoginWeb.UserController do
       case current_user.right_id do
         1 ->
           user = Login.get_user!(id)
-          {:ok, _user} = Login.archive_user(user)
+          Login.archive_user(user)
 
           conn
           |> put_flash(:info, "Utilisateur #{user.username} archivé(e).")
