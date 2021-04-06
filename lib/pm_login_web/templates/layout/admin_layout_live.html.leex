@@ -32,13 +32,13 @@
 
 
     <main id="main" role="main" class="container">
-      <p class="alert alert-info" role="alert"><%= get_flash(@conn, :info) %></p>
-      <p class="alert alert-danger" role="alert"><%= get_flash(@conn, :error) %></p>
+      <p class="alert alert-info" role="alert" phx-click="lv:clear-flash" phx-value-key="error"><%= live_flash(@flash, :info) %></p>
+      <p class="alert alert-danger" role="alert" phx-click="lv:clear-flash" phx-value-key="error"><%= live_flash(@flash, :error) %></p>
       <%= @inner_content %>
       <br/>
       <br/>
 
-      <span><%= link "Se déconnecter", to: Routes.auth_path(@conn, :sign_out), class: "btn btn-outline-danger btn-lg" %></span>
+      <span><%= link "Déconnexion", to: Routes.auth_path(@conn, :sign_out), class: "btn btn-outline-danger btn-lg" %></span>
     </main>
   </body>
   <footer id="foot" class="container-fluid">
