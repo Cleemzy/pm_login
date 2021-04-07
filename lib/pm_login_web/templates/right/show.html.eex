@@ -1,3 +1,4 @@
+<% undeletable_rights = [1,2,3,4,7] %>
 <h1>Droit/ Statut</h1>
 
 <ul>
@@ -9,5 +10,7 @@
 
 </ul>
 
-<span><%= link "Modifier", to: Routes.right_path(@conn, :edit, @right) %></span>
+<%= if @right.id not in undeletable_rights do %>
+  <span><%= link "Modifier", to: Routes.right_path(@conn, :edit, @right) %></span>
+<% end %>
 <span><%= link "Retour", to: Routes.right_path(@conn, :index) %></span>

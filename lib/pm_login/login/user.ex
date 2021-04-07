@@ -34,7 +34,7 @@ defmodule PmLogin.Login.User do
     user
     |> cast(attrs, [:right_id])
   end
-  
+
   def archive_changeset(user, attrs) do
     user
     |> cast(attrs, [:right_id])
@@ -151,7 +151,7 @@ defmodule PmLogin.Login.User do
   end
 
   defp put_default_profile_picture(changeset) do
-      put_change(changeset, :profile_picture, "images/default_profile_pic.png")
+      put_change(changeset, :profile_picture, "images/profiles/default_profile_pic.png")
   end
 
   defp crypt_pass(changeset) do

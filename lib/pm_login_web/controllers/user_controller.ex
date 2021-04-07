@@ -38,7 +38,7 @@ defmodule PmLoginWeb.UserController do
       current_user = Login.get_user!(current_id)
       case current_user.right_id do
         1 ->
-          auths = Login.list_all_auth
+          auths = Login.list_asc_auth
           LiveView.Controller.live_render(conn, PmLoginWeb.User.ListLive, session: %{"curr_user_id" => get_session(conn, :curr_user_id)})
           # render(conn, "index.html", users: auths, layout: {PmLoginWeb.LayoutView, "admin_layout.html"})
         _ ->

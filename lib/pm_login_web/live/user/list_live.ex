@@ -7,7 +7,11 @@ defmodule PmLoginWeb.User.ListLive do
 
   def mount(_params, %{"curr_user_id" => curr_user_id}, socket) do
     Login.subscribe()
-   {:ok, fetch(socket)}
+   {:ok,
+      socket
+      |> assign(curr_user_id: curr_user_id)
+      |> fetch
+      }
   end
 
   def handle_info({Login, [:user | _], _}, socket) do
@@ -23,7 +27,7 @@ defmodule PmLoginWeb.User.ListLive do
   end
 
   defp fetch(socket) do
-    assign(socket, users: Login.list_all_auth(),show_modal: false, arch_id: nil,layout: {PmLoginWeb.LayoutView, "admin_layout_live.html"})
+    assign(socket, users: Login.list_asc_auth(),show_modal: false, arch_id: nil,layout: {PmLoginWeb.LayoutView, "admin_layout_live.html"})
   end
 
   def render(assigns) do
@@ -45,7 +49,12 @@ defmodule PmLoginWeb.User.ListLive do
     ) do
       user = Login.get_user!(arch_id)
       Login.archive_user(user)
-  {:noreply, assign(socket, show_modal: false)}
+      # PmLoginWeb.UserController.archive(socket, user.id)
+  {:noreply,
+    socket
+    # |> assign(info: "L'utilisateur #{user.username} a bien été archivé")
+    |> assign(show_modal: false)
+      }
   end
 
   def handle_event("go-arch", %{"id" => id}, socket) do

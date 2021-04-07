@@ -3,6 +3,8 @@ defmodule PmLoginWeb.RightController do
 
   alias PmLogin.Login
   alias PmLogin.Login.Right
+  alias Phoenix.LiveView
+
 
   def index(conn, _params) do
     current_id = get_session(conn, :curr_user_id)
@@ -10,8 +12,9 @@ defmodule PmLoginWeb.RightController do
       current_user = Login.get_user!(current_id)
       case current_user.right_id do
         1 ->
-          rights = Login.list_rights()
-          render(conn, "index.html", rights: rights, layout: {PmLoginWeb.LayoutView, "admin_layout.html"})
+          rights = Login.list_asc_rights()
+          LiveView.Controller.live_render(conn,PmLoginWeb.Right.IndexLive, session: %{"curr_user_id" => get_session(conn, :curr_user_id)})
+          # render(conn, "index.html", rights: rights, layout: {PmLoginWeb.LayoutView, "admin_layout.html"})
 
         _ ->
         conn
@@ -141,7 +144,7 @@ defmodule PmLoginWeb.RightController do
       |> put_flash(:error, "Connectez-vous d'abord!")
       |> redirect(to: Routes.page_path(conn, :index))
     end
-    
+
 
   end
 

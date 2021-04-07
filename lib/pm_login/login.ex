@@ -31,6 +31,12 @@ defmodule PmLogin.Login do
   end
 
   # select * from rights where rights.id != 7;
+
+  def list_asc_rights do
+    query = from r in Right, where: r.id != 4, order_by: [asc: :id] , select: r
+    Repo.all(query)
+  end
+
   def list_rights_without_archived do
     query = from r in Right, where: r.id != 7, select: r
     Repo.all(query)
@@ -101,7 +107,9 @@ defmodule PmLogin.Login do
 
   """
   def delete_right(%Right{} = right) do
-    Repo.delete(right)
+    right
+    |> Repo.delete
+    |> broadcast_change([:right, :deleted])
   end
 
   @doc """
@@ -251,6 +259,11 @@ defmodule PmLogin.Login do
   end
 
   alias PmLogin.Login.Auth
+
+  def list_asc_auth do
+    query = from a in Auth, order_by: [asc: :right_id], select: a
+    Repo.all(query)
+  end
 
   def list_all_auth do
     Repo.all(Auth)
