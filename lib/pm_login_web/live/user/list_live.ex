@@ -18,6 +18,10 @@ defmodule PmLoginWeb.User.ListLive do
     {:noreply, fetch(socket)}
   end
 
+  def handle_info({Login, [:right | _], _}, socket) do
+    {:noreply, fetch(socket)}
+  end
+
   def handle_event("arch", %{"id" => id}, socket) do
     user = Login.get_user!(id)
     Login.archive_user(user)
