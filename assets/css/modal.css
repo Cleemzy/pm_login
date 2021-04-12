@@ -22,7 +22,9 @@
   width: 28rem;
   max-width: 51rem;
   margin: 0.5rem;
-  border-radius: 0.4rem;
+  /* border-radius: 0.4rem; */
+
+  border-radius: 1.5em;
   background-color: #fff;
 }
 
