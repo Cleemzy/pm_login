@@ -14,10 +14,11 @@ defmodule PmLoginWeb.UserController do
       current_user = Login.get_user!(current_id)
         case current_user.right_id do
             1 -> render(conn, "admin_index.html", current_user: current_user, layout: {PmLoginWeb.LayoutView, "admin_layout.html"})
-            2 -> render(conn, "contributor_index.html", current_user: current_user)
-            3 -> render(conn, "client_index.html", current_user: current_user)
-            4 -> render(conn, "unattributed_index.html", current_user: current_user)
-            7 -> conn |> put_flash(:error, "Votre compte a été archivé!") |> redirect(to: Routes.page_path(conn, :index))
+            2 -> render(conn, "attributor_index.html", current_user: current_user)
+            3 -> render(conn, "contributor_index.html", current_user: current_user)
+            4 -> render(conn, "client_index.html", current_user: current_user)
+            5 -> render(conn, "unattributed_index.html", current_user: current_user)
+            100 -> conn |> put_flash(:error, "Votre compte a été archivé!") |> redirect(to: Routes.page_path(conn, :index))
             _ -> redirect(conn, to: Routes.page_path(conn, :index))
         end
 

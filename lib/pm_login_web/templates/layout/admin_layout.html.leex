@@ -19,6 +19,7 @@
         <nav class="nav">
           <input id="hamburger" type="image"  src="<%= Routes.static_path(@conn, "/images/hamburger.png") %>" class="nav__toggle">
           <ul class="nav__wrapper">
+            <li class="nav__item"><%= link "Sociétés", to: Routes.company_path(@conn, :index) %></li>
             <li class="nav__item"><%= link "Utilisateurs", to: Routes.user_path(@conn, :list) %></li>
             <li class="nav__item"><%= link "Droits/Statuts", to: Routes.right_path(@conn, :index) %></li>
             <li class="nav__item"><%= link "Accueil", to: Routes.user_path(@conn, :index) %></li>
@@ -34,7 +35,7 @@
     <main id="main" role="main" class="container">
       <p class="alert alert-info" role="alert"><%= get_flash(@conn, :info) %></p>
       <p class="alert alert-danger" role="alert"><%= get_flash(@conn, :error) %></p>
-        
+
       <%= @inner_content %>
       <br/>
       <br/>

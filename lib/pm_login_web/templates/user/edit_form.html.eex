@@ -20,7 +20,7 @@
 
 
 <div id="right-row" class="row">
-  <%= if @user.right_id != 7 do %>
+  <%= if @user.right_id != 100 do %>
       <div class="col-6 col60">
         <%= label f, "Droit:" %>
       </div>
@@ -38,7 +38,7 @@
 </div>
 
   <br/>
-  <%= if @user.right_id != 7 do %>
+  <%= if @user.right_id != 100 do %>
   <%= submit "Modifier droit", class: "submit", id: "signin" %>
   <% end %>
 

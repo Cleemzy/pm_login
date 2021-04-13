@@ -56,7 +56,7 @@ defmodule PmLoginWeb.User.ListLive do
       # PmLoginWeb.UserController.archive(socket, user.id)
   {:noreply,
     socket
-    # |> assign(info: "L'utilisateur #{user.username} a bien été archivé")
+    |> put_flash(:info, "L'utilisateur a bien été archivé!")
     |> assign(show_modal: false)
       }
   end

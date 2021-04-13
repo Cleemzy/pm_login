@@ -17,6 +17,7 @@ defmodule PmLogin.Login do
     Phoenix.PubSub.broadcast(PmLogin.PubSub, @topic, {__MODULE__, event, result})
   end
 
+
   @doc """
   Returns the list of rights.
 
@@ -33,12 +34,14 @@ defmodule PmLogin.Login do
   # select * from rights where rights.id != 7;
 
   def list_asc_rights do
-    query = from r in Right, where: r.id != 4, order_by: [asc: :id] , select: r
+    query = from r in Right, where: r.id != 5, order_by: [asc: :id] , select: r
+    #5 = non attribué
     Repo.all(query)
   end
 
   def list_rights_without_archived do
-    query = from r in Right, where: r.id != 7, select: r
+    query = from r in Right, where: r.id != 100, select: r
+    #0 = archivé
     Repo.all(query)
   end
 
@@ -126,6 +129,34 @@ defmodule PmLogin.Login do
   end
 
   alias PmLogin.Login.User
+  @doc """
+  checks user status functions
+
+  """
+  def is_admin?(%User{} = user) do
+    user.right_id == 1
+  end
+
+  def is_attributor?(%User{} = user) do
+    user.right_id == 2
+  end
+
+  def is_contributor(%User{} = user) do
+    user.right_id == 3
+  end
+
+  def is_client?(%User{} = user) do
+    user.right_id == 4
+  end
+
+  def is_not_attributed?(%User{} = user) do
+    user.right_id == 5
+  end
+
+  def is_archived?(%User{} = user) do
+    user.right_id == 100
+  end
+
 
   @doc """
   Returns the list of users.
@@ -137,14 +168,14 @@ defmodule PmLogin.Login do
 
   """
   def restore_user(%User{} = user) do
-    params = %{"right_id" => 4}
+    params = %{"right_id" => 5}
     user
     |> User.restore_changeset(params)
     |> Repo.update()
   end
 
   def archive_user(%User{} = user) do
-    params = %{"right_id" => 7}
+    params = %{"right_id" => 100}
     user
     |> User.archive_changeset(params)
     |> Repo.update()

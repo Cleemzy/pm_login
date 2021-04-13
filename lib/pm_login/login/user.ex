@@ -147,7 +147,7 @@ defmodule PmLogin.Login.User do
   end
 
   defp put_default_right(changeset) do
-      put_change(changeset, :right_id, 4)
+      put_change(changeset, :right_id, 5)
   end
 
   defp put_default_profile_picture(changeset) do
