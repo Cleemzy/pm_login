@@ -1,9 +1,9 @@
-<h1>Listing Companies</h1>
+<h1>Liste des sociétés</h1>
 
 <table>
   <thead>
     <tr>
-      <th>Name</th>
+      <th>Nom de la société</th>
 
       <th></th>
     </tr>
@@ -14,13 +14,13 @@
       <td><%= company.name %></td>
 
       <td>
-        <span><%= link "Show", to: Routes.company_path(@conn, :show, company) %></span>
-        <span><%= link "Edit", to: Routes.company_path(@conn, :edit, company) %></span>
-        <span><%= link "Delete", to: Routes.company_path(@conn, :delete, company), method: :delete, data: [confirm: "Are you sure?"] %></span>
+        <span><%= link "Afficher", to: Routes.company_path(@conn, :show, company),class: "btn btn-info btn-lg" %></span>
+        <span><%= link "Modifier", to: Routes.company_path(@conn, :edit, company),class: "btn btn-primary btn-lg" %></span>
+        <!-- <span><%= link "Delete", to: Routes.company_path(@conn, :delete, company), method: :delete, data: [confirm: "Are you sure?"] %></span> -->
       </td>
     </tr>
 <% end %>
   </tbody>
 </table>
 
-<span><%= link "New Company", to: Routes.company_path(@conn, :new) %></span>
+<span><%= link "Nouvelle société", to: Routes.company_path(@conn, :new) %></span>

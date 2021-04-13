@@ -11,7 +11,7 @@ defmodule PmLoginWeb.CompanyController do
 
   def new(conn, _params) do
     changeset = Services.change_company(%Company{})
-    render(conn, "new.html", changeset: changeset)
+    render(conn, "new.html", changeset: changeset, layout: {PmLoginWeb.LayoutView, "admin_layout.html"})
   end
 
   def create(conn, %{"company" => company_params}) do
@@ -22,19 +22,19 @@ defmodule PmLoginWeb.CompanyController do
         |> redirect(to: Routes.company_path(conn, :show, company))
 
       {:error, %Ecto.Changeset{} = changeset} ->
-        render(conn, "new.html", changeset: changeset)
+        render(conn, "new.html", changeset: changeset, layout: {PmLoginWeb.LayoutView, "admin_layout.html"})
     end
   end
 
   def show(conn, %{"id" => id}) do
     company = Services.get_company!(id)
-    render(conn, "show.html", company: company)
+    render(conn, "show.html", company: company, layout: {PmLoginWeb.LayoutView, "admin_layout.html"})
   end
 
   def edit(conn, %{"id" => id}) do
     company = Services.get_company!(id)
     changeset = Services.change_company(company)
-    render(conn, "edit.html", company: company, changeset: changeset)
+    render(conn, "edit.html", company: company, changeset: changeset, layout: {PmLoginWeb.LayoutView, "admin_layout.html"})
   end
 
   def update(conn, %{"id" => id, "company" => company_params}) do
@@ -47,7 +47,7 @@ defmodule PmLoginWeb.CompanyController do
         |> redirect(to: Routes.company_path(conn, :show, company))
 
       {:error, %Ecto.Changeset{} = changeset} ->
-        render(conn, "edit.html", company: company, changeset: changeset)
+        render(conn, "edit.html", company: company, changeset: changeset, layout: {PmLoginWeb.LayoutView, "admin_layout.html"})
     end
   end
 
@@ -56,7 +56,7 @@ defmodule PmLoginWeb.CompanyController do
     {:ok, _company} = Services.delete_company(company)
 
     conn
-    |> put_flash(:info, "Company deleted successfully.")
+    |> put_flash(:info, "Société enregistrée")
     |> redirect(to: Routes.company_path(conn, :index))
   end
 end

@@ -12,6 +12,6 @@ defmodule PmLogin.Services.Company do
   def changeset(company, attrs) do
     company
     |> cast(attrs, [:name])
-    |> validate_required([:name])
+    |> validate_required(:name, message: "Ne peut pas être vide")
   end
 end
