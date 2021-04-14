@@ -61,4 +61,63 @@ defmodule PmLogin.ServicesTest do
       assert %Ecto.Changeset{} = Services.change_company(company)
     end
   end
+
+  describe "softwares" do
+    alias PmLogin.Services.Software
+
+    @valid_attrs %{title: "some title"}
+    @update_attrs %{title: "some updated title"}
+    @invalid_attrs %{title: nil}
+
+    def software_fixture(attrs \\ %{}) do
+      {:ok, software} =
+        attrs
+        |> Enum.into(@valid_attrs)
+        |> Services.create_software()
+
+      software
+    end
+
+    test "list_softwares/0 returns all softwares" do
+      software = software_fixture()
+      assert Services.list_softwares() == [software]
+    end
+
+    test "get_software!/1 returns the software with given id" do
+      software = software_fixture()
+      assert Services.get_software!(software.id) == software
+    end
+
+    test "create_software/1 with valid data creates a software" do
+      assert {:ok, %Software{} = software} = Services.create_software(@valid_attrs)
+      assert software.title == "some title"
+    end
+
+    test "create_software/1 with invalid data returns error changeset" do
+      assert {:error, %Ecto.Changeset{}} = Services.create_software(@invalid_attrs)
+    end
+
+    test "update_software/2 with valid data updates the software" do
+      software = software_fixture()
+      assert {:ok, %Software{} = software} = Services.update_software(software, @update_attrs)
+      assert software.title == "some updated title"
+    end
+
+    test "update_software/2 with invalid data returns error changeset" do
+      software = software_fixture()
+      assert {:error, %Ecto.Changeset{}} = Services.update_software(software, @invalid_attrs)
+      assert software == Services.get_software!(software.id)
+    end
+
+    test "delete_software/1 deletes the software" do
+      software = software_fixture()
+      assert {:ok, %Software{}} = Services.delete_software(software)
+      assert_raise Ecto.NoResultsError, fn -> Services.get_software!(software.id) end
+    end
+
+    test "change_software/1 returns a software changeset" do
+      software = software_fixture()
+      assert %Ecto.Changeset{} = Services.change_software(software)
+    end
+  end
 end

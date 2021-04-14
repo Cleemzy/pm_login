@@ -1,0 +1,26 @@
+<h1>Listing Softwares</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Title</th>
+
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+<%= for software <- @softwares do %>
+    <tr>
+      <td><%= software.title %></td>
+
+      <td>
+        <span><%= link "Show", to: Routes.software_path(@conn, :show, software) %></span>
+        <span><%= link "Edit", to: Routes.software_path(@conn, :edit, software) %></span>
+        <span><%= link "Delete", to: Routes.software_path(@conn, :delete, software), method: :delete, data: [confirm: "Are you sure?"] %></span>
+      </td>
+    </tr>
+<% end %>
+  </tbody>
+</table>
+
+<span><%= link "New Software", to: Routes.software_path(@conn, :new) %></span>

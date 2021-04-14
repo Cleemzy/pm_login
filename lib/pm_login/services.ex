@@ -101,4 +101,100 @@ defmodule PmLogin.Services do
   def change_company(%Company{} = company, attrs \\ %{}) do
     Company.changeset(company, attrs)
   end
+
+  alias PmLogin.Services.Software
+
+  @doc """
+  Returns the list of softwares.
+
+  ## Examples
+
+      iex> list_softwares()
+      [%Software{}, ...]
+
+  """
+  def list_softwares do
+    Repo.all(Software)
+  end
+
+  @doc """
+  Gets a single software.
+
+  Raises `Ecto.NoResultsError` if the Software does not exist.
+
+  ## Examples
+
+      iex> get_software!(123)
+      %Software{}
+
+      iex> get_software!(456)
+      ** (Ecto.NoResultsError)
+
+  """
+  def get_software!(id), do: Repo.get!(Software, id)
+
+  @doc """
+  Creates a software.
+
+  ## Examples
+
+      iex> create_software(%{field: value})
+      {:ok, %Software{}}
+
+      iex> create_software(%{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def create_software(attrs \\ %{}) do
+    %Software{}
+    |> Software.changeset(attrs)
+    |> Repo.insert()
+  end
+
+  @doc """
+  Updates a software.
+
+  ## Examples
+
+      iex> update_software(software, %{field: new_value})
+      {:ok, %Software{}}
+
+      iex> update_software(software, %{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def update_software(%Software{} = software, attrs) do
+    software
+    |> Software.changeset(attrs)
+    |> Repo.update()
+  end
+
+  @doc """
+  Deletes a software.
+
+  ## Examples
+
+      iex> delete_software(software)
+      {:ok, %Software{}}
+
+      iex> delete_software(software)
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def delete_software(%Software{} = software) do
+    Repo.delete(software)
+  end
+
+  @doc """
+  Returns an `%Ecto.Changeset{}` for tracking software changes.
+
+  ## Examples
+
+      iex> change_software(software)
+      %Ecto.Changeset{data: %Software{}}
+
+  """
+  def change_software(%Software{} = software, attrs \\ %{}) do
+    Software.changeset(software, attrs)
+  end
 end

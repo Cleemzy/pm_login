@@ -1,0 +1,13 @@
+<h1>Show Software</h1>
+
+<ul>
+
+  <li>
+    <strong>Title:</strong>
+    <%= @software.title %>
+  </li>
+
+</ul>
+
+<span><%= link "Edit", to: Routes.software_path(@conn, :edit, @software) %></span>
+<span><%= link "Back", to: Routes.software_path(@conn, :index) %></span>
