@@ -2,7 +2,7 @@ defmodule PmLogin.Login do
   @moduledoc """
   The Login context.
   """
-
+  import Plug.Conn
   import Ecto.Query, warn: false
   alias PmLogin.Repo
 
@@ -131,29 +131,53 @@ defmodule PmLogin.Login do
   alias PmLogin.Login.User
   @doc """
   checks user status functions
-
   """
-  def is_admin?(%User{} = user) do
+
+  def is_connected?(conn) do
+    get_curr_user_id(conn) != nil
+  end
+
+  def get_curr_user(conn) do
+    user = get_curr_user_id(conn) |> get_user!
+  end
+
+  def get_curr_user_id(conn) do
+    current_id = get_session(conn, :curr_user_id)
+  end
+
+  def is_admin?(conn) do
+    user_id = get_curr_user_id(conn)
+    user = get_user!(user_id)
     user.right_id == 1
   end
 
-  def is_attributor?(%User{} = user) do
+  def is_attributor?(conn) do
+    user_id = get_curr_user_id(conn)
+    user = get_user!(user_id)
     user.right_id == 2
   end
 
-  def is_contributor(%User{} = user) do
+  def is_contributor?(conn) do
+    user_id = get_curr_user_id(conn)
+    user = get_user!(user_id)
     user.right_id == 3
   end
 
-  def is_client?(%User{} = user) do
+  def is_client?(conn) do
+    user_id = get_curr_user_id(conn)
+    user = get_user!(user_id)
     user.right_id == 4
   end
 
-  def is_not_attributed?(%User{} = user) do
+  def is_not_attributed?(conn) do
+    user_id = get_curr_user_id(conn)
+    user = get_user!(user_id)
     user.right_id == 5
   end
 
-  def is_archived?(%User{} = user) do
+  def is_archived?(conn) do
+    user_id = get_curr_user_id(conn)
+    user = get_user!(user_id)
     user.right_id == 100
   end
 

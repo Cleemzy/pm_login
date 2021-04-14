@@ -8,18 +8,19 @@ defmodule PmLoginWeb.UserController do
   alias Phoenix.LiveView
 
   def index(conn, _params) do
-    current_id = get_session(conn, :curr_user_id)
 
-    if current_id != nil do
-      current_user = Login.get_user!(current_id)
-        case current_user.right_id do
-            1 -> render(conn, "admin_index.html", current_user: current_user, layout: {PmLoginWeb.LayoutView, "admin_layout.html"})
-            2 -> render(conn, "attributor_index.html", current_user: current_user)
-            3 -> render(conn, "contributor_index.html", current_user: current_user)
-            4 -> render(conn, "client_index.html", current_user: current_user)
-            5 -> render(conn, "unattributed_index.html", current_user: current_user)
-            100 -> conn |> put_flash(:error, "Votre compte a été archivé!") |> redirect(to: Routes.page_path(conn, :index))
-            _ -> redirect(conn, to: Routes.page_path(conn, :index))
+    # current_id = get_session(conn, :curr_user_id)
+
+    if Login.is_connected?(conn) do
+      # current_user = Login.get_user!(current_id)
+        cond do
+          Login.is_admin?(conn) -> render(conn, "admin_index.html", current_user: Login.get_curr_user(conn), layout: {PmLoginWeb.LayoutView, "admin_layout.html"})
+          Login.is_attributor?(conn) -> render(conn, "attributor_index.html", current_user: Login.get_curr_user(conn))
+          Login.is_contributor?(conn) -> render(conn, "contributor_index.html", current_user: Login.get_curr_user(conn))
+          Login.is_client?(conn) -> render(conn, "client_index.html", current_user: Login.get_curr_user(conn))
+          Login.is_not_attributed?(conn) -> render(conn, "unattributed_index.html", current_user: Login.get_curr_user(conn))
+          Login.is_archived?(conn) -> conn |> put_flash(:error, "Votre compte a été archivé!") |> redirect(to: Routes.page_path(conn, :index))
+          true -> redirect(conn, to: Routes.page_path(conn, :index))
         end
 
       else
@@ -34,15 +35,12 @@ defmodule PmLoginWeb.UserController do
   end
 
   def list(conn, _params) do
-    current_id = get_session(conn, :curr_user_id)
-    if current_id != nil do
-      current_user = Login.get_user!(current_id)
-      case current_user.right_id do
-        1 ->
-          auths = Login.list_asc_auth
+    if Login.is_connected?(conn) do
+      cond do
+        Login.is_admin?(conn) ->
           LiveView.Controller.live_render(conn, PmLoginWeb.User.ListLive, session: %{"curr_user_id" => get_session(conn, :curr_user_id)})
-          # render(conn, "index.html", users: auths, layout: {PmLoginWeb.LayoutView, "admin_layout.html"})
-        _ ->
+
+        true ->
         conn
           |> put_flash(:error, "Désolé, vous n'êtes pas administrateur!")
           |> redirect(to: Routes.user_path(conn, :index))
@@ -75,10 +73,9 @@ defmodule PmLoginWeb.UserController do
   end
 
   def show(conn, %{"id" => id}) do
-    # user = Login.get_user!(id)
-    current_id = get_session(conn, :curr_user_id)
-    if current_id != nil do
-      user = Login.get_auth!(current_id)
+
+    if Login.is_connected?(conn) do
+      user = Login.get_curr_user_id(conn) |> Login.get_auth!
       case user.right_id do
         1 -> render(conn, "show.html", user: user, layout: {PmLoginWeb.LayoutView, "admin_layout.html"})
         _ -> render(conn, "show.html", user: user)
@@ -92,13 +89,13 @@ defmodule PmLoginWeb.UserController do
   end
 
   def edit_profile(conn, %{"id" => id}) do
-    current_id = get_session(conn, :curr_user_id)
-    if current_id != nil do
-      user = Login.get_user!(current_id)
+    # current_id = get_session(conn, :curr_user_id)
+    if Login.is_connected?(conn) do
+      user = Login.get_curr_user(conn)
       changeset = Login.change_user(user)
-      case user.right_id do
-          1 -> render(conn, "edit_profile.html", user: user, changeset: changeset, layout: {PmLoginWeb.LayoutView, "admin_layout.html"})
-          _ -> render(conn, "edit_profile.html", user: user, changeset: changeset)
+      cond do
+          Login.is_admin?(conn) -> render(conn, "edit_profile.html", user: user, changeset: changeset, layout: {PmLoginWeb.LayoutView, "admin_layout.html"})
+          true -> render(conn, "edit_profile.html", user: user, changeset: changeset)
       end
 
     else
@@ -116,18 +113,17 @@ defmodule PmLoginWeb.UserController do
   # end
 
   def edit(conn, %{"id" => id}) do
-    current_id = get_session(conn, :curr_user_id)
-    if current_id != nil do
+    if Login.is_connected?(conn) do
 
-      current_user = Login.get_user!(current_id)
+      current_user = Login.get_curr_user(conn)
       user = Login.get_user!(id)
-      case current_user.right_id do
-         1 ->
+      cond do
+         Login.is_admin?(conn) ->
            changeset = Login.change_user(user)
            rights = Login.list_rights_without_archived
            str_rights = Enum.map(rights, fn (%Right{} = r)  -> {String.to_atom(r.title), r.id} end)
            render(conn, "edit.html", user: user, changeset: changeset, rights: rights, str_rights: str_rights, layout: {PmLoginWeb.LayoutView, "admin_layout.html"})
-         _ ->
+         true ->
          conn
          |> put_flash(:error, "Vous n'êtes pas administrateur!")
          |> redirect(to: Routes.user_path(conn, :index))
@@ -170,12 +166,11 @@ defmodule PmLoginWeb.UserController do
   end
 
   def restore(conn, %{"id" => id}) do
-    current_id = get_session(conn, :curr_user_id)
 
-    if current_id != nil do
-      current_user = Login.get_user!(current_id)
-      case current_user.right_id do
-        1 ->
+    if Login.is_connected?(conn) do
+
+      cond do
+        Login.is_admin?(conn) ->
           user = Login.get_user!(id)
           {:ok, _user} = Login.restore_user(user)
 
@@ -183,7 +178,7 @@ defmodule PmLoginWeb.UserController do
           |> put_flash(:info, "Utilisateur #{user.username} restauré(e).")
           |> redirect(to: Routes.user_path(conn, :list))
 
-        _ ->
+        true ->
           conn
           |> put_flash(:error, "Vous n'êtes pas administrateur!")
           |> redirect(to: Routes.user_path(conn, :index))
@@ -197,12 +192,10 @@ defmodule PmLoginWeb.UserController do
   end
 
   def archive(conn, %{"id" => id}) do
-    current_id = get_session(conn, :curr_user_id)
 
-    if current_id != nil do
-      current_user = Login.get_user!(current_id)
-      case current_user.right_id do
-        1 ->
+    if Login.is_connected?(conn) do
+      cond do
+        Login.is_admin?(conn) ->
           user = Login.get_user!(id)
           Login.archive_user(user)
 
@@ -210,7 +203,7 @@ defmodule PmLoginWeb.UserController do
           |> put_flash(:info, "Utilisateur #{user.username} archivé(e).")
           |> redirect(to: Routes.user_path(conn, :list))
 
-        _ ->
+        true ->
           conn
           |> put_flash(:error, "Vous n'êtes pas administrateur!")
           |> redirect(to: Routes.user_path(conn, :index))
@@ -224,35 +217,35 @@ defmodule PmLoginWeb.UserController do
 
   end
 
+  #NOT USED YET FOR NOW
 
-  def delete(conn, %{"id" => id}) do
-    current_id = get_session(conn, :curr_user_id)
-
-    if current_id != nil do
-      current_user = Login.get_user!(current_id)
-      case current_user.right_id do
-        1 ->
-          user = Login.get_user!(id)
-          {:ok, _user} = Login.delete_user(user)
-
-          conn
-          |> put_flash(:info, "Utilisateur #{user.username} archivé(e).")
-          |> redirect(to: Routes.user_path(conn, :list))
-
-        _ ->
-          conn
-          |> put_flash(:error, "Vous n'êtes pas administrateur!")
-          |> redirect(to: Routes.user_path(conn, :index))
-      end
-
-    else
-      conn
-      |> put_flash(:error, "Connectez-vous d'abord!")
-      |> redirect(to: Routes.user_path(conn, :index))
-    end
-
-  end
-
+  # def delete(conn, %{"id" => id}) do
+  #   current_id = get_session(conn, :curr_user_id)
+  #
+  #   if current_id != nil do
+  #     current_user = Login.get_user!(current_id)
+  #     case current_user.right_id do
+  #       1 ->
+  #         user = Login.get_user!(id)
+  #         {:ok, _user} = Login.delete_user(user)
+  #
+  #         conn
+  #         |> put_flash(:info, "Utilisateur #{user.username} archivé(e).")
+  #         |> redirect(to: Routes.user_path(conn, :list))
+  #
+  #       _ ->
+  #         conn
+  #         |> put_flash(:error, "Vous n'êtes pas administrateur!")
+  #         |> redirect(to: Routes.user_path(conn, :index))
+  #     end
+  #
+  #   else
+  #     conn
+  #     |> put_flash(:error, "Connectez-vous d'abord!")
+  #     |> redirect(to: Routes.user_path(conn, :index))
+  #   end
+  #
+  # end
 
 
 end
