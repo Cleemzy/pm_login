@@ -179,4 +179,67 @@ defmodule PmLogin.ServicesTest do
       assert %Ecto.Changeset{} = Services.change_editor(editor)
     end
   end
+
+  describe "licenses" do
+    alias PmLogin.Services.License
+
+    @valid_attrs %{date_end: ~D[2010-04-17], date_start: ~D[2010-04-17], title: "some title"}
+    @update_attrs %{date_end: ~D[2011-05-18], date_start: ~D[2011-05-18], title: "some updated title"}
+    @invalid_attrs %{date_end: nil, date_start: nil, title: nil}
+
+    def license_fixture(attrs \\ %{}) do
+      {:ok, license} =
+        attrs
+        |> Enum.into(@valid_attrs)
+        |> Services.create_license()
+
+      license
+    end
+
+    test "list_licenses/0 returns all licenses" do
+      license = license_fixture()
+      assert Services.list_licenses() == [license]
+    end
+
+    test "get_license!/1 returns the license with given id" do
+      license = license_fixture()
+      assert Services.get_license!(license.id) == license
+    end
+
+    test "create_license/1 with valid data creates a license" do
+      assert {:ok, %License{} = license} = Services.create_license(@valid_attrs)
+      assert license.date_end == ~D[2010-04-17]
+      assert license.date_start == ~D[2010-04-17]
+      assert license.title == "some title"
+    end
+
+    test "create_license/1 with invalid data returns error changeset" do
+      assert {:error, %Ecto.Changeset{}} = Services.create_license(@invalid_attrs)
+    end
+
+    test "update_license/2 with valid data updates the license" do
+      license = license_fixture()
+      assert {:ok, %License{} = license} = Services.update_license(license, @update_attrs)
+      assert license.date_end == ~D[2011-05-18]
+      assert license.date_start == ~D[2011-05-18]
+      assert license.title == "some updated title"
+    end
+
+    test "update_license/2 with invalid data returns error changeset" do
+      license = license_fixture()
+      assert {:error, %Ecto.Changeset{}} = Services.update_license(license, @invalid_attrs)
+      assert license == Services.get_license!(license.id)
+    end
+
+    test "delete_license/1 deletes the license" do
+      license = license_fixture()
+      assert {:ok, %License{}} = Services.delete_license(license)
+      assert_raise Ecto.NoResultsError, fn -> Services.get_license!(license.id) end
+    end
+
+    test "change_license/1 returns a license changeset" do
+      license = license_fixture()
+      assert %Ecto.Changeset{} = Services.change_license(license)
+    end
+  end
 end
