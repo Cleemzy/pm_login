@@ -389,4 +389,100 @@ defmodule PmLogin.Services do
   def change_license(%License{} = license, attrs \\ %{}) do
     License.changeset(license, attrs)
   end
+
+  alias PmLogin.Services.AssistContract
+
+  @doc """
+  Returns the list of assist_contracts.
+
+  ## Examples
+
+      iex> list_assist_contracts()
+      [%AssistContract{}, ...]
+
+  """
+  def list_assist_contracts do
+    Repo.all(AssistContract)
+  end
+
+  @doc """
+  Gets a single assist_contract.
+
+  Raises `Ecto.NoResultsError` if the Assist contract does not exist.
+
+  ## Examples
+
+      iex> get_assist_contract!(123)
+      %AssistContract{}
+
+      iex> get_assist_contract!(456)
+      ** (Ecto.NoResultsError)
+
+  """
+  def get_assist_contract!(id), do: Repo.get!(AssistContract, id)
+
+  @doc """
+  Creates a assist_contract.
+
+  ## Examples
+
+      iex> create_assist_contract(%{field: value})
+      {:ok, %AssistContract{}}
+
+      iex> create_assist_contract(%{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def create_assist_contract(attrs \\ %{}) do
+    %AssistContract{}
+    |> AssistContract.changeset(attrs)
+    |> Repo.insert()
+  end
+
+  @doc """
+  Updates a assist_contract.
+
+  ## Examples
+
+      iex> update_assist_contract(assist_contract, %{field: new_value})
+      {:ok, %AssistContract{}}
+
+      iex> update_assist_contract(assist_contract, %{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def update_assist_contract(%AssistContract{} = assist_contract, attrs) do
+    assist_contract
+    |> AssistContract.changeset(attrs)
+    |> Repo.update()
+  end
+
+  @doc """
+  Deletes a assist_contract.
+
+  ## Examples
+
+      iex> delete_assist_contract(assist_contract)
+      {:ok, %AssistContract{}}
+
+      iex> delete_assist_contract(assist_contract)
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def delete_assist_contract(%AssistContract{} = assist_contract) do
+    Repo.delete(assist_contract)
+  end
+
+  @doc """
+  Returns an `%Ecto.Changeset{}` for tracking assist_contract changes.
+
+  ## Examples
+
+      iex> change_assist_contract(assist_contract)
+      %Ecto.Changeset{data: %AssistContract{}}
+
+  """
+  def change_assist_contract(%AssistContract{} = assist_contract, attrs \\ %{}) do
+    AssistContract.changeset(assist_contract, attrs)
+  end
 end

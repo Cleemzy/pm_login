@@ -242,4 +242,67 @@ defmodule PmLogin.ServicesTest do
       assert %Ecto.Changeset{} = Services.change_license(license)
     end
   end
+
+  describe "assist_contracts" do
+    alias PmLogin.Services.AssistContract
+
+    @valid_attrs %{date_end: ~D[2010-04-17], date_start: ~D[2010-04-17], title: "some title"}
+    @update_attrs %{date_end: ~D[2011-05-18], date_start: ~D[2011-05-18], title: "some updated title"}
+    @invalid_attrs %{date_end: nil, date_start: nil, title: nil}
+
+    def assist_contract_fixture(attrs \\ %{}) do
+      {:ok, assist_contract} =
+        attrs
+        |> Enum.into(@valid_attrs)
+        |> Services.create_assist_contract()
+
+      assist_contract
+    end
+
+    test "list_assist_contracts/0 returns all assist_contracts" do
+      assist_contract = assist_contract_fixture()
+      assert Services.list_assist_contracts() == [assist_contract]
+    end
+
+    test "get_assist_contract!/1 returns the assist_contract with given id" do
+      assist_contract = assist_contract_fixture()
+      assert Services.get_assist_contract!(assist_contract.id) == assist_contract
+    end
+
+    test "create_assist_contract/1 with valid data creates a assist_contract" do
+      assert {:ok, %AssistContract{} = assist_contract} = Services.create_assist_contract(@valid_attrs)
+      assert assist_contract.date_end == ~D[2010-04-17]
+      assert assist_contract.date_start == ~D[2010-04-17]
+      assert assist_contract.title == "some title"
+    end
+
+    test "create_assist_contract/1 with invalid data returns error changeset" do
+      assert {:error, %Ecto.Changeset{}} = Services.create_assist_contract(@invalid_attrs)
+    end
+
+    test "update_assist_contract/2 with valid data updates the assist_contract" do
+      assist_contract = assist_contract_fixture()
+      assert {:ok, %AssistContract{} = assist_contract} = Services.update_assist_contract(assist_contract, @update_attrs)
+      assert assist_contract.date_end == ~D[2011-05-18]
+      assert assist_contract.date_start == ~D[2011-05-18]
+      assert assist_contract.title == "some updated title"
+    end
+
+    test "update_assist_contract/2 with invalid data returns error changeset" do
+      assist_contract = assist_contract_fixture()
+      assert {:error, %Ecto.Changeset{}} = Services.update_assist_contract(assist_contract, @invalid_attrs)
+      assert assist_contract == Services.get_assist_contract!(assist_contract.id)
+    end
+
+    test "delete_assist_contract/1 deletes the assist_contract" do
+      assist_contract = assist_contract_fixture()
+      assert {:ok, %AssistContract{}} = Services.delete_assist_contract(assist_contract)
+      assert_raise Ecto.NoResultsError, fn -> Services.get_assist_contract!(assist_contract.id) end
+    end
+
+    test "change_assist_contract/1 returns a assist_contract changeset" do
+      assist_contract = assist_contract_fixture()
+      assert %Ecto.Changeset{} = Services.change_assist_contract(assist_contract)
+    end
+  end
 end

@@ -28,7 +28,9 @@ defmodule PmLoginWeb.Router do
     resources "/softwares", SoftwareController
 
     resources "/licenses", LicenseController
-    
+
+    resources "/assist_contracts", AssistContractController
+
     get "/users/:id/edit_profile", UserController, :edit_profile
 
     get "/list_users", UserController, :list
