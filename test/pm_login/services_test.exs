@@ -120,4 +120,63 @@ defmodule PmLogin.ServicesTest do
       assert %Ecto.Changeset{} = Services.change_software(software)
     end
   end
+
+  describe "editors" do
+    alias PmLogin.Services.Editor
+
+    @valid_attrs %{title: "some title"}
+    @update_attrs %{title: "some updated title"}
+    @invalid_attrs %{title: nil}
+
+    def editor_fixture(attrs \\ %{}) do
+      {:ok, editor} =
+        attrs
+        |> Enum.into(@valid_attrs)
+        |> Services.create_editor()
+
+      editor
+    end
+
+    test "list_editors/0 returns all editors" do
+      editor = editor_fixture()
+      assert Services.list_editors() == [editor]
+    end
+
+    test "get_editor!/1 returns the editor with given id" do
+      editor = editor_fixture()
+      assert Services.get_editor!(editor.id) == editor
+    end
+
+    test "create_editor/1 with valid data creates a editor" do
+      assert {:ok, %Editor{} = editor} = Services.create_editor(@valid_attrs)
+      assert editor.title == "some title"
+    end
+
+    test "create_editor/1 with invalid data returns error changeset" do
+      assert {:error, %Ecto.Changeset{}} = Services.create_editor(@invalid_attrs)
+    end
+
+    test "update_editor/2 with valid data updates the editor" do
+      editor = editor_fixture()
+      assert {:ok, %Editor{} = editor} = Services.update_editor(editor, @update_attrs)
+      assert editor.title == "some updated title"
+    end
+
+    test "update_editor/2 with invalid data returns error changeset" do
+      editor = editor_fixture()
+      assert {:error, %Ecto.Changeset{}} = Services.update_editor(editor, @invalid_attrs)
+      assert editor == Services.get_editor!(editor.id)
+    end
+
+    test "delete_editor/1 deletes the editor" do
+      editor = editor_fixture()
+      assert {:ok, %Editor{}} = Services.delete_editor(editor)
+      assert_raise Ecto.NoResultsError, fn -> Services.get_editor!(editor.id) end
+    end
+
+    test "change_editor/1 returns a editor changeset" do
+      editor = editor_fixture()
+      assert %Ecto.Changeset{} = Services.change_editor(editor)
+    end
+  end
 end

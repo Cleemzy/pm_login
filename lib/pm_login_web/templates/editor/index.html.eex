@@ -1,0 +1,26 @@
+<h1>Listing Editors</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Title</th>
+
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+<%= for editor <- @editors do %>
+    <tr>
+      <td><%= editor.title %></td>
+
+      <td>
+        <span><%= link "Show", to: Routes.editor_path(@conn, :show, editor) %></span>
+        <span><%= link "Edit", to: Routes.editor_path(@conn, :edit, editor) %></span>
+        <span><%= link "Delete", to: Routes.editor_path(@conn, :delete, editor), method: :delete, data: [confirm: "Are you sure?"] %></span>
+      </td>
+    </tr>
+<% end %>
+  </tbody>
+</table>
+
+<span><%= link "New Editor", to: Routes.editor_path(@conn, :new) %></span>

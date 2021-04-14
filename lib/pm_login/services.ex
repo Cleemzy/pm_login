@@ -197,4 +197,100 @@ defmodule PmLogin.Services do
   def change_software(%Software{} = software, attrs \\ %{}) do
     Software.changeset(software, attrs)
   end
+
+  alias PmLogin.Services.Editor
+
+  @doc """
+  Returns the list of editors.
+
+  ## Examples
+
+      iex> list_editors()
+      [%Editor{}, ...]
+
+  """
+  def list_editors do
+    Repo.all(Editor)
+  end
+
+  @doc """
+  Gets a single editor.
+
+  Raises `Ecto.NoResultsError` if the Editor does not exist.
+
+  ## Examples
+
+      iex> get_editor!(123)
+      %Editor{}
+
+      iex> get_editor!(456)
+      ** (Ecto.NoResultsError)
+
+  """
+  def get_editor!(id), do: Repo.get!(Editor, id)
+
+  @doc """
+  Creates a editor.
+
+  ## Examples
+
+      iex> create_editor(%{field: value})
+      {:ok, %Editor{}}
+
+      iex> create_editor(%{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def create_editor(attrs \\ %{}) do
+    %Editor{}
+    |> Editor.changeset(attrs)
+    |> Repo.insert()
+  end
+
+  @doc """
+  Updates a editor.
+
+  ## Examples
+
+      iex> update_editor(editor, %{field: new_value})
+      {:ok, %Editor{}}
+
+      iex> update_editor(editor, %{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def update_editor(%Editor{} = editor, attrs) do
+    editor
+    |> Editor.changeset(attrs)
+    |> Repo.update()
+  end
+
+  @doc """
+  Deletes a editor.
+
+  ## Examples
+
+      iex> delete_editor(editor)
+      {:ok, %Editor{}}
+
+      iex> delete_editor(editor)
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def delete_editor(%Editor{} = editor) do
+    Repo.delete(editor)
+  end
+
+  @doc """
+  Returns an `%Ecto.Changeset{}` for tracking editor changes.
+
+  ## Examples
+
+      iex> change_editor(editor)
+      %Ecto.Changeset{data: %Editor{}}
+
+  """
+  def change_editor(%Editor{} = editor, attrs \\ %{}) do
+    Editor.changeset(editor, attrs)
+  end
 end

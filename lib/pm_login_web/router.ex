@@ -23,6 +23,8 @@ defmodule PmLoginWeb.Router do
 
     resources "/companies", CompanyController
 
+    resources "/editors", EditorController
+
     resources "/softwares", SoftwareController
 
     get "/users/:id/edit_profile", UserController, :edit_profile
