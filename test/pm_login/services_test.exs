@@ -362,4 +362,124 @@ defmodule PmLogin.ServicesTest do
       assert %Ecto.Changeset{} = Services.change_active_client(active_client)
     end
   end
+
+  describe "clients_requests" do
+    alias PmLogin.Services.ClientsRequest
+
+    @valid_attrs %{date_post: ~N[2010-04-17 14:00:00]}
+    @update_attrs %{date_post: ~N[2011-05-18 15:01:01]}
+    @invalid_attrs %{date_post: nil}
+
+    def clients_request_fixture(attrs \\ %{}) do
+      {:ok, clients_request} =
+        attrs
+        |> Enum.into(@valid_attrs)
+        |> Services.create_clients_request()
+
+      clients_request
+    end
+
+    test "list_clients_requests/0 returns all clients_requests" do
+      clients_request = clients_request_fixture()
+      assert Services.list_clients_requests() == [clients_request]
+    end
+
+    test "get_clients_request!/1 returns the clients_request with given id" do
+      clients_request = clients_request_fixture()
+      assert Services.get_clients_request!(clients_request.id) == clients_request
+    end
+
+    test "create_clients_request/1 with valid data creates a clients_request" do
+      assert {:ok, %ClientsRequest{} = clients_request} = Services.create_clients_request(@valid_attrs)
+      assert clients_request.date_post == ~N[2010-04-17 14:00:00]
+    end
+
+    test "create_clients_request/1 with invalid data returns error changeset" do
+      assert {:error, %Ecto.Changeset{}} = Services.create_clients_request(@invalid_attrs)
+    end
+
+    test "update_clients_request/2 with valid data updates the clients_request" do
+      clients_request = clients_request_fixture()
+      assert {:ok, %ClientsRequest{} = clients_request} = Services.update_clients_request(clients_request, @update_attrs)
+      assert clients_request.date_post == ~N[2011-05-18 15:01:01]
+    end
+
+    test "update_clients_request/2 with invalid data returns error changeset" do
+      clients_request = clients_request_fixture()
+      assert {:error, %Ecto.Changeset{}} = Services.update_clients_request(clients_request, @invalid_attrs)
+      assert clients_request == Services.get_clients_request!(clients_request.id)
+    end
+
+    test "delete_clients_request/1 deletes the clients_request" do
+      clients_request = clients_request_fixture()
+      assert {:ok, %ClientsRequest{}} = Services.delete_clients_request(clients_request)
+      assert_raise Ecto.NoResultsError, fn -> Services.get_clients_request!(clients_request.id) end
+    end
+
+    test "change_clients_request/1 returns a clients_request changeset" do
+      clients_request = clients_request_fixture()
+      assert %Ecto.Changeset{} = Services.change_clients_request(clients_request)
+    end
+  end
+
+  describe "clients_requests" do
+    alias PmLogin.Services.ClientsRequest
+
+    @valid_attrs %{content: "some content", date_post: ~N[2010-04-17 14:00:00]}
+    @update_attrs %{content: "some updated content", date_post: ~N[2011-05-18 15:01:01]}
+    @invalid_attrs %{content: nil, date_post: nil}
+
+    def clients_request_fixture(attrs \\ %{}) do
+      {:ok, clients_request} =
+        attrs
+        |> Enum.into(@valid_attrs)
+        |> Services.create_clients_request()
+
+      clients_request
+    end
+
+    test "list_clients_requests/0 returns all clients_requests" do
+      clients_request = clients_request_fixture()
+      assert Services.list_clients_requests() == [clients_request]
+    end
+
+    test "get_clients_request!/1 returns the clients_request with given id" do
+      clients_request = clients_request_fixture()
+      assert Services.get_clients_request!(clients_request.id) == clients_request
+    end
+
+    test "create_clients_request/1 with valid data creates a clients_request" do
+      assert {:ok, %ClientsRequest{} = clients_request} = Services.create_clients_request(@valid_attrs)
+      assert clients_request.content == "some content"
+      assert clients_request.date_post == ~N[2010-04-17 14:00:00]
+    end
+
+    test "create_clients_request/1 with invalid data returns error changeset" do
+      assert {:error, %Ecto.Changeset{}} = Services.create_clients_request(@invalid_attrs)
+    end
+
+    test "update_clients_request/2 with valid data updates the clients_request" do
+      clients_request = clients_request_fixture()
+      assert {:ok, %ClientsRequest{} = clients_request} = Services.update_clients_request(clients_request, @update_attrs)
+      assert clients_request.content == "some updated content"
+      assert clients_request.date_post == ~N[2011-05-18 15:01:01]
+    end
+
+    test "update_clients_request/2 with invalid data returns error changeset" do
+      clients_request = clients_request_fixture()
+      assert {:error, %Ecto.Changeset{}} = Services.update_clients_request(clients_request, @invalid_attrs)
+      assert clients_request == Services.get_clients_request!(clients_request.id)
+    end
+
+    test "delete_clients_request/1 deletes the clients_request" do
+      clients_request = clients_request_fixture()
+      assert {:ok, %ClientsRequest{}} = Services.delete_clients_request(clients_request)
+      assert_raise Ecto.NoResultsError, fn -> Services.get_clients_request!(clients_request.id) end
+    end
+
+    test "change_clients_request/1 returns a clients_request changeset" do
+      clients_request = clients_request_fixture()
+      assert %Ecto.Changeset{} = Services.change_clients_request(clients_request)
+    end
+  end
 end

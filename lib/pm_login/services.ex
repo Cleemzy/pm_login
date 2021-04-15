@@ -581,4 +581,102 @@ defmodule PmLogin.Services do
   def change_active_client(%ActiveClient{} = active_client, attrs \\ %{}) do
     ActiveClient.changeset(active_client, attrs)
   end
+
+  
+
+  alias PmLogin.Services.ClientsRequest
+
+  @doc """
+  Returns the list of clients_requests.
+
+  ## Examples
+
+      iex> list_clients_requests()
+      [%ClientsRequest{}, ...]
+
+  """
+  def list_clients_requests do
+    Repo.all(ClientsRequest)
+  end
+
+  @doc """
+  Gets a single clients_request.
+
+  Raises `Ecto.NoResultsError` if the Clients request does not exist.
+
+  ## Examples
+
+      iex> get_clients_request!(123)
+      %ClientsRequest{}
+
+      iex> get_clients_request!(456)
+      ** (Ecto.NoResultsError)
+
+  """
+  def get_clients_request!(id), do: Repo.get!(ClientsRequest, id)
+
+  @doc """
+  Creates a clients_request.
+
+  ## Examples
+
+      iex> create_clients_request(%{field: value})
+      {:ok, %ClientsRequest{}}
+
+      iex> create_clients_request(%{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def create_clients_request(attrs \\ %{}) do
+    %ClientsRequest{}
+    |> ClientsRequest.changeset(attrs)
+    |> Repo.insert()
+  end
+
+  @doc """
+  Updates a clients_request.
+
+  ## Examples
+
+      iex> update_clients_request(clients_request, %{field: new_value})
+      {:ok, %ClientsRequest{}}
+
+      iex> update_clients_request(clients_request, %{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def update_clients_request(%ClientsRequest{} = clients_request, attrs) do
+    clients_request
+    |> ClientsRequest.changeset(attrs)
+    |> Repo.update()
+  end
+
+  @doc """
+  Deletes a clients_request.
+
+  ## Examples
+
+      iex> delete_clients_request(clients_request)
+      {:ok, %ClientsRequest{}}
+
+      iex> delete_clients_request(clients_request)
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def delete_clients_request(%ClientsRequest{} = clients_request) do
+    Repo.delete(clients_request)
+  end
+
+  @doc """
+  Returns an `%Ecto.Changeset{}` for tracking clients_request changes.
+
+  ## Examples
+
+      iex> change_clients_request(clients_request)
+      %Ecto.Changeset{data: %ClientsRequest{}}
+
+  """
+  def change_clients_request(%ClientsRequest{} = clients_request, attrs \\ %{}) do
+    ClientsRequest.changeset(clients_request, attrs)
+  end
 end
