@@ -18,43 +18,25 @@ defmodule PmLoginWeb.Router do
     pipe_through :browser
 
     resources "/rights", RightController
-
     resources "/users", UserController
-
     resources "/companies", CompanyController
-
     resources "/editors", EditorController
-
     resources "/softwares", SoftwareController
-
     resources "/licenses", LicenseController
-
     resources "/assist_contracts", AssistContractController
-
     resources "/active_clients", ActiveClientController
-
     resources "/clients_requests", ClientsRequestController
-
+    
     get "/users/:id/edit_profile", UserController, :edit_profile
-
     get "/list_users", UserController, :list
-
     put "/profile/:id", UserController, :update_profile
-
     patch "/profile/:id", UserController, :update_profile
-
     put "/user/:id", UserController, :archive
-
     patch "/user/:id", UserController, :archive
-
     put "/user/restore/:id", UserController, :restore
-
     get "/", PageController, :index
-
     post "/auth", AuthController, :auth
-
     post "/test_auth", AuthController, :test_auth
-
     get "/signout", AuthController, :sign_out
   end
 
