@@ -22,6 +22,10 @@ defmodule PmLoginWeb.User.ListLive do
     {:noreply, fetch(socket)}
   end
 
+  def handle_event("switch", %{"id" => id}, socket) do  
+    {:noreply, assign(socket, users: Login.filter_auth(id))}
+  end
+
   def handle_event("arch", %{"id" => id}, socket) do
     user = Login.get_user!(id)
     Login.archive_user(user)
@@ -31,7 +35,7 @@ defmodule PmLoginWeb.User.ListLive do
   end
 
   defp fetch(socket) do
-    assign(socket, users: Login.list_asc_auth(),show_modal: false, arch_id: nil,layout: {PmLoginWeb.LayoutView, "admin_layout_live.html"})
+    assign(socket, users: Login.list_asc_auth(), rights: Login.list_rights(),show_modal: false, arch_id: nil,layout: {PmLoginWeb.LayoutView, "admin_layout_live.html"})
   end
 
   def render(assigns) do

@@ -315,6 +315,47 @@ defmodule PmLogin.Login do
 
   alias PmLogin.Login.Auth
 
+  def filter_auth(right_id) do
+    case right_id do
+      1 -> list_only_auth_admin
+      2 -> list_only_auth_attributor
+      3 -> list_only_auth_contributor
+      4 -> list_only_auth_client
+      5 -> list_only_auth_unattributed
+      100 -> list_only_auth_archived
+    end
+  end
+
+  def list_only_auth_admin do
+    query = from a in Auth, where: a.id == 1,order_by: [asc: :right_id], select: a
+    Repo.all(query)
+  end
+
+  def list_only_auth_attributor do
+    query = from a in Auth, where: a.id == 2,order_by: [asc: :right_id], select: a
+    Repo.all(query)
+  end
+
+  def list_only_auth_contributor do
+    query = from a in Auth, where: a.id == 3,order_by: [asc: :right_id], select: a
+    Repo.all(query)
+  end
+
+  def list_only_auth_client do
+    query = from a in Auth, where: a.id == 4,order_by: [asc: :right_id], select: a
+    Repo.all(query)
+  end
+
+  def list_only_auth_unattributed do
+    query = from a in Auth, where: a.id == 5,order_by: [asc: :right_id], select: a
+    Repo.all(query)
+  end
+
+  def list_only_auth_archived do
+    query = from a in Auth, where: a.id == 100,order_by: [asc: :right_id], select: a
+    Repo.all(query)
+  end
+
   def list_asc_auth do
     query = from a in Auth, order_by: [asc: :right_id], select: a
     Repo.all(query)

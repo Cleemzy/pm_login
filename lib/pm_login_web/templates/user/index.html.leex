@@ -1,7 +1,24 @@
 <% alias PmLoginWeb.LiveComponent.ModalLive %>
   <h1>Liste des utilisateurs</h1>
 
-  <table>
+  <div class="row">
+    <div class="column column-10">
+      <b>Filtre: </b>
+    </div>
+
+    <div class="column column-10">
+      <select id="right_filter" name="right_select">
+        <%= for right <- @rights do %>
+        <option phx-click="switch" phx-value-id="<%= right.id %>" value="<%= right.id %>"><%= right.title %></option>
+        <% end %>
+      </select>
+    </div>
+
+  </div>
+
+
+
+  <table id="tb-auth">
     <thead>
       <tr>
         <th></th>
@@ -9,7 +26,7 @@
         <th>Email</th>
         <th>Statut</th>
 
-        <th></th>
+        <th>Actions</th>
       </tr>
     </thead>
     <tbody>
