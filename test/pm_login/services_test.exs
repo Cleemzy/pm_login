@@ -305,4 +305,61 @@ defmodule PmLogin.ServicesTest do
       assert %Ecto.Changeset{} = Services.change_assist_contract(assist_contract)
     end
   end
+
+  describe "active_clients" do
+    alias PmLogin.Services.ActiveClient
+
+    @valid_attrs %{}
+    @update_attrs %{}
+    @invalid_attrs %{}
+
+    def active_client_fixture(attrs \\ %{}) do
+      {:ok, active_client} =
+        attrs
+        |> Enum.into(@valid_attrs)
+        |> Services.create_active_client()
+
+      active_client
+    end
+
+    test "list_active_clients/0 returns all active_clients" do
+      active_client = active_client_fixture()
+      assert Services.list_active_clients() == [active_client]
+    end
+
+    test "get_active_client!/1 returns the active_client with given id" do
+      active_client = active_client_fixture()
+      assert Services.get_active_client!(active_client.id) == active_client
+    end
+
+    test "create_active_client/1 with valid data creates a active_client" do
+      assert {:ok, %ActiveClient{} = active_client} = Services.create_active_client(@valid_attrs)
+    end
+
+    test "create_active_client/1 with invalid data returns error changeset" do
+      assert {:error, %Ecto.Changeset{}} = Services.create_active_client(@invalid_attrs)
+    end
+
+    test "update_active_client/2 with valid data updates the active_client" do
+      active_client = active_client_fixture()
+      assert {:ok, %ActiveClient{} = active_client} = Services.update_active_client(active_client, @update_attrs)
+    end
+
+    test "update_active_client/2 with invalid data returns error changeset" do
+      active_client = active_client_fixture()
+      assert {:error, %Ecto.Changeset{}} = Services.update_active_client(active_client, @invalid_attrs)
+      assert active_client == Services.get_active_client!(active_client.id)
+    end
+
+    test "delete_active_client/1 deletes the active_client" do
+      active_client = active_client_fixture()
+      assert {:ok, %ActiveClient{}} = Services.delete_active_client(active_client)
+      assert_raise Ecto.NoResultsError, fn -> Services.get_active_client!(active_client.id) end
+    end
+
+    test "change_active_client/1 returns a active_client changeset" do
+      active_client = active_client_fixture()
+      assert %Ecto.Changeset{} = Services.change_active_client(active_client)
+    end
+  end
 end

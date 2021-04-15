@@ -485,4 +485,100 @@ defmodule PmLogin.Services do
   def change_assist_contract(%AssistContract{} = assist_contract, attrs \\ %{}) do
     AssistContract.changeset(assist_contract, attrs)
   end
+
+  alias PmLogin.Services.ActiveClient
+
+  @doc """
+  Returns the list of active_clients.
+
+  ## Examples
+
+      iex> list_active_clients()
+      [%ActiveClient{}, ...]
+
+  """
+  def list_active_clients do
+    Repo.all(ActiveClient)
+  end
+
+  @doc """
+  Gets a single active_client.
+
+  Raises `Ecto.NoResultsError` if the Active client does not exist.
+
+  ## Examples
+
+      iex> get_active_client!(123)
+      %ActiveClient{}
+
+      iex> get_active_client!(456)
+      ** (Ecto.NoResultsError)
+
+  """
+  def get_active_client!(id), do: Repo.get!(ActiveClient, id)
+
+  @doc """
+  Creates a active_client.
+
+  ## Examples
+
+      iex> create_active_client(%{field: value})
+      {:ok, %ActiveClient{}}
+
+      iex> create_active_client(%{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def create_active_client(attrs \\ %{}) do
+    %ActiveClient{}
+    |> ActiveClient.changeset(attrs)
+    |> Repo.insert()
+  end
+
+  @doc """
+  Updates a active_client.
+
+  ## Examples
+
+      iex> update_active_client(active_client, %{field: new_value})
+      {:ok, %ActiveClient{}}
+
+      iex> update_active_client(active_client, %{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def update_active_client(%ActiveClient{} = active_client, attrs) do
+    active_client
+    |> ActiveClient.changeset(attrs)
+    |> Repo.update()
+  end
+
+  @doc """
+  Deletes a active_client.
+
+  ## Examples
+
+      iex> delete_active_client(active_client)
+      {:ok, %ActiveClient{}}
+
+      iex> delete_active_client(active_client)
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def delete_active_client(%ActiveClient{} = active_client) do
+    Repo.delete(active_client)
+  end
+
+  @doc """
+  Returns an `%Ecto.Changeset{}` for tracking active_client changes.
+
+  ## Examples
+
+      iex> change_active_client(active_client)
+      %Ecto.Changeset{data: %ActiveClient{}}
+
+  """
+  def change_active_client(%ActiveClient{} = active_client, attrs \\ %{}) do
+    ActiveClient.changeset(active_client, attrs)
+  end
 end
