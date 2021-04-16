@@ -22,9 +22,19 @@ defmodule PmLoginWeb.User.ListLive do
     {:noreply, fetch(socket)}
   end
 
-  def handle_event("switch", %{"id" => id}, socket) do  
+  def handle_event("switch", %{"id" => id}, socket) do
     {:noreply, assign(socket, users: Login.filter_auth(id))}
   end
+
+  def handle_event("test_filter", _, socket) do
+    {:noreply, assign(socket, users: Login.filter_auth(1))}
+  end
+
+  def handle_event("right_selected", %{"_target" => ["right_select"], "right_select" => id}, socket), do:
+    {:noreply, assign(socket, users: Login.filter_auth(id |> String.to_integer))}
+
+  def handle_event("right_selected", %{"_target" => ["right_select"]}, socket), do:
+    {:noreply, socket}
 
   def handle_event("arch", %{"id" => id}, socket) do
     user = Login.get_user!(id)

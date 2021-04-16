@@ -3,16 +3,24 @@
 
   <div class="row">
     <div class="column column-10">
-      <b>Filtre: </b>
+      <b style="position: relative; top: 8px;">Filtre: </b>
     </div>
 
     <div class="column column-10">
-      <select id="right_filter" name="right_select">
-        <%= for right <- @rights do %>
-        <option phx-click="switch" phx-value-id="<%= right.id %>" value="<%= right.id %>"><%= right.title %></option>
-        <% end %>
-      </select>
+      <form phx-change="right_selected">
+
+        <select id="right_filter" name="right_select">
+        <option value="" selected disabled hidden>par statut</option>
+        <option value="9000">Tout</option>
+          <%= for right <- @rights do %>
+        <option value="<%= right.id %>"><%= right.title %></option>
+          <% end %>
+        </select>
+
+      </form>
     </div>
+
+
 
   </div>
 
