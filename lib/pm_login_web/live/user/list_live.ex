@@ -30,6 +30,12 @@ defmodule PmLoginWeb.User.ListLive do
     {:noreply, assign(socket, users: Login.filter_auth(1))}
   end
 
+  def handle_event("sort_users", %{"_target" => ["sort_select"], "sort_select" => sort_type}, socket), do:
+    {:noreply, assign(socket, users: Login.sort_auth(sort_type))}
+
+  def handle_event("sort_users", %{"_target" => ["sort_select"]},socket), do:
+    {:noreply, socket}
+
   def handle_event("right_selected", %{"_target" => ["right_select"], "right_select" => id}, socket), do:
     {:noreply, assign(socket, users: Login.filter_auth(id |> String.to_integer))}
 

@@ -357,6 +357,9 @@ defmodule PmLogin.Login do
     Repo.all(query)
   end
 
+  def sort_auth(sort_type) when sort_type == "asc", do: list_asc_username_auth
+  def sort_auth(sort_type) when sort_type == "desc", do: list_desc_username_auth 
+
   def list_asc_username_auth do
     query = from a in Auth, order_by: [asc: :username], select: a
     Repo.all(query)
