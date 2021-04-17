@@ -317,7 +317,7 @@ defmodule PmLogin.Login do
 
   def asc_username do
     auth = list_asc_auth
-    Enum.sort_by(auth, &(&1.username))
+    Enum.sort_by(auth, &(&1.username), :desc)
     # Enum.sort(auth)
   end
 

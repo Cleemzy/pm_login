@@ -30,9 +30,34 @@ defmodule PmLoginWeb.User.ListLive do
     {:noreply, assign(socket, users: Login.filter_auth(1))}
   end
 
-  def handle_event("click", _,socket) do
+  def handle_event("sorted_by_status", _,socket) do
+    auth = socket.assigns.users
 
-    {:noreply, socket}
+    case socket.assigns.sorted_by_status do
+        true -> {:noreply, socket |> assign(users: Enum.sort_by(auth, &(&1.right_id), :desc), sorted_by_status: false)}
+        _ ->  {:noreply, socket |> assign(users: Enum.sort_by(auth, &(&1.right_id)), sorted_by_status: true)}
+    end
+
+  end
+
+  def handle_event("sorted_by_email", _,socket) do
+    auth = socket.assigns.users
+
+    case socket.assigns.sorted_by_email do
+        true -> {:noreply, socket |> assign(users: Enum.sort_by(auth, &(&1.email), :desc), sorted_by_email: false)}
+        _ ->  {:noreply, socket |> assign(users: Enum.sort_by(auth, &(&1.email)), sorted_by_email: true)}
+    end
+
+  end
+
+  def handle_event("sorted_by_username", _,socket) do
+    auth = socket.assigns.users
+
+    case socket.assigns.sorted_by_username do
+        true -> {:noreply, socket |> assign(users: Enum.sort_by(auth, &(&1.username), :desc), sorted_by_username: false)}
+        _ ->  {:noreply, socket |> assign(users: Enum.sort_by(auth, &(&1.username)), sorted_by_username: true)}
+    end
+
   end
 
   def handle_event("sort_users", %{"_target" => ["sort_select"], "sort_select" => sort_type}, socket), do:
@@ -56,7 +81,7 @@ defmodule PmLoginWeb.User.ListLive do
   end
 
   defp fetch(socket) do
-    assign(socket, users: Login.list_asc_auth(), rights: Login.list_rights(), info_message: "sdf",show_modal: false, arch_id: nil,layout: {PmLoginWeb.LayoutView, "admin_layout_live.html"})
+    assign(socket, users: Login.list_asc_auth(), rights: Login.list_rights(),sorted_by_username: false , sorted_by_email: false, sorted_by_status: false,show_modal: false, arch_id: nil,layout: {PmLoginWeb.LayoutView, "admin_layout_live.html"})
   end
 
   def render(assigns) do
