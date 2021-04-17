@@ -32,7 +32,7 @@ defmodule PmLoginWeb.User.ListLive do
 
   def handle_event("click", _,socket) do
 
-    {:noreply, socket|>put_flash(:info, "wassup")|>IO.inspect}
+    {:noreply, socket}
   end
 
   def handle_event("sort_users", %{"_target" => ["sort_select"], "sort_select" => sort_type}, socket), do:
@@ -81,7 +81,7 @@ defmodule PmLoginWeb.User.ListLive do
       # PmLoginWeb.UserController.archive(socket, user.id)
   {:noreply,
     socket
-    |> put_flash(:info, "L'utilisateur a bien été archivé!")
+    |> put_flash(:info, "L'utilisateur #{user.username} a bien été archivé!")
     |> assign(show_modal: false)
       }
   end

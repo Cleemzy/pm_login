@@ -36,27 +36,6 @@
       <!-- <p class="alert alert-info" role="alert" phx-click="lv:clear-flash" phx-value-key="error"><%= live_flash(@flash, :info) %></p>
       <p class="alert alert-danger" role="alert" phx-click="lv:clear-flash" phx-value-key="error"><%= live_flash(@flash, :error) %></p> -->
 
-      <p class="alert alert-info" role="alert"
-        phx-click="lv:clear-flash"
-        phx-value-key="info"><%= live_flash(@flash, :info) %></p>
-
-      <p class="alert alert-danger" role="alert"
-        phx-click="lv:clear-flash"
-        phx-value-key="error"><%= live_flash(@flash, :error) %></p>
-
-        <p class="alert alert-info" role="alert"
-          phx-click="lv:clear-flash"
-          phx-value-key="info"><%= get_flash(@conn, :info) %></p>
-
-        <p class="alert alert-danger" role="alert"
-          phx-click="lv:clear-flash"
-          phx-value-key="error"><%= get_flash(@conn, :error) %></p>
-
-
-
-          <p class="alert alert-danger"><%= live_flash(@flash, :info) %></p>
-          <p class="alert alert-danger"><%= live_flash(@flash, :error) %></p>
-          <%= IO.inspect @flash["info"] %>
       <%= @inner_content %>
       <br/>
       <br/>
