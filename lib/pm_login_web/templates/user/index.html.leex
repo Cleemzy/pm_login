@@ -1,3 +1,4 @@
+<p class="alert alert-info"><%= live_flash(@flash, :info) %></p>
 <% alias PmLoginWeb.LiveComponent.ModalLive %>
   <h1>Liste des utilisateurs</h1>
 
@@ -46,7 +47,7 @@
     <thead>
       <tr>
         <th></th>
-        <th>Nom d'utilisateur</th>
+        <th><span><%= link("+",to: "#",phx_click: "click",class: "btn btn-outline-dark btn-sm")%></span> Nom d'utilisateur</th>
         <th>Email</th>
         <th>Statut</th>
 

@@ -30,6 +30,11 @@ defmodule PmLoginWeb.User.ListLive do
     {:noreply, assign(socket, users: Login.filter_auth(1))}
   end
 
+  def handle_event("click", _,socket) do
+
+    {:noreply, socket|>put_flash(:info, "wassup")|>IO.inspect}
+  end
+
   def handle_event("sort_users", %{"_target" => ["sort_select"], "sort_select" => sort_type}, socket), do:
     {:noreply, assign(socket, users: Login.sort_auth(sort_type))}
 
@@ -51,7 +56,7 @@ defmodule PmLoginWeb.User.ListLive do
   end
 
   defp fetch(socket) do
-    assign(socket, users: Login.list_asc_auth(), rights: Login.list_rights(),show_modal: false, arch_id: nil,layout: {PmLoginWeb.LayoutView, "admin_layout_live.html"})
+    assign(socket, users: Login.list_asc_auth(), rights: Login.list_rights(), info_message: "sdf",show_modal: false, arch_id: nil,layout: {PmLoginWeb.LayoutView, "admin_layout_live.html"})
   end
 
   def render(assigns) do

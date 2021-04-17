@@ -315,6 +315,12 @@ defmodule PmLogin.Login do
 
   alias PmLogin.Login.Auth
 
+  def asc_username do
+    auth = list_asc_auth
+    Enum.sort_by(auth, &(&1.username))
+    # Enum.sort(auth)
+  end
+
   def filter_auth(right_id) do
     case right_id do
       1 -> list_only_auth_admin
@@ -358,7 +364,7 @@ defmodule PmLogin.Login do
   end
 
   def sort_auth(sort_type) when sort_type == "asc", do: list_asc_username_auth
-  def sort_auth(sort_type) when sort_type == "desc", do: list_desc_username_auth 
+  def sort_auth(sort_type) when sort_type == "desc", do: list_desc_username_auth
 
   def list_asc_username_auth do
     query = from a in Auth, order_by: [asc: :username], select: a

@@ -44,11 +44,25 @@
         phx-click="lv:clear-flash"
         phx-value-key="error"><%= live_flash(@flash, :error) %></p>
 
+        <p class="alert alert-info" role="alert"
+          phx-click="lv:clear-flash"
+          phx-value-key="info"><%= get_flash(@conn, :info) %></p>
+
+        <p class="alert alert-danger" role="alert"
+          phx-click="lv:clear-flash"
+          phx-value-key="error"><%= get_flash(@conn, :error) %></p>
+
+
+
+          <p class="alert alert-danger"><%= live_flash(@flash, :info) %></p>
+          <p class="alert alert-danger"><%= live_flash(@flash, :error) %></p>
+          <%= IO.inspect @flash["info"] %>
       <%= @inner_content %>
       <br/>
       <br/>
 
       <span><%= link "Déconnexion", to: Routes.auth_path(@conn, :sign_out), class: "btn btn-outline-danger btn-lg" %></span>
+      <p>Is is really live ?</p>
     </main>
   </body>
   <footer id="foot" class="container-fluid">
