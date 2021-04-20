@@ -33,7 +33,7 @@ CREATE TABLE public.active_clients (
 );
 
 
-ALTER TABLE public.active_clients OWNER TO postgres;
+ALTER TABLE public.active_clients OWNER TO odoo;
 
 --
 -- Name: active_clients_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
@@ -47,7 +47,7 @@ CREATE SEQUENCE public.active_clients_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.active_clients_id_seq OWNER TO postgres;
+ALTER TABLE public.active_clients_id_seq OWNER TO odoo;
 
 --
 -- Name: active_clients_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
@@ -71,7 +71,7 @@ CREATE TABLE public.assist_contracts (
 );
 
 
-ALTER TABLE public.assist_contracts OWNER TO postgres;
+ALTER TABLE public.assist_contracts OWNER TO odoo;
 
 --
 -- Name: assist_contracts_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
@@ -85,7 +85,7 @@ CREATE SEQUENCE public.assist_contracts_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.assist_contracts_id_seq OWNER TO postgres;
+ALTER TABLE public.assist_contracts_id_seq OWNER TO odoo;
 
 --
 -- Name: assist_contracts_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
@@ -106,7 +106,7 @@ CREATE TABLE public.rights (
 );
 
 
-ALTER TABLE public.rights OWNER TO postgres;
+ALTER TABLE public.rights OWNER TO odoo;
 
 --
 -- Name: users; Type: TABLE; Schema: public; Owner: postgres
@@ -124,7 +124,7 @@ CREATE TABLE public.users (
 );
 
 
-ALTER TABLE public.users OWNER TO postgres;
+ALTER TABLE public.users OWNER TO odoo;
 
 --
 -- Name: auth; Type: VIEW; Schema: public; Owner: postgres
@@ -141,7 +141,7 @@ CREATE VIEW public.auth AS
      JOIN public.rights ON ((users.right_id = rights.id)));
 
 
-ALTER TABLE public.auth OWNER TO postgres;
+ALTER TABLE public.auth OWNER TO odoo;
 
 --
 -- Name: clients_requests; Type: TABLE; Schema: public; Owner: postgres
@@ -158,7 +158,7 @@ CREATE TABLE public.clients_requests (
 );
 
 
-ALTER TABLE public.clients_requests OWNER TO postgres;
+ALTER TABLE public.clients_requests OWNER TO odoo;
 
 --
 -- Name: clients_requests_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
@@ -172,7 +172,7 @@ CREATE SEQUENCE public.clients_requests_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.clients_requests_id_seq OWNER TO postgres;
+ALTER TABLE public.clients_requests_id_seq OWNER TO odoo;
 
 --
 -- Name: clients_requests_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
@@ -193,7 +193,7 @@ CREATE TABLE public.companies (
 );
 
 
-ALTER TABLE public.companies OWNER TO postgres;
+ALTER TABLE public.companies OWNER TO odoo;
 
 --
 -- Name: companies_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
@@ -207,7 +207,7 @@ CREATE SEQUENCE public.companies_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.companies_id_seq OWNER TO postgres;
+ALTER TABLE public.companies_id_seq OWNER TO odoo;
 
 --
 -- Name: companies_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
@@ -229,7 +229,7 @@ CREATE TABLE public.editors (
 );
 
 
-ALTER TABLE public.editors OWNER TO postgres;
+ALTER TABLE public.editors OWNER TO odoo;
 
 --
 -- Name: editors_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
@@ -243,7 +243,7 @@ CREATE SEQUENCE public.editors_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.editors_id_seq OWNER TO postgres;
+ALTER TABLE public.editors_id_seq OWNER TO odoo;
 
 --
 -- Name: editors_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
@@ -267,7 +267,7 @@ CREATE TABLE public.licenses (
 );
 
 
-ALTER TABLE public.licenses OWNER TO postgres;
+ALTER TABLE public.licenses OWNER TO odoo;
 
 --
 -- Name: licenses_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
@@ -281,7 +281,7 @@ CREATE SEQUENCE public.licenses_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.licenses_id_seq OWNER TO postgres;
+ALTER TABLE public.licenses_id_seq OWNER TO odoo;
 
 --
 -- Name: licenses_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
@@ -302,7 +302,7 @@ CREATE SEQUENCE public.rights_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.rights_id_seq OWNER TO postgres;
+ALTER TABLE public.rights_id_seq OWNER TO odoo;
 
 --
 -- Name: rights_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
@@ -321,7 +321,7 @@ CREATE TABLE public.schema_migrations (
 );
 
 
-ALTER TABLE public.schema_migrations OWNER TO postgres;
+ALTER TABLE public.schema_migrations OWNER TO odoo;
 
 --
 -- Name: softwares; Type: TABLE; Schema: public; Owner: postgres
@@ -336,7 +336,7 @@ CREATE TABLE public.softwares (
 );
 
 
-ALTER TABLE public.softwares OWNER TO postgres;
+ALTER TABLE public.softwares OWNER TO odoo;
 
 --
 -- Name: softwares_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
@@ -350,7 +350,7 @@ CREATE SEQUENCE public.softwares_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.softwares_id_seq OWNER TO postgres;
+ALTER TABLE public.softwares_id_seq OWNER TO odoo;
 
 --
 -- Name: softwares_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
@@ -371,7 +371,7 @@ CREATE SEQUENCE public.users_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.users_id_seq OWNER TO postgres;
+ALTER TABLE public.users_id_seq OWNER TO odoo;
 
 --
 -- Name: users_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
@@ -849,4 +849,3 @@ ALTER TABLE ONLY public.users
 --
 -- PostgreSQL database dump complete
 --
-
