@@ -1,3 +1,4 @@
+-- Change owner to your user
 --
 -- PostgreSQL database dump
 --
