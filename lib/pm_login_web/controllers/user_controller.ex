@@ -154,6 +154,8 @@ defmodule PmLoginWeb.UserController do
   def update(conn, %{"id" => id, "user" => user_params}) do
     user = Login.get_user!(id)
 
+    IO.inspect user_params
+    
     case Login.update_user(user, user_params) do
       {:ok, user} ->
         conn
@@ -218,6 +220,7 @@ defmodule PmLoginWeb.UserController do
   end
 
   #NOT USED YET FOR NOW
+  # A DELETE_USER FUNCTION
 
   # def delete(conn, %{"id" => id}) do
   #   current_id = get_session(conn, :curr_user_id)
