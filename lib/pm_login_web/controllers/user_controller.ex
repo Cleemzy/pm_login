@@ -154,7 +154,7 @@ defmodule PmLoginWeb.UserController do
   def update(conn, %{"id" => id, "user" => user_params}) do
     user = Login.get_user!(id)
 
-    IO.inspect user_params
+    # IO.inspect user_params
     
     case Login.update_user(user, user_params) do
       {:ok, user} ->

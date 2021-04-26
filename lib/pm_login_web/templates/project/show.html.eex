@@ -1,0 +1,48 @@
+<h1>Show Project</h1>
+
+<ul>
+
+  <li>
+    <strong>Title:</strong>
+    <%= @project.title %>
+  </li>
+
+  <li>
+    <strong>Description:</strong>
+    <%= @project.description %>
+  </li>
+
+  <li>
+    <strong>Progression:</strong>
+    <%= @project.progression %>
+  </li>
+
+  <li>
+    <strong>Date start:</strong>
+    <%= @project.date_start %>
+  </li>
+
+  <li>
+    <strong>Date end:</strong>
+    <%= @project.date_end %>
+  </li>
+
+  <li>
+    <strong>Estimated duration:</strong>
+    <%= @project.estimated_duration %>
+  </li>
+
+  <li>
+    <strong>Performed duration:</strong>
+    <%= @project.performed_duration %>
+  </li>
+
+  <li>
+    <strong>Deadline:</strong>
+    <%= @project.deadline %>
+  </li>
+
+</ul>
+
+<span><%= link "Edit", to: Routes.project_path(@conn, :edit, @project) %></span>
+<span><%= link "Back", to: Routes.project_path(@conn, :index) %></span>

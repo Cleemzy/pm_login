@@ -17,8 +17,18 @@ defmodule PmLoginWeb.Router do
   scope "/", PmLoginWeb do
     pipe_through :browser
 
+    #Monitoring context
+    resources "/statuses", StatusController
+    resources "/projects", ProjectController
+    resources "/priorities", PriorityController
+    resources "/tasks", TaskController
+    resources "/comments", CommentController
+
+    #Login context
     resources "/rights", RightController
     resources "/users", UserController
+
+    #Services context
     resources "/companies", CompanyController
     resources "/editors", EditorController
     resources "/softwares", SoftwareController
