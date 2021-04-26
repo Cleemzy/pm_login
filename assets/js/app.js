@@ -21,6 +21,75 @@ import {LiveSocket} from "phoenix_live_view"
 
 // Define hooks
 const Hooks = {}
+
+Hooks.Board = {
+  mounted() {
+    this.initDraggables();
+  },
+
+  updated() {
+    this.sortableCard.destroy();
+    this.sortableStage.destroy();
+    this.initDraggables();
+  },
+
+  initDraggables() {
+    this.sortableCard = new Sortable(
+      document.querySelectorAll(".stage__cards"),
+      {
+        draggable: ".card",
+        mirror: {
+          constrainDimensions: true
+        },
+        swapAnimation: {
+          duration: 200,
+          easingFunction: "ease-in-out"
+        },
+        plugins: [Plugins.SwapAnimation]
+      }
+    );
+
+    this.sortableCard.on("sortable:stop", event => {
+      const source = event.data.dragEvent.data.source;
+      const cardId = parseInt(source.getAttribute("data-card-id"));
+      const newStageId = parseInt(
+        event.data.newContainer.getAttribute("data-stage-id")
+      );
+      const newIndex = parseInt(event.data.newIndex);
+      const cardPayload = {
+        card: {
+          id: cardId,
+          stage_id: newStageId,
+          position: newIndex
+        }
+      };
+      this.pushEvent("update_card", cardPayload);
+    });
+
+    this.sortableStage = new Sortable(document.querySelectorAll(".board"), {
+      draggable: ".stage",
+      handle: ".draggable-handle",
+      mirror: {
+        constrainDimensions: true,
+        yAxis: false
+      }
+    });
+
+    this.sortableStage.on("sortable:stop", event => {
+      const source = event.data.dragEvent.data.source;
+      const stageId = parseInt(source.getAttribute("data-stage-id"));
+      const newIndex = parseInt(event.data.newIndex);
+      const stagePayload = {
+        stage: {
+          id: stageId,
+          position: newIndex
+        }
+      };
+      this.pushEvent("update_stage", stagePayload);
+    });
+  }
+};
+
 Hooks.ScrollLock = {
   mounted() {
     this.lockScroll()
@@ -51,7 +120,7 @@ Hooks.ScrollLock = {
     // Remove the negative top inline style from body
     document.body.style.top = null
   }
-}
+};
 //hook end
 
 let navToggle = document.querySelector(".nav__toggle");
