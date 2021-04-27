@@ -1,8 +1,10 @@
 defmodule PmLoginWeb.ProjectController do
   use PmLoginWeb, :controller
 
+  alias PmLogin.Services
   alias PmLogin.Monitoring
   alias PmLogin.Monitoring.Project
+  alias PmLogin.Services.ActiveClient
 
   def index(conn, _params) do
     projects = Monitoring.list_projects()
@@ -11,7 +13,9 @@ defmodule PmLoginWeb.ProjectController do
 
   def new(conn, _params) do
     changeset = Monitoring.change_project(%Project{})
-    render(conn, "new.html", changeset: changeset)
+    ac_list = Services.list_active_clients
+    ac_ids = Enum.map(ac_list, fn(%ActiveClient{} = ac) -> {ac.user.username, ac.user.id} end )
+    render(conn, "new.html", changeset: changeset, ac_ids: ac_ids)
   end
 
   def create(conn, %{"project" => project_params}) do

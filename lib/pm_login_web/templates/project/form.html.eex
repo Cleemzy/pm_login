@@ -5,39 +5,56 @@
     </div>
   <% end %>
 
-  <%= label f, :title %>
+  <%= label f, "Nom du projet" %>
   <%= text_input f, :title %>
   <%= error_tag f, :title %>
 
   <%= label f, :description %>
-  <%= text_input f, :description %>
+  <%= textarea f, :description %>
   <%= error_tag f, :description %>
 
-  <%= label f, :progression %>
+  <!-- <%= label f, :progression %>
   <%= number_input f, :progression %>
-  <%= error_tag f, :progression %>
+  <%= error_tag f, :progression %> -->
 
-  <%= label f, :date_start %>
-  <%= date_select f, :date_start %>
-  <%= error_tag f, :date_start %>
+  <div class="row">
+    <div class="column">
+      <%= label f, "Date de début" %>
+      <%= date_input f, :date_start %>
+      <%= error_tag f, :date_start %>
+    </div>
 
-  <%= label f, :date_end %>
-  <%= date_select f, :date_end %>
-  <%= error_tag f, :date_end %>
+    <div class="column">
+      <%= label f, "Date finale" %>
+      <%= date_input f, :date_end %>
+      <%= error_tag f, :date_end %>
+    </div>
 
-  <%= label f, :estimated_duration %>
+  </div>
+
+
+  <%= label f, "Durée estimée (en heure(s))" %>
   <%= number_input f, :estimated_duration %>
   <%= error_tag f, :estimated_duration %>
 
-  <%= label f, :performed_duration %>
+  <!-- <%= label f, :performed_duration %>
   <%= number_input f, :performed_duration %>
-  <%= error_tag f, :performed_duration %>
+  <%= error_tag f, :performed_duration %> -->
+  <div class="row">
+    <div class="column">
+      <%= label f, "Date d'échéance" %>
+      <%= date_input f, :deadline %>
+      <%= error_tag f, :deadline %>
+    </div>
+    <div class="column">
+      <%= label f, "Client attitré" %>
+      <%= select f, :active_client_id, @ac_ids %>
+      <%= error_tag f, :active_client_id %>
+    </div>
+  </div>
 
-  <%= label f, :deadline %>
-  <%= date_select f, :deadline %>
-  <%= error_tag f, :deadline %>
 
   <div>
-    <%= submit "Save" %>
+    <%= submit "Créer projet",class: "btn btn-lg btn-primary" %>
   </div>
 <% end %>

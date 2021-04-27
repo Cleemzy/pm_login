@@ -499,7 +499,10 @@ defmodule PmLogin.Services do
 
   """
   def list_active_clients do
-    Repo.all(ActiveClient)
+    query = from ac in ActiveClient,
+            preload: [user: ^from u in User]
+    Repo.all(query)
+    # Repo.all(ActiveClient)
   end
 
   @doc """
@@ -519,7 +522,7 @@ defmodule PmLogin.Services do
   def get_active_client!(id) do
     # |> Repo.preload(User)
     # |> Repo.get!(id)
-    
+
     query = from ac in ActiveClient,
           preload: [user: ^from u in User],
           where: ac.id == ^id
