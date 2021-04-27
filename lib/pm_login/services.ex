@@ -7,6 +7,7 @@ defmodule PmLogin.Services do
   alias PmLogin.Repo
 
   alias PmLogin.Services.Company
+  alias PmLogin.Login.User
 
   @doc """
   Returns the list of companies.
@@ -515,8 +516,16 @@ defmodule PmLogin.Services do
       ** (Ecto.NoResultsError)
 
   """
-  def get_active_client!(id), do: Repo.get!(ActiveClient, id)
+  def get_active_client!(id) do
+    # |> Repo.preload(User)
+    # |> Repo.get!(id)
+    
+    query = from ac in ActiveClient,
+          preload: [user: ^from u in User],
+          where: ac.id == ^id
+    Repo.one!(query)
 
+  end
   @doc """
   Creates a active_client.
 
@@ -532,6 +541,12 @@ defmodule PmLogin.Services do
   def create_active_client(attrs \\ %{}) do
     %ActiveClient{}
     |> ActiveClient.changeset(attrs)
+    |> Repo.insert()
+  end
+
+  def create_active_client_func(attrs \\ %{}) do
+    %ActiveClient{}
+    |> ActiveClient.create_changeset(attrs)
     |> Repo.insert()
   end
 
@@ -582,7 +597,7 @@ defmodule PmLogin.Services do
     ActiveClient.changeset(active_client, attrs)
   end
 
-  
+
 
   alias PmLogin.Services.ClientsRequest
 
