@@ -1,6 +1,7 @@
 defmodule PmLogin.Monitoring.Project do
   use Ecto.Schema
   import Ecto.Changeset
+  alias PmLogin.Monitoring.Task
 
   schema "projects" do
     field :date_end, :date
@@ -13,6 +14,7 @@ defmodule PmLogin.Monitoring.Project do
     field :title, :string
     field :active_client_id, :id
     field :status_id, :id
+    has_many :tasks, Task
 
     timestamps()
   end
