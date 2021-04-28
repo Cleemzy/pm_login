@@ -17,6 +17,9 @@ defmodule PmLoginWeb.Router do
   scope "/", PmLoginWeb do
     pipe_through :browser
 
+    #Project LiveView
+    get "/boards/:id", ProjectController, :board
+
     #Monitoring context
     resources "/statuses", StatusController
     resources "/projects", ProjectController

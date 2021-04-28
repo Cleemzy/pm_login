@@ -18,7 +18,8 @@
     <tbody>
   <%= for project <- @projects do %>
       <tr>
-        <td><%= project.title %></td>
+        <%= project.id %>
+        <td><%= link "#{project.title}", to: Routes.project_path(@conn, :board, project) %></td>
         <td><%= project.description %></td>
         <td><%= project.progression %></td>
         <td><%= project.date_start %></td>

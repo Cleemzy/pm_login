@@ -5,6 +5,13 @@ defmodule PmLoginWeb.ProjectController do
   alias PmLogin.Monitoring
   alias PmLogin.Monitoring.Project
   alias PmLogin.Services.ActiveClient
+  alias Phoenix.LiveView
+
+
+
+  def board(conn, %{"id" => id}) do
+    LiveView.Controller.live_render(conn, PmLoginWeb.Project.BoardLive, session: %{"curr_user_id" => get_session(conn, :curr_user_id), "pro_id" => id}, router: PmLoginWeb.Router)
+  end
 
   def index(conn, _params) do
     projects = Monitoring.list_projects()
