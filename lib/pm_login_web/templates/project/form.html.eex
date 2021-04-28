@@ -1,10 +1,9 @@
 <%= form_for @changeset, @action, fn f -> %>
   <%= if @changeset.action do %>
     <div class="alert alert-danger">
-      <p>Oops, something went wrong! Please check the errors below.</p>
+      <p>Veuillez revérifier les informations de votre projet</p>
     </div>
   <% end %>
-
   <%= label f, "Nom du projet" %>
   <%= text_input f, :title %>
   <%= error_tag f, :title %>
@@ -22,12 +21,15 @@
       <%= label f, "Date de début" %>
       <%= date_input f, :date_start %>
       <%= error_tag f, :date_start %>
+      <%= error_tag f, :date_start_lt %>
     </div>
 
     <div class="column">
       <%= label f, "Date finale" %>
       <%= date_input f, :date_end %>
       <%= error_tag f, :date_end %>
+      <%= error_tag f, :date_end_lt %>
+      <%= error_tag f, :dt_end_lt_start %>
     </div>
 
   </div>
@@ -36,6 +38,8 @@
   <%= label f, "Durée estimée (en heure(s))" %>
   <%= number_input f, :estimated_duration %>
   <%= error_tag f, :estimated_duration %>
+  <%= error_tag f, :negative_estimated %>
+
 
   <!-- <%= label f, :performed_duration %>
   <%= number_input f, :performed_duration %>
@@ -45,6 +49,9 @@
       <%= label f, "Date d'échéance" %>
       <%= date_input f, :deadline %>
       <%= error_tag f, :deadline %>
+      <%= error_tag f, :deadline_lt %>
+      <%= error_tag f, :deadline_before_dtstart %>
+
     </div>
     <div class="column">
       <%= label f, "Client attitré" %>

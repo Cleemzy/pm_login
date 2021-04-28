@@ -14,7 +14,7 @@ defmodule PmLoginWeb.ProjectController do
   def new(conn, _params) do
     changeset = Monitoring.change_project(%Project{})
     ac_list = Services.list_active_clients
-    ac_ids = Enum.map(ac_list, fn(%ActiveClient{} = ac) -> {ac.user.username, ac.user.id} end )
+    ac_ids = Enum.map(ac_list, fn(%ActiveClient{} = ac) -> {ac.user.username, ac.id} end )
     render(conn, "new.html", changeset: changeset, ac_ids: ac_ids)
   end
 
@@ -26,7 +26,9 @@ defmodule PmLoginWeb.ProjectController do
         |> redirect(to: Routes.project_path(conn, :show, project))
 
       {:error, %Ecto.Changeset{} = changeset} ->
-        render(conn, "new.html", changeset: changeset)
+        ac_list = Services.list_active_clients
+        ac_ids = Enum.map(ac_list, fn(%ActiveClient{} = ac) -> {ac.user.username, ac.id} end )
+        render(conn, "new.html", changeset: changeset, ac_ids: ac_ids)
     end
   end
 
