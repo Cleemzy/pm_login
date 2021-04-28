@@ -21,7 +21,7 @@ defmodule PmLoginWeb.LiveComponent.TaskModalLive do
       <div class="modal-container"
           phx-hook="ScrollLock">
         <div class="modal-inner-container">
-          <div class="modal-card">
+          <div class="modal-card-task">
             <div class="modal-inner-card">
               <!-- Title -->
               <%= if @title != nil do %>
@@ -41,28 +41,65 @@ defmodule PmLoginWeb.LiveComponent.TaskModalLive do
               <div class="modal-body">
 
                 <%= f = form_for @task_changeset, "#", [phx_submit: :save] %>
-                  <%= label f, :title %>
+                  <%= label f, "Tâche" %>
                   <%= text_input f, :title %>
                   <%= error_tag f, :title %>
                   <%= hidden_input f, :project_id, value: @pro_id %>
-                  <%= submit "Créer" %>
+                  <div class="row">
+                    <div class="column">
+                      <%= label f, "Date de début" %>
+                      <%= date_input f, :date_start %>
+                      <%= error_tag f, :date_start %>
+                      <%= error_tag f, :date_start_lt %>
+                    </div>
+
+                    <div class="column">
+                      <%= label f, "Date finale" %>
+                      <%= date_input f, :date_end %>
+                      <%= error_tag f, :date_end %>
+                      <%= error_tag f, :date_end_lt %>
+                      <%= error_tag f, :dt_end_lt_start %>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="column">
+                      <%= label f, "Durée estimée (en heure(s))" %>
+                      <%= number_input f, :estimated_duration %>
+                      <%= error_tag f, :estimated_duration %>
+                      <%= error_tag f, :negative_estimated %>
+                    </div>
+                    <div class="column">
+                      <%= label f, "Date d'échéance" %>
+                      <%= date_input f, :deadline %>
+                      <%= error_tag f, :deadline %>
+                      <%= error_tag f, :deadline_lt %>
+                      <%= error_tag f, :deadline_before_dtstart %>
+                    </div>
+                  </div>
+
+                  <!-- Buttons -->
+                  <div class="modal-buttons">
+                    <!-- Left Button -->
+                    <button class="left-button"
+                            type="button"
+                            phx-click="left-button-click"
+                            phx-target="#modal-<%= @id %>">
+                      <div>
+                        <%= @left_button %>
+                      </div>
+                    </button>
+                      <div class="right-button">
+                      <%= submit "Créer tâche" %>
+                      </div>
+                  </div>
+
+
+
                 </form>
 
               </div>
 
-              <!-- Buttons -->
-              <div class="modal-buttons">
-                <!-- Left Button -->
-                <button class="left-button"
-                        type="button"
-                        phx-click="left-button-click"
-                        phx-target="#modal-<%= @id %>">
-                  <div>
-                    <%= @left_button %>
-                  </div>
-                </button>
 
-              </div>
             </div>
           </div>
         </div>

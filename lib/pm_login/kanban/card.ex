@@ -10,14 +10,14 @@ defmodule PmLogin.Kanban.Card do
     timestamps()
     belongs_to(:stage, Stage)
     field(:position, :integer)
-    has_one :task, Task
+    field :task_id, :id
   end
 
   @doc false
   def create_changeset(card, attrs) do
     card
-    |> cast(attrs, [:name, :stage_id])
-    |> validate_required([:name, :stage_id])
+    |> cast(attrs, [:name, :stage_id, :task_id])
+    |> validate_required([:name, :stage_id, :task_id])
     |> Position.insert_at_bottom(:stage_id)
   end
 

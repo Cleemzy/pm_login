@@ -30,6 +30,16 @@ pre{padding: 1em;}
   position: relative;
   width: 100%
 }
+
+.boardcontainer{
+  margin: 0 auto;
+  max-width: 200.0rem;
+  padding: 0 2.0rem;
+  position: relative;
+  width: 100%;
+  /* background-color: black; */
+}
+
 select {
   width: auto;
 }

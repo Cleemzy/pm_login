@@ -2,11 +2,101 @@ defmodule PmLogin.Monitoring do
   @moduledoc """
   The Monitoring context.
   """
-
+  import Ecto.Changeset
   import Ecto.Query, warn: false
   alias PmLogin.Repo
-
+  alias PmLogin.Kanban
   alias PmLogin.Monitoring.Status
+  #Date validations and positive estimation
+  def validate_positive_estimated(changeset) do
+    est = get_field(changeset, :estimated_duration)
+    case est do
+      nil -> changeset
+      _ -> cond do
+      est < 0 -> changeset |> add_error(:negative_estimated, "La durée estimée ne peut être négative")
+      true -> changeset
+    end
+  end
+end
+
+def validate_start_deadline(changeset) do
+  date_start = get_field(changeset, :date_start)
+  deadline = get_field(changeset, :deadline)
+
+  if date_start != nil and deadline != nil do
+
+    dt_start = date_start |> to_string |> string_to_date
+    dt_deadline = deadline |> to_string |> string_to_date
+
+    case Date.compare(dt_deadline, dt_start) do
+      :lt ->
+        changeset |> add_error(:deadline_before_dtstart, "La date d'échéance ne peut pas être antérieure à la date de début")
+        _ -> changeset
+      end
+
+    else
+      changeset
+    end
+  end
+
+  def validate_start_end(changeset) do
+    date_start = get_field(changeset, :date_start)
+    date_end = get_field(changeset, :date_end)
+
+    if date_start != nil and date_end != nil do
+
+      dt_start = date_start |> to_string |> string_to_date
+      dt_end = date_end |> to_string |> string_to_date
+
+      case Date.compare(dt_end, dt_start) do
+        :lt ->
+          # IO.puts "startEnd"
+          changeset |> add_error(:dt_end_lt_start, "La date finale ne peut pas être antérieure à la date de début")
+          _ -> changeset
+        end
+
+      else
+        changeset
+      end
+    end
+
+    def validate_dates(changeset) do
+      today = Date.utc_today
+      date_start = get_field(changeset, :date_start)
+      date_end = get_field(changeset, :date_end)
+      deadline = get_field(changeset, :deadline)
+
+      # IO.puts(date_start != "" and date_end != "" and deadline != "")
+      if date_start != nil and date_end != nil and deadline != nil do
+
+        dt_start = date_start |> to_string |> string_to_date
+        dt_end = date_end |> to_string |> string_to_date
+        dt_deadline = deadline |> to_string |> string_to_date
+
+        cond do
+          Date.compare(dt_start,today) == :lt ->
+            changeset
+            |> add_error(:date_start_lt, "La date de début ne peut pas être antérieure à aujourd'hui")
+            Date.compare(dt_end,today) == :lt ->
+              changeset
+              |> add_error(:date_end_lt, "La date de fin ne peut pas être antérieure à aujourd'hui")
+              Date.compare(dt_deadline,today) == :lt ->
+                changeset
+                |> add_error(:deadline_lt, "La date d'échéance ne peut pas être antérieure à aujourd'hui")
+                true -> changeset
+              end
+            else
+              changeset
+            end
+
+          end
+
+          def string_to_date(str) do
+            [str_y, str_m, str_d] = String.split(str,"-")
+            [y, m, d] = [String.to_integer(str_y), String.to_integer(str_m), String.to_integer(str_d)]
+            {:ok, date} = Date.new(y,m,d)
+            date
+          end
 
   @doc """
   Returns the list of statuses.
@@ -343,6 +433,13 @@ defmodule PmLogin.Monitoring do
     |> Repo.insert()
   end
 
+  def create_task_with_card(attrs \\ %{}) do
+    %Task{}
+    |> Task.create_changeset(attrs)
+    |> Repo.insert()
+  end
+
+
   @doc """
   Updates a task.
 
@@ -485,4 +582,5 @@ defmodule PmLogin.Monitoring do
   def change_comment(%Comment{} = comment, attrs \\ %{}) do
     Comment.changeset(comment, attrs)
   end
+
 end

@@ -28,6 +28,17 @@
   background-color: #fff;
 }
 
+.modal-card-task {
+  height: auto;
+  width: 50rem;
+  max-width: 100rem;
+  margin: 0.5rem;
+  /* border-radius: 0.4rem; */
+
+  border-radius: 1.5em;
+  background-color: #fff;
+}
+
 .modal-inner-card {
   padding-top: 1rem;
   padding-bottom: 0.5rem;

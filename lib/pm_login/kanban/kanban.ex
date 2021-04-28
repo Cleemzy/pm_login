@@ -89,7 +89,7 @@ defmodule PmLogin.Kanban do
     Phoenix.PubSub.broadcast(PmLogin.PubSub, @topic, {__MODULE__, event, result})
 
     Phoenix.PubSub.broadcast(
-      MyKanban.PubSub,
+      PmLogin.PubSub,
       @topic <> "#{result.id}",
       {__MODULE__, event, result}
     )
