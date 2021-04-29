@@ -22,7 +22,8 @@
 
           </div>
 
-          <%= link "+",to: "#",class: "card__plus"%>
+          <%= link "+",to: "#",class: "card__plus",phx_click: "show_plus_modal", phx_value_id: card.id %>
+          <%= link "M",to: "#",class: "card__modif"%>
 
 
 
@@ -34,6 +35,8 @@
   </section>
 
   <% alias PmLoginWeb.LiveComponent.TaskModalLive%>
+  <% alias PmLoginWeb.LiveComponent.PlusModalLive%>
+
   <%= if @show_task_modal do %>
   <%= live_component(@socket,
                   TaskModalLive,
@@ -48,6 +51,24 @@
                   task_changeset: @task_changeset,
                   pro_id: @pro_id,
                   curr_user_id: @curr_user_id)
+  %>
+  <% end %>
+
+  <%= if @show_plus_modal do %>
+  <%= live_component(@socket,
+                  PlusModalLive,
+                  id: "confirm-arch",
+                  title: "Tâche",
+                  body: nil,
+                  right_button: nil,
+                  right_button_action: nil,
+                  right_button_param: nil,
+                  left_button: "RETOUR",
+                  left_button_action: "cancel-plus",
+                  task_changeset: @task_changeset,
+                  pro_id: @pro_id,
+                  curr_user_id: @curr_user_id,
+                  card: @card)
   %>
   <% end %>
 

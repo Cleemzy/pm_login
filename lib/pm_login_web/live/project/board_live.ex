@@ -2,6 +2,7 @@ defmodule PmLoginWeb.Project.BoardLive do
   use Phoenix.LiveView
 
   alias PmLoginWeb.LiveComponent.TaskModalLive
+  alias PmLoginWeb.LiveComponent.PlusModalLive
 
   alias PmLoginWeb.ProjectView
   alias PmLogin.Monitoring
@@ -12,7 +13,9 @@ defmodule PmLoginWeb.Project.BoardLive do
     if connected?(socket), do: Kanban.subscribe()
     project = Monitoring.get_project!(pro_id)
     task_changeset = Monitoring.change_task(%Task{})
-    {:ok, assign(socket,curr_user_id: curr_user_id, pro_id: pro_id,board: Kanban.get_board!(project.board_id), show_task_modal: false, task_changeset: task_changeset,layout: {PmLoginWeb.LayoutView, "board_layout_live.html"})}
+    {:ok, assign(socket, show_plus_modal: false,curr_user_id: curr_user_id, pro_id: pro_id,
+                    board: Kanban.get_board!(project.board_id), show_task_modal: false,
+                    task_changeset: task_changeset,layout: {PmLoginWeb.LayoutView, "board_layout_live.html"})}
   end
 
   def handle_event("update_card", %{"card" => card_attrs}, socket) do
@@ -61,9 +64,19 @@ defmodule PmLoginWeb.Project.BoardLive do
 
   def handle_event("show_task_modal", %{}, socket), do: {:noreply, socket |> assign(show_task_modal: true)}
 
+  def handle_event("show_plus_modal", %{"id" => id}, socket) do
+    card = Kanban.get_card_from_modal!(id)
+    {:noreply, socket |> assign(show_plus_modal: true, card: card)}
+  end
+
   def handle_info({TaskModalLive, :button_clicked, %{action: "cancel"}},socket) do
     task_changeset = Monitoring.change_task(%Task{})
     {:noreply, assign(socket, show_task_modal: false, task_changeset: task_changeset )}
+  end
+
+  def handle_info({PlusModalLive, :button_clicked, %{action: "cancel-plus"}},socket) do
+    # task_changeset = Monitoring.change_task(%Task{})
+    {:noreply, assign(socket, show_plus_modal: false)}
   end
 
   def handle_event("save", %{"task" => params}, socket) do

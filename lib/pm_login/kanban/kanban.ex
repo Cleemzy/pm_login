@@ -3,7 +3,7 @@ defmodule PmLogin.Kanban do
 
   alias PmLogin.Repo
   alias PmLogin.Kanban.{Board, Stage, Card}
-  alias PmLogin.Monitoring.Task
+  alias PmLogin.Monitoring.{Task, Status, Priority}
   alias PmLogin.Login.User
 
   def get_board!(board_id) do
@@ -67,6 +67,21 @@ defmodule PmLogin.Kanban do
     |> Stage.update_changeset(attrs)
     |> Repo.update()
     |> notify_subscribers([:stage, :updated])
+  end
+
+  def get_card_from_modal!(id) do
+    priority_query = from p in Priority
+    status_query = from s in Status
+    attributor_query = from u in User
+
+    task_query = from t in Task,
+                preload: [attributor: ^attributor_query, status: ^status_query, priority: ^priority_query]
+
+    query = from c in Card,
+            preload: [task: ^task_query],
+            where: c.id == ^id
+
+    Repo.one!(query)
   end
 
   def get_card!(id) do

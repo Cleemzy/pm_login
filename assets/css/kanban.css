@@ -72,6 +72,18 @@
   padding: 0.2rem 1rem;
   border-radius: 9999px;
   left: 230px;
+  top: -100px;
+}
+
+.card__modif {
+  position: relative;
+  background-color: lightgray;
+  color: white;
+  font-size: 150%;
+  font-weight: bold;
+  padding: 0.2rem 1rem;
+  border-radius: 9999px;
+  left: 185px;
   top: -35px;
 }
 

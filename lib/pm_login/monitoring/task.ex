@@ -5,6 +5,8 @@ defmodule PmLogin.Monitoring.Task do
   alias PmLogin.Kanban
   alias PmLogin.Kanban.Card
   alias PmLogin.Login.User
+  alias PmLogin.Monitoring.{Status,Priorty}
+
 
   schema "tasks" do
     field :date_end, :date
@@ -17,10 +19,12 @@ defmodule PmLogin.Monitoring.Task do
     field :parent_id, :id
     field :project_id, :id
     field :contributor_id, :id
-    field :status_id, :id
-    field :priority_id, :id
+    # field :status_id, :id
+    # field :priority_id, :id
     # field :attributor_id, :id
+    belongs_to :priority, Priority
     belongs_to :attributor, User
+    belongs_to :status, Status
     timestamps()
   end
 
