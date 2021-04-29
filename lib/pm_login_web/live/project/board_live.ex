@@ -17,10 +17,12 @@ defmodule PmLoginWeb.Project.BoardLive do
 
   def handle_event("update_card", %{"card" => card_attrs}, socket) do
     card = Kanban.get_card!(card_attrs["id"])
-
+    IO.inspect card_attrs
     case Kanban.update_card(card, card_attrs) do
       {:ok, _updated_card} ->
-        {:noreply, update(socket, :board, fn _ -> Kanban.get_board!() end)}
+        this_board = socket.assigns.board
+        {:noreply, assign(socket, :board, this_board)}
+        # {:noreply, update(socket, :board, fn _ -> Kanban.get_board!() end)}
 
       {:error, changeset} ->
         {:noreply, {:error, %{message: changeset.message}, socket}}
@@ -32,6 +34,7 @@ defmodule PmLoginWeb.Project.BoardLive do
 
     case Kanban.update_stage(stage, stage_attrs) do
       {:ok, _updated_stage} ->
+        this_board = socket.assigns.board
         {:noreply, update(socket, :board, fn _ -> Kanban.get_board!() end)}
 
       {:error, changeset} ->
