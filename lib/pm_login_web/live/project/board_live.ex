@@ -62,7 +62,8 @@ defmodule PmLoginWeb.Project.BoardLive do
   def handle_event("show_task_modal", %{}, socket), do: {:noreply, socket |> assign(show_task_modal: true)}
 
   def handle_info({TaskModalLive, :button_clicked, %{action: "cancel"}},socket) do
-    {:noreply, assign(socket, show_task_modal: false)}
+    task_changeset = Monitoring.change_task(%Task{})
+    {:noreply, assign(socket, show_task_modal: false, task_changeset: task_changeset )}
   end
 
   def handle_event("save", %{"task" => params}, socket) do

@@ -14,16 +14,16 @@
 
         <ul data-stage-id="<%= stage.id %>" class="stage__cards">
           <%= for card <- stage.cards do %>
-          <div class="row">
-            <div class=" column column-80">
-              <li data-card-id="<%= card.id %>" class="card basecontents">
-                  <div class="card__name"><%= card.name %></div>
-              </li>
-            </div>
-            <div class="column column-20">
-              <%= link "+",to: "#",class: "card__plus"%>
-            </div>
+
+          <div data-card-id="<%= card.id %>" class="card basecontents">
+                <div class="card__name"><%= card.name %></div>
           </div>
+
+          <%= link "+",to: "#",class: "card__plus"%>
+
+
+
+
           <% end %>
         </ul>
       </div>
