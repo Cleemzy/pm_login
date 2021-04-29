@@ -29,6 +29,12 @@ defmodule PmLogin.Monitoring.Task do
     |> validate_required([:title, :progression, :date_start, :date_end, :estimated_duration, :performed_duration, :deadline])
   end
 
+  def update_changeset(task, attrs) do
+    task
+    |> cast(attrs, [:title, :status_id,:progression, :date_start, :date_end, :estimated_duration, :performed_duration, :deadline])
+    |> validate_required([:title, :progression, :date_start, :date_end, :estimated_duration, :performed_duration, :deadline])
+  end
+
   def create_changeset(task, attrs) do
     # %{"project_id" => pro_id, "title" => title} = attrs
     #
