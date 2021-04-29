@@ -18,6 +18,7 @@ defmodule PmLogin.Monitoring.Task do
     field :contributor_id, :id
     field :status_id, :id
     field :priority_id, :id
+    field :attributor_id, :id
 
     timestamps()
   end
@@ -25,13 +26,13 @@ defmodule PmLogin.Monitoring.Task do
   @doc false
   def changeset(task, attrs) do
     task
-    |> cast(attrs, [:title, :progression, :date_start, :date_end, :estimated_duration, :performed_duration, :deadline])
+    |> cast(attrs, [:title, :attributor_id, :progression, :date_start, :date_end, :estimated_duration, :performed_duration, :deadline])
     |> validate_required([:title, :progression, :date_start, :date_end, :estimated_duration, :performed_duration, :deadline])
   end
 
   def update_changeset(task, attrs) do
     task
-    |> cast(attrs, [:title, :status_id,:progression, :date_start, :date_end, :estimated_duration, :performed_duration, :deadline])
+    |> cast(attrs, [:title, :attributor_id, :status_id,:progression, :date_start, :date_end, :estimated_duration, :performed_duration, :deadline])
     |> validate_required([:title, :progression, :date_start, :date_end, :estimated_duration, :performed_duration, :deadline])
   end
 
@@ -45,7 +46,7 @@ defmodule PmLogin.Monitoring.Task do
     # case Kanban.create_card(%{name: title, stage_id: stage.id}) do
     #   {:ok, card} ->
         task
-        |> cast(attrs, [:title, :project_id,:date_start, :date_end, :estimated_duration, :deadline])
+        |> cast(attrs, [:title, :attributor_id, :project_id,:date_start, :date_end, :estimated_duration, :deadline])
         |> validate_required(:title, message: "Entrez tâche")
         |> unique_constraint(:title, message: "Tâche déjà existante")
         |> validate_required(:estimated_duration, message: "Entrez estimation")

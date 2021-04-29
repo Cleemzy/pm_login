@@ -12,7 +12,7 @@ defmodule PmLoginWeb.Project.BoardLive do
     if connected?(socket), do: Kanban.subscribe()
     project = Monitoring.get_project!(pro_id)
     task_changeset = Monitoring.change_task(%Task{})
-    {:ok, assign(socket,pro_id: pro_id,board: Kanban.get_board!(project.board_id), show_task_modal: false, task_changeset: task_changeset,layout: {PmLoginWeb.LayoutView, "board_layout_live.html"})}
+    {:ok, assign(socket,curr_user_id: curr_user_id, pro_id: pro_id,board: Kanban.get_board!(project.board_id), show_task_modal: false, task_changeset: task_changeset,layout: {PmLoginWeb.LayoutView, "board_layout_live.html"})}
   end
 
   def handle_event("update_card", %{"card" => card_attrs}, socket) do

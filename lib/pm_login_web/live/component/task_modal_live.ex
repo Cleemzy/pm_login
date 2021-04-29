@@ -39,12 +39,13 @@ defmodule PmLoginWeb.LiveComponent.TaskModalLive do
 
               <!-- MY FORM -->
               <div class="modal-body">
-
+              <%= @curr_user_id %>
                 <%= f = form_for @task_changeset, "#", [phx_submit: :save] %>
                   <%= label f, "Tâche" %>
                   <%= text_input f, :title %>
                   <%= error_tag f, :title %>
                   <%= hidden_input f, :project_id, value: @pro_id %>
+                  <%= hidden_input f, :attributor_id, value: @curr_user_id %>
                   <div class="row">
                     <div class="column">
                       <%= label f, "Date de début" %>

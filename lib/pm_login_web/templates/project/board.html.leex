@@ -1,7 +1,7 @@
 <div class="boardcontainer">
   <div class="boardheader">
     <h2><%= @board.name %></h2>
-    <%= link "+ Nouvelle tâche",to: "#",class: "btn btn-lg btn-primary",phx_click: "show_task_modal" %>
+    <%= link "+Nouvelle tâche",to: "#",class: "btn btn-lg btn-primary",phx_click: "show_task_modal" %>
   </div>
 
   <section class="board" phx-hook="Board" style="">
@@ -14,9 +14,16 @@
 
         <ul data-stage-id="<%= stage.id %>" class="stage__cards">
           <%= for card <- stage.cards do %>
-            <li data-card-id="<%= card.id %>" class="card basecontents">
-              <div class="card__name"><%= card.name %></div>
-            </li>
+          <div class="row">
+            <div class=" column column-80">
+              <li data-card-id="<%= card.id %>" class="card basecontents">
+                  <div class="card__name"><%= card.name %></div>
+              </li>
+            </div>
+            <div class="column column-20">
+              <%= link "+",to: "#",class: "card__plus"%>
+            </div>
+          </div>
           <% end %>
         </ul>
       </div>
@@ -36,7 +43,8 @@
                   left_button: "ANNULER",
                   left_button_action: "cancel",
                   task_changeset: @task_changeset,
-                  pro_id: @pro_id)
+                  pro_id: @pro_id,
+                  curr_user_id: @curr_user_id)
   %>
   <% end %>
 
