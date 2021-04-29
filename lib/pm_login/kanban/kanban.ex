@@ -3,14 +3,22 @@ defmodule PmLogin.Kanban do
 
   alias PmLogin.Repo
   alias PmLogin.Kanban.{Board, Stage, Card}
+  alias PmLogin.Monitoring.Task
+  alias PmLogin.Login.User
 
   def get_board!(board_id) do
+    attributor_query = from u in User
+
+    task_query = from t in Task,
+                preload: [attributor: ^attributor_query]
+
     stage_query =
       from s in Stage,
         order_by: s.position,
         preload: [
           cards:
             ^from(c in Card,
+              preload: [task: ^task_query],
               order_by: :position
             )
         ]

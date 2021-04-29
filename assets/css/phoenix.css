@@ -213,7 +213,8 @@ font-size: 23px;
   max-width: 100px;
   max-height: 100px;
   margin-top: 20px;
-  border-style: groove;
+  border: 1px solid gray;
+  border-style: solid;
   border-color: gray;
   border-radius: 50%;
 }
@@ -327,7 +328,8 @@ justify-content: center;
   height: 40px;
   max-width: 40px;
   max-height: 40px;
-  border-style: groove;
+  border: 1px solid gray;
+  border-style: solid;
   border-radius: 60%;
 }
 
@@ -336,7 +338,8 @@ justify-content: center;
   height: 50px;
   max-width: 50px;
   max-height: 50px;
-  border-style: groove;
+  border: 1px solid gray;
+  border-style: solid;
   border-radius: 60%;
   margin-left: 2%;
   /* display: block; */
@@ -349,7 +352,8 @@ justify-content: center;
   max-width: 100px;
   max-height: 100px;
   margin-top: 20px;
-  border-style: groove;
+  border: 1px solid gray;
+  border-style: solid;
   border-radius: 60%;
 }
 
@@ -360,7 +364,8 @@ justify-content: center;
   max-height: 100px;
   margin-top: 20px;
   margin-left: 30%;
-  border-style: groove;
+  border: 1px solid gray;
+  border-style: solid;
   border-radius: 60%;
 }
 

@@ -65,14 +65,18 @@
 
 .card__plus {
   position: relative;
-  background-color: blue;
+  background-color: lightblue;
   color: white;
-  font-size: 150%;
+  font-size: 180%;
   font-weight: bold;
   padding: 0.2rem 1rem;
   border-radius: 9999px;
-  left: 220px;
+  left: 230px;
   top: -35px;
+}
+
+.card__date{
+  font-size: 75%;
 }
 
 .stage__cards {
@@ -88,7 +92,7 @@
   padding: 1em;
   cursor: move;
   width: 80%;
-  height: 75px;
+  height: auto;
   margin-bottom: -20px;
 }
 

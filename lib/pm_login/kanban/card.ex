@@ -9,8 +9,9 @@ defmodule PmLogin.Kanban.Card do
     field :name, :string
     timestamps()
     belongs_to(:stage, Stage)
+    belongs_to :task, Task
     field(:position, :integer)
-    field :task_id, :id
+    # field :task_id, :id
   end
 
   @doc false
