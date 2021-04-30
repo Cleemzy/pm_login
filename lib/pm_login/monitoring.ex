@@ -9,12 +9,14 @@ defmodule PmLogin.Monitoring do
   alias PmLogin.Monitoring.Status
   #Date validations and positive estimation with progression
 
+
   def validate_progression(changeset) do
     progression  = get_field(changeset, :progression)
     case progression do
       nil -> changeset
       _ -> cond do
           progression < 0 or progression > 100 -> add_error(changeset, :invalid_progression, "Progression doit être comprise entre 0 et 100")
+          not is_integer progression -> add_error(changeset, :progression_not_int, "Entrez un entier")
           true -> changeset
       end
     end

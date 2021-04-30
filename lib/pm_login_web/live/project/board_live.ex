@@ -114,16 +114,21 @@ defmodule PmLoginWeb.Project.BoardLive do
   end
 
   def handle_event("update_task", %{"task" => params}, socket) do
+    #progression to int
+    int_progression = params["progression"] |> Float.parse |> elem(0) |> trunc
+    attrs = %{params | "progression" => int_progression}
           #UPDATING
     task = Monitoring.get_task!(params["task_id"])
     # IO.inspect params
     # IO.inspect task
     # IO.inspect Monitoring.update_task(task, params)
-    case Monitoring.update_task(task, params) do
+    case Monitoring.update_task(task, attrs) do
       {:ok, task} ->
         {:noreply, socket |> assign(show_modif_modal: false)}
 
       {:error, %Ecto.Changeset{} = changeset} ->
+        IO.inspect changeset
+        IO.inspect changeset.errors
         {:noreply, socket |> assign(modif_changeset: changeset)}
     end
 

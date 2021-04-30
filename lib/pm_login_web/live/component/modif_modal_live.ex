@@ -40,7 +40,7 @@ defmodule PmLoginWeb.LiveComponent.ModifModalLive do
 
               <!-- MY FORM -->
               <div class="modal-body">
-                <%= f = form_for @modif_changeset, "#", [phx_submit: :update_task] %>
+                <%= f = form_for @modif_changeset, "#", [phx_submit: :update_task, novalidate: :novalidate] %>
                 <%= hidden_input f, :task_id,value: @card.task.id %>
                 <!-- FIRST ROW -->
                   <div class="row">
@@ -141,6 +141,7 @@ defmodule PmLoginWeb.LiveComponent.ModifModalLive do
                     <%= label f, "Progression: ", style: "margin-top: 5px;" %>
                     <b><%= number_input f, :progression, value: @card.task.progression, style: "width: 70px; margin-left: 20px;" %> %</b>
                     <%= error_tag f, :invalid_progression %>
+                    <%= error_tag f, :progression_not_int %>
 
                      </div>
                   <!-- -->
