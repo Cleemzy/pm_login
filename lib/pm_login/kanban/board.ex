@@ -1,7 +1,7 @@
 defmodule PmLogin.Kanban.Board do
   use Ecto.Schema
   import Ecto.Changeset
-
+  alias PmLogin.Monitoring.Project
   alias PmLogin.Kanban.Stage
 
   schema "boards" do

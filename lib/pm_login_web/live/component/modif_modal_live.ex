@@ -1,4 +1,4 @@
-defmodule PmLoginWeb.LiveComponent.PlusModalLive do
+defmodule PmLoginWeb.LiveComponent.ModifModalLive do
   use Phoenix.LiveComponent
   import Phoenix.HTML.Form
   import PmLoginWeb.ErrorHelpers
@@ -40,6 +40,7 @@ defmodule PmLoginWeb.LiveComponent.PlusModalLive do
 
               <!-- MY FORM -->
               <div class="modal-body">
+                <%= f = form_for @task_changeset, "#", [phx_submit: :update] %>
 
                 <!-- FIRST ROW -->
                   <div class="row">
@@ -73,84 +74,85 @@ defmodule PmLoginWeb.LiveComponent.PlusModalLive do
                   <!-- END OF FIRST ROW -->
 
                     <!-- SECOND ROW -->
-                      <div class="row" style="margin-bottom: 10px;">
+                      <div class="row">
 
                         <div class="column">
-                          <div class="row">
-                            <div class="column column-10">
-                              <label>Statut:</label>
-                              </div>
-                              <div class="column column-65">
-                              <%= @card.task.status.title %>
-                              </div>
-                          </div>
+
+                              <%= label f, "Durée estimée (en heure(s)):" %>
+
+                              <b><%= number_input f, :estimated_duration, style: "width: 70px", value: @card.task.estimated_duration %> h</b>
+                              <%= error_tag f, :estimated_duration %>
+                              <%= error_tag f, :negative_estimated %>
+
                         </div>
 
                         <div class="column">
-                          <div class="row">
-                            <div class="column column-10">
-                              <label>Priorité:</label>
-                              </div>
-                              <div class="column column-65">
-                              <%= @card.task.priority.title %>
-                              </div>
-                          </div>
+                          <label>Durée effectuée:</label>
+                          <b><%= number_input f, :performed_duration, style: "width: 70px", value: @card.task.performed_duration %> h</b>
+                          <%= error_tag f, :performed_duration%>
+                          <%= error_tag f, :negative_estimated %>
                         </div>
+
 
                       </div>
                       <!-- END OF SECOND ROW -->
+
 
                         <!-- THIRD ROW -->
                           <div class="row">
 
                             <div class="column">
-                                  <label>Date de début:</label>
-                                  <%= @card.task.date_start %>
+
+                                  <%= label f, "Assigner contributeur" %>
+
+                                  <%= select f, :contributor_id, @contributors %>
+                                  <%= error_tag f, :contributor_id %>
+
                             </div>
 
                             <div class="column">
-                                  <label>Date finale:</label>
-                                  <%= @card.task.date_end %>
+                              <label>Priorité:</label>
+                              <%= select f, :priority_id, @priorities, value: @card.task.priority_id %>
                             </div>
 
                           </div>
-                        <!-- END OF THIRD ROW -->
+                          <!-- END OF THIRD ROW -->
 
-                          <!-- FOURTH ROW -->
-                            <div class="row">
 
-                              <div class="column">
-                                    <label>Durée estimée:</label>
-                                    <p><%= @card.task.estimated_duration %> heure(s)</p>
-                              </div>
+                  <%= hidden_input f, :project_id, value: @pro_id %>
+                  <%= hidden_input f, :attributor_id, value: @curr_user_id %>
 
-                              <div class="column">
-                                    <label>Durée effectuée:</label>
-                                    <p><%= @card.task.performed_duration%> heure(s)</p>
-                              </div>
+                  <!-- FOURTH ROW -->
+                  <div class="row">
+                    <div class="column">
+                      <%= label f, "Date de début" %>
+                      <%= date_input f, :date_start, value: @card.task.date_start %>
+                      <%= error_tag f, :date_start %>
+                      <%= error_tag f, :date_start_lt %>
+                    </div>
 
-                            </div>
-                          <!-- END OF FOURTH ROW -->
+                    <div class="column">
+                      <%= label f, "Date finale" %>
+                      <%= date_input f, :date_end, value: @card.task.date_end %>
+                      <%= error_tag f, :date_end %>
+                      <%= error_tag f, :date_end_lt %>
+                      <%= error_tag f, :dt_end_lt_start %>
+                    </div>
+                  </div>
 
-                            <!-- FOURTH ROW -->
-                              <div class="row">
+                  <!-- END OF FOURTH ROW -->
 
-                                <div class="column">
-                                      <label>Progression</label>
-                                      <p><%= @card.task.progression%> %</p>
-                                </div>
-
-                                <div class="column">
-                                      <label>Date d'échéance:</label>
-                                      <p><%= @card.task.performed_duration%> heure(s)</p>
-                                </div>
-
-                              </div>
-                            <!-- END OF FOURTH ROW -->
-
+                  <!-- FIFTH ROW -->
+                    <div class="row" style="text-align:center;">
+                    <%= label f, "Progression: ", style: "margin-top: 5px;" %>
+                    <b><%= number_input f, :progression, value: @card.task.progression, style: "width: 70px; margin-left: 20px;" %> %</b>
+                    <%= error_tag f, :progression %>
+                     </div>
+                  <!-- -->
 
                   <!-- Buttons -->
-
+                  <div class="modal-buttons">
+                    <!-- Left Button -->
                     <button class="left-button"
                             type="button"
                             phx-click="left-button-click"
@@ -159,18 +161,14 @@ defmodule PmLoginWeb.LiveComponent.PlusModalLive do
                         <%= @left_button %>
                       </div>
                     </button>
-
-                    <div class="row">
-                    <div class="column column-50">
-                    </div>
-                      <div class="column column-50">
-                        <i>Créee le <%= @card.task.inserted_at %></i>
+                      <div class="right-button">
+                      <%= submit "Valider" %>
                       </div>
-                    </div>
-
                   </div>
 
 
+
+                </form>
 
               </div>
 

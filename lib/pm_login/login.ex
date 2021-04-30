@@ -206,6 +206,12 @@ defmodule PmLogin.Login do
     |> broadcast_change([:user, :updated])
   end
 
+  def list_contributors do
+    contrib_query = from u in User,
+                    where: u.right_id == 3
+    Repo.all(contrib_query)
+  end
+
   def list_users do
     Repo.all(User)
   end

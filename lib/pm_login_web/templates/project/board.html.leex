@@ -23,7 +23,7 @@
           </div>
 
           <%= link "+",to: "#",class: "card__plus",phx_click: "show_plus_modal", phx_value_id: card.id %>
-          <%= link "M",to: "#",class: "card__modif"%>
+          <%= link "M",to: "#",class: "card__modif",phx_click: "show_modif_modal", phx_value_id: card.id %>
 
 
 
@@ -36,6 +36,7 @@
 
   <% alias PmLoginWeb.LiveComponent.TaskModalLive%>
   <% alias PmLoginWeb.LiveComponent.PlusModalLive%>
+  <% alias PmLoginWeb.LiveComponent.ModifModalLive %>
 
   <%= if @show_task_modal do %>
   <%= live_component(@socket,
@@ -68,6 +69,27 @@
                   task_changeset: @task_changeset,
                   pro_id: @pro_id,
                   curr_user_id: @curr_user_id,
+                  card: @card)
+  %>
+  <% end %>
+
+  <%= if @show_modif_modal do %>
+  <%= live_component(@socket,
+                  ModifModalLive,
+                  id: "confirm-arch",
+                  title: "Modifier tâche",
+                  body: nil,
+                  right_button: nil,
+                  right_button_action: nil,
+                  right_button_param: nil,
+                  left_button: "RETOUR",
+                  left_button_action: "cancel-modif",
+                  task_changeset: @task_changeset,
+                  pro_id: @pro_id,
+                  curr_user_id: @curr_user_id,
+                  modif_changeset: @modif_changeset,
+                  priorities: @priorities,
+                  contributors: @contributors,
                   card: @card)
   %>
   <% end %>
