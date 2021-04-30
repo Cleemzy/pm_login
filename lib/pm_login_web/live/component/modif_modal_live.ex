@@ -40,8 +40,8 @@ defmodule PmLoginWeb.LiveComponent.ModifModalLive do
 
               <!-- MY FORM -->
               <div class="modal-body">
-                <%= f = form_for @task_changeset, "#", [phx_submit: :update] %>
-
+                <%= f = form_for @modif_changeset, "#", [phx_submit: :update_task] %>
+                <%= hidden_input f, :task_id,value: @card.task.id %>
                 <!-- FIRST ROW -->
                   <div class="row">
 
@@ -81,7 +81,6 @@ defmodule PmLoginWeb.LiveComponent.ModifModalLive do
                               <%= label f, "Durée estimée (en heure(s)):" %>
 
                               <b><%= number_input f, :estimated_duration, style: "width: 70px", value: @card.task.estimated_duration %> h</b>
-                              <%= error_tag f, :estimated_duration %>
                               <%= error_tag f, :negative_estimated %>
 
                         </div>
@@ -89,8 +88,7 @@ defmodule PmLoginWeb.LiveComponent.ModifModalLive do
                         <div class="column">
                           <label>Durée effectuée:</label>
                           <b><%= number_input f, :performed_duration, style: "width: 70px", value: @card.task.performed_duration %> h</b>
-                          <%= error_tag f, :performed_duration%>
-                          <%= error_tag f, :negative_estimated %>
+                          <%= error_tag f, :negative_performed%>
                         </div>
 
 
@@ -119,22 +117,18 @@ defmodule PmLoginWeb.LiveComponent.ModifModalLive do
                           <!-- END OF THIRD ROW -->
 
 
-                  <%= hidden_input f, :project_id, value: @pro_id %>
-                  <%= hidden_input f, :attributor_id, value: @curr_user_id %>
 
                   <!-- FOURTH ROW -->
                   <div class="row">
                     <div class="column">
                       <%= label f, "Date de début" %>
                       <%= date_input f, :date_start, value: @card.task.date_start %>
-                      <%= error_tag f, :date_start %>
                       <%= error_tag f, :date_start_lt %>
                     </div>
 
                     <div class="column">
                       <%= label f, "Date finale" %>
                       <%= date_input f, :date_end, value: @card.task.date_end %>
-                      <%= error_tag f, :date_end %>
                       <%= error_tag f, :date_end_lt %>
                       <%= error_tag f, :dt_end_lt_start %>
                     </div>
@@ -146,7 +140,8 @@ defmodule PmLoginWeb.LiveComponent.ModifModalLive do
                     <div class="row" style="text-align:center;">
                     <%= label f, "Progression: ", style: "margin-top: 5px;" %>
                     <b><%= number_input f, :progression, value: @card.task.progression, style: "width: 70px; margin-left: 20px;" %> %</b>
-                    <%= error_tag f, :progression %>
+                    <%= error_tag f, :invalid_progression %>
+
                      </div>
                   <!-- -->
 

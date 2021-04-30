@@ -37,8 +37,12 @@ defmodule PmLogin.Monitoring.Task do
 
   def update_changeset(task, attrs) do
     task
-    |> cast(attrs, [:title, :attributor_id, :status_id,:progression, :date_start, :date_end, :estimated_duration, :performed_duration, :deadline])
-    |> validate_required([:title, :progression, :date_start, :date_end, :estimated_duration, :performed_duration, :deadline])
+    |> cast(attrs, [:progression, :date_start, :date_end, :estimated_duration, :performed_duration])
+    |> Monitoring.validate_dates_without_deadline
+    |> Monitoring.validate_start_end
+    |> Monitoring.validate_positive_estimated
+    |> Monitoring.validate_positive_performed
+    |> Monitoring.validate_progression
   end
 
   def create_changeset(task, attrs) do
@@ -92,7 +96,5 @@ defmodule PmLogin.Monitoring.Task do
         # |> put_change(:status_id, 1)
 
   end
-
-
 
 end

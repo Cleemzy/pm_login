@@ -109,26 +109,24 @@ defmodule PmLoginWeb.Project.BoardLive do
         {:noreply, socket |> assign(show_task_modal: false)}
 
       {:error, %Ecto.Changeset{} = changeset} ->
-        {:noreply, assign(socket,task_changeset: changeset)}
+        {:noreply, assign(socket,modif_changeset: changeset)}
     end
   end
 
-  def handle_event("update", %{"task" => params}, socket) do
+  def handle_event("update_task", %{"task" => params}, socket) do
           #UPDATING
+    task = Monitoring.get_task!(params["task_id"])
+    # IO.inspect params
+    # IO.inspect task
+    # IO.inspect Monitoring.update_task(task, params)
+    case Monitoring.update_task(task, params) do
+      {:ok, task} ->
+        {:noreply, socket |> assign(show_modif_modal: false)}
 
-    IO.inspect params
-    {:noreply, socket}
-          #CREATION
-    # case Monitoring.create_task_with_card(params) do
-    #   {:ok, task} ->
-    #     this_board = socket.assigns.board
-    #     [head | _] = this_board.stages
-    #     Kanban.create_card(%{name: task.title, stage_id: head.id ,task_id: task.id})
-    #     {:noreply, socket |> assign(show_task_modal: false)}
-    #
-    #   {:error, %Ecto.Changeset{} = changeset} ->
-    #     {:noreply, assign(socket,task_changeset: changeset)}
-    # end
+      {:error, %Ecto.Changeset{} = changeset} ->
+        {:noreply, socket |> assign(modif_changeset: changeset)}
+    end
+
   end
 
   def render(assigns) do

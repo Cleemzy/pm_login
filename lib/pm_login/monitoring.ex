@@ -7,17 +7,40 @@ defmodule PmLogin.Monitoring do
   alias PmLogin.Repo
   alias PmLogin.Kanban
   alias PmLogin.Monitoring.Status
-  #Date validations and positive estimation
-  def validate_positive_estimated(changeset) do
-    est = get_field(changeset, :estimated_duration)
-    case est do
+  #Date validations and positive estimation with progression
+
+  def validate_progression(changeset) do
+    progression  = get_field(changeset, :progression)
+    case progression do
       nil -> changeset
       _ -> cond do
-      est < 0 -> changeset |> add_error(:negative_estimated, "La durée estimée ne peut être négative")
-      true -> changeset
+          progression < 0 or progression > 100 -> add_error(changeset, :invalid_progression, "Progression doit être comprise entre 0 et 100")
+          true -> changeset
+      end
     end
   end
-end
+
+  def validate_positive_performed(changeset) do
+      est = get_field(changeset, :performed_duration)
+      case est do
+        nil -> changeset
+        _ -> cond do
+        est < 0 -> changeset |> add_error(:negative_performed, "La durée exécutée ne peut être négative")
+        true -> changeset
+      end
+    end
+  end
+
+  def validate_positive_estimated(changeset) do
+      est = get_field(changeset, :estimated_duration)
+      case est do
+        nil -> changeset
+        _ -> cond do
+        est < 0 -> changeset |> add_error(:negative_estimated, "La durée estimée ne peut être négative")
+        true -> changeset
+      end
+    end
+  end
 
 def validate_start_deadline(changeset) do
   date_start = get_field(changeset, :date_start)
@@ -60,6 +83,32 @@ def validate_start_deadline(changeset) do
       end
     end
 
+    def validate_dates_without_deadline(changeset) do
+      today = Date.utc_today
+      date_start = get_field(changeset, :date_start)
+      date_end = get_field(changeset, :date_end)
+
+      if date_start != nil and date_end != nil do
+
+        dt_start = date_start |> to_string |> string_to_date
+        dt_end = date_end |> to_string |> string_to_date
+
+        cond do
+          Date.compare(dt_start,today) == :lt ->
+            changeset
+            |> add_error(:date_start_lt, "La date de début ne peut pas être antérieure à aujourd'hui")
+          Date.compare(dt_end,today) == :lt ->
+            changeset
+            |> add_error(:date_end_lt, "La date de fin ne peut pas être antérieure à aujourd'hui")
+          true -> changeset
+        end
+
+            else
+              changeset
+            end
+
+    end
+
     def validate_dates(changeset) do
       today = Date.utc_today
       date_start = get_field(changeset, :date_start)
@@ -89,7 +138,7 @@ def validate_start_deadline(changeset) do
               changeset
             end
 
-          end
+    end
 
           def string_to_date(str) do
             [str_y, str_m, str_d] = String.split(str,"-")
@@ -457,6 +506,8 @@ def validate_start_deadline(changeset) do
     |> Task.update_changeset(attrs)
     |> Repo.update()
   end
+
+
 
   @doc """
   Deletes a task.
