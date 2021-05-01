@@ -527,8 +527,14 @@ def validate_start_deadline(changeset) do
     |> Repo.update()
   end
 
+  def update_task_status(%Task{} = task, attrs) do
+    task
+    |> Task.update_status_changeset(attrs)
+    |> Repo.update()
+  end
+
   def broadcast_updated_task(tuple),do: tuple |> broadcast_change([:task, :updated])
-  
+
 
 
 

@@ -47,6 +47,11 @@ defmodule PmLogin.Monitoring.Task do
     |> Monitoring.del_contrib_id_if_nil
   end
 
+  def update_status_changeset(task, attrs) do
+    task
+    |> cast(attrs, [:status_id])
+  end
+
   def create_changeset(task, attrs) do
     # %{"project_id" => pro_id, "title" => title} = attrs
     #

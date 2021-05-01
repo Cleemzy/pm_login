@@ -33,12 +33,13 @@ defmodule PmLoginWeb.Project.BoardLive do
     card = Kanban.get_card!(card_attrs["id"])
     # IO.inspect card_attrs
     # IO.inspect updated_stage
+    IO.inspect card
     case Kanban.update_card(card, card_attrs) do
       {:ok, _updated_card} ->
         updated_task = card.task_id |> Monitoring.get_task!
         updated_stage = card_attrs["stage_id"] |> Kanban.get_stage!
         task_attrs = %{"status_id" => updated_stage.status_id}
-        Monitoring.update_task(updated_task, task_attrs)
+        IO.inspect Monitoring.update_task_status(updated_task, task_attrs)
         this_board = socket.assigns.board
         {:noreply, assign(socket, :board, this_board)}
         # {:noreply, update(socket, :board, fn _ -> Kanban.get_board!() end)}
