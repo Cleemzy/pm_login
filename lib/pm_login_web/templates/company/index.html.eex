@@ -1,6 +1,6 @@
 <h1>Liste des sociétés</h1>
 
-<table>
+<table id="tb-auth">
   <thead>
     <tr>
       <th>Nom de la société</th>

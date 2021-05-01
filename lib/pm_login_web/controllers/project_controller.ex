@@ -15,7 +15,7 @@ defmodule PmLoginWeb.ProjectController do
 
   def index(conn, _params) do
     projects = Monitoring.list_projects()
-    render(conn, "index.html", projects: projects)
+    render(conn, "index.html", projects: projects, layout: {PmLoginWeb.LayoutView, "admin_layout.html"})
   end
 
   def new(conn, _params) do
@@ -29,7 +29,7 @@ defmodule PmLoginWeb.ProjectController do
     case Monitoring.create_project(project_params) do
       {:ok, project} ->
         conn
-        |> put_flash(:info, "Project created successfully.")
+        |> put_flash(:info, "Projet crée avec succès")
         |> redirect(to: Routes.project_path(conn, :show, project))
 
       {:error, %Ecto.Changeset{} = changeset} ->
@@ -41,13 +41,17 @@ defmodule PmLoginWeb.ProjectController do
 
   def show(conn, %{"id" => id}) do
     project = Monitoring.get_project!(id)
-    render(conn, "show.html", project: project)
+    render(conn, "show.html", project: project, layout: {PmLoginWeb.LayoutView, "admin_layout.html"})
   end
 
   def edit(conn, %{"id" => id}) do
     project = Monitoring.get_project!(id)
     changeset = Monitoring.change_project(project)
-    render(conn, "edit.html", project: project, changeset: changeset)
+
+    ac_list = Services.list_active_clients
+    ac_ids = Enum.map(ac_list, fn(%ActiveClient{} = ac) -> {ac.user.username, ac.id} end )
+
+    render(conn, "edit.html", project: project, changeset: changeset, ac_ids: ac_ids, layout: {PmLoginWeb.LayoutView, "admin_layout.html"})
   end
 
   def update(conn, %{"id" => id, "project" => project_params}) do

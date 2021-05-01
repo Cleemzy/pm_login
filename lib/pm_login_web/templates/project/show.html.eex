@@ -1,9 +1,9 @@
-<h1>Show Project</h1>
-
+<h1><%= @project.title %></h1>
+<div class="basecontents project-show">
 <ul>
 
   <li>
-    <strong>Title:</strong>
+    <strong>Nom: </strong>
     <%= @project.title %>
   </li>
 
@@ -14,35 +14,35 @@
 
   <li>
     <strong>Progression:</strong>
-    <%= @project.progression %>
+    <%= @project.progression %> %
   </li>
 
   <li>
-    <strong>Date start:</strong>
+    <strong>Début du projet</strong>
     <%= @project.date_start %>
   </li>
 
   <li>
-    <strong>Date end:</strong>
+    <strong>Fin du projet</strong>
     <%= @project.date_end %>
   </li>
 
   <li>
-    <strong>Estimated duration:</strong>
-    <%= @project.estimated_duration %>
+    <strong>Durée estimée</strong>
+    <%= @project.estimated_duration %> h
   </li>
 
   <li>
-    <strong>Performed duration:</strong>
-    <%= @project.performed_duration %>
+    <strong>Durée effectuée:</strong>
+    <%= @project.performed_duration %> h
   </li>
 
   <li>
-    <strong>Deadline:</strong>
+    <strong>Date d'échéance:</strong>
     <%= @project.deadline %>
   </li>
 
 </ul>
-
-<span><%= link "Edit", to: Routes.project_path(@conn, :edit, @project) %></span>
-<span><%= link "Back", to: Routes.project_path(@conn, :index) %></span>
+</div>
+<span><%= link "Modifier informations", to: Routes.project_path(@conn, :edit, @project), class: "btn btn-lg btn-primary" %></span>
+<span><%= link "Retour", to: Routes.project_path(@conn, :index),class: "btn btn-lg btn-secondary" %></span>

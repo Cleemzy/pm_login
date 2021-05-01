@@ -18,24 +18,23 @@
     <tbody>
   <%= for project <- @projects do %>
       <tr>
-        <%= project.id %>
         <td><%= link "#{project.title}", to: Routes.project_path(@conn, :board, project) %></td>
         <td><%= project.description %></td>
-        <td><%= project.progression %></td>
+        <td><%= project.progression %> %</td>
         <td><%= project.date_start %></td>
         <td><%= project.date_end %></td>
-        <td><%= project.estimated_duration %></td>
-        <td><%= project.performed_duration %></td>
+        <td><%= project.estimated_duration %> h</td>
+        <td><%= project.performed_duration %> h</td>
         <td><%= project.deadline %></td>
 
         <td>
-          <span><%= link "Afficher", to: Routes.project_path(@conn, :show, project) %></span>
-          <span><%= link "Modifier", to: Routes.project_path(@conn, :edit, project) %></span>
-          <span><%= link "Supprimer", to: Routes.project_path(@conn, :delete, project), method: :delete, data: [confirm: "Are you sure?"] %></span>
+          <span><%= link "Détails", to: Routes.project_path(@conn, :show, project), class: "button btn btn-lg btn-info" %></span>
+          <span><%= link "Modifier", to: Routes.project_path(@conn, :edit, project),class: "button btn btn-lg btn-warning" %></span>
+          <!-- <span><%= link "Supprimer", to: Routes.project_path(@conn, :delete, project), method: :delete, data: [confirm: "Are you sure?"] %></span> -->
         </td>
       </tr>
   <% end %>
     </tbody>
   </table>
 
-  <span><%= link "Nouveau projet", to: Routes.project_path(@conn, :new) %></span>
+  <span><%= link "+ Nouveau projet", to: Routes.project_path(@conn, :new), class: "btn btn-lg btn-primary" %></span>

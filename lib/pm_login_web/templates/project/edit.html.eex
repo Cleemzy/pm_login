@@ -1,5 +1,7 @@
-<h1>Edit Project</h1>
+<h1>Modifier projet: <%= @project.title %></h1>
 
+<div class="basecontents">
 <%= render "form.html", Map.put(assigns, :action, Routes.project_path(@conn, :update, @project)) %>
+</div>
 
-<span><%= link "Back", to: Routes.project_path(@conn, :index) %></span>
+<span><%= link "Retour", to: Routes.project_path(@conn, :index), class: "btn btn-lg btn-secondary" %></span>

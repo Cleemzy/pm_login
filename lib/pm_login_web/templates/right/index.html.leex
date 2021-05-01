@@ -1,7 +1,7 @@
 <% alias PmLoginWeb.LiveComponent.ModalLive %>
 <h1>Droits/ autorisations</h1>
 
-<table>
+<table id="tb-auth">
   <thead>
     <tr>
 
@@ -29,7 +29,7 @@
   </tbody>
 </table>
 
-<span><%= link "Nouveau droit", to: Routes.right_path(@socket, :new) %></span>
+<span><%= link "+ Nouveau droit", to: Routes.right_path(@socket, :new), class: "btn btn-lg btn-primary" %></span>
 
 <%= if @show_modal do %>
 <%= live_component(@socket,
