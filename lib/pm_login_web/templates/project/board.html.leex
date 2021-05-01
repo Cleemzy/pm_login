@@ -17,8 +17,9 @@
 
           <div data-card-id="<%= card.id %>" class="card basecontents">
                 <div class="card__name"><%= card.name %></div>
-                <i class="card__date">Créee le <%= card.task.inserted_at %>, par</i>
+                <i class="card__date">Créee le <%= card.task.inserted_at %>, par
                 <img class="profile-pic-mini" src="<%= Routes.static_path(@socket, "/#{card.task.attributor.profile_picture}") %>" width="50"/>
+                 <%= if card.task.contributor != nil do %>pour <img class="profile-pic-mini" src="<%= Routes.static_path(@socket, "/#{card.task.contributor.profile_picture}") %>" width="50"/><% end %></i>
 
           </div>
 

@@ -102,8 +102,7 @@ defmodule PmLoginWeb.LiveComponent.ModifModalLive do
                             <div class="column">
 
                                   <%= label f, "Assigner contributeur" %>
-
-                                  <%= select f, :contributor_id, @contributors %>
+                                  <%= select f, :contributor_id, @contributors, prompt: "Contributeurs:", selected: @card.task.contributor_id %>
                                   <%= error_tag f, :contributor_id %>
 
                             </div>
@@ -123,13 +122,11 @@ defmodule PmLoginWeb.LiveComponent.ModifModalLive do
                     <div class="column">
                       <%= label f, "Date de début" %>
                       <%= date_input f, :date_start, value: @card.task.date_start %>
-                      <%= error_tag f, :date_start_lt %>
                     </div>
 
                     <div class="column">
                       <%= label f, "Date finale" %>
                       <%= date_input f, :date_end, value: @card.task.date_end %>
-                      <%= error_tag f, :date_end_lt %>
                       <%= error_tag f, :dt_end_lt_start %>
                     </div>
                   </div>

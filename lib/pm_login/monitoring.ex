@@ -7,8 +7,26 @@ defmodule PmLogin.Monitoring do
   alias PmLogin.Repo
   alias PmLogin.Kanban
   alias PmLogin.Monitoring.Status
+
+
+  @topic inspect(__MODULE__)
+  def subscribe do
+    Phoenix.PubSub.subscribe(PmLogin.PubSub, @topic)
+  end
+
+  defp broadcast_change({:ok, result}, event) do
+    Phoenix.PubSub.broadcast(PmLogin.PubSub, @topic, {__MODULE__, event, result})
+  end
+
   #Date validations and positive estimation with progression
 
+  def del_contrib_id_if_nil(changeset) do
+    contributor_id = get_field(changeset, :contributor_id)
+    case contributor_id do
+      nil -> changeset |> delete_change(:contributor_id)
+      _ -> changeset
+    end
+  end
 
   def validate_progression(changeset) do
     progression  = get_field(changeset, :progression)
@@ -508,6 +526,10 @@ def validate_start_deadline(changeset) do
     |> Task.update_changeset(attrs)
     |> Repo.update()
   end
+
+  def broadcast_updated_task(tuple),do: tuple |> broadcast_change([:task, :updated])
+  
+
 
 
 

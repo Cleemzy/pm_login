@@ -63,7 +63,7 @@ defmodule PmLoginWeb.LiveComponent.PlusModalLive do
                         <div class="column column-25">
                         <%= @card.task.attributor.username %>
                         </div>
-                        <div class="column column-35">
+                        <div class="column column-35" style="position: relative; top: -7px;">
                           <img class="profile-pic-mini" src="<%= Routes.static_path(@socket, "/#{@card.task.attributor.profile_picture}") %>" width="50"/>
                         </div>
                     </div>
@@ -71,6 +71,34 @@ defmodule PmLoginWeb.LiveComponent.PlusModalLive do
 
                   </div>
                   <!-- END OF FIRST ROW -->
+
+                    <!-- CONTRIBUTOR ROW -->
+                      <%= if @card.task.contributor != nil do  %>
+
+                      <div class="row">
+
+                        <div class="column">
+
+                        </div>
+
+                        <div class="column">
+                        <div class="row">
+                          <div class="column column-40">
+                            <label>Contributeur:</label>
+                            </div>
+                            <div class="column column-25">
+                            <%= @card.task.contributor.username %>
+                            </div>
+                            <div class="column column-35" style="position: relative; top: -7px; left: 3px;">
+                              <img class="profile-pic-mini" src="<%= Routes.static_path(@socket, "/#{@card.task.contributor.profile_picture}") %>" width="50"/>
+                            </div>
+                        </div>
+                        </div>
+
+                      </div>
+
+                      <% end %>
+                      <!-- END OF CONTRIBUTOR ROW -->
 
                     <!-- SECOND ROW -->
                       <div class="row" style="margin-bottom: 10px;">
@@ -164,7 +192,7 @@ defmodule PmLoginWeb.LiveComponent.PlusModalLive do
                     <div class="column column-50">
                     </div>
                       <div class="column column-50">
-                        <i>Créee le <%= @card.task.inserted_at %></i>
+                        <i style="font-size: 10px;">Créee le <%= @card.task.inserted_at %></i>
                       </div>
                     </div>
 

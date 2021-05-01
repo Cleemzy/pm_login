@@ -7,10 +7,11 @@ defmodule PmLogin.Kanban do
   alias PmLogin.Login.User
 
   def get_board!(board_id) do
+    contributor_query = from c in User
     attributor_query = from u in User
 
     task_query = from t in Task,
-                preload: [attributor: ^attributor_query]
+                preload: [attributor: ^attributor_query, contributor: ^contributor_query]
 
     stage_query =
       from s in Stage,
@@ -70,12 +71,14 @@ defmodule PmLogin.Kanban do
   end
 
   def get_card_from_modal!(id) do
+    contributor_query = from c in User
     priority_query = from p in Priority
     status_query = from s in Status
     attributor_query = from u in User
 
     task_query = from t in Task,
-                preload: [attributor: ^attributor_query, status: ^status_query, priority: ^priority_query]
+                preload: [attributor: ^attributor_query, status: ^status_query,
+                priority: ^priority_query, contributor: ^contributor_query]
 
     query = from c in Card,
             preload: [task: ^task_query],

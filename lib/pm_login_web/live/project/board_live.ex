@@ -13,6 +13,7 @@ defmodule PmLoginWeb.Project.BoardLive do
 
   def mount(_params,%{"curr_user_id" => curr_user_id ,"pro_id" => pro_id}, socket) do
     if connected?(socket), do: Kanban.subscribe()
+    Monitoring.subscribe()
     project = Monitoring.get_project!(pro_id)
 
     task_changeset = Monitoring.change_task(%Task{})
@@ -60,6 +61,11 @@ defmodule PmLoginWeb.Project.BoardLive do
   #   end
   # end
 
+  def handle_info({Monitoring, [:task, :updated], _}, socket) do
+    board_id = socket.assigns.board.id
+    {:noreply, assign(socket, board: Kanban.get_board!(board_id))}
+  end
+
   def handle_info({Kanban, [_, :updated], _}, socket) do
     proj_id = socket.assigns.pro_id
     project = Monitoring.get_project!(proj_id)
@@ -96,7 +102,8 @@ defmodule PmLoginWeb.Project.BoardLive do
 
   def handle_info({ModifModalLive, :button_clicked, %{action: "cancel-modif"}},socket) do
     # task_changeset = Monitoring.change_task(%Task{})
-    {:noreply, assign(socket, show_modif_modal: false)}
+    modif_changeset = Monitoring.change_task(%Task{})
+    {:noreply, assign(socket, show_modif_modal: false, modif_changeset: modif_changeset)}
   end
 
   def handle_event("save", %{"task" => params}, socket) do
@@ -124,6 +131,9 @@ defmodule PmLoginWeb.Project.BoardLive do
     # IO.inspect Monitoring.update_task(task, params)
     case Monitoring.update_task(task, attrs) do
       {:ok, task} ->
+        # IO.inspect task
+        # IO.inspect attrs
+        {:ok, task} |> Monitoring.broadcast_updated_task
         {:noreply, socket |> assign(show_modif_modal: false)}
 
       {:error, %Ecto.Changeset{} = changeset} ->

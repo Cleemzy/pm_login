@@ -18,10 +18,11 @@ defmodule PmLogin.Monitoring.Task do
     field :title, :string
     field :parent_id, :id
     field :project_id, :id
-    field :contributor_id, :id
+    # field :contributor_id, :id
     # field :status_id, :id
     # field :priority_id, :id
     # field :attributor_id, :id
+    belongs_to :contributor, User
     belongs_to :priority, Priority
     belongs_to :attributor, User
     belongs_to :status, Status
@@ -37,12 +38,13 @@ defmodule PmLogin.Monitoring.Task do
 
   def update_changeset(task, attrs) do
     task
-    |> cast(attrs, [:progression, :date_start, :date_end, :estimated_duration, :performed_duration])
-    |> Monitoring.validate_dates_without_deadline
+    |> cast(attrs, [:progression, :date_start, :date_end, :estimated_duration, :performed_duration, :contributor_id])
+    # |> Monitoring.validate_dates_without_deadline
     |> Monitoring.validate_start_end
     |> Monitoring.validate_positive_estimated
     |> Monitoring.validate_positive_performed
     |> Monitoring.validate_progression
+    |> Monitoring.del_contrib_id_if_nil
   end
 
   def create_changeset(task, attrs) do
