@@ -1,1 +1,26 @@
 <h1>Bienvenue administrateur <%= @current_user.username %>!</h1>
+
+<div class="container">
+  <div id="esp__adm__row" class="row basecontents">
+    <a id="adm" href="<%= Routes.user_path(@conn, :index)  %>"><h3>Espace administrateur</h3></a>
+  </div>
+
+  <div class="row">
+    <div class="column basecontents esp__adm__col">
+      <h4><%= link "Projets", to: Routes.project_path(@conn, :index)%></h4>
+    </div>
+    <div class="column basecontents esp__adm__col">
+      <h4><%= link "Sociétés", to: Routes.company_path(@conn, :index) %></h4>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="column basecontents esp__adm__col">
+      <h4><%= link "Utilisateurs", to: Routes.user_path(@conn, :list) %></h4>
+    </div>
+    <div class="column basecontents esp__adm__col">
+      <h4><%= link "Droits/Statuts", to: Routes.right_path(@conn, :index) %></h4>
+    </div>
+  </div>
+
+</div>
