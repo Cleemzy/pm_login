@@ -4,6 +4,7 @@ defmodule PmLoginWeb.User.ListLive do
   alias PmLoginWeb.UserView
   alias PmLoginWeb.UserController
   alias PmLoginWeb.LiveComponent.ModalLive
+  alias PmLogin.Login.Auth
 
   def mount(_params, %{"curr_user_id" => curr_user_id}, socket) do
     Login.subscribe()
@@ -58,6 +59,11 @@ defmodule PmLoginWeb.User.ListLive do
         _ ->  {:noreply, socket |> assign(users: Enum.sort_by(auth, &(&1.username)), sorted_by_username: true)}
     end
 
+  end
+
+  def handle_event("search-user", %{"_target" => ["search-a"], "search-a" => text}, socket) do
+    new_auth = Enum.filter(Login.list_asc_auth(), fn %Auth{} = x -> Login.filter_username(text,x.username) end)
+    {:noreply, assign(socket, users: new_auth)}
   end
 
   def handle_event("sort_users", %{"_target" => ["sort_select"], "sort_select" => sort_type}, socket), do:

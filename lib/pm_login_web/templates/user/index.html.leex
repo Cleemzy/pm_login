@@ -46,6 +46,16 @@
       </form>
     </div>
 
+    <div class="column" style="margin-left: 130px;">
+      <form phx-change="search-user">
+        <div class="row">
+          <input type="text" name="search-a">
+          <img src="<%= Routes.static_path(@socket, "/images/gray_search_icon.png") %>" width="25" height="25" style="margin-top: 5px; margin-left:5px;"/>
+        </div>
+
+      </form>
+    </div>
+
 
 
   </div>

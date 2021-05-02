@@ -17,7 +17,11 @@ defmodule PmLogin.Login do
     Phoenix.PubSub.broadcast(PmLogin.PubSub, @topic, {__MODULE__, event, result})
   end
 
+  # SEARCH FUNCTION
 
+  def filter_username(text, username) do
+    Regex.match?(~r/^#{text}/i, username)
+  end
   @doc """
   Returns the list of rights.
 
