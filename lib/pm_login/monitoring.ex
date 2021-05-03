@@ -484,6 +484,16 @@ def validate_start_deadline(changeset) do
   """
   def get_task!(id), do: Repo.get!(Task, id)
 
+  def get_task_with_status!(id) do
+    status_query = from s in Status
+
+    query = from t in Task,
+            preload: [status: ^status_query],
+            where: t.id == ^id
+
+    Repo.one!(query)
+  end
+
   @doc """
   Creates a task.
 

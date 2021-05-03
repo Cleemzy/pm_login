@@ -40,8 +40,11 @@ defmodule PmLoginWeb.Project.BoardLive do
         updated_stage = card_attrs["stage_id"] |> Kanban.get_stage!
         task_attrs = %{"status_id" => updated_stage.status_id}
         IO.inspect Monitoring.update_task_status(updated_task, task_attrs)
+        {_, real_task} = Monitoring.update_task_status(updated_task, task_attrs)
+        # IO.inspect real_task
+        # IO.inspect Monitoring.get_task!(real_task.id)
         this_board = socket.assigns.board
-        {:noreply, assign(socket, :board, this_board)}
+        {:noreply, socket |> put_flash(:info, "Tâche #{Monitoring.get_task_with_status!(real_task.id).title} mise dans \" #{Monitoring.get_task_with_status!(real_task.id).status.title} \" ") |> assign(:board, this_board)}
         # {:noreply, update(socket, :board, fn _ -> Kanban.get_board!() end)}
 
       {:error, changeset} ->
@@ -63,6 +66,11 @@ defmodule PmLoginWeb.Project.BoardLive do
   # end
 
   def handle_info({Monitoring, [:task, :updated], _}, socket) do
+    board_id = socket.assigns.board.id
+    {:noreply, assign(socket, board: Kanban.get_board!(board_id))}
+  end
+
+  def handle_info({Monitoring, [:task, :created], _}, socket) do
     board_id = socket.assigns.board.id
     {:noreply, assign(socket, board: Kanban.get_board!(board_id))}
   end
@@ -114,10 +122,12 @@ defmodule PmLoginWeb.Project.BoardLive do
         this_board = socket.assigns.board
         [head | _] = this_board.stages
         Kanban.create_card(%{name: task.title, stage_id: head.id ,task_id: task.id})
-        {:noreply, socket |> assign(show_task_modal: false)}
+        {:noreply, socket
+        |> put_flash(:info, "La tâche #{Monitoring.get_task!(task.id).title} a bien été créee")
+        |> assign(show_task_modal: false)}
 
       {:error, %Ecto.Changeset{} = changeset} ->
-        {:noreply, assign(socket,modif_changeset: changeset)}
+        {:noreply, assign(socket,task_changeset: changeset)}
     end
   end
 
@@ -135,11 +145,11 @@ defmodule PmLoginWeb.Project.BoardLive do
         # IO.inspect task
         # IO.inspect attrs
         {:ok, task} |> Monitoring.broadcast_updated_task
-        {:noreply, socket |> assign(show_modif_modal: false)}
+        {:noreply, socket |> put_flash(:info, "Tâche #{task.title} mise à jour") |> assign(show_modif_modal: false)}
 
       {:error, %Ecto.Changeset{} = changeset} ->
-        IO.inspect changeset
-        IO.inspect changeset.errors
+        # IO.inspect changeset
+        # IO.inspect changeset.errors
         {:noreply, socket |> assign(modif_changeset: changeset)}
     end
 

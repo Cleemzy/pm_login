@@ -29,8 +29,9 @@ defmodule PmLoginWeb.ProjectController do
     case Monitoring.create_project(project_params) do
       {:ok, project} ->
         conn
-        |> put_flash(:info, "Projet crée avec succès")
-        |> redirect(to: Routes.project_path(conn, :show, project))
+        |> put_flash(:info, "Projet #{Monitoring.get_project!(project.id).title} crée avec succès")
+        |> redirect(to: Routes.project_path(conn, :board, project))
+
 
       {:error, %Ecto.Changeset{} = changeset} ->
         ac_list = Services.list_active_clients

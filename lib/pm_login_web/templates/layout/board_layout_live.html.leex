@@ -26,6 +26,7 @@
                 <li class="nav__item"><%= link "Sociétés", to: Routes.company_path(@conn, :index) %></li>
                 <li class="nav__item"><%= link "Utilisateurs", to: Routes.user_path(@conn, :list) %></li>
                 <li class="nav__item"><%= link "Droits/Statuts", to: Routes.right_path(@conn, :index) %></li>
+                <li class="nav__item"><%= link "Clients", to: Routes.active_client_path(@conn, :index) %></li>
               </ul>
             </li>
             <li class="nav__item"><%= link "Accueil", to: Routes.user_path(@conn, :index) %></li>

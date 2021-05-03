@@ -9,6 +9,15 @@ defmodule PmLogin.Services do
   alias PmLogin.Services.Company
   alias PmLogin.Login.User
 
+
+  @topic inspect(__MODULE__)
+  def subscribe do
+    Phoenix.PubSub.subscribe(PmLogin.PubSub, @topic)
+  end
+
+  defp broadcast_change({:ok, result}, event) do
+    Phoenix.PubSub.broadcast(PmLogin.PubSub, @topic, {__MODULE__, event, result})
+  end
   @doc """
   Returns the list of companies.
 
@@ -499,8 +508,10 @@ defmodule PmLogin.Services do
 
   """
   def list_active_clients do
+    company_query = from c in Company
+    user_query = from u in User
     query = from ac in ActiveClient,
-            preload: [user: ^from u in User]
+            preload: [user: ^user_query, company: ^company_query]
     Repo.all(query)
     # Repo.all(ActiveClient)
   end
@@ -545,13 +556,14 @@ defmodule PmLogin.Services do
     %ActiveClient{}
     |> ActiveClient.changeset(attrs)
     |> Repo.insert()
+    |> broadcast_change([:active_client, :created])
   end
 
-  def create_active_client_func(attrs \\ %{}) do
-    %ActiveClient{}
-    |> ActiveClient.create_changeset(attrs)
-    |> Repo.insert()
-  end
+  # def create_active_client_func(attrs \\ %{}) do
+  #   %ActiveClient{}
+  #   |> ActiveClient.create_changeset(attrs)
+  #   |> Repo.insert()
+  # end
 
   @doc """
   Updates a active_client.

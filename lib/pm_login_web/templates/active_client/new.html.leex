@@ -1,0 +1,49 @@
+<div role="main" class="container">
+  <p class="alert alert-info" role="alert"
+    phx-click="lv:clear-flash"
+    phx-value-key="info"><%= live_flash(@flash, :info) %></p>
+
+  <p class="alert alert-danger" role="alert"
+    phx-click="lv:clear-flash"
+    phx-value-key="error"><%= live_flash(@flash, :error) %></p>
+</div>
+
+<h1>Clients inactifs </h1>
+<table id="tb-auth">
+  <thead>
+    <th>Nom</th>
+    <th>Email</th>
+    <th>Affilier à une société</th>
+    <th></th>
+  </thead>
+  <tbody>
+    <%= for client <- @inactives do %>
+    <%= f = form_for nil, "#", [phx_submit: :activate_c] %>
+      <input type="hidden" name="client_id" value="<%= client.id %>">
+        <td><%= client.username %></td>
+        <td><%= client.email %></td>
+        <td><%= select f, "company_id", @companies %></td>
+        <td><%= submit "Rendre actif", class: "btn btn-lg btn-primary" %></td>
+    </form>
+    <% end %>
+  </tbody>
+</table>
+
+<span><%= link "Retour", to: Routes.active_client_path(@socket, :index), class: "btn btn-lg btn-secondary" %></span>
+
+<% alias PmLoginWeb.LiveComponent.ModalLive %>
+<%= if @show_modal do %>
+<%= live_component(@socket,
+                   ModalLive,
+                   id: "confirm-arch",
+                   title: "Rendre actif?",
+                   body: "Etes-vous sûr de rendre le client
+                   #{PmLogin.Login.get_user!(@params["user_id"]).username} actif et
+                   l'affilier à la société #{PmLogin.Services.get_company!(@params["company_id"]).name}?",
+                   right_button: "OUI",
+                   right_button_action: "confirm-activate",
+                   right_button_param: @params,
+                   left_button: "ANNULER",
+                   left_button_action: "cancel-active")
+%>
+<% end %>

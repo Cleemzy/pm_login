@@ -3,15 +3,22 @@ defmodule PmLoginWeb.ActiveClientController do
 
   alias PmLogin.Services
   alias PmLogin.Services.ActiveClient
+  alias PmLogin.Login
+
+  alias Phoenix.LiveView
+
 
   def index(conn, _params) do
     active_clients = Services.list_active_clients()
-    render(conn, "index.html", active_clients: active_clients)
+    render(conn, "index.html", active_clients: active_clients, layout: {PmLoginWeb.LayoutView, "admin_layout.html"})
   end
 
   def new(conn, _params) do
-    changeset = Services.change_active_client(%ActiveClient{})
-    render(conn, "new.html", changeset: changeset)
+    # changeset = Services.change_active_client(%ActiveClient{})
+    # inactive_clients = Login.list_non_active_clients
+    # render(conn, "new.html", changeset: changeset, inactives: inactive_clients)
+    LiveView.Controller.live_render(conn, PmLogin.ActiveClient.ActiveClientLive, session: %{"curr_user_id" => get_session(conn, :curr_user_id)}, router: PmLoginWeb.Router)
+
   end
 
   def create(conn, %{"active_client" => active_client_params}) do
