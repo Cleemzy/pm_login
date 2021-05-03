@@ -4,8 +4,8 @@
       <p>Vérifiez vos informations ci-dessous</p>
     </div>
   <% end %>
-  
-  <%= text_input f, :username, class: "un", id: "iu", align: "center", placeholder: "Utilisateur" %>
+
+  <%= text_input f, :username, class: "un", id: "iu", align: "center", placeholder: "Utilisateur", value: "Mgbi" %>
   <%= error_tag f, :req_uname_error %>
 
   <%= password_input f, :password, class: "pass", align: "center", placeholder: "Mot de passe" %>
