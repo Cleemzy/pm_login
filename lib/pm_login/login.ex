@@ -1,4 +1,5 @@
 defmodule PmLogin.Login do
+  use PmLoginWeb, :controller
   @moduledoc """
   The Login context.
   """
@@ -137,6 +138,39 @@ defmodule PmLogin.Login do
   @doc """
   checks user status functions
   """
+
+  def check_and_redirect(conn, action) do
+
+    if is_connected?(conn) do
+      cond do
+        is_admin?(conn) ->
+            action
+        true ->
+          conn
+            |> not_admin_redirection
+      end
+    else
+      conn
+      |> not_connected_redirection
+    end
+
+  end
+
+  def do_action(action) do
+    action
+  end
+
+  def not_admin_redirection(conn) do
+    conn
+    |> put_flash(:error, "Désolé, vous n'êtes pas administrateur!")
+    |> redirect(to: Routes.user_path(conn, :index))
+  end
+
+  def not_connected_redirection(conn) do
+    conn
+    |> put_flash(:error, "Connectez-vous d'abord!")
+    |> redirect(to: Routes.page_path(conn, :index))
+  end
 
   def is_connected?(conn) do
     get_curr_user_id(conn) != nil

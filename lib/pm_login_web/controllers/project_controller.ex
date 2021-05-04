@@ -6,24 +6,65 @@ defmodule PmLoginWeb.ProjectController do
   alias PmLogin.Monitoring.Project
   alias PmLogin.Services.ActiveClient
   alias Phoenix.LiveView
-
-
+  alias PmLogin.Login
 
   def board(conn, %{"id" => id}) do
-    LiveView.Controller.live_render(conn, PmLoginWeb.Project.BoardLive, session: %{"curr_user_id" => get_session(conn, :curr_user_id), "pro_id" => id}, router: PmLoginWeb.Router)
+
+    if Login.is_connected?(conn) do
+      cond do
+        Login.is_admin?(conn) ->
+          LiveView.Controller.live_render(conn, PmLoginWeb.Project.BoardLive, session: %{"curr_user_id" => get_session(conn, :curr_user_id), "pro_id" => id}, router: PmLoginWeb.Router)
+
+        true ->
+          conn
+            |> Login.not_admin_redirection
+      end
+    else
+      conn
+      |> Login.not_connected_redirection
+    end
+
   end
 
   def index(conn, _params) do
-    projects = Monitoring.list_projects()
-    render(conn, "index.html", projects: projects, layout: {PmLoginWeb.LayoutView, "admin_layout.html"})
+
+    if Login.is_connected?(conn) do
+      cond do
+        Login.is_admin?(conn) ->
+          projects = Monitoring.list_projects()
+          render(conn, "index.html", projects: projects, layout: {PmLoginWeb.LayoutView, "admin_layout.html"})
+
+        true ->
+          conn
+            |> Login.not_admin_redirection
+      end
+    else
+      conn
+      |> Login.not_connected_redirection
+    end
+
   end
 
   def new(conn, _params) do
-    changeset = Monitoring.change_project(%Project{})
-    ac_list = Services.list_active_clients
-    ac_ids = Enum.map(ac_list, fn(%ActiveClient{} = ac) -> {ac.user.username, ac.id} end )
-    render(conn, "new.html", changeset: changeset, ac_ids: ac_ids)
-  end
+    
+    if Login.is_connected?(conn) do
+      cond do
+        Login.is_admin?(conn) ->
+          changeset = Monitoring.change_project(%Project{})
+          ac_list = Services.list_active_clients
+          ac_ids = Enum.map(ac_list, fn(%ActiveClient{} = ac) -> {ac.user.username, ac.id} end )
+          render(conn, "new.html", changeset: changeset, ac_ids: ac_ids)
+
+        true ->
+          conn
+            |> Login.not_admin_redirection
+      end
+    else
+      conn
+      |> Login.not_connected_redirection
+    end
+
+end
 
   def create(conn, %{"project" => project_params}) do
     case Monitoring.create_project(project_params) do
@@ -41,18 +82,45 @@ defmodule PmLoginWeb.ProjectController do
   end
 
   def show(conn, %{"id" => id}) do
-    project = Monitoring.get_project!(id)
-    render(conn, "show.html", project: project, layout: {PmLoginWeb.LayoutView, "admin_layout.html"})
+
+    if Login.is_connected?(conn) do
+      cond do
+        Login.is_admin?(conn) ->
+          project = Monitoring.get_project!(id)
+          render(conn, "show.html", project: project, layout: {PmLoginWeb.LayoutView, "admin_layout.html"})
+
+        true ->
+          conn
+            |> Login.not_admin_redirection
+      end
+    else
+      conn
+      |> Login.not_connected_redirection
+    end
+
   end
 
   def edit(conn, %{"id" => id}) do
-    project = Monitoring.get_project!(id)
-    changeset = Monitoring.change_project(project)
+    if Login.is_connected?(conn) do
+      cond do
+        Login.is_admin?(conn) ->
+          project = Monitoring.get_project!(id)
+          changeset = Monitoring.change_project(project)
 
-    ac_list = Services.list_active_clients
-    ac_ids = Enum.map(ac_list, fn(%ActiveClient{} = ac) -> {ac.user.username, ac.id} end )
+          ac_list = Services.list_active_clients
+          ac_ids = Enum.map(ac_list, fn(%ActiveClient{} = ac) -> {ac.user.username, ac.id} end )
 
-    render(conn, "edit.html", project: project, changeset: changeset, ac_ids: ac_ids, layout: {PmLoginWeb.LayoutView, "admin_layout.html"})
+          render(conn, "edit.html", project: project, changeset: changeset, ac_ids: ac_ids, layout: {PmLoginWeb.LayoutView, "admin_layout.html"})
+
+        true ->
+          conn
+            |> Login.not_admin_redirection
+      end
+    else
+      conn
+      |> Login.not_connected_redirection
+    end
+
   end
 
   def update(conn, %{"id" => id, "project" => project_params}) do

@@ -3,15 +3,44 @@ defmodule PmLoginWeb.CompanyController do
 
   alias PmLogin.Services
   alias PmLogin.Services.Company
+  alias PmLogin.Login
 
   def index(conn, _params) do
-    companies = Services.list_companies()
-    render(conn, "index.html", companies: companies, layout: {PmLoginWeb.LayoutView, "admin_layout.html"})
+
+    if Login.is_connected?(conn) do
+      cond do
+        Login.is_admin?(conn) ->
+          companies = Services.list_companies()
+          render(conn, "index.html", companies: companies, layout: {PmLoginWeb.LayoutView, "admin_layout.html"})
+
+        true ->
+          conn
+            |> Login.not_admin_redirection
+      end
+    else
+      conn
+      |> Login.not_connected_redirection
+    end
+
   end
 
   def new(conn, _params) do
-    changeset = Services.change_company(%Company{})
-    render(conn, "new.html", changeset: changeset, layout: {PmLoginWeb.LayoutView, "admin_layout.html"})
+
+    if Login.is_connected?(conn) do
+      cond do
+        Login.is_admin?(conn) ->
+          changeset = Services.change_company(%Company{})
+          render(conn, "new.html", changeset: changeset, layout: {PmLoginWeb.LayoutView, "admin_layout.html"})
+
+        true ->
+          conn
+            |> Login.not_admin_redirection
+      end
+    else
+      conn
+      |> Login.not_connected_redirection
+    end
+
   end
 
   def create(conn, %{"company" => company_params}) do
@@ -27,14 +56,42 @@ defmodule PmLoginWeb.CompanyController do
   end
 
   def show(conn, %{"id" => id}) do
-    company = Services.get_company!(id)
-    render(conn, "show.html", company: company, layout: {PmLoginWeb.LayoutView, "admin_layout.html"})
+
+    if Login.is_connected?(conn) do
+      cond do
+        Login.is_admin?(conn) ->
+          company = Services.get_company!(id)
+          render(conn, "show.html", company: company, layout: {PmLoginWeb.LayoutView, "admin_layout.html"})
+
+        true ->
+          conn
+            |> Login.not_admin_redirection
+      end
+    else
+      conn
+      |> Login.not_connected_redirection
+    end
+
   end
 
   def edit(conn, %{"id" => id}) do
-    company = Services.get_company!(id)
-    changeset = Services.change_company(company)
-    render(conn, "edit.html", company: company, changeset: changeset, layout: {PmLoginWeb.LayoutView, "admin_layout.html"})
+
+    if Login.is_connected?(conn) do
+      cond do
+        Login.is_admin?(conn) ->
+          company = Services.get_company!(id)
+          changeset = Services.change_company(company)
+          render(conn, "edit.html", company: company, changeset: changeset, layout: {PmLoginWeb.LayoutView, "admin_layout.html"})
+
+        true ->
+          conn
+            |> Login.not_admin_redirection
+      end
+    else
+      conn
+      |> Login.not_connected_redirection
+    end
+
   end
 
   def update(conn, %{"id" => id, "company" => company_params}) do

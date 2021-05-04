@@ -75,10 +75,20 @@ defmodule PmLoginWeb.AuthController do
 
 
   def sign_out(conn, _params) do
-    conn
-    |> delete_session(:curr_user_id)
-    # |> configure_session(drop: :true)
-    |> put_flash(:info, "Vous vous êtes déconnecté.")
-    |> redirect(to: Routes.page_path(conn, :index))
+
+    case get_session(conn, :curr_user_id) do
+      nil ->
+        conn
+        |> put_flash(:error, "Vous ne pouvez pas vous déconnecter car vous ne vous êtes pas encore connecté.")
+        |> redirect(to: Routes.page_path(conn, :index))
+
+      _ ->
+        conn
+        |> delete_session(:curr_user_id)
+        # |> configure_session(drop: :true)
+        |> put_flash(:info, "Vous vous êtes déconnecté.")
+        |> redirect(to: Routes.page_path(conn, :index))
+    end
+
   end
 end

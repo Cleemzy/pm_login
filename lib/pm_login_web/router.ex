@@ -1,6 +1,8 @@
 defmodule PmLoginWeb.Router do
   use PmLoginWeb, :router
-
+"""
+COMMENTED ROUTES ARE NOT TO BE DELETED BUT JUST NOT USED AT THE TIME
+"""
   pipeline :browser do
     plug :accepts, ["html"]
     plug :fetch_session
@@ -21,11 +23,11 @@ defmodule PmLoginWeb.Router do
     get "/boards/:id", ProjectController, :board
 
     #Monitoring context
-    resources "/statuses", StatusController
+    # resources "/statuses", StatusController
     resources "/projects", ProjectController
-    resources "/priorities", PriorityController
-    resources "/tasks", TaskController
-    resources "/comments", CommentController
+    # resources "/priorities", PriorityController
+    resources "/tasks", TaskController, except: [:index, :edit, :show, :new]
+    # resources "/comments", CommentController
 
     #Login context
     resources "/rights", RightController
@@ -33,12 +35,12 @@ defmodule PmLoginWeb.Router do
 
     #Services context
     resources "/companies", CompanyController
-    resources "/editors", EditorController
-    resources "/softwares", SoftwareController
-    resources "/licenses", LicenseController
-    resources "/assist_contracts", AssistContractController
-    resources "/active_clients", ActiveClientController
-    resources "/clients_requests", ClientsRequestController
+    # resources "/editors", EditorController
+    # resources "/softwares", SoftwareController
+    # resources "/licenses", LicenseController
+    # resources "/assist_contracts", AssistContractController
+    resources "/active_clients", ActiveClientController, except: [:edit, :show]
+    # resources "/clients_requests", ClientsRequestController
 
     get "/users/:id/edit_profile", UserController, :edit_profile
     get "/list_users", UserController, :list

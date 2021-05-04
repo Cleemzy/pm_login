@@ -4,7 +4,18 @@ defmodule PmLoginWeb.PageController do
   alias PmLogin.Login
 
   def index(conn, _params) do
-    changeset = Login.change_user(%User{})
-    render(conn, "index.html", changeset: changeset, layout: {PmLoginWeb.LayoutView, "login_layout.html"})
+
+    case get_session(conn, :curr_user_id) do
+      nil ->
+        changeset = Login.change_user(%User{})
+        render(conn, "index.html", changeset: changeset, layout: {PmLoginWeb.LayoutView, "login_layout.html"})
+
+      _ ->
+        conn
+        |> redirect(to: Routes.user_path(conn, :index))
+    end
+
+
   end
+
 end

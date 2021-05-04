@@ -4,15 +4,15 @@ defmodule PmLoginWeb.TaskController do
   alias PmLogin.Monitoring
   alias PmLogin.Monitoring.Task
 
-  def index(conn, _params) do
-    tasks = Monitoring.list_tasks()
-    render(conn, "index.html", tasks: tasks)
-  end
+  # def index(conn, _params) do
+  #   tasks = Monitoring.list_tasks()
+  #   render(conn, "index.html", tasks: tasks)
+  # end
 
-  def new(conn, _params) do
-    changeset = Monitoring.change_task(%Task{})
-    render(conn, "new.html", changeset: changeset)
-  end
+  # def new(conn, _params) do
+  #   changeset = Monitoring.change_task(%Task{})
+  #   render(conn, "new.html", changeset: changeset)
+  # end
 
   def create(conn, %{"task" => task_params}) do
     case Monitoring.create_task(task_params) do
@@ -26,16 +26,16 @@ defmodule PmLoginWeb.TaskController do
     end
   end
 
-  def show(conn, %{"id" => id}) do
-    task = Monitoring.get_task!(id)
-    render(conn, "show.html", task: task)
-  end
+  # def show(conn, %{"id" => id}) do
+  #   task = Monitoring.get_task!(id)
+  #   render(conn, "show.html", task: task)
+  # end
 
-  def edit(conn, %{"id" => id}) do
-    task = Monitoring.get_task!(id)
-    changeset = Monitoring.change_task(task)
-    render(conn, "edit.html", task: task, changeset: changeset)
-  end
+  # def edit(conn, %{"id" => id}) do
+  #   task = Monitoring.get_task!(id)
+  #   changeset = Monitoring.change_task(task)
+  #   render(conn, "edit.html", task: task, changeset: changeset)
+  # end
 
   def update(conn, %{"id" => id, "task" => task_params}) do
     task = Monitoring.get_task!(id)

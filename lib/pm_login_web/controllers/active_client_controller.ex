@@ -9,15 +9,41 @@ defmodule PmLoginWeb.ActiveClientController do
 
 
   def index(conn, _params) do
-    active_clients = Services.list_active_clients()
-    render(conn, "index.html", active_clients: active_clients, layout: {PmLoginWeb.LayoutView, "admin_layout.html"})
+    if Login.is_connected?(conn) do
+      cond do
+        Login.is_admin?(conn) ->
+            active_clients = Services.list_active_clients()
+            render(conn, "index.html", active_clients: active_clients, layout: {PmLoginWeb.LayoutView, "admin_layout.html"})
+
+        true ->
+          conn
+            |> put_flash(:error, "Désolé, vous n'êtes pas administrateur!")
+            |> redirect(to: Routes.user_path(conn, :index))
+
+      end
+    else
+      conn
+      |> put_flash(:error, "Connectez-vous d'abord!")
+      |> redirect(to: Routes.page_path(conn, :index))
+    end
+
   end
 
   def new(conn, _params) do
-    # changeset = Services.change_active_client(%ActiveClient{})
-    # inactive_clients = Login.list_non_active_clients
-    # render(conn, "new.html", changeset: changeset, inactives: inactive_clients)
-    LiveView.Controller.live_render(conn, PmLogin.ActiveClient.ActiveClientLive, session: %{"curr_user_id" => get_session(conn, :curr_user_id)}, router: PmLoginWeb.Router)
+
+    if Login.is_connected?(conn) do
+      cond do
+        Login.is_admin?(conn) ->
+          LiveView.Controller.live_render(conn, PmLogin.ActiveClient.ActiveClientLive, session: %{"curr_user_id" => get_session(conn, :curr_user_id)}, router: PmLoginWeb.Router)
+
+        true ->
+          conn
+            |> Login.not_admin_redirection
+      end
+    else
+      conn
+      |> Login.not_connected_redirection
+    end
 
   end
 
@@ -33,16 +59,18 @@ defmodule PmLoginWeb.ActiveClientController do
     end
   end
 
-  def show(conn, %{"id" => id}) do
-    active_client = Services.get_active_client!(id)
-    render(conn, "show.html", active_client: active_client)
-  end
+    #NOT USED
+  # def show(conn, %{"id" => id}) do
+  #   active_client = Services.get_active_client!(id)
+  #   render(conn, "show.html", active_client: active_client)
+  # end
 
-  def edit(conn, %{"id" => id}) do
-    active_client = Services.get_active_client!(id)
-    changeset = Services.change_active_client(active_client)
-    render(conn, "edit.html", active_client: active_client, changeset: changeset)
-  end
+    #NOT USED
+  # def edit(conn, %{"id" => id}) do
+  #   active_client = Services.get_active_client!(id)
+  #   changeset = Services.change_active_client(active_client)
+  #   render(conn, "edit.html", active_client: active_client, changeset: changeset)
+  # end
 
   def update(conn, %{"id" => id, "active_client" => active_client_params}) do
     active_client = Services.get_active_client!(id)
