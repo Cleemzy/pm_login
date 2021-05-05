@@ -160,6 +160,12 @@ defmodule PmLogin.Login do
     action
   end
 
+  def not_contributor_redirection(conn) do
+    conn
+    |> put_flash(:error, "Désolé, vous n'êtes pas contributeur de Mgbi!")
+    |> redirect(to: Routes.user_path(conn, :index))
+  end
+
   def not_admin_redirection(conn) do
     conn
     |> put_flash(:error, "Désolé, vous n'êtes pas administrateur!")

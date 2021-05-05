@@ -12,7 +12,7 @@ defmodule PmLoginWeb.ProjectController do
 
     if Login.is_connected?(conn) do
       cond do
-        Login.is_admin?(conn) ->
+        Login.is_admin?(conn) or Login.is_contributor?(conn) ->
           LiveView.Controller.live_render(conn, PmLoginWeb.Project.BoardLive, session: %{"curr_user_id" => get_session(conn, :curr_user_id), "pro_id" => id}, router: PmLoginWeb.Router)
 
         true ->
@@ -46,14 +46,14 @@ defmodule PmLoginWeb.ProjectController do
   end
 
   def new(conn, _params) do
-    
+
     if Login.is_connected?(conn) do
       cond do
         Login.is_admin?(conn) ->
           changeset = Monitoring.change_project(%Project{})
           ac_list = Services.list_active_clients
           ac_ids = Enum.map(ac_list, fn(%ActiveClient{} = ac) -> {ac.user.username, ac.id} end )
-          render(conn, "new.html", changeset: changeset, ac_ids: ac_ids)
+          render(conn, "new.html", changeset: changeset, ac_ids: ac_ids, layout: {PmLoginWeb.LayoutView, "admin_layout.html"})
 
         true ->
           conn

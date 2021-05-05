@@ -6,6 +6,7 @@ defmodule PmLoginWeb.UserController do
   alias PmLogin.Login.Right
   alias PmLogin.Login.Auth
   alias Phoenix.LiveView
+  alias PmLogin.Monitoring
 
   def index(conn, _params) do
 
@@ -16,7 +17,7 @@ defmodule PmLoginWeb.UserController do
         cond do
           Login.is_admin?(conn) -> render(conn, "admin_index.html", current_user: Login.get_curr_user(conn), layout: {PmLoginWeb.LayoutView, "admin_layout.html"})
           Login.is_attributor?(conn) -> render(conn, "attributor_index.html", current_user: Login.get_curr_user(conn))
-          Login.is_contributor?(conn) -> render(conn, "contributor_index.html", current_user: Login.get_curr_user(conn))
+          Login.is_contributor?(conn) -> render(conn, "contributor_index.html", current_user: Login.get_curr_user(conn), layout: {PmLoginWeb.LayoutView, "contributor_layout.html"})
           Login.is_client?(conn) -> render(conn, "client_index.html", current_user: Login.get_curr_user(conn))
           Login.is_not_attributed?(conn) -> render(conn, "unattributed_index.html", current_user: Login.get_curr_user(conn))
           Login.is_archived?(conn) -> conn |> put_flash(:error, "Votre compte a été archivé!") |> redirect(to: Routes.page_path(conn, :index))
@@ -155,7 +156,7 @@ defmodule PmLoginWeb.UserController do
     user = Login.get_user!(id)
 
     # IO.inspect user_params
-    
+
     case Login.update_user(user, user_params) do
       {:ok, user} ->
         conn

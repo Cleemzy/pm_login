@@ -1,0 +1,7 @@
+<h1>Mes projets</h1>
+
+<ul>
+  <%= for project <- @projects do %>
+    <li><%= link "#{project.title}", to: Routes.project_path(@conn, :board, project) %></li>
+  <% end %>
+</ul>

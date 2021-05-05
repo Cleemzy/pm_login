@@ -19,6 +19,9 @@ COMMENTED ROUTES ARE NOT TO BE DELETED BUT JUST NOT USED AT THE TIME
   scope "/", PmLoginWeb do
     pipe_through :browser
 
+    #contributor route
+    get "/my_projects", ContributorController, :my_projects
+
     #Project LiveView
     get "/boards/:id", ProjectController, :board
 

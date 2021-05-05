@@ -7,6 +7,7 @@ defmodule PmLogin.Monitoring do
   alias PmLogin.Repo
   alias PmLogin.Kanban
   alias PmLogin.Monitoring.Status
+  alias PmLogin.Monitoring.Task
 
 
   @topic inspect(__MODULE__)
@@ -276,6 +277,16 @@ def validate_start_deadline(changeset) do
     Repo.all(Project)
   end
 
+  def list_projects_by_contributor(con_id) do
+    tasks_query = from t in Task,
+                  where: t.contributor_id == ^con_id
+    query = from p in Project,
+            preload: [tasks: ^tasks_query]
+    Repo.all(query)
+    |> Enum.filter(fn %PmLogin.Monitoring.Project{} = project ->
+                                          project.tasks != [] end)
+  end
+
   @doc """
   Gets a single project.
 
@@ -453,7 +464,6 @@ def validate_start_deadline(changeset) do
     Priority.changeset(priority, attrs)
   end
 
-  alias PmLogin.Monitoring.Task
 
   @doc """
   Returns the list of tasks.
