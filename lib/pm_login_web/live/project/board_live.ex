@@ -14,6 +14,16 @@ defmodule PmLoginWeb.Project.BoardLive do
   def mount(_params,%{"curr_user_id" => curr_user_id ,"pro_id" => pro_id}, socket) do
     if connected?(socket), do: Kanban.subscribe()
     Monitoring.subscribe()
+
+    layout = if Monitoring.is_admin?(curr_user_id) do
+      {PmLoginWeb.LayoutView, "board_layout_live.html"}
+    else
+      # {PmLoginWeb.LayoutView, "board_layout_live.html"}
+      {PmLoginWeb.LayoutView, "contributor_board_live.html"}
+    end
+
+
+
     project = Monitoring.get_project!(pro_id)
 
     task_changeset = Monitoring.change_task(%Task{})
@@ -24,9 +34,11 @@ defmodule PmLoginWeb.Project.BoardLive do
 
     contributors = Login.list_contributors
     list_contributors = Enum.map(contributors, fn (%User{} = p)  -> {p.username, p.id} end)
-    {:ok, assign(socket, show_plus_modal: false,curr_user_id: curr_user_id, pro_id: pro_id,
+
+    {:ok, assign(socket, is_admin: Monitoring.is_admin?(curr_user_id), show_plus_modal: false,curr_user_id: curr_user_id, pro_id: pro_id,
                     contributors: list_contributors, priorities: list_priorities, board: Kanban.get_board!(project.board_id), show_task_modal: false, show_modif_modal: false,
-                    task_changeset: task_changeset, modif_changeset: modif_changeset, layout: {PmLoginWeb.LayoutView, "board_layout_live.html"})}
+                    task_changeset: task_changeset, modif_changeset: modif_changeset,
+                    layout: layout)}
   end
 
   def handle_event("update_card", %{"card" => card_attrs}, socket) do

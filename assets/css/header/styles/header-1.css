@@ -106,13 +106,13 @@
     opacity: 1;
     transform: translateY(0); }
 
-.nav__toggle__proj {
+/* .nav__toggle__proj { */
   /* display: block;
   position: absolute;
   right: 1rem;
   top: 1rem;
   */
-   }
+   /* } */
 
 .nav__item a {
   display: block;

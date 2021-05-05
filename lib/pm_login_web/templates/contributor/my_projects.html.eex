@@ -1,4 +1,4 @@
-<h1>Mes projets</h1>
+<h1>Les projets à qui on m'a assigné des tâches</h1>
 
 <ul>
   <%= for project <- @projects do %>

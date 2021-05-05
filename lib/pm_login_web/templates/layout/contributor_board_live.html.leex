@@ -19,16 +19,7 @@
         <nav class="nav">
           <input id="hamburger" type="image"  src="<%= Routes.static_path(@conn, "/images/hamburger.png") %>" class="nav__toggle">
           <ul class="nav__wrapper">
-            <li class="nav__item"><%= link "▼ Espace administrateur",to: "#", class: "nav__toggle__proj" %></li>
-            <li class="nav__item">
-              <ul class="nav__wrapper__project">
-                <li class="nav__item"><%= link "Projets", to: Routes.project_path(@conn, :index)%></li>
-                <li class="nav__item"><%= link "Sociétés", to: Routes.company_path(@conn, :index) %></li>
-                <li class="nav__item"><%= link "Utilisateurs", to: Routes.user_path(@conn, :list) %></li>
-                <li class="nav__item"><%= link "Droits/Statuts", to: Routes.right_path(@conn, :index) %></li>
-                <li class="nav__item"><%= link "Clients", to: Routes.active_client_path(@conn, :index) %></li>
-              </ul>
-            </li>
+            <li class="nav__item"><%= link "Mes projets", to: Routes.contributor_path(@conn, :my_projects) %></li>
             <li class="nav__item"><%= link "Accueil", to: Routes.user_path(@conn, :index) %></li>
             <li class="nav__item"><%= link "Profil", to: Routes.user_path(@conn, :show, Plug.Conn.get_session(@conn, :curr_user_id))%></li>
           </ul>
@@ -38,9 +29,9 @@
 
     </header>
 
-
+    <input type="hidden" name="" value="" class="nav__toggle__proj">
     <main id="main" role="main" class="boardcontainer">
-    
+
       <%= @inner_content %>
       <br/>
       <br/>

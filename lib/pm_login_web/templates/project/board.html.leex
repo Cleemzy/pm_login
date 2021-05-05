@@ -24,6 +24,7 @@
 
         <ul data-stage-id="<%= stage.id %>" class="stage__cards">
           <%= for card <- stage.cards do %>
+            <%= if @is_admin or @curr_user_id == card.task.contributor_id do %>
 
           <div data-card-id="<%= card.id %>" class="card basecontents">
                 <div class="card__name"><%= card.name %></div>
@@ -38,7 +39,7 @@
 
 
 
-
+            <% end %>
           <% end %>
         </ul>
       </div>

@@ -8,7 +8,7 @@ defmodule PmLogin.Monitoring do
   alias PmLogin.Kanban
   alias PmLogin.Monitoring.Status
   alias PmLogin.Monitoring.Task
-
+  alias PmLogin.Login
 
   @topic inspect(__MODULE__)
   def subscribe do
@@ -17,6 +17,13 @@ defmodule PmLogin.Monitoring do
 
   defp broadcast_change({:ok, result}, event) do
     Phoenix.PubSub.broadcast(PmLogin.PubSub, @topic, {__MODULE__, event, result})
+  end
+
+  #checking user right in board
+
+  def is_admin?(id) do
+    user = Login.get_user!(id)
+    user.right_id == 1
   end
 
   #Date validations and positive estimation with progression
