@@ -11,7 +11,7 @@
 <div class="boardcontainer">
   <div class="boardheader">
     <h2><%= @board.name %></h2>
-
+    <i class="bi bi-chat-left-dots"></i>
     <%= if @is_admin do%>
       <%= link "+Nouvelle tâche",to: "#",class: "btn btn-lg btn-primary",phx_click: "show_task_modal" %>
     <% end %>
@@ -25,7 +25,7 @@
           <div class="stage__name"><%= stage.name %></div>
           <div class="stage__counter"><%= length(stage.cards) %></div>
         </div>
-        <%= if !@is_admin and stage.status_id == 5 do %>
+        <%= if not @is_admin and stage.status_id == 5 do %>
 
           <ul data-stage-id="<%= stage.id %>" class="">
             <%= for card <- stage.cards do %>
@@ -40,7 +40,8 @@
             </div>
 
             <%= link "+",to: "#",class: "card__plus",phx_click: "show_plus_modal", phx_value_id: card.id %>
-            <%= link "M",to: "#",class: "card__modif",phx_click: "show_modif_modal", phx_value_id: card.id %>
+            <%= link "C",to: "#",class: "card__comments",phx_click: "show_modif_modal", phx_value_id: card.id %>
+            <img src="<%= Routes.static_path(@socket, "/images/icons/pencil-square.svg") %>" phx-click="show_modif_modal" phx-value-id="<%= card.id %>" class="btn card__modif" alt="Bootstrap" width="32" height="32">
 
 
 
@@ -61,9 +62,9 @@
                  <%= if card.task.contributor != nil do %>pour <img class="profile-pic-mini" src="<%= Routes.static_path(@socket, "/#{card.task.contributor.profile_picture}") %>" width="50" style="position: relative; top:10px;"/><% end %></i>
 
           </div>
-
-          <%= link "+",to: "#",class: "card__plus",phx_click: "show_plus_modal", phx_value_id: card.id %>
-          <%= link "M",to: "#",class: "card__modif",phx_click: "show_modif_modal", phx_value_id: card.id %>
+          <img src="<%= Routes.static_path(@socket, "/images/icons/plus.svg") %>" phx-click="show_plus_modal" phx-value-id="<%= card.id %>" class="btn btn-success card__plus" alt="+" width="32" height="32">
+          <%= link "C",to: "#",class: "card__comments",phx_click: "show_modif_modal", phx_value_id: card.id %>
+          <img src="<%= Routes.static_path(@socket, "/images/icons/pencil-square.svg") %>" phx-click="show_modif_modal" phx-value-id="<%= card.id %>" class="btn btn-primary card__modif" alt="e" width="32" height="32">
 
 
 

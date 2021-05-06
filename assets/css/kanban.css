@@ -64,27 +64,42 @@
 }
 
 .card__plus {
+  cursor: pointer;
   position: relative;
-  background-color: lightblue;
+  font-size: 150%;
+  /* background-color: lightblue;
   color: white;
-  font-size: 180%;
+  font-size: 110%;
   font-weight: bold;
-  padding: 0.2rem 1rem;
+  padding: 0.2rem 1rem; */
   border-radius: 9999px;
-  left: 230px;
+  left: 220px;
   top: -100px;
 }
 
 .card__modif {
+  cursor: pointer;
+  position: relative;
+  /* background-color: lightgray; */
+  /* color: white; */
+  font-size: 105%;
+  font-weight: bold;
+  /* padding: 0.2rem 1rem; */
+  border-radius: 9999px;
+  left: 150px;
+  top: -32px;
+}
+
+.card__comments {
   position: relative;
   background-color: lightgray;
   color: white;
-  font-size: 150%;
+  font-size: 110%;
   font-weight: bold;
   padding: 0.2rem 1rem;
   border-radius: 9999px;
   left: 185px;
-  top: -35px;
+  top: -72px;
 }
 
 .card__date{
