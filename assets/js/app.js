@@ -129,19 +129,19 @@ navToggle.addEventListener("click", function () {
   }
 });
 
-let navToggleProj = document.querySelector(".nav__toggle__proj");
-let navWrapperProj = document.querySelector(".nav__wrapper__project");
-navToggleProj.addEventListener("click", function () {
-  if (navWrapperProj.classList.contains("active")) {
-    this.setAttribute("aria-expanded", "false");
-    this.setAttribute("aria-label", "menu");
-    navWrapperProj.classList.remove("active");
-  } else {
-    navWrapperProj.classList.add("active");
-    this.setAttribute("aria-label", "close menu");
-    this.setAttribute("aria-expanded", "true");
-  }
-});
+// let navToggleProj = document.querySelector(".nav__toggle__proj");
+// let navWrapperProj = document.querySelector(".nav__wrapper__project");
+// navToggleProj.addEventListener("click", function () {
+//   if (navWrapperProj.classList.contains("active")) {
+//     this.setAttribute("aria-expanded", "false");
+//     this.setAttribute("aria-label", "menu");
+//     navWrapperProj.classList.remove("active");
+//   } else {
+//     navWrapperProj.classList.add("active");
+//     this.setAttribute("aria-label", "close menu");
+//     this.setAttribute("aria-expanded", "true");
+//   }
+// });
 
 let csrfToken = document.querySelector("meta[name='csrf-token']").getAttribute("content")
 //Working liveSocket
