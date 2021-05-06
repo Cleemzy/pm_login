@@ -11,7 +11,11 @@
 <div class="boardcontainer">
   <div class="boardheader">
     <h2><%= @board.name %></h2>
-    <%= link "+Nouvelle tâche",to: "#",class: "btn btn-lg btn-primary",phx_click: "show_task_modal" %>
+
+    <%= if @is_admin do%>
+      <%= link "+Nouvelle tâche",to: "#",class: "btn btn-lg btn-primary",phx_click: "show_task_modal" %>
+    <% end %>
+
   </div>
 
   <section class="board" phx-hook="Board" style="">
@@ -21,6 +25,30 @@
           <div class="stage__name"><%= stage.name %></div>
           <div class="stage__counter"><%= length(stage.cards) %></div>
         </div>
+        <%= if !@is_admin and stage.status_id == 5 do %>
+
+          <ul data-stage-id="<%= stage.id %>" class="">
+            <%= for card <- stage.cards do %>
+              <%= if @is_admin or @curr_user_id == card.task.contributor_id do %>
+
+            <div data-card-id="<%= card.id %>" class="card basecontents">
+                  <div class="card__name"><%= card.name %></div>
+                  <i class="card__date">Créee le <%= card.task.inserted_at %>, par
+                  <img class="profile-pic-mini" src="<%= Routes.static_path(@socket, "/#{card.task.attributor.profile_picture}") %>" width="50" style="position: relative; top:10px;"/>
+                   <%= if card.task.contributor != nil do %>pour <img class="profile-pic-mini" src="<%= Routes.static_path(@socket, "/#{card.task.contributor.profile_picture}") %>" width="50" style="position: relative; top:10px;"/><% end %></i>
+
+            </div>
+
+            <%= link "+",to: "#",class: "card__plus",phx_click: "show_plus_modal", phx_value_id: card.id %>
+            <%= link "M",to: "#",class: "card__modif",phx_click: "show_modif_modal", phx_value_id: card.id %>
+
+
+
+              <% end %>
+            <% end %>
+          </ul>
+
+        <% else %>
 
         <ul data-stage-id="<%= stage.id %>" class="stage__cards">
           <%= for card <- stage.cards do %>
@@ -42,6 +70,10 @@
             <% end %>
           <% end %>
         </ul>
+
+        <% end %>
+
+
       </div>
     <% end %>
   </section>
