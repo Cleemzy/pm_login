@@ -10,10 +10,9 @@
 
 <div class="boardcontainer">
   <div class="boardheader">
-    <h2><%= @board.name %></h2>
-    <i class="bi bi-chat-left-dots"></i>
+    <h2><i class="bi bi-list-task"></i> <%= @board.name %></h2>
     <%= if @is_admin do%>
-      <%= link "+Nouvelle tâche",to: "#",class: "btn btn-lg btn-primary",phx_click: "show_task_modal" %>
+      <a href="#" class="btn btn-lg btn-primary" phx-click="show_task_modal"><i class="bi bi-plus-circle"></i> Nouvelle tâche</a>
     <% end %>
 
   </div>
@@ -38,10 +37,9 @@
                    <%= if card.task.contributor != nil do %>pour <img class="profile-pic-mini" src="<%= Routes.static_path(@socket, "/#{card.task.contributor.profile_picture}") %>" width="50" style="position: relative; top:10px;"/><% end %></i>
 
             </div>
-
-            <%= link "+",to: "#",class: "card__plus",phx_click: "show_plus_modal", phx_value_id: card.id %>
-            <%= link "C",to: "#",class: "card__comments",phx_click: "show_modif_modal", phx_value_id: card.id %>
-            <img src="<%= Routes.static_path(@socket, "/images/icons/pencil-square.svg") %>" phx-click="show_modif_modal" phx-value-id="<%= card.id %>" class="btn card__modif" alt="Bootstrap" width="32" height="32">
+            <i class="bi bi-plus plus__icon" phx-click="show_plus_modal" phx-value-id="<%= card.id %>"></i>
+            <i class="bi bi-chat-left-dots comment__icon" phx-click="show_plus_modal" phx-value-id="<%= card.id %>"></i>
+            <i class="bi bi-pencil-square modif__icon" phx-click="show_modif_modal" phx-value-id="<%= card.id %>"></i>
 
 
 
@@ -62,9 +60,9 @@
                  <%= if card.task.contributor != nil do %>pour <img class="profile-pic-mini" src="<%= Routes.static_path(@socket, "/#{card.task.contributor.profile_picture}") %>" width="50" style="position: relative; top:10px;"/><% end %></i>
 
           </div>
-          <img src="<%= Routes.static_path(@socket, "/images/icons/plus.svg") %>" phx-click="show_plus_modal" phx-value-id="<%= card.id %>" class="btn btn-success card__plus" alt="+" width="32" height="32">
-          <%= link "C",to: "#",class: "card__comments",phx_click: "show_modif_modal", phx_value_id: card.id %>
-          <img src="<%= Routes.static_path(@socket, "/images/icons/pencil-square.svg") %>" phx-click="show_modif_modal" phx-value-id="<%= card.id %>" class="btn btn-primary card__modif" alt="e" width="32" height="32">
+          <i class="bi bi-plus plus__icon" phx-click="show_plus_modal" phx-value-id="<%= card.id %>"></i>
+          <i class="bi bi-chat-left-dots comment__icon" phx-click="show_plus_modal" phx-value-id="<%= card.id %>"></i>
+          <i class="bi bi-pencil-square modif__icon" phx-click="show_modif_modal" phx-value-id="<%= card.id %>"></i>
 
 
 
@@ -139,6 +137,5 @@
   %>
   <% end %>
 <br/>
-  <span><%= link "Retour", to: Routes.project_path(@socket, :index), class: "btn btn-lg btn-secondary" %></span>
-
+  <span><a href="<%= Routes.project_path(@socket, :index) %>" class="btn btn-lg btn-secondary"><i class="bi bi-arrow-bar-left"></i> Retour</a></span>
 </div>

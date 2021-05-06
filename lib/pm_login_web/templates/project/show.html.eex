@@ -1,4 +1,4 @@
-<h1><%= @project.title %></h1>
+<h1><i class="bi bi-info-circle"></i> <%= @project.title %></h1>
 <div class="basecontents project-show">
 <ul>
 
@@ -44,5 +44,7 @@
 
 </ul>
 </div>
-<span><%= link "Modifier informations", to: Routes.project_path(@conn, :edit, @project), class: "btn btn-lg btn-primary" %></span>
-<span><%= link "Retour", to: Routes.project_path(@conn, :index),class: "btn btn-lg btn-secondary" %></span>
+<span>
+  <a href="<%= Routes.project_path(@conn, :edit, @project) %>" class="btn btn-lg btn-warning"><i class="bi bi-pencil-square"></i> Modifier informations</a>
+</span>
+<span><a href="<%= Routes.project_path(@conn, :index) %>" class="btn btn-lg btn-secondary"><i class="bi bi-arrow-bar-left"></i> Retour</a></span>

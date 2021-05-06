@@ -1,5 +1,5 @@
 <% alias PmLoginWeb.LiveComponent.ModalLive %>
-<h1>Droits/ autorisations</h1>
+<h1><i class="bi bi-shield-exclamation"></i> Droits/ autorisations</h1>
 
 <table id="tb-auth">
   <thead>
@@ -19,9 +19,9 @@
       <td><%= right.title %></td>
 
       <td>
-        <span><%= link "Afficher", to: Routes.right_path(@socket, :show, right), class: "btn btn-info btn-lg" %></span>
+        <span><a href="<%= Routes.right_path(@socket, :show, right) %>"><i class="bi bi-info-circle btn btn-info btn-lg"></i></a></span>
         <%= if right.id not in undeletable_rights do %>
-          <span><%= link "Supprimer", to: "#",phx_click: "go-del",phx_value_id: right.id,class: "btn btn-danger btn-lg" %></span>
+        <span><a href="#" phx-click="go-del" phx-value-id="<%= right.id %>" class="btn btn-danger btn-lg"><i class="bi bi-trash"></i></a></span>
         <% end %>
       </td>
     </tr>
@@ -29,7 +29,7 @@
   </tbody>
 </table>
 
-<span><%= link "+ Nouveau droit", to: Routes.right_path(@socket, :new), class: "btn btn-lg btn-primary" %></span>
+<span><a href="<%= Routes.right_path(@socket, :new) %>" class="btn btn-lg btn-primary"><i class="bi bi-plus-circle"></i> Nouveau droit</a></span>
 
 <%= if @show_modal do %>
 <%= live_component(@socket,

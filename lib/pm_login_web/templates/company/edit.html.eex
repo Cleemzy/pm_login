@@ -1,5 +1,5 @@
-<h1>Modifier nom de la société</h1>
+<h1><i class="bi bi-pencil-square"></i> Modifier nom de la société</h1>
 
 <%= render "form.html", Map.put(assigns, :action, Routes.company_path(@conn, :update, @company)) %>
 
-<span><%= link "Retour", to: Routes.company_path(@conn, :index) %></span>
+<span><a href="<%= Routes.company_path(@conn, :index) %>" class="btn btn-lg btn-secondary"><i class="bi bi-arrow-bar-left"></i> Retour</a></span>

@@ -9,11 +9,12 @@
 </div>
 
 <% alias PmLoginWeb.LiveComponent.ModalLive %>
-  <h1>Liste des utilisateurs</h1>
+  <h1><i class="bi bi-card-list"></i> Liste des utilisateurs</h1>
 
   <div class="row">
     <div class="column column-10">
-      <b style="position: relative; top: 8px;">Filtre: </b>
+      <!-- <b style="position: relative; top: 8px;">Filtre :</b> -->
+      <i class="bi bi-filter filter__icon"></i>
     </div>
 
     <div class="column column-20">
@@ -31,7 +32,8 @@
     </div>
 
     <div class="column column-10">
-      <b style="position: relative; top: 8px;">Tri: </b>
+      <!-- <b style="position: relative; top: 8px;"></b> -->
+      <i class="bi bi-sort-alpha-down sort__icon"></i>
     </div>
 
     <div class="column column-20">
@@ -46,13 +48,13 @@
       </form>
     </div>
 
-    <div class="column" style="margin-left: 130px;">
-      <form phx-change="search-user">
-        <div class="row">
-          <input type="text" name="search-a">
-          <img src="<%= Routes.static_path(@socket, "/images/gray_search_icon.png") %>" width="25" height="25" style="margin-top: 5px; margin-left:5px;"/>
-        </div>
+    <div class="column column-10">
+      <i class="bi bi-search srch__icon"></i>
+    </div>
 
+    <div class="column column-20">
+      <form phx-change="search-user">
+          <input type="text" name="search-a" style="width: 150px;">
       </form>
     </div>
 
@@ -66,9 +68,9 @@
     <thead>
       <tr>
         <th></th>
-        <th><span><%= link("+",to: "#",phx_click: "sorted_by_username",class: "btn btn-outline-dark btn-sm")%></span> Nom d'utilisateur</th>
-        <th><span><%= link("+",to: "#",phx_click: "sorted_by_email",class: "btn btn-outline-dark btn-sm")%></span> Email</th>
-        <th><span><%= link("+",to: "#",phx_click: "sorted_by_status",class: "btn btn-outline-dark btn-sm")%></span> Statut</th>
+        <th><span><i class="bi bi-caret-down-fill arr__sorted" phx-click="sorted_by_username"></i></span> Nom d'utilisateur</th>
+        <th><span><i class="bi bi-caret-down-fill arr__sorted" phx-click="sorted_by_email"></i></span> Email</th>
+        <th><span><i class="bi bi-caret-down-fill arr__sorted" phx-click="sorted_by_status"></i></span> Statut</th>
 
         <th>Actions</th>
       </tr>
@@ -87,12 +89,11 @@
 
         <td>
           <%= if user.id != @curr_user_id do %>
-
-              <span><%= link "Afficher", to: Routes.user_path(@socket, :edit, user), class: "btn btn-info btn-lg" %></span>
+              <a href="<%= Routes.user_path(@socket, :edit, user) %>" class=""><i class="bi bi-info-circle info__user btn btn-info btn-lg"></i></a>
               <%= if user.right_id != 100 do %>
-              <span><%= link("Archiver",to: "#",phx_click: "go-arch",phx_value_id: user.id,class: "btn btn-danger btn-lg")%></span>
+              <i class="bi bi-archive btn btn-danger btn-lg archive__user" phx-click="go-arch" phx-value-id="<%= user.id %>"></i>
               <% else %>
-              <span class="btn btn-dark btn-lg">Archivé</span>
+              <i class="bi bi-archive btn btn-dark btn-lg"></i>
             <% end %>
 
           <% end %>
@@ -107,7 +108,7 @@
                      ModalLive,
                      id: "confirm-arch",
                      title: "Archiver?",
-                     body: "Etes-vous sûr d'archiver cet utilisateur?",
+                     body: "Etes-vous sûr d'archiver l'utilisateur #{PmLogin.Login.get_username(@arch_id)}?",
                      right_button: "OUI",
                      right_button_action: "arch",
                      right_button_param: @arch_id,

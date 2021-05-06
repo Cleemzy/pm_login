@@ -1,4 +1,4 @@
-<h1>Société <%= @company.name %></h1>
+<h1><i class="bi bi-building"></i> Société <%= @company.name %></h1>
 
 <ul>
 
@@ -9,5 +9,7 @@
 
 </ul>
 
-<span><%= link "Modifier", to: Routes.company_path(@conn, :edit, @company) %></span>
-<span><%= link "Retour", to: Routes.company_path(@conn, :index) %></span>
+<span>
+  <a href="<%= Routes.company_path(@conn, :edit, @company) %>" class="btn btn-lg btn-warning"><i class="bi bi-pencil-square"></i> Modifier informations</a>
+</span>
+<span><a href="<%= Routes.company_path(@conn, :index) %>" class="btn btn-lg btn-secondary"><i class="bi bi-arrow-bar-left"></i> Retour</a></span>

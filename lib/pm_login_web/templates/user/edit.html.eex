@@ -1,4 +1,4 @@
 
 <%= render "edit_form.html", Map.put(assigns, :action, Routes.user_path(@conn, :update, @user)) %>
 
-<span><%= link "Retour", to: Routes.user_path(@conn, :list) %></span>
+<span><a href="<%= Routes.user_path(@conn, :list) %>" class="btn btn-lg btn-secondary"><i class="bi bi-arrow-bar-left"></i> Retour</a></span>

@@ -19,7 +19,7 @@
         <nav class="nav">
           <input id="hamburger" type="image"  src="<%= Routes.static_path(@conn, "/images/hamburger.png") %>" class="nav__toggle">
           <ul class="nav__wrapper">
-            <li class="nav__item"><%= link "▼ Espace administrateur",to: "#", class: "nav__toggle__proj" %></li>
+            <li class="nav__item"><a href="#" class="nav__toggle__proj">▼<i class="bi bi-people-fill"></i> Espace administrateur</a></li>
             <li class="nav__item">
               <ul class="nav__wrapper__project">
                 <li class="nav__item"><%= link "Projets", to: Routes.project_path(@conn, :index)%></li>
@@ -29,8 +29,8 @@
                 <li class="nav__item"><%= link "Clients", to: Routes.active_client_path(@conn, :index) %></li>
               </ul>
             </li>
-            <li class="nav__item"><%= link "Accueil", to: Routes.user_path(@conn, :index) %></li>
-            <li class="nav__item"><%= link "Profil", to: Routes.user_path(@conn, :show, Plug.Conn.get_session(@conn, :curr_user_id))%></li>
+            <li class="nav__item"><a href="<%= Routes.user_path(@conn, :index) %>"><i class="bi bi-house-fill"></i> Accueil</a></li>
+            <li class="nav__item"><a href="<%= Routes.user_path(@conn, :show, Plug.Conn.get_session(@conn, :curr_user_id)) %>"><i class="bi bi-person-circle"></i> Profil</a></li>
           </ul>
         </nav>
       </div>
@@ -46,8 +46,9 @@
       <%= @inner_content %>
       <br/>
       <br/>
-
-      <span><%= link "Déconnexion", to: Routes.auth_path(@conn, :sign_out), class: "btn btn-outline-danger btn-lg" %></span>
+      <span>
+        <a href="<%= Routes.auth_path(@conn, :sign_out) %>" class="btn btn-outline-danger btn-lg"><i class="bi bi-box-arrow-left"></i> Déconnexion</a>
+      </span>
     </main>
   </body>
   <footer id="foot" class="container-fluid">

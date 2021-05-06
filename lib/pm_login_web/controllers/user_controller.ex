@@ -79,6 +79,7 @@ defmodule PmLoginWeb.UserController do
       user = Login.get_curr_user_id(conn) |> Login.get_auth!
       case user.right_id do
         1 -> render(conn, "show.html", user: user, layout: {PmLoginWeb.LayoutView, "admin_layout.html"})
+        3 -> render(conn, "show.html", user: user, layout: {PmLoginWeb.LayoutView, "contributor_layout.html"})
         _ -> render(conn, "show.html", user: user)
       end
 

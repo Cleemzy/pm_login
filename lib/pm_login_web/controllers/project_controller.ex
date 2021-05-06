@@ -32,7 +32,7 @@ defmodule PmLoginWeb.ProjectController do
       cond do
         Login.is_admin?(conn) ->
           projects = Monitoring.list_projects()
-          render(conn, "index.html", projects: projects, layout: {PmLoginWeb.LayoutView, "admin_layout.html"})
+          render(conn, "index.html", projects: projects, layout: {PmLoginWeb.LayoutView, "board_layout_live.html"})
 
         true ->
           conn

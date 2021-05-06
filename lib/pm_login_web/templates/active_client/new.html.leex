@@ -8,7 +8,7 @@
     phx-value-key="error"><%= live_flash(@flash, :error) %></p>
 </div>
 
-<h1>Clients inactifs </h1>
+<h1><i class="bi bi-people"></i> Clients inactifs </h1>
 <table id="tb-auth">
   <thead>
     <th>Nom</th>
@@ -29,7 +29,7 @@
   </tbody>
 </table>
 
-<span><%= link "Retour", to: Routes.active_client_path(@socket, :index), class: "btn btn-lg btn-secondary" %></span>
+<span><a href="<%= Routes.active_client_path(@socket, :index) %>" class="btn btn-lg btn-secondary"><i class="bi bi-arrow-bar-left"></i> Retour</a></span>
 
 <% alias PmLoginWeb.LiveComponent.ModalLive %>
 <%= if @show_modal do %>

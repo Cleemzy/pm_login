@@ -1,4 +1,4 @@
-<h1>Clients actifs</h1>
+<h1><i class="bi bi-people-fill"></i> Clients actifs</h1>
 
 <table id="tb-auth">
   <thead>

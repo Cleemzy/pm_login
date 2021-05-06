@@ -7,3 +7,33 @@
   padding-left: 15px;
   padding-right: 10px;
 }
+
+.info__user{
+  /* font-size: 20px; */
+}
+.archive__user{
+
+}
+.archive__user:hover{
+  cursor: pointer;
+}
+
+.filter__icon{
+  font-size: 30px;
+}
+.sort__icon{
+  font-size: 30px;
+}
+.srch__icon{
+  font-size: 30px;
+}
+.srch__input{
+  size: 50px;
+}
+.arr__sorted{
+
+}
+.arr__sorted:hover{
+  cursor: pointer;
+  color: gray;
+}

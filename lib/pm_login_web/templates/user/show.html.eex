@@ -21,5 +21,4 @@
 
 
 </div>
-
-<span><%= link "Accueil", to: Routes.user_path(@conn, :index) %></span>
+<span><a href="<%= Routes.user_path(@conn, :index) %>" class="btn btn-primary btn-lg"><i class="bi bi-house-fill"></i> Accueil</a></span>

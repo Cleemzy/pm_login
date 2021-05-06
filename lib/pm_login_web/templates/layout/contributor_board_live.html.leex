@@ -19,9 +19,9 @@
         <nav class="nav">
           <input id="hamburger" type="image"  src="<%= Routes.static_path(@conn, "/images/hamburger.png") %>" class="nav__toggle">
           <ul class="nav__wrapper">
-            <li class="nav__item"><%= link "Mes projets", to: Routes.contributor_path(@conn, :my_projects) %></li>
-            <li class="nav__item"><%= link "Accueil", to: Routes.user_path(@conn, :index) %></li>
-            <li class="nav__item"><%= link "Profil", to: Routes.user_path(@conn, :show, Plug.Conn.get_session(@conn, :curr_user_id))%></li>
+            <li class="nav__item"><a href="<%= Routes.contributor_path(@conn, :my_projects) %>"><i class="bi bi-kanban-fill"></i> Mes projets</a></li>
+            <li class="nav__item"><a href="<%= Routes.user_path(@conn, :index) %>"><i class="bi bi-house-fill"></i> Accueil</a></li>
+            <li class="nav__item"><a href="<%= Routes.user_path(@conn, :show, Plug.Conn.get_session(@conn, :curr_user_id)) %>"><i class="bi bi-person-circle"></i> Profil</a></li>
           </ul>
         </nav>
       </div>
@@ -36,8 +36,10 @@
       <br/>
       <br/>
 
-      <span><%= link "Déconnexion", to: Routes.auth_path(@conn, :sign_out), class: "btn btn-outline-danger btn-lg" %></span>
-    </main>
+      <span>
+        <a href="<%= Routes.auth_path(@conn, :sign_out) %>" class="btn btn-outline-danger btn-lg"><i class="bi bi-box-arrow-left"></i> Déconnexion</a>
+      </span>
+        </main>
   </body>
   <footer id="foot" class="boardcontainer">
     <div id="footcont" class="boardcontainer">

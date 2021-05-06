@@ -63,6 +63,42 @@
   border-radius: 9999px;
 }
 
+.modif__icon{
+  color: gray;
+  cursor: pointer;
+  font-size: 20px;
+  position: relative;
+  left: 168px;
+  top: -55px;
+}
+.modif__icon:hover{
+  color : lightgray;
+}
+
+.comment__icon{
+  color: gray;
+  cursor: pointer;
+  font-size: 20px;
+  position: relative;
+  left: 192px;
+  top: -85px;
+}
+.comment__icon:hover{
+  color : lightgray;
+}
+
+.plus__icon{
+  color: gray;
+  cursor: pointer;
+  font-size: 30px;
+  position: relative;
+  left: 220px;
+  top: -110px;
+}
+.plus__icon:hover{
+  color : lightgray;
+}
+
 .card__plus {
   cursor: pointer;
   position: relative;
