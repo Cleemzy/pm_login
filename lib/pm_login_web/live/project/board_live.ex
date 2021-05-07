@@ -1,7 +1,7 @@
 defmodule PmLoginWeb.Project.BoardLive do
   use Phoenix.LiveView
 
-  alias PmLoginWeb.LiveComponent.{TaskModalLive,PlusModalLive,ModifModalLive}
+  alias PmLoginWeb.LiveComponent.{TaskModalLive,PlusModalLive,ModifModalLive,CommentsModalLive}
 
   alias PmLoginWeb.ProjectView
   alias PmLogin.Monitoring
@@ -37,7 +37,7 @@ defmodule PmLoginWeb.Project.BoardLive do
 
     {:ok, assign(socket, is_admin: Monitoring.is_admin?(curr_user_id), show_plus_modal: false,curr_user_id: curr_user_id, pro_id: pro_id,
                     contributors: list_contributors, priorities: list_priorities, board: Kanban.get_board!(project.board_id), show_task_modal: false, show_modif_modal: false,
-                    task_changeset: task_changeset, modif_changeset: modif_changeset,
+                    task_changeset: task_changeset, modif_changeset: modif_changeset, show_comments_modal: false,
                     layout: layout)}
   end
 
@@ -100,6 +100,15 @@ defmodule PmLoginWeb.Project.BoardLive do
   end
 
   def handle_event("show_task_modal", %{}, socket), do: {:noreply, socket |> assign(show_task_modal: true)}
+
+  def handle_event("show_comments_modal", %{"id" => id}, socket) do
+    IO.inspect id
+    {:noreply, socket |> assign(show_comments_modal: true)}
+  end
+
+  def handle_info({CommentsModalLive, :button_clicked, %{action: "cancel-comments"}},socket) do
+    {:noreply, assign(socket, show_comments_modal: false)}
+  end
 
   def handle_event("show_plus_modal", %{"id" => id}, socket) do
     card = Kanban.get_card_from_modal!(id)

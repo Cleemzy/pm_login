@@ -32,13 +32,14 @@
 
             <div data-card-id="<%= card.id %>" class="card basecontents">
                   <div class="card__name"><%= card.name %></div>
-                  <i class="card__date">Créee le <%= card.task.inserted_at %>, par
-                  <img class="profile-pic-mini" src="<%= Routes.static_path(@socket, "/#{card.task.attributor.profile_picture}") %>" width="50" style="position: relative; top:10px;"/>
+                  <i class="card__date">Créee le <%= card.task.inserted_at %>, pari </i>
+                  <br/>
+                  <i><img class="profile-pic-mini" src="<%= Routes.static_path(@socket, "/#{card.task.attributor.profile_picture}") %>" width="50" style="position: relative; top:10px;"/>
                    <%= if card.task.contributor != nil do %>pour <img class="profile-pic-mini" src="<%= Routes.static_path(@socket, "/#{card.task.contributor.profile_picture}") %>" width="50" style="position: relative; top:10px;"/><% end %></i>
 
             </div>
             <i class="bi bi-plus plus__icon" phx-click="show_plus_modal" phx-value-id="<%= card.id %>"></i>
-            <i class="bi bi-chat-left-dots comment__icon" phx-click="show_plus_modal" phx-value-id="<%= card.id %>"></i>
+            <i class="bi bi-chat-left-dots comment__icon" phx-click="show_comments_modal" phx-value-id="<%= card.id %>"></i>
             <i class="bi bi-pencil-square modif__icon" phx-click="show_modif_modal" phx-value-id="<%= card.id %>"></i>
 
 
@@ -55,13 +56,14 @@
 
           <div data-card-id="<%= card.id %>" class="card basecontents">
                 <div class="card__name"><%= card.name %></div>
-                <i class="card__date">Créee le <%= card.task.inserted_at %>, par
-                <img class="profile-pic-mini" src="<%= Routes.static_path(@socket, "/#{card.task.attributor.profile_picture}") %>" width="50" style="position: relative; top:10px;"/>
+                <i class="card__date">Créee le <%= card.task.inserted_at %>, par</i>
+                <br/>
+                <i><img class="profile-pic-mini" src="<%= Routes.static_path(@socket, "/#{card.task.attributor.profile_picture}") %>" width="50" style="position: relative; top:10px;"/>
                  <%= if card.task.contributor != nil do %>pour <img class="profile-pic-mini" src="<%= Routes.static_path(@socket, "/#{card.task.contributor.profile_picture}") %>" width="50" style="position: relative; top:10px;"/><% end %></i>
 
           </div>
           <i class="bi bi-plus plus__icon" phx-click="show_plus_modal" phx-value-id="<%= card.id %>"></i>
-          <i class="bi bi-chat-left-dots comment__icon" phx-click="show_plus_modal" phx-value-id="<%= card.id %>"></i>
+          <i class="bi bi-chat-left-dots comment__icon" phx-click="show_comments_modal" phx-value-id="<%= card.id %>"></i>
           <i class="bi bi-pencil-square modif__icon" phx-click="show_modif_modal" phx-value-id="<%= card.id %>"></i>
 
 
@@ -80,6 +82,7 @@
   <% alias PmLoginWeb.LiveComponent.TaskModalLive%>
   <% alias PmLoginWeb.LiveComponent.PlusModalLive%>
   <% alias PmLoginWeb.LiveComponent.ModifModalLive %>
+  <% alias  PmLoginWeb.LiveComponent.CommentsModalLive %>
 
   <%= if @show_task_modal do %>
   <%= live_component(@socket,
@@ -136,6 +139,21 @@
                   card: @card)
   %>
   <% end %>
+
+  <%= if @show_comments_modal do %>
+<%= live_component(@socket,
+                     CommentsModalLive,
+                     id: "confirm-arch",
+                     title: "Commentaires",
+                     body: nil,
+                     right_button: "OUI",
+                     right_button_action: "arch",
+                     right_button_param: "", #@arch_id
+                     left_button: "ANNULER",
+                     left_button_action: "cancel-comments")
+  %>
+<% end %>
+
 <br/>
   <span><a href="<%= Routes.project_path(@socket, :index) %>" class="btn btn-lg btn-secondary"><i class="bi bi-arrow-bar-left"></i> Retour</a></span>
 </div>
