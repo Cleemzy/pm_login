@@ -155,5 +155,9 @@
 <% end %>
 
 <br/>
+<%= if @is_admin do %>
   <span><a href="<%= Routes.project_path(@socket, :index) %>" class="btn btn-lg btn-secondary"><i class="bi bi-arrow-bar-left"></i> Retour</a></span>
+  <% else %>
+  <span><a href="<%= Routes.contributor_path(@socket, :my_projects) %>" class="btn btn-lg btn-secondary"><i class="bi bi-arrow-bar-left"></i> Retour</a></span>
+<% end %>
 </div>
