@@ -5,8 +5,7 @@ defmodule PmLogin.Monitoring.Task do
   alias PmLogin.Kanban
   alias PmLogin.Kanban.Card
   alias PmLogin.Login.User
-  alias PmLogin.Monitoring.{Status,Priorty}
-
+  alias PmLogin.Monitoring.{Status,Priorty,Comment}
 
   schema "tasks" do
     field :date_end, :date
@@ -26,6 +25,7 @@ defmodule PmLogin.Monitoring.Task do
     belongs_to :priority, Priority
     belongs_to :attributor, User
     belongs_to :status, Status
+    has_many :comments, Comment
     timestamps()
   end
 
@@ -38,7 +38,7 @@ defmodule PmLogin.Monitoring.Task do
 
   def update_changeset(task, attrs) do
     task
-    |> cast(attrs, [:progression, :date_start, :date_end, :estimated_duration, :performed_duration, :contributor_id])
+    |> cast(attrs, [:progression, :date_start, :date_end, :estimated_duration, :performed_duration, :contributor_id, :priority_id])
     # |> Monitoring.validate_dates_without_deadline
     |> Monitoring.validate_start_end
     |> Monitoring.validate_positive_estimated

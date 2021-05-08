@@ -1,4 +1,5 @@
 defmodule PmLoginWeb.LiveComponent.CommentsModalLive do
+  alias PmLoginWeb.Router.Helpers, as: Routes
   @moduledoc """
   This is a general modal component with title, body text, and two buttons.
 
@@ -47,6 +48,7 @@ defmodule PmLoginWeb.LiveComponent.CommentsModalLive do
   @spec render(map()) :: Phoenix.LiveView.Rendered.t()
   def render(assigns) do
     ~L"""
+    <% current_user = PmLogin.Login.get_user!(@curr_user_id) %>
     <div id="modal-<%= @id %>">
       <!-- Modal Background -->
       <div class="modal-container"
@@ -73,77 +75,60 @@ defmodule PmLoginWeb.LiveComponent.CommentsModalLive do
 
                 <div class="row">
                   <div class="comments-section">
+
+
+                  <!-- start of one comment -->
+                    <%= for comment <- @card.task.comments do %>
                     <div class="basecontents__without__shadow comment__div">
 
+                    <%= if comment.poster_id == @curr_user_id do %>
+                    <div class="row comment__header">
+                      <div class="column column-80"></div>
+                      <div class="column column-20"><div class="row"><p class="username__comment__you">Vous</p><img class="pp__comment" src="<%= Routes.static_path(@socket, "/#{current_user.profile_picture}") %>" /></div></div>
+                    </div>
+                    <% else %>
                       <div class="row comment__header">
-                        <div class="column column-20"><div class="row"><img class="pp__comment" src="" /><p class="username__comment">Utilisateur</p></div></div>
+                        <div class="column column-20"><div class="row"><img class="pp__comment" src="<%= Routes.static_path(@socket, "/#{comment.poster.profile_picture}") %>" /><p class="username__comment"><%= comment.poster.username %></p></div></div>
                         <div class="column column-80"></div>
                       </div>
+                    <% end %>
 
+                    <%= if comment.poster_id == @curr_user_id do %>
+                      <div class="row">
+                      <div class="comment__content">
+                        <p class="textc__content_user"><%= comment.content %></p>
+                      </div>
+                        <i class="bi bi-caret-left-fill"></i>
+                      </div>
+                      <% else %>
                       <div class="row">
                         <i class="bi bi-caret-right-fill"></i>
                         <div class="comment__content">
-                          <p class="textc__content"> contentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontent</p>
+                          <p class="textc__content"><%= comment.content %></p>
                         </div>
                       </div>
+                    <% end %>
 
                       <div class="row comment__footer">
+                      <%= if @curr_user_id == comment.poster_id do %>
+                        <div class="column column-30">
+                        <i class="date__footer"><%= comment.inserted_at %></i>
+                        </div>
+                        <div class="column column-70">
+                        </div>
+                      <% else %>
                         <div class="column column-70">
                         </div>
                         <div class="column column-30">
-                          <i class="date__footer">footer</i>
+                          <i class="date__footer"><%= comment.inserted_at %></i>
                         </div>
+                      <% end %>
                       </div>
 
                     </div>
 
-                    <div class="basecontents__without__shadow comment__div">
-
-                      <div class="row comment__header">
-                        <div class="column column-20"><div class="row"><img class="pp__comment" src="" /><p class="username__comment">Utilisateur</p></div></div>
-                        <div class="column column-80"></div>
-                      </div>
-
-                      <div class="row">
-                        <i class="bi bi-caret-right-fill"></i>
-                        <div class="comment__content">
-                          <p class="textc__content"> contentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontent</p>
-                        </div>
-                      </div>
-
-                      <div class="row comment__footer">
-                        <div class="column column-70">
-                        </div>
-                        <div class="column column-30">
-                          <i class="date__footer">footer</i>
-                        </div>
-                      </div>
-
-                    </div>
-
-                    <div class="basecontents__without__shadow comment__div">
-
-                      <div class="row comment__header">
-                        <div class="column column-20"><div class="row"><img class="pp__comment" src="" /><p class="username__comment">Utilisateur</p></div></div>
-                        <div class="column column-80"></div>
-                      </div>
-
-                      <div class="row">
-                        <i class="bi bi-caret-right-fill"></i>
-                        <div class="comment__content">
-                          <p class="textc__content"> contentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontent</p>
-                        </div>
-                      </div>
-
-                      <div class="row comment__footer">
-                        <div class="column column-70">
-                        </div>
-                        <div class="column column-30">
-                          <i class="date__footer">footer</i>
-                        </div>
-                      </div>
-
-                    </div>
+                    <% end %>
+                    <!-- end of one comment -->
                   </div>
                 </div>
 
@@ -156,15 +141,20 @@ defmodule PmLoginWeb.LiveComponent.CommentsModalLive do
               <div class="row comment__modal__footer">
 
                 <!-- Left Button -->
-                <div class="column">
+                <div class="column column-10">
                   <i class="bi bi-arrow-bar-left comment__back" phx-click="left-button-click" phx-target="#modal-<%= @id %>"></i>
                 </div>
                 <!-- Right Button -->
-                <div class="column">
-                  <input type="text" name="com">
-                </div>
-                <div class="column">
-                  <input type="submit">
+                <div class="column column-80">
+                  <form phx-submit="send-comment">
+                    <div class="form__wrapper">
+                      <input type="text" name="com">
+                      <input type="hidden" name="poster_id" value="<%= @curr_user_id %>">
+                      <input type="hidden" name="task_id" value="<%= @card.task_id %>">
+                      <button type="submit" class="bt__com__form"><i class="bi bi-symmetry-horizontal" style="font-size: 200%;color: gray;"></i></button>
+                    </div>
+                    <!-- <button type="submit" style="background-color: transparent;"><i class="bi bi-symmetry-horizontal" style="font-size: 200%;color: gray;"></i></button> -->
+                  </form>
                 </div>
 
 

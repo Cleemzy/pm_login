@@ -3,7 +3,7 @@ defmodule PmLogin.Kanban do
 
   alias PmLogin.Repo
   alias PmLogin.Kanban.{Board, Stage, Card}
-  alias PmLogin.Monitoring.{Task, Status, Priority}
+  alias PmLogin.Monitoring.{Task, Status, Priority, Comment}
   alias PmLogin.Login.User
 
   def get_board!(board_id) do
@@ -89,6 +89,23 @@ defmodule PmLogin.Kanban do
 
   def get_card!(id) do
     Repo.get(Card, id)
+  end
+
+  def get_card_for_comment!(id) do
+    poster_query = from p in User
+
+    comments_query = from c in Comment,
+                      preload: [poster: ^poster_query],
+                    order_by: [asc: :inserted_at]
+
+    task_query = from t in Task,
+                  preload: [comments: ^comments_query]
+
+    query = from crd in Card,
+            preload: [task: ^task_query],
+            where: crd.id == ^id
+
+    Repo.one!(query)
   end
 
   def create_card(attrs) do

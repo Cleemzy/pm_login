@@ -41,6 +41,15 @@ defmodule PmLoginWeb.Project.BoardLive do
                     layout: layout)}
   end
 
+
+  def handle_event("send-comment", %{"com" => content, "poster_id" => poster_id, "task_id" => task_id}, socket) do
+    IO.puts task_id
+    IO.puts poster_id
+    IO.puts content
+    Monitoring.post_comment(%{"content" => content, "task_id" => task_id, "poster_id" => poster_id})
+    {:noreply, socket}
+  end
+
   def handle_event("update_card", %{"card" => card_attrs}, socket) do
     card = Kanban.get_card!(card_attrs["id"])
     # IO.inspect card_attrs
@@ -76,6 +85,10 @@ defmodule PmLoginWeb.Project.BoardLive do
   #       {:noreply, {:error, %{message: changeset.message}, socket}}
   #   end
   # end
+  def handle_info({Monitoring, [:comment, :posted], _}, socket) do
+    card_id = socket.assigns.card_with_comments.id
+    {:noreply, assign(socket, card_with_comments: Kanban.get_card_for_comment!(card_id))}
+  end
 
   def handle_info({Monitoring, [:task, :updated], _}, socket) do
     board_id = socket.assigns.board.id
@@ -102,8 +115,9 @@ defmodule PmLoginWeb.Project.BoardLive do
   def handle_event("show_task_modal", %{}, socket), do: {:noreply, socket |> assign(show_task_modal: true)}
 
   def handle_event("show_comments_modal", %{"id" => id}, socket) do
-    IO.inspect id
-    {:noreply, socket |> assign(show_comments_modal: true)}
+    # IO.puts id
+    card = Kanban.get_card_for_comment!(id)
+    {:noreply, socket |> assign(show_comments_modal: true, card_with_comments: card)}
   end
 
   def handle_info({CommentsModalLive, :button_clicked, %{action: "cancel-comments"}},socket) do
@@ -154,6 +168,7 @@ defmodule PmLoginWeb.Project.BoardLive do
 
   def handle_event("update_task", %{"task" => params}, socket) do
     #progression to int
+    IO.inspect params
     int_progression = params["progression"] |> Float.parse |> elem(0) |> trunc
     attrs = %{params | "progression" => int_progression}
           #UPDATING

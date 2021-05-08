@@ -610,6 +610,14 @@ def validate_start_deadline(changeset) do
     Repo.all(Comment)
   end
 
+  def list_comments_by_task_id(task_id) do
+    query = from c in Comment,
+            where: c.task_id == ^task_id,
+            order_by: [asc: :inserted_at]
+
+    Repo.all(query)
+  end
+
   @doc """
   Gets a single comment.
 
@@ -642,6 +650,13 @@ def validate_start_deadline(changeset) do
     %Comment{}
     |> Comment.changeset(attrs)
     |> Repo.insert()
+  end
+
+  def post_comment(attrs \\ %{}) do
+    %Comment{}
+    |> Comment.create_changeset(attrs)
+    |> Repo.insert()
+    |> broadcast_change([:comment, :posted])
   end
 
   @doc """

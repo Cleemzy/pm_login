@@ -2,6 +2,7 @@
   overflow-x: scroll;
   height: 400px;
   width: 500px;
+  /* white-space: nowrap; */
 }
 
 .pp__comment{
@@ -19,6 +20,11 @@
   font-size: 11px;
 }
 
+.username__comment__you{
+  margin-right: 5px;
+  font-size: 11px;
+}
+
 .comment__div{
   margin-left: 20px;
   margin-bottom: 20px;
@@ -33,6 +39,12 @@
   width: 430px;
 }
 .textc__content{
+  text-align: left;
+  word-wrap: break-word;
+}
+
+.textc__content_user{
+  text-align: right;
   word-wrap: break-word;
 }
 
@@ -41,7 +53,13 @@
 }
 
 .comment__modal__footer{
+  /* white-space: nowrap; */
   margin-top: 10px;
+  margin-bottom: -15px;
+}
+
+.form__wrapper{
+  white-space: nowrap;
 }
 
 .comment__back{
@@ -51,4 +69,9 @@
 .comment__back:hover{
   cursor: pointer;
   color: lightgray;
+}
+.bt__com__form{
+  border: none;
+  width: 10px;
+  background-color: transparent;
 }
