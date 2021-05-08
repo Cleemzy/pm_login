@@ -2,8 +2,8 @@
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 12.5 (Ubuntu 12.5-1.pgdg18.04+1)
--- Dumped by pg_dump version 12.5 (Ubuntu 12.5-1.pgdg18.04+1)
+-- Dumped from database version 12.6 (Ubuntu 12.6-1.pgdg18.04+1)
+-- Dumped by pg_dump version 12.6 (Ubuntu 12.6-1.pgdg18.04+1)
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -842,15 +842,16 @@ COPY public.boards (id, name, inserted_at, updated_at) FROM stdin;
 
 COPY public.cards (id, name, stage_id, "position", inserted_at, updated_at, task_id) FROM stdin;
 9	cinquième	37	1	2021-04-29 08:37:56	2021-05-01 13:23:29	5
-12	CHECK	38	1	2021-05-01 13:10:32	2021-05-01 13:24:11	8
-10	pubsub	39	1	2021-05-01 13:00:55	2021-05-01 13:24:13	6
-13	first_task	41	0	2021-05-03 10:07:31	2021-05-03 10:38:19	9
-14	second_task	41	1	2021-05-03 10:18:08	2021-05-03 10:38:31	10
-1	Vraie tâche	36	0	2021-04-28 19:36:59	2021-05-01 13:22:42	1
-8	4eme	38	0	2021-04-29 08:37:15	2021-05-01 13:22:59	4
-7	une nouvelle	37	0	2021-04-29 06:27:21	2021-05-01 13:23:14	3
+10	pubsub	39	0	2021-05-01 13:00:55	2021-05-07 14:47:50	6
+6	Seconde tâche	38	1	2021-04-29 06:25:23	2021-05-07 14:47:54	2
+15	EXEMPLE	36	2	2021-05-07 14:49:09	2021-05-07 14:49:09	11
+14	second_task	41	1	2021-05-03 10:18:08	2021-05-06 06:06:27	10
+13	first_task	41	0	2021-05-03 10:07:31	2021-05-07 05:42:16	9
 11	kanban	36	1	2021-05-01 13:07:10	2021-05-01 13:21:07	7
-6	Seconde tâche	39	0	2021-04-29 06:25:23	2021-05-01 13:23:34	2
+7	une nouvelle	37	0	2021-04-29 06:27:21	2021-05-01 13:23:14	3
+1	Vraie tâche	36	0	2021-04-28 19:36:59	2021-05-05 20:27:47	1
+12	CHECK	38	0	2021-05-01 13:10:32	2021-05-01 13:24:11	8
+8	4eme	40	0	2021-04-29 08:37:15	2021-05-07 14:47:52	4
 \.
 
 
@@ -867,6 +868,15 @@ COPY public.clients_requests (id, content, date_post, active_client_id, company_
 --
 
 COPY public.comments (id, content, task_id, poster_id, inserted_at, updated_at) FROM stdin;
+3	commentaire posté	9	57	2021-05-08 15:08:25	2021-05-08 15:08:25
+1	premier commentaire	9	57	2021-05-08 15:03:14	2021-05-08 15:03:14
+2	second commentaire	9	57	2021-05-08 15:07:33	2021-05-08 15:07:33
+4	commentaire contributeur	9	56	2021-05-08 16:23:17	2021-05-08 16:23:17
+5	testpost	9	57	2021-05-08 17:07:22	2021-05-08 17:07:22
+6	pubsub working?	9	57	2021-05-08 17:21:28	2021-05-08 17:21:28
+7	second test?	9	57	2021-05-08 17:29:16	2021-05-08 17:29:16
+8	oui	9	56	2021-05-08 17:30:02	2021-05-08 17:30:02
+9	but not scrolling	9	56	2021-05-08 17:34:06	2021-05-08 17:34:06
 \.
 
 
@@ -1003,16 +1013,17 @@ COPY public.statuses (id, title, inserted_at, updated_at) FROM stdin;
 --
 
 COPY public.tasks (id, title, progression, date_start, date_end, estimated_duration, performed_duration, deadline, parent_id, project_id, contributor_id, status_id, priority_id, inserted_at, updated_at, attributor_id) FROM stdin;
+9	first_task	0	2021-05-03	2021-05-03	24	0	2021-05-04	\N	15	56	1	2	2021-05-03 10:07:31	2021-05-07 05:42:16	57
+6	pubsub	0	2021-05-01	2021-05-01	50	0	2021-05-08	\N	14	54	4	2	2021-05-01 13:00:55	2021-05-07 14:47:50	52
 7	kanban	0	2021-05-01	2021-05-01	3	0	2021-05-08	\N	14	54	1	2	2021-05-01 13:07:10	2021-05-01 13:07:16	52
+4	4eme	2	2021-05-01	2021-05-01	24	0	2021-04-30	\N	14	54	5	2	2021-04-29 08:37:15	2021-05-07 14:47:52	52
+2	Seconde tâche	0	2021-04-29	2021-04-29	24	0	2021-04-30	\N	14	54	3	2	2021-04-29 06:25:23	2021-05-07 14:47:54	52
 1	Vraie tâche	0	2021-04-28	2021-04-30	48	0	2021-04-30	\N	14	54	1	2	2021-04-28 19:36:58	2021-05-01 13:22:42	52
-4	4eme	2	2021-05-01	2021-05-01	24	0	2021-04-30	\N	14	54	3	2	2021-04-29 08:37:15	2021-05-01 13:22:59	52
 3	une nouvelle	0	2021-04-29	2021-04-30	2	0	2021-04-30	\N	14	54	2	2	2021-04-29 06:27:21	2021-05-01 13:23:14	52
 5	cinquième	0	2021-04-30	2021-05-01	48	0	2021-05-01	\N	14	54	2	2	2021-04-29 08:37:56	2021-05-01 13:23:29	52
-2	Seconde tâche	0	2021-04-29	2021-04-29	24	0	2021-04-30	\N	14	54	4	2	2021-04-29 06:25:23	2021-05-01 13:23:34	52
 8	CHECK	0	2021-05-01	2021-05-01	2	0	2021-05-08	\N	14	54	3	2	2021-05-01 13:10:32	2021-05-01 13:24:11	52
-6	pubsub	0	2021-05-01	2021-05-01	50	0	2021-05-08	\N	14	54	4	2	2021-05-01 13:00:55	2021-05-01 13:24:13	52
-9	first_task	0	2021-05-03	2021-05-03	24	0	2021-05-04	\N	15	56	1	2	2021-05-03 10:07:31	2021-05-03 10:38:19	57
-10	second_task	0	2021-05-03	2021-05-03	10	0	2021-05-04	\N	15	\N	1	2	2021-05-03 10:18:08	2021-05-03 10:38:31	57
+11	EXEMPLE	0	2021-05-07	2021-05-07	45	0	2021-05-08	\N	14	\N	1	2	2021-05-07 14:49:09	2021-05-07 14:49:09	57
+10	second_task	0	2021-05-03	2021-05-03	10	0	2021-05-04	\N	15	\N	1	2	2021-05-03 10:18:08	2021-05-08 17:15:10	57
 \.
 
 
@@ -1024,13 +1035,13 @@ COPY public.users (id, username, profile_picture, email, password, right_id, ins
 53	Attributeur	images/profiles/default_profile_pic.png	mgbi	$2b$12$XzzR7ctCGFIaJh61ehEnSubxPtV6kazt7xXwig64bhqdZCN4HXYzO	2	2021-04-13 11:30:16	2021-04-13 11:35:15
 55	Jesuisarchivé	images/profiles/default_profile_pic.png	archivé@mgbi	$2b$12$xJLHmfbZ2dKMLIOneMRpKuHi1Z0.hSkEylUfIst/eTyL/3STO4MGS	100	2021-04-13 11:46:26	2021-04-19 14:20:31
 41	Test	images/profiles/test-profile.jpg	test@test	$2b$12$cXDy2z641NRtgvK5de5dheyTn6sVTAbKHvZ4YW0e9C2ehn2XZx4vC	1	2021-03-30 18:00:03	2021-03-30 18:01:54
-25	Profilnonattribué	images/profiles/Nora-profile.png	nonattribuée@mgbi	$2b$12$Iy1kKfKzrBE9iSexjuZCQOdj7tyQ3vop0mwRNfeXacY1Qe7VHmfkO	5	2021-03-25 11:09:44	2021-04-26 05:34:17
-33	Mohammad	images/profiles/default_profile_pic.png	client@soc	$2b$12$ITPGIbTPJJEjonr31Tuwu.vJIvX20rU6tgb.UoD86y1mzmZGIZ0zi	4	2021-03-26 06:37:02	2021-04-22 08:20:01
-54	Mgbi1	images/profiles/default_profile_pic.png	contributeur@mgbi	$2b$12$ujizFEj7g8NIkTWc87v3M.5gQSZWBVIm9C4s83EzAlX1mwPaP9b06	3	2021-04-13 11:38:03	2021-04-13 11:38:19
-56	Mgbi2	images/profiles/default_profile_pic.png	contributeur2@mgbi	$2b$12$IDB46kT1mRgxSCoJVIsnZu6O3aNMEUoGeooP3SW6lVb7Gz6QYooeu	3	2021-05-01 18:12:11	2021-05-01 18:13:32
 52	Admin	images/profiles/admin-profile.jpg	admin@myadmin	$2b$12$3yngeegsjEEifTOEZDSfAeOXnuyBOkCfjGUN.7GdIW1A57mD6tKqO	1	2021-04-13 08:28:09	2021-04-13 08:54:00
 57	Mgbi	images/profiles/default_profile_pic.png	admin@mgbi	$2b$12$0LWzPAdYxEQyl2BX3UL7tev4jk1Ty0jLKK7kFhHkiilAaT7ShOo3.	1	2021-05-01 21:28:30	2021-05-01 21:28:46
-58	Abdoul	images/profiles/default_profile_pic.png	abdoul@comp	$2b$12$Lnbt12faR1AtMAMCetmlRuc6SDpB2pjiR936wqT4W2Eko35l4FxtO	4	2021-05-02 13:24:25	2021-05-02 13:24:38
+54	Mgbi1	images/profiles/default_profile_pic.png	contributeur@mgbi	$2b$12$sxaYg4bRhFyE7RDn0gaXcOlDkEnhOoPFpB./8Ir.RDNKR85vsv6nK	3	2021-04-13 11:38:03	2021-04-13 11:38:19
+56	Mgbi2	images/profiles/default_profile_pic.png	contributeur2@mgbi	$2b$12$xjnYOEvFZyi6ky2vB8HGCO//zHlN8lqg56hBeGE/ezDgqB/z01Z8a	3	2021-05-01 18:12:11	2021-05-01 18:13:32
+25	Profilnonattribué	images/profiles/Nora-profile.png	nonattribuée@mgbi	$2b$12$Iy1kKfKzrBE9iSexjuZCQOdj7tyQ3vop0mwRNfeXacY1Qe7VHmfkO	5	2021-03-25 11:09:44	2021-05-06 16:15:30
+33	Eric	images/profiles/default_profile_pic.png	eric@soc	$2b$12$ITPGIbTPJJEjonr31Tuwu.vJIvX20rU6tgb.UoD86y1mzmZGIZ0zi	4	2021-03-26 06:37:02	2021-04-22 08:20:01
+58	Marc	images/profiles/default_profile_pic.png	marc@comp	$2b$12$Lnbt12faR1AtMAMCetmlRuc6SDpB2pjiR936wqT4W2Eko35l4FxtO	4	2021-05-02 13:24:25	2021-05-02 13:24:38
 \.
 
 
@@ -1059,7 +1070,7 @@ SELECT pg_catalog.setval('public.boards_id_seq', 10, true);
 -- Name: cards_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.cards_id_seq', 14, true);
+SELECT pg_catalog.setval('public.cards_id_seq', 15, true);
 
 
 --
@@ -1073,7 +1084,7 @@ SELECT pg_catalog.setval('public.clients_requests_id_seq', 1, false);
 -- Name: comments_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.comments_id_seq', 1, false);
+SELECT pg_catalog.setval('public.comments_id_seq', 9, true);
 
 
 --
@@ -1115,7 +1126,7 @@ SELECT pg_catalog.setval('public.projects_id_seq', 15, true);
 -- Name: rights_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.rights_id_seq', 29, true);
+SELECT pg_catalog.setval('public.rights_id_seq', 30, true);
 
 
 --
@@ -1143,7 +1154,7 @@ SELECT pg_catalog.setval('public.statuses_id_seq', 5, true);
 -- Name: tasks_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.tasks_id_seq', 10, true);
+SELECT pg_catalog.setval('public.tasks_id_seq', 11, true);
 
 
 --
