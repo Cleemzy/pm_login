@@ -1,0 +1,49 @@
+.priority__point{
+  width: 10px;
+  height: 10px;
+  background-color: black;
+  border-radius: 999px;
+  position: relative;
+  left: 175px;
+  top: -20px;
+}
+
+.urg__priority__point{
+  width: 10px;
+  height: 10px;
+  background-color: red;
+  border-radius: 999px;
+  position: relative;
+  left: 175px;
+  top: -20px;
+}
+
+.high__priority__point{
+  width: 10px;
+  height: 10px;
+  background-color: #f8961e;
+  border-radius: 999px;
+  position: relative;
+  left: 175px;
+  top: -20px;
+}
+
+.avg__priority__point{
+  width: 10px;
+  height: 10px;
+  background-color: #4361ee;
+  border-radius: 999px;
+  position: relative;
+  left: 175px;
+  top: -20px;
+}
+
+.low__priority__point{
+  width: 10px;
+  height: 10px;
+  background-color: lightgreen;
+  border-radius: 999px;
+  position: relative;
+  left: 175px;
+  top: -20px;
+}

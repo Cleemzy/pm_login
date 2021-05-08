@@ -41,6 +41,7 @@
             <i class="bi bi-plus plus__icon" phx-click="show_plus_modal" phx-value-id="<%= card.id %>"></i>
             <i class="bi bi-chat-left-dots comment__icon" phx-click="show_comments_modal" phx-value-id="<%= card.id %>"></i>
             <i class="bi bi-pencil-square modif__icon" phx-click="show_modif_modal" phx-value-id="<%= card.id %>"></i>
+            <div style="width: 10px; height: 10px; background-color:black;"></div>
 
 
 
@@ -53,9 +54,17 @@
         <ul data-stage-id="<%= stage.id %>" class="stage__cards">
           <%= for card <- stage.cards do %>
             <%= if @is_admin or @curr_user_id == card.task.contributor_id do %>
-
           <div data-card-id="<%= card.id %>" class="card basecontents">
-                <div class="card__name"><%= card.name %></div>
+
+                <div class="card__name"><%= card.task.title %></div>
+                <%= case card.task.priority_id do %>
+                  <% 1 -> %><div class="low__priority__point"></div>
+                  <% 2 -> %><div class="avg__priority__point"></div>
+                  <% 3 -> %><div class="high__priority__point"></div>
+                  <% 4 -> %><div class="urg__priority__point"></div>
+                  <% _ -> %><div class="priority__point"></div>
+                <% end %>
+
                 <i class="card__date">Créee le <%= card.task.inserted_at %>, par</i>
                 <br/>
                 <i><img class="profile-pic-mini" src="<%= Routes.static_path(@socket, "/#{card.task.attributor.profile_picture}") %>" width="50" style="position: relative; top:10px;"/>
@@ -65,7 +74,6 @@
           <i class="bi bi-plus plus__icon" phx-click="show_plus_modal" phx-value-id="<%= card.id %>"></i>
           <i class="bi bi-chat-left-dots comment__icon" phx-click="show_comments_modal" phx-value-id="<%= card.id %>"></i>
           <i class="bi bi-pencil-square modif__icon" phx-click="show_modif_modal" phx-value-id="<%= card.id %>"></i>
-
 
 
             <% end %>
