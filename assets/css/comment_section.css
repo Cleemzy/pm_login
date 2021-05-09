@@ -1,5 +1,5 @@
 .comments-section{
-  overflow-x: scroll;
+  overflow: scroll;
   height: 400px;
   width: 500px;
   /* white-space: nowrap; */

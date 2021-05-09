@@ -41,13 +41,13 @@ defmodule PmLoginWeb.Project.BoardLive do
                     layout: layout)}
   end
 
-
   def handle_event("send-comment", %{"com" => content, "poster_id" => poster_id, "task_id" => task_id}, socket) do
     IO.puts task_id
     IO.puts poster_id
     IO.puts content
     Monitoring.post_comment(%{"content" => content, "task_id" => task_id, "poster_id" => poster_id})
-    {:noreply, socket}
+    card_id = socket.assigns.card_with_comments.id
+    {:noreply, socket |> assign(card_with_comments: Kanban.get_card_for_comment!(card_id)) |>push_event("updateScroll", %{})}
   end
 
   def handle_event("update_card", %{"card" => card_attrs}, socket) do
@@ -85,9 +85,12 @@ defmodule PmLoginWeb.Project.BoardLive do
   #       {:noreply, {:error, %{message: changeset.message}, socket}}
   #   end
   # end
+
   def handle_info({Monitoring, [:comment, :posted], _}, socket) do
     card_id = socket.assigns.card_with_comments.id
-    {:noreply, assign(socket, card_with_comments: Kanban.get_card_for_comment!(card_id))}
+    {:noreply, socket
+              |> assign(card_with_comments: Kanban.get_card_for_comment!(card_id))
+              |> push_event("updateScroll", %{})}
   end
 
   def handle_info({Monitoring, [:task, :updated], _}, socket) do

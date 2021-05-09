@@ -20,6 +20,9 @@ import {Socket} from "phoenix"
 import {LiveSocket} from "phoenix_live_view"
 import { Sortable, Plugins } from "@shopify/draggable";
 
+// ScrollComment
+let messageBody = document.querySelector('#messageBody');
+// messageBody.scrollTop = messageBody.scrollHeight - messageBody.clientHeight;
 
 // Define hooks
 const Hooks = {}
@@ -113,8 +116,31 @@ Hooks.ScrollLock = {
     document.body.style.top = null
   }
 };
+
+Hooks.MessageBody = {
+  mounted(){
+    var messageBody = document.querySelector('#messageBody');
+    this.handleEvent("updateScroll", ({}) =>
+    messageBody.scrollTop = messageBody.scrollHeight - messageBody.clientHeight
+   )
+ }
+//  updated(){
+//    var messageBody = document.querySelector('#messageBody');
+//    this.handleEvent("updateScroll", ({}) =>
+//    messageBody.scrollTop = messageBody.scrollHeight - messageBody.clientHeight
+//   )
+// },
+  // beforeUpdate(){
+  //   var messageBody = document.querySelector('#messageBody');
+  //   this.handleEvent("updateScroll", ({}) =>
+  //   messageBody.scrollTop = messageBody.scrollHeight - messageBody.clientHeight
+  //  )
+  // }
+};
 //hook end
 
+
+//
 let navToggle = document.querySelector(".nav__toggle");
 let navWrapper = document.querySelector(".nav__wrapper");
 navToggle.addEventListener("click", function () {

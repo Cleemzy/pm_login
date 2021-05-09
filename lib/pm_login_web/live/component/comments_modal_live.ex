@@ -74,7 +74,7 @@ defmodule PmLoginWeb.LiveComponent.CommentsModalLive do
 
 
                 <div class="row">
-                  <div class="comments-section">
+                  <div id="messageBody" class="comments-section" phx-hook="MessageBody">
 
 
                   <!-- start of one comment -->
@@ -156,6 +156,7 @@ defmodule PmLoginWeb.LiveComponent.CommentsModalLive do
                     <!-- <button type="submit" style="background-color: transparent;"><i class="bi bi-symmetry-horizontal" style="font-size: 200%;color: gray;"></i></button> -->
                   </form>
                 </div>
+                
 
 
               </div>
