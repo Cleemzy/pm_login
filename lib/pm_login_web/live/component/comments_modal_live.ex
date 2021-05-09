@@ -48,6 +48,11 @@ defmodule PmLoginWeb.LiveComponent.CommentsModalLive do
   @spec render(map()) :: Phoenix.LiveView.Rendered.t()
   def render(assigns) do
     ~L"""
+    <script>
+      var messageBody = document.querySelector('#messageBody');
+      messageBody.scrollTop = messageBody.scrollHeight - messageBody.clientHeight
+    </script>
+
     <% current_user = PmLogin.Login.get_user!(@curr_user_id) %>
     <div id="modal-<%= @id %>">
       <!-- Modal Background -->
@@ -58,8 +63,12 @@ defmodule PmLoginWeb.LiveComponent.CommentsModalLive do
             <div class="modal-inner-card">
               <!-- Title -->
               <%= if @title != nil do %>
-              <div class="modal-title">
-                <%= @title %><a href="#" phx-click="scroll-bot"><i class="bi bi-arrow-bar-down"></i></a>
+              <div class="row modal-title">
+                <%= @title %>
+                <div class="load__icons">
+                  <a href="#" phx-click="scroll-bot"><i class="bi bi-arrow-bar-down"></i></a>
+                  <a href="#" phx-click="load_comments"><i class="bi bi-arrow-clockwise"></i></a>
+                </div>
               </div>
               <% end %>
 
@@ -77,7 +86,7 @@ defmodule PmLoginWeb.LiveComponent.CommentsModalLive do
                   <div id="messageBody" class="comments-section" phx-hook="MessageBody">
 
                   <!-- start of one comment -->
-                    <%= for comment <- @card.task.comments do %>
+                    <%= for comment <- Enum.reverse(@card.task.comments) do %>
                     <div class="basecontents__without__shadow comment__div">
 
                     <%= if comment.poster_id == @curr_user_id do %>
@@ -166,6 +175,7 @@ defmodule PmLoginWeb.LiveComponent.CommentsModalLive do
         </div>
       </div>
     </div>
+
     """
   end
 

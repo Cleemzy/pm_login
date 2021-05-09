@@ -35,19 +35,22 @@ defmodule PmLoginWeb.Project.BoardLive do
     contributors = Login.list_contributors
     list_contributors = Enum.map(contributors, fn (%User{} = p)  -> {p.username, p.id} end)
 
-    {:ok, assign(socket, is_admin: Monitoring.is_admin?(curr_user_id), show_plus_modal: false,curr_user_id: curr_user_id, pro_id: pro_id,
+    {:ok, socket |> assign(is_admin: Monitoring.is_admin?(curr_user_id), show_plus_modal: false,curr_user_id: curr_user_id, pro_id: pro_id,
                     contributors: list_contributors, priorities: list_priorities, board: Kanban.get_board!(project.board_id), show_task_modal: false, show_modif_modal: false,
                     task_changeset: task_changeset, modif_changeset: modif_changeset, show_comments_modal: false,
-                    layout: layout)}
+                    layout: layout)
+                  }
   end
 
   def handle_event("send-comment", %{"com" => content, "poster_id" => poster_id, "task_id" => task_id}, socket) do
     IO.puts task_id
     IO.puts poster_id
     IO.puts content
+
     Monitoring.post_comment(%{"content" => content, "task_id" => task_id, "poster_id" => poster_id})
     card_id = socket.assigns.card_with_comments.id
-    {:noreply, socket |> assign(card_with_comments: Kanban.get_card_for_comment!(card_id)) |>push_event("updateScroll", %{})}
+    nb_com = socket.assigns.com_nb
+    {:noreply, socket |> assign(card_with_comments: Kanban.get_card_for_comment_limit!(card_id, nb_com), com_nb: nb_com) |>push_event("updateScroll", %{})}
   end
 
   def handle_event("update_card", %{"card" => card_attrs}, socket) do
@@ -88,8 +91,9 @@ defmodule PmLoginWeb.Project.BoardLive do
 
   def handle_info({Monitoring, [:comment, :posted], _}, socket) do
     card_id = socket.assigns.card_with_comments.id
+    nb_com = socket.assigns.com_nb
     {:noreply, socket
-              |> assign(card_with_comments: Kanban.get_card_for_comment!(card_id))
+              |> assign(card_with_comments: Kanban.get_card_for_comment_limit!(card_id, nb_com), com_nb: nb_com)
               |> push_event("updateScroll", %{})}
   end
 
@@ -119,12 +123,25 @@ defmodule PmLoginWeb.Project.BoardLive do
 
   def handle_event("show_comments_modal", %{"id" => id}, socket) do
     # IO.puts id
-    card = Kanban.get_card_for_comment!(id)
-    {:noreply, socket |> assign(show_comments_modal: true, card_with_comments: card)
+    # IO.puts "com modal showed"
+    IO.puts id
+    com_nb = 5
+    card = Kanban.get_card_for_comment_limit!(id,com_nb)
+    # card = ordered |> Enum.reverse
+    {:noreply, socket |> assign(show_comments_modal: true, card_with_comments: card, com_nb: com_nb)
                       |> push_event("updateScroll", %{})}
   end
 
+  def handle_event("load_comments", %{}, socket) do
+    IO.puts "load"
+    card_id = socket.assigns.card_with_comments.id
+    nb_com = socket.assigns.com_nb + 5
+    card = Kanban.get_card_for_comment_limit!(card_id,nb_com)
+    {:noreply, socket |> assign(com_nb: nb_com, card_with_comments: card)}
+  end
+
   def handle_event("scroll-bot", %{}, socket) do
+    # IO.puts "niditra scroll"
     {:noreply, socket |> push_event("updateScroll", %{})}
   end
 
