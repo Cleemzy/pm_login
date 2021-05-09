@@ -59,7 +59,7 @@ defmodule PmLoginWeb.LiveComponent.CommentsModalLive do
               <!-- Title -->
               <%= if @title != nil do %>
               <div class="modal-title">
-                <%= @title %>
+                <%= @title %><a href="#" phx-click="scroll-bot"><i class="bi bi-arrow-bar-down"></i></a>
               </div>
               <% end %>
 
@@ -75,7 +75,6 @@ defmodule PmLoginWeb.LiveComponent.CommentsModalLive do
 
                 <div class="row">
                   <div id="messageBody" class="comments-section" phx-hook="MessageBody">
-
 
                   <!-- start of one comment -->
                     <%= for comment <- @card.task.comments do %>
@@ -156,7 +155,7 @@ defmodule PmLoginWeb.LiveComponent.CommentsModalLive do
                     <!-- <button type="submit" style="background-color: transparent;"><i class="bi bi-symmetry-horizontal" style="font-size: 200%;color: gray;"></i></button> -->
                   </form>
                 </div>
-                
+
 
 
               </div>

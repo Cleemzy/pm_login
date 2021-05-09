@@ -122,7 +122,7 @@ Hooks.MessageBody = {
     var messageBody = document.querySelector('#messageBody');
     this.handleEvent("updateScroll", ({}) =>
     messageBody.scrollTop = messageBody.scrollHeight - messageBody.clientHeight
-   )
+  )
  }
 //  updated(){
 //    var messageBody = document.querySelector('#messageBody');
@@ -138,7 +138,7 @@ Hooks.MessageBody = {
   // }
 };
 //hook end
-
+// document.querySelector('#messageBody').scrollTop = messageBody.scrollHeight - messageBody.clientHeight
 
 //
 let navToggle = document.querySelector(".nav__toggle");

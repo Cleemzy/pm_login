@@ -120,7 +120,12 @@ defmodule PmLoginWeb.Project.BoardLive do
   def handle_event("show_comments_modal", %{"id" => id}, socket) do
     # IO.puts id
     card = Kanban.get_card_for_comment!(id)
-    {:noreply, socket |> assign(show_comments_modal: true, card_with_comments: card)}
+    {:noreply, socket |> assign(show_comments_modal: true, card_with_comments: card)
+                      |> push_event("updateScroll", %{})}
+  end
+
+  def handle_event("scroll-bot", %{}, socket) do
+    {:noreply, socket |> push_event("updateScroll", %{})}
   end
 
   def handle_info({CommentsModalLive, :button_clicked, %{action: "cancel-comments"}},socket) do
