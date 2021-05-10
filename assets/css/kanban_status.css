@@ -5,7 +5,7 @@
   border-radius: 999px;
   position: relative;
   left: 175px;
-  top: -20px;
+  top: 0px;
 }
 
 .urg__priority__point{
@@ -15,7 +15,7 @@
   border-radius: 999px;
   position: relative;
   left: 175px;
-  top: -20px;
+  top: 0px;
 }
 
 .high__priority__point{
@@ -25,7 +25,7 @@
   border-radius: 999px;
   position: relative;
   left: 175px;
-  top: -20px;
+  top: 0px;
 }
 
 .avg__priority__point{
@@ -35,7 +35,7 @@
   border-radius: 999px;
   position: relative;
   left: 175px;
-  top: -20px;
+  top: 0px;
 }
 
 .low__priority__point{
@@ -45,5 +45,5 @@
   border-radius: 999px;
   position: relative;
   left: 175px;
-  top: -20px;
+  top: 0px;
 }

@@ -4,6 +4,7 @@
 }
 .boardheader{
   margin-bottom: 20px;
+  margin-top: -1.5%;
 }
 
 .boardpage{
@@ -178,4 +179,8 @@
 .draggable-source--is-dragging {
   background: #ccc;
   opacity: 0.25;
+}
+
+.secondary__kanban{
+  background-color: lightgray !important;
 }

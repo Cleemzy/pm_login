@@ -170,7 +170,7 @@ defmodule PmLoginWeb.LiveComponent.PlusModalLive do
 
                                 <div class="column">
                                       <label>Date d'échéance:</label>
-                                      <p><%= @card.task.performed_duration%> heure(s)</p>
+                                      <p><%= @card.task.deadline%></p>
                                 </div>
 
                               </div>

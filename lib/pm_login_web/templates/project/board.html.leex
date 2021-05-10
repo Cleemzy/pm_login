@@ -10,9 +10,22 @@
 
 <div class="boardcontainer">
   <div class="boardheader">
-    <h2><i class="bi bi-list-task"></i> <%= @board.name %></h2>
+      <%= cond do %>
+      <% @is_admin -> %><h2><i class="bi bi-list-task"></i> <%= @board.project.title %></h2>
+      <% @is_contributor -> %><h2><i class="bi bi-list-task"></i> Mes tâches sur  "<%= @board.project.title %>"</h2>
+      <% true -> %><h2></h2>
+      <% end %>
+
+    <div class="row">
+      <p><u><b> Description:</b></u> <%= @board.project.description %></p>
+    </div>
+
     <%= if @is_admin do%>
       <a href="#" class="btn btn-lg btn-primary" phx-click="show_task_modal"><i class="bi bi-plus-circle"></i> Nouvelle tâche</a>
+    <% end %>
+
+    <%= if @is_contributor do%>
+      <a href="#" class="btn btn-lg btn-secondary" phx-click="show-secondary"><i class="bi bi-plus-circle"></i> Créer tâche secondaire</a>
     <% end %>
 
   </div>
@@ -24,51 +37,48 @@
           <div class="stage__name"><%= stage.name %></div>
           <div class="stage__counter"><%= length(stage.cards) %></div>
         </div>
+
         <%= if not @is_admin and stage.status_id == 5 do %>
-
-          <ul data-stage-id="<%= stage.id %>" class="">
-            <%= for card <- stage.cards do %>
-              <%= if @is_admin or @curr_user_id == card.task.contributor_id do %>
-
-            <div data-card-id="<%= card.id %>" class="card basecontents">
-                  <div class="card__name"><%= card.name %></div>
-                  <i class="card__date">Créee le <%= card.task.inserted_at %>, pari </i>
-                  <br/>
-                  <i><img class="profile-pic-mini" src="<%= Routes.static_path(@socket, "/#{card.task.attributor.profile_picture}") %>" width="50" style="position: relative; top:10px;"/>
-                   <%= if card.task.contributor != nil do %>pour <img class="profile-pic-mini" src="<%= Routes.static_path(@socket, "/#{card.task.contributor.profile_picture}") %>" width="50" style="position: relative; top:10px;"/><% end %></i>
-
-            </div>
-            <i class="bi bi-plus plus__icon" phx-click="show_plus_modal" phx-value-id="<%= card.id %>"></i>
-            <i class="bi bi-chat-left-dots comment__icon" phx-click="show_comments_modal" phx-value-id="<%= card.id %>"></i>
-            <i class="bi bi-pencil-square modif__icon" phx-click="show_modif_modal" phx-value-id="<%= card.id %>"></i>
-            <div style="width: 10px; height: 10px; background-color:black;"></div>
-
-
-
-              <% end %>
-            <% end %>
-          </ul>
-
+        <ul data-stage-id="<%= stage.id %>" class="">
         <% else %>
-
         <ul data-stage-id="<%= stage.id %>" class="stage__cards">
+        <% end %>
+
           <%= for card <- stage.cards do %>
             <%= if @is_admin or @curr_user_id == card.task.contributor_id do %>
+          <%= if is_nil(card.task.parent_id) do %>
           <div data-card-id="<%= card.id %>" class="card basecontents">
+          <% else %>
+          <div data-card-id="<%= card.id %>" class="card basecontents secondary__kanban">
+          <% end %>
+
+
+            <%= case card.task.priority_id do %>
+              <% 1 -> %><div class="low__priority__point"></div>
+              <% 2 -> %><div class="avg__priority__point"></div>
+              <% 3 -> %><div class="high__priority__point"></div>
+              <% 4 -> %><div class="urg__priority__point"></div>
+              <% _ -> %><div class="priority__point"></div>
+            <% end %>
 
                 <div class="card__name"><%= card.task.title %></div>
-                <%= case card.task.priority_id do %>
-                  <% 1 -> %><div class="low__priority__point"></div>
-                  <% 2 -> %><div class="avg__priority__point"></div>
-                  <% 3 -> %><div class="high__priority__point"></div>
-                  <% 4 -> %><div class="urg__priority__point"></div>
-                  <% _ -> %><div class="priority__point"></div>
-                <% end %>
 
                 <i class="card__date">Créee le <%= card.task.inserted_at %>, par</i>
                 <br/>
                 <i><img class="profile-pic-mini" src="<%= Routes.static_path(@socket, "/#{card.task.attributor.profile_picture}") %>" width="50" style="position: relative; top:10px;"/>
                  <%= if card.task.contributor != nil do %>pour <img class="profile-pic-mini" src="<%= Routes.static_path(@socket, "/#{card.task.contributor.profile_picture}") %>" width="50" style="position: relative; top:10px;"/><% end %></i>
+
+                 <%= if !is_nil(card.task.parent_id) do %>
+
+                 <div class="row">
+                  <div class="column">
+                  </div>
+                  <div class="column">
+                    <i style="font-size: 80%;white-space: nowrap;">Tâche mère: <%= card.task.parent.title %></i>
+                  </div>
+                 </div>
+
+                 <% end %>
 
           </div>
           <i class="bi bi-plus plus__icon" phx-click="show_plus_modal" phx-value-id="<%= card.id %>"></i>
@@ -80,17 +90,11 @@
           <% end %>
         </ul>
 
-        <% end %>
-
-
       </div>
     <% end %>
   </section>
 
-  <% alias PmLoginWeb.LiveComponent.TaskModalLive%>
-  <% alias PmLoginWeb.LiveComponent.PlusModalLive%>
-  <% alias PmLoginWeb.LiveComponent.ModifModalLive %>
-  <% alias  PmLoginWeb.LiveComponent.CommentsModalLive %>
+  <% alias PmLoginWeb.LiveComponent.{TaskModalLive,PlusModalLive,ModifModalLive,CommentsModalLive,SecondaryModalLive}%>
 
   <%= if @show_task_modal do %>
   <%= live_component(@socket,
@@ -104,6 +108,24 @@
                   left_button: "ANNULER",
                   left_button_action: "cancel",
                   task_changeset: @task_changeset,
+                  pro_id: @pro_id,
+                  curr_user_id: @curr_user_id)
+  %>
+  <% end %>
+
+  <%= if @show_secondary do %>
+  <%= live_component(@socket,
+                  SecondaryModalLive,
+                  id: "confirm-arch",
+                  title: "Créer tâche secondaire",
+                  body: nil,
+                  right_button: nil,
+                  right_button_action: nil,
+                  right_button_param: nil,
+                  left_button: "ANNULER",
+                  left_button_action: "cancel-secondary",
+                  task_changeset: @secondary_changeset,
+                  primaries: @primaries,
                   pro_id: @pro_id,
                   curr_user_id: @curr_user_id)
   %>

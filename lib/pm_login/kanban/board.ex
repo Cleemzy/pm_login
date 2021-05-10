@@ -7,6 +7,7 @@ defmodule PmLogin.Kanban.Board do
   schema "boards" do
     field :name, :string
     timestamps()
+    has_one :project, Project
     has_many(:stages, Stage)
     has_many(:cards, through: [:stages, :cards])
   end

@@ -26,6 +26,10 @@ defmodule PmLogin.Monitoring do
     user.right_id == 1
   end
 
+  def is_contributor?(id) do
+    user = Login.get_user!(id)
+    user.right_id == 3
+  end
   #Date validations and positive estimation with progression
 
   def del_contrib_id_if_nil(changeset) do
@@ -481,6 +485,13 @@ def validate_start_deadline(changeset) do
       [%Task{}, ...]
 
   """
+  def list_primary_tasks(contributor_id) do
+    query = from t in Task,
+            where: is_nil(t.parent_id) and t.contributor_id == ^contributor_id
+
+    Repo.all(query)
+  end
+
   def list_tasks do
     Repo.all(Task)
   end
@@ -500,6 +511,8 @@ def validate_start_deadline(changeset) do
 
   """
   def get_task!(id), do: Repo.get!(Task, id)
+
+
 
   def get_task_with_status!(id) do
     status_query = from s in Status
@@ -532,6 +545,12 @@ def validate_start_deadline(changeset) do
   def create_task_with_card(attrs \\ %{}) do
     %Task{}
     |> Task.create_changeset(attrs)
+    |> Repo.insert()
+  end
+
+  def create_secondary_task(attrs \\ %{}) do
+    %Task{}
+    |> Task.secondary_changeset(attrs)
     |> Repo.insert()
   end
 

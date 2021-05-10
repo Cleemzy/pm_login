@@ -3,15 +3,16 @@ defmodule PmLogin.Kanban do
 
   alias PmLogin.Repo
   alias PmLogin.Kanban.{Board, Stage, Card}
-  alias PmLogin.Monitoring.{Task, Status, Priority, Comment}
+  alias PmLogin.Monitoring.{Task, Status, Priority, Comment, Project}
   alias PmLogin.Login.User
 
   def get_board!(board_id) do
+    parent_query = from tsk in Task
     contributor_query = from c in User
     attributor_query = from u in User
 
     task_query = from t in Task,
-                preload: [attributor: ^attributor_query, contributor: ^contributor_query]
+                preload: [attributor: ^attributor_query, contributor: ^contributor_query, parent: ^parent_query]
 
     stage_query =
       from s in Stage,
@@ -24,9 +25,11 @@ defmodule PmLogin.Kanban do
             )
         ]
 
+      project_query = from pro in Project
+
       board_query =
         from b in Board,
-          preload: [stages: ^stage_query],
+          preload: [stages: ^stage_query, project: ^project_query],
           where: b.id == ^board_id
 
       Repo.one!(board_query)

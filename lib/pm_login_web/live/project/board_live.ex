@@ -1,7 +1,7 @@
 defmodule PmLoginWeb.Project.BoardLive do
   use Phoenix.LiveView
 
-  alias PmLoginWeb.LiveComponent.{TaskModalLive,PlusModalLive,ModifModalLive,CommentsModalLive}
+  alias PmLoginWeb.LiveComponent.{TaskModalLive,PlusModalLive,ModifModalLive,CommentsModalLive,SecondaryModalLive}
 
   alias PmLoginWeb.ProjectView
   alias PmLogin.Monitoring
@@ -35,11 +35,23 @@ defmodule PmLoginWeb.Project.BoardLive do
     contributors = Login.list_contributors
     list_contributors = Enum.map(contributors, fn (%User{} = p)  -> {p.username, p.id} end)
 
-    {:ok, socket |> assign(is_admin: Monitoring.is_admin?(curr_user_id), show_plus_modal: false,curr_user_id: curr_user_id, pro_id: pro_id,
+    secondary_changeset = Monitoring.change_task(%Task{})
+    my_primary_tasks = Monitoring.list_primary_tasks(curr_user_id)
+    list_primaries = my_primary_tasks |> Enum.map(fn (%Task{} = p) -> {p.title, p.id} end)
+
+    {:ok, socket |> assign(is_admin: Monitoring.is_admin?(curr_user_id), show_plus_modal: false,curr_user_id: curr_user_id, pro_id: pro_id, show_secondary: false,
                     contributors: list_contributors, priorities: list_priorities, board: Kanban.get_board!(project.board_id), show_task_modal: false, show_modif_modal: false,
-                    task_changeset: task_changeset, modif_changeset: modif_changeset, show_comments_modal: false,
-                    layout: layout)
+                    primaries: list_primaries, is_contributor: Monitoring.is_contributor?(curr_user_id),task_changeset: task_changeset, modif_changeset: modif_changeset, show_comments_modal: false,
+                    secondary_changeset: secondary_changeset,layout: layout)
                   }
+  end
+
+  def handle_event("show-secondary", %{}, socket) do
+    {:noreply, socket |> assign(show_secondary: true)}
+  end
+
+  def handle_info({SecondaryModalLive, :button_clicked, %{action: "cancel-secondary"}},socket) do
+    {:noreply, assign(socket, show_secondary: false, secondary_changeset: Monitoring.change_task(%Task{}))}
   end
 
   def handle_event("send-comment", %{"com" => content, "poster_id" => poster_id, "task_id" => task_id}, socket) do
@@ -173,6 +185,37 @@ defmodule PmLoginWeb.Project.BoardLive do
     # task_changeset = Monitoring.change_task(%Task{})
     modif_changeset = Monitoring.change_task(%Task{})
     {:noreply, assign(socket, show_modif_modal: false, modif_changeset: modif_changeset)}
+  end
+
+  def handle_event("submit_secondary", %{"task" => params}, socket) do
+    IO.puts "input"
+    IO.inspect params
+
+    parent_task = Monitoring.get_task!(params["parent_id"])
+    parent_params = %{"attributor_id" => parent_task.attributor_id,
+                    "priority_id" => parent_task.priority_id,
+                    "deadline" => parent_task.deadline}
+    IO.puts "parent params"
+    IO.inspect parent_params
+
+    IO.puts "output"
+    op_params = params |> Map.merge(parent_params)
+    IO.inspect op_params
+
+
+    case Monitoring.create_secondary_task(op_params) do
+      {:ok, task} ->
+        this_board = socket.assigns.board
+        [head | _] = this_board.stages
+        Kanban.create_card(%{name: task.title, stage_id: head.id ,task_id: task.id})
+        {:noreply, socket
+        |> put_flash(:info, "La tâche secondaire #{Monitoring.get_task!(task.id).title} a bien été créee")
+        |> assign(show_secondary: false)}
+
+      {:error, %Ecto.Changeset{} = changeset} ->
+        {:noreply, assign(socket,secondary_changeset: changeset)}
+
+    end
   end
 
   def handle_event("save", %{"task" => params}, socket) do

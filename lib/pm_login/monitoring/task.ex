@@ -15,12 +15,13 @@ defmodule PmLogin.Monitoring.Task do
     field :performed_duration, :integer
     field :progression, :integer
     field :title, :string
-    field :parent_id, :id
+    # field :parent_id, :id
     field :project_id, :id
     # field :contributor_id, :id
     # field :status_id, :id
     # field :priority_id, :id
     # field :attributor_id, :id
+    belongs_to :parent, Task
     belongs_to :contributor, User
     belongs_to :priority, Priority
     belongs_to :attributor, User
@@ -50,6 +51,24 @@ defmodule PmLogin.Monitoring.Task do
   def update_status_changeset(task, attrs) do
     task
     |> cast(attrs, [:status_id])
+  end
+
+  def secondary_changeset(task, attrs) do
+    task
+    |> cast(attrs, [:parent_id, :title, :priority_id, :contributor_id,:attributor_id, :project_id,:date_start, :date_end, :estimated_duration, :deadline])
+    |> validate_required(:parent_id ,message: "Entrez une tâche parente")
+    |> validate_required(:attributor_id,message: "La tâche n'a pas d'Attributeur")
+    |> validate_required(:title, message: "Entrez tâche")
+    |> unique_constraint(:title, message: "Tâche déjà existante")
+    |> validate_required(:estimated_duration, message: "Entrez estimation")
+    |> validate_required(:date_start, message: "Entrez date de début")
+    |> validate_required(:date_end, message: "Entrez date de fin")
+    |> validate_required(:deadline, message: "Entrez date d'échéance")
+    |> Monitoring.validate_start_end
+    |> Monitoring.validate_positive_estimated
+    |> put_change(:progression, 0)
+    |> put_change(:performed_duration, 0)
+    |> put_change(:status_id, 1)
   end
 
   def create_changeset(task, attrs) do
