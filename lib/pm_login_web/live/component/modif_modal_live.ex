@@ -79,16 +79,23 @@ defmodule PmLoginWeb.LiveComponent.ModifModalLive do
                         <div class="column">
 
                               <%= label f, "Durée estimée (en heure(s)):" %>
-
-                              <b><%= number_input f, :estimated_duration, style: "width: 70px", value: @card.task.estimated_duration %> h</b>
-                              <%= error_tag f, :negative_estimated %>
+                              <%= if @is_admin do %>
+                                <b><%= number_input f, :estimated_duration, style: "width: 70px", value: @card.task.estimated_duration %> h</b>
+                                <%= error_tag f, :negative_estimated %>
+                              <% else %>
+                                <b><%= @card.task.estimated_duration %></b>
+                              <% end %>
 
                         </div>
 
                         <div class="column">
                           <label>Durée effectuée:</label>
-                          <b><%= number_input f, :performed_duration, style: "width: 70px", value: @card.task.performed_duration %> h</b>
-                          <%= error_tag f, :negative_performed%>
+                          <%= if @is_contributor do %>
+                            <b><%= number_input f, :performed_duration, style: "width: 70px", value: @card.task.performed_duration %> h</b>
+                            <%= error_tag f, :negative_performed%>
+                          <% else %>
+                            <b><%= @card.task.performed_duration %> h</b>
+                          <% end %>
                         </div>
 
 
@@ -100,16 +107,27 @@ defmodule PmLoginWeb.LiveComponent.ModifModalLive do
                           <div class="row">
 
                             <div class="column">
-
+                                <%= if @is_admin do %>
                                   <%= label f, "Assigner contributeur" %>
                                   <%= select f, :contributor_id, @contributors, prompt: "Contributeurs:", selected: @card.task.contributor_id %>
                                   <%= error_tag f, :contributor_id %>
-
+                                <% else %>
+                                  <%= label f, "Contributeur" %>
+                                    <%= if !is_nil(@card.task.contributor_id) do %>
+                                    <%= @card.task.contributor.username %>
+                                    <% else %>
+                                    <%= "Pas d'intervenant" %>
+                                    <% end %>
+                                <% end %>
                             </div>
 
                             <div class="column">
                               <label>Priorité:</label>
-                              <%= select f, :priority_id, @priorities, value: @card.task.priority_id %>
+                              <%= if @is_contributor and is_nil(@card.task.parent_id) do %>
+                                <p><%= @card.task.priority.title %></p>
+                              <% else %>
+                                <%= select f, :priority_id, @priorities, value: @card.task.priority_id %>
+                              <% end %>
                             </div>
 
                           </div>
@@ -121,13 +139,25 @@ defmodule PmLoginWeb.LiveComponent.ModifModalLive do
                   <div class="row">
                     <div class="column">
                       <%= label f, "Date de début" %>
-                      <%= date_input f, :date_start, value: @card.task.date_start %>
+                      <%= if (@is_admin and is_nil(@card.task.parent_id)) or (@is_contributor and !is_nil(@card.task.parent_id)) do %>
+                        <%= date_input f, :date_start, value: @card.task.date_start %>
+                      <% else %>
+                        <p><%= @card.task.date_start %></p>
+                      <% end %>
                     </div>
 
                     <div class="column">
-                      <%= label f, "Date finale" %>
-                      <%= date_input f, :date_end, value: @card.task.date_end %>
-                      <%= error_tag f, :dt_end_lt_start %>
+                      <%= label f, "Date de fin" %>
+                      <%= if @is_contributor and @card.task.status_id == 4 do %>
+                        <%= date_input f, :date_end, value: @card.task.date_end %>
+                        <%= error_tag f, :dt_end_lt_start %>
+                      <% else %>
+                          <%= if !is_nil(@card.task.date_end) do %>
+                            <p><%= @card.task.date_end %></p>
+                          <% else %>
+                            <p>En attente</p>
+                          <% end %>
+                      <% end %>
                     </div>
                   </div>
 
