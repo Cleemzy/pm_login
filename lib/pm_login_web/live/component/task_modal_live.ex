@@ -54,12 +54,13 @@ defmodule PmLoginWeb.LiveComponent.TaskModalLive do
                     </div>
 
                     <div class="column">
-                      <%= label f, "Date finale" %>
-                      <%= date_input f, :date_end %>
-                      <%= error_tag f, :date_end %>
-                      <%= error_tag f, :date_end_lt %>
-                      <%= error_tag f, :dt_end_lt_start %>
+                      <%= label f, "Date d'échéance" %>
+                      <%= date_input f, :deadline %>
+                      <%= error_tag f, :deadline %>
+                      <%= error_tag f, :deadline_lt %>
+                      <%= error_tag f, :deadline_before_dtstart %>
                     </div>
+
                   </div>
                   <div class="row">
                     <div class="column">
@@ -68,13 +69,7 @@ defmodule PmLoginWeb.LiveComponent.TaskModalLive do
                       <%= error_tag f, :estimated_duration %>
                       <%= error_tag f, :negative_estimated %>
                     </div>
-                    <div class="column">
-                      <%= label f, "Date d'échéance" %>
-                      <%= date_input f, :deadline %>
-                      <%= error_tag f, :deadline %>
-                      <%= error_tag f, :deadline_lt %>
-                      <%= error_tag f, :deadline_before_dtstart %>
-                    </div>
+                  
                   </div>
 
                   <!-- Buttons -->

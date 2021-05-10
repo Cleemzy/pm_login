@@ -137,8 +137,12 @@ defmodule PmLoginWeb.LiveComponent.PlusModalLive do
                             </div>
 
                             <div class="column">
-                                  <label>Date finale:</label>
-                                  <%= @card.task.date_end %>
+                                  <label>Date de fin:</label>
+                                  <%= if @card.task.date_end != nil do
+                                        @card.task.date_end
+                                      else
+                                        "En attente"
+                                      end %>
                             </div>
 
                           </div>
@@ -176,6 +180,21 @@ defmodule PmLoginWeb.LiveComponent.PlusModalLive do
                               </div>
                             <!-- END OF FOURTH ROW -->
 
+                            <!-- FIFTH ROW -->
+                            <div class="row">
+                            <label>Nombre approximatif d'heures par jour ouvrable
+                             pour l'intervenant pour terminer cette tâche avant la date d'échéance:
+                            </label>
+                            </div>
+                            <!--END OF FIFTH ROW -->
+
+                            <!-- SIXTH ROW -->
+                            <div class="row">
+                              <div class="column">
+                                <p><%= PmLogin.Monitoring.avg_working_hours(@card.task) %> heure(s)</p>
+                              </div>
+                            </div>
+                            <!-- END OF SIXTH ROW -->
 
                   <!-- Buttons -->
 

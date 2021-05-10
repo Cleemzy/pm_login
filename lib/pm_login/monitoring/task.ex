@@ -81,15 +81,13 @@ defmodule PmLogin.Monitoring.Task do
     # case Kanban.create_card(%{name: title, stage_id: stage.id}) do
     #   {:ok, card} ->
         task
-        |> cast(attrs, [:title, :attributor_id, :project_id,:date_start, :date_end, :estimated_duration, :deadline])
+        |> cast(attrs, [:title, :attributor_id, :project_id, :date_start, :estimated_duration, :deadline])
         |> validate_required(:title, message: "Entrez tâche")
         |> unique_constraint(:title, message: "Tâche déjà existante")
         |> validate_required(:estimated_duration, message: "Entrez estimation")
         |> validate_required(:date_start, message: "Entrez date de début")
-        |> validate_required(:date_end, message: "Entrez date de fin")
         |> validate_required(:deadline, message: "Entrez date d'échéance")
-        |> Monitoring.validate_dates
-        |> Monitoring.validate_start_end
+        |> Monitoring.validate_dates_without_dtend
         |> Monitoring.validate_start_deadline
         |> Monitoring.validate_positive_estimated
         |> put_change(:progression, 0)

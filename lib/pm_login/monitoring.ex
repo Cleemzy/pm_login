@@ -19,6 +19,23 @@ defmodule PmLogin.Monitoring do
     Phoenix.PubSub.broadcast(PmLogin.PubSub, @topic, {__MODULE__, event, result})
   end
 
+  #DATE CALCULUS
+  def avg_working_hours(%Task{} = t) do
+      trunc(t.estimated_duration / working_days(t.date_start, t.deadline))
+  end
+
+  def working_days(d1,d2) do
+      Date.range(d1,Date.add(d2,-1))
+      |> Enum.count(fn day -> is_working_day?(day) end)
+  end
+
+  def diff_between_dates do
+    Date.diff(~D[2021-05-10], ~D[2021-05-04])
+  end
+
+  def is_working_day?(day) do
+    Date.day_of_week(day) != 6 and Date.day_of_week(day) != 7
+  end
   #checking user right in board
 
   def is_admin?(id) do
@@ -141,6 +158,32 @@ def validate_start_deadline(changeset) do
 
     end
 
+    def validate_dates_without_dtend(changeset) do
+      today = Date.utc_today
+      date_start = get_field(changeset, :date_start)
+      deadline = get_field(changeset, :deadline)
+
+      # IO.puts(date_start != "" and date_end != "" and deadline != "")
+      if date_start != nil and deadline != nil do
+
+        dt_start = date_start |> to_string |> string_to_date
+        dt_deadline = deadline |> to_string |> string_to_date
+
+        cond do
+          Date.compare(dt_start,today) == :lt ->
+            changeset
+            |> add_error(:date_start_lt, "La date de début ne peut pas être antérieure à aujourd'hui")
+          Date.compare(dt_deadline,today) == :lt ->
+            changeset
+            |> add_error(:deadline_lt, "La date d'échéance ne peut pas être antérieure à aujourd'hui")
+          true -> changeset
+        end
+            else
+              changeset
+            end
+
+    end
+
     def validate_dates(changeset) do
       today = Date.utc_today
       date_start = get_field(changeset, :date_start)
@@ -172,12 +215,12 @@ def validate_start_deadline(changeset) do
 
     end
 
-          def string_to_date(str) do
-            [str_y, str_m, str_d] = String.split(str,"-")
-            [y, m, d] = [String.to_integer(str_y), String.to_integer(str_m), String.to_integer(str_d)]
-            {:ok, date} = Date.new(y,m,d)
-            date
-          end
+    def string_to_date(str) do
+      [str_y, str_m, str_d] = String.split(str,"-")
+      [y, m, d] = [String.to_integer(str_y), String.to_integer(str_m), String.to_integer(str_d)]
+      {:ok, date} = Date.new(y,m,d)
+      date
+    end
 
   @doc """
   Returns the list of statuses.
