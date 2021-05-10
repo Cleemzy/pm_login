@@ -16,6 +16,7 @@ defmodule PmLogin.Monitoring.Task do
     field :progression, :integer
     field :title, :string
     # field :parent_id, :id
+    # field :parent_id, :id
     field :project_id, :id
     # field :contributor_id, :id
     # field :status_id, :id
@@ -27,6 +28,7 @@ defmodule PmLogin.Monitoring.Task do
     belongs_to :attributor, User
     belongs_to :status, Status
     has_many :comments, Comment
+    # has_many :children, Task
     timestamps()
   end
 
@@ -121,4 +123,9 @@ defmodule PmLogin.Monitoring.Task do
 
   end
 
+  def update_moth_prg_changeset(task, attrs) do
+    task
+    |> cast(attrs, [:progression])
+    |> Monitoring.validate_progression_mother
+  end
 end

@@ -69,6 +69,19 @@ defmodule PmLogin.Monitoring do
     end
   end
 
+  def validate_progression_mother(changeset) do
+    progression  = get_field(changeset, :progression)
+    case progression do
+      nil -> changeset
+      _ -> cond do
+          progression < 0 -> put_change(changeset, :progression, 0)
+          progression > 100 -> put_change(changeset, :progression, 100)
+          # not is_integer progression -> add_error(changeset, :progression_not_int, "Entrez un entier")
+          true -> changeset
+      end
+    end
+  end
+
   def validate_positive_performed(changeset) do
       est = get_field(changeset, :performed_duration)
       case est do
@@ -555,6 +568,32 @@ def validate_start_deadline(changeset) do
   """
   def get_task!(id), do: Repo.get!(Task, id)
 
+  def get_task_with_children!(id) do
+    children_query = from ch in Task
+
+    query = from t in Task,
+            # preload: [children: ^children_query],
+            where: t.id == ^id
+    Repo.one!(query)
+  end
+
+  def is_a_child?(%Task{} = t) do
+    !is_nil(t.parent_id)
+  end
+
+  def update_mother_task_progression(%Task{} = child) do
+    t = get_task_with_children!(child.parent_id)
+    up_rate = (1/(length(t.children))) *100
+    prog = t.progression + trunc(up_rate)
+    update_mother_progression(t, %{"progression" => prog})
+  end
+
+  def substract_mother_task_progression_when_creating_child(%Task{} = child) do
+    t = get_task_with_children!(child.parent_id)
+    down_rate = (1/(length(t.children))) *100
+    prog = t.progression - trunc(down_rate)
+    update_mother_progression(t, %{"progression" => prog})
+  end
 
 
   def get_task_with_status!(id) do
@@ -613,6 +652,12 @@ def validate_start_deadline(changeset) do
   def update_task(%Task{} = task, attrs) do
     task
     |> Task.update_changeset(attrs)
+    |> Repo.update()
+  end
+
+  def update_mother_progression(%Task{} = task, attrs) do
+    task
+    |> Task.update_moth_prg_changeset(attrs)
     |> Repo.update()
   end
 
