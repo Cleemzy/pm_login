@@ -74,8 +74,8 @@ defmodule PmLogin.Monitoring do
     case progression do
       nil -> changeset
       _ -> cond do
-          progression < 5 -> put_change(changeset, :progression, 0)
-          progression > 95 -> put_change(changeset, :progression, 100)
+          progression < 0 -> put_change(changeset, :progression, 0)
+          progression > 100 -> put_change(changeset, :progression, 100)
           # not is_integer progression -> add_error(changeset, :progression_not_int, "Entrez un entier")
           true -> changeset
       end
@@ -569,7 +569,6 @@ def validate_start_deadline(changeset) do
   def get_task!(id), do: Repo.get!(Task, id)
 
   def get_task_with_children!(id) do
-    children_query = from ch in Task
 
     query = from t in Task,
             where: t.id == ^id,
@@ -587,6 +586,11 @@ def validate_start_deadline(changeset) do
     up_rate = (1/(length(t.children))) *100
     prog = t.progression + trunc(up_rate)
     update_mother_progression(t, %{"progression" => prog})
+
+    #round progression to 0 or 100 if all children are achieved or none
+    moth = get_task_with_children!(t.id)
+    update_mother_progression(moth, %{"progression" => round_mother_progression(t.id)})
+
   end
 
   def substract_mother_task_progression_when_removing_child_from_achieved(%Task{} = child) do
@@ -594,13 +598,23 @@ def validate_start_deadline(changeset) do
     down_rate = (1/(length(t.children))) *100
     prog = t.progression - trunc(down_rate)
     update_mother_progression(t, %{"progression" => prog})
+
+    #round progression to 0 or 100 if all children are achieved or none
+    moth = get_task_with_children!(t.id)
+    update_mother_progression(moth, %{"progression" => round_mother_progression(t.id)})
+
   end
 
   def substract_mother_task_progression_when_creating_child(%Task{} = child) do
     t = get_task_with_children!(child.parent_id)
-    down_rate = (1/(length(t.children))) *100
+    nb_children = (length(t.children))+1
+    down_rate = (1/nb_children) *100
     prog = t.progression - trunc(down_rate)
     update_mother_progression(t, %{"progression" => prog})
+
+    #round progression to 0 or 100 if all children are achieved or none
+    moth = get_task_with_children!(t.id)
+    update_mother_progression(moth, %{"progression" => round_mother_progression(t.id)})
   end
 
 
@@ -661,6 +675,24 @@ def validate_start_deadline(changeset) do
     task
     |> Task.update_changeset(attrs)
     |> Repo.update()
+  end
+
+  def round_mother_progression(id) do
+    task = get_task_with_children!(id)
+    len = length(task.children)
+
+    achieved = count_achieved_children_tasks(task)
+
+      case achieved do
+        ^len -> 100
+        0 -> 0
+        _ -> task.progression
+      end
+  end
+
+
+  def count_achieved_children_tasks(%Task{} = mother) do
+    (mother.children) |> Enum.count(fn %Task{} = t -> t.status_id == 5 end)
   end
 
   def update_mother_progression(%Task{} = task, attrs) do
