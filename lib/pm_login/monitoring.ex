@@ -76,6 +76,7 @@ defmodule PmLogin.Monitoring do
       _ -> cond do
           progression < 0 -> put_change(changeset, :progression, 0)
           progression > 100 -> put_change(changeset, :progression, 100)
+          progression == 99 -> put_change(changeset, :progression, 100)
           # not is_integer progression -> add_error(changeset, :progression_not_int, "Entrez un entier")
           true -> changeset
       end
@@ -572,8 +573,9 @@ def validate_start_deadline(changeset) do
     children_query = from ch in Task
 
     query = from t in Task,
-            # preload: [children: ^children_query],
-            where: t.id == ^id
+            where: t.id == ^id,
+            preload: [children: :children]
+
     Repo.one!(query)
   end
 
@@ -585,6 +587,13 @@ def validate_start_deadline(changeset) do
     t = get_task_with_children!(child.parent_id)
     up_rate = (1/(length(t.children))) *100
     prog = t.progression + trunc(up_rate)
+    update_mother_progression(t, %{"progression" => prog})
+  end
+
+  def substract_mother_task_progression_when_removing_child_from_achieved(%Task{} = child) do
+    t = get_task_with_children!(child.parent_id)
+    down_rate = (1/(length(t.children))) *100
+    prog = t.progression - trunc(down_rate)
     update_mother_progression(t, %{"progression" => prog})
   end
 

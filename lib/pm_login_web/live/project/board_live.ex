@@ -69,6 +69,7 @@ defmodule PmLoginWeb.Project.BoardLive do
     card = Kanban.get_card!(card_attrs["id"])
     # IO.inspect card_attrs
     # IO.inspect updated_stage
+    IO.puts "before"
     IO.inspect card
     case Kanban.update_card(card, card_attrs) do
       {:ok, _updated_card} ->
@@ -80,9 +81,19 @@ defmodule PmLoginWeb.Project.BoardLive do
         # IO.inspect real_task
         # IO.inspect Monitoring.get_task!(real_task.id)
         this_board = socket.assigns.board
+
+        IO.puts "after"
+        IO.inspect card
+        IO.inspect Kanban.get_stage!(card.stage_id)
+
         if Monitoring.is_a_child?(real_task) and real_task.status_id == 5 do
           Monitoring.update_mother_task_progression(real_task)
         end
+
+        if Monitoring.is_a_child?(real_task) and Kanban.get_stage!(card.stage_id).status_id == 5 and real_task.status_id != 5  do
+          Monitoring.substract_mother_task_progression_when_removing_child_from_achieved(real_task)
+        end
+
         {:noreply, socket |> put_flash(:info, "Tâche #{Monitoring.get_task_with_status!(real_task.id).title} mise dans \" #{Monitoring.get_task_with_status!(real_task.id).status.title} \" ") |> assign(:board, this_board)}
         # {:noreply, update(socket, :board, fn _ -> Kanban.get_board!() end)}
 
@@ -214,7 +225,7 @@ defmodule PmLoginWeb.Project.BoardLive do
 
     case Monitoring.create_secondary_task(op_params) do
       {:ok, task} ->
-        # Monitoring.substract_mother_task_progression_when_creating_child(task)
+        Monitoring.substract_mother_task_progression_when_creating_child(task)
         this_board = socket.assigns.board
         [head | _] = this_board.stages
         Kanban.create_card(%{name: task.title, stage_id: head.id ,task_id: task.id})
