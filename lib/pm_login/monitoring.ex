@@ -74,9 +74,8 @@ defmodule PmLogin.Monitoring do
     case progression do
       nil -> changeset
       _ -> cond do
-          progression < 0 -> put_change(changeset, :progression, 0)
-          progression > 100 -> put_change(changeset, :progression, 100)
-          progression == 99 -> put_change(changeset, :progression, 100)
+          progression < 5 -> put_change(changeset, :progression, 0)
+          progression > 95 -> put_change(changeset, :progression, 100)
           # not is_integer progression -> add_error(changeset, :progression_not_int, "Entrez un entier")
           true -> changeset
       end
