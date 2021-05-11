@@ -12,7 +12,7 @@ defmodule PmLogin.Kanban do
     attributor_query = from u in User
 
     task_query = from t in Task,
-                preload: [attributor: ^attributor_query, contributor: ^contributor_query, parent: ^parent_query]
+                preload: [attributor: ^attributor_query, contributor: ^contributor_query, parent: ^parent_query, children: :children]
 
     stage_query =
       from s in Stage,

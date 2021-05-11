@@ -668,6 +668,7 @@ def validate_start_deadline(changeset) do
     task
     |> Task.update_moth_prg_changeset(attrs)
     |> Repo.update()
+    |> broadcast_change([:mother, :updated])
   end
 
   def update_task_status(%Task{} = task, attrs) do

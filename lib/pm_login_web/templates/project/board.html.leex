@@ -80,6 +80,15 @@
 
                  <% end %>
 
+                 <%= if length(card.task.children) != 0 do %>
+                    <div class="row">
+                      <div class="column">
+                      </div>
+                      <div class="column" style="margin-left: 100px;">
+                        <i style="font-size: 80%;white-space: nowrap;"><%= card.task.progression %> %</i>
+                      </div>
+                    </div>
+                 <% end %>
           </div>
           <i class="bi bi-plus plus__icon" phx-click="show_plus_modal" phx-value-id="<%= card.id %>"></i>
           <i class="bi bi-chat-left-dots comment__icon" phx-click="show_comments_modal" phx-value-id="<%= card.id %>"></i>

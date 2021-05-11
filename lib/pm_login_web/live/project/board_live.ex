@@ -69,8 +69,8 @@ defmodule PmLoginWeb.Project.BoardLive do
     card = Kanban.get_card!(card_attrs["id"])
     # IO.inspect card_attrs
     # IO.inspect updated_stage
-    IO.puts "before"
-    IO.inspect card
+    # IO.puts "before"
+    # IO.inspect card
     case Kanban.update_card(card, card_attrs) do
       {:ok, _updated_card} ->
         updated_task = card.task_id |> Monitoring.get_task!
@@ -132,6 +132,11 @@ defmodule PmLoginWeb.Project.BoardLive do
     list_primaries = my_primary_tasks |> Enum.map(fn (%Task{} = p) -> {p.title, p.id} end)
 
     {:noreply, assign(socket, board: Kanban.get_board!(board_id), primaries: list_primaries)}
+  end
+
+  def handle_info({Monitoring, [:mother, :updated], _}, socket) do
+    board_id = socket.assigns.board.id
+    {:noreply, assign(socket, board: Kanban.get_board!(board_id))}
   end
 
   def handle_info({Monitoring, [:task, :created], _}, socket) do
