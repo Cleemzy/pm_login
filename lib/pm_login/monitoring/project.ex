@@ -85,7 +85,13 @@ defmodule PmLogin.Monitoring.Project do
     changeset |> put_change(:progression, 0)
   end
 
-  
+  def update_progression_cs(project, attrs) do
+    project
+    |> cast(attrs, [:progression])
+    |> Monitoring.validate_progression_mother
+  end
+
+
 
 
 

@@ -354,6 +354,63 @@ def validate_start_deadline(changeset) do
                                           project.tasks != [] end)
   end
 
+  def add_progression_to_project(%Project{} = p) do
+    primary_len = count_primaries(p)
+    up_rate = (1/primary_len) * 100
+    prog = p.progression + trunc(up_rate)
+    update_project_progression(p, %{"progression" => prog})
+
+    #round progression to 0 or 100
+    project = get_project!(p.id)
+    update_project_progression(project, %{"progression" => round_project_progression(p.id)})
+
+  end
+
+  def substract_progression_to_project(%Project{} = p) do
+    primary_len = count_primaries(p)
+    up_rate = (1/primary_len) * 100
+    prog = p.progression - trunc(up_rate)
+    update_project_progression(p, %{"progression" => prog})
+
+    #round progression to 0 or 100
+    project = get_project!(p.id)
+    update_project_progression(project, %{"progression" => round_project_progression(p.id)})
+  end
+
+  def substract_project_progression_when_creating_primary(%Project{} = p) do
+    primary_len = count_primaries(p)
+    up_rate = (1/primary_len) * 100
+    prog = p.progression - trunc(up_rate)
+    update_project_progression(p, %{"progression" => prog})
+
+    #round progression to 0 or 100
+    project = get_project!(p.id)
+    update_project_progression(project, %{"progression" => round_project_progression(p.id)})
+  end
+
+
+
+  def is_task_primary?(%Task{} = t) do
+    is_nil(t.parent_id)
+  end
+
+  def count_achieved_primaries(%Project{} = p) do
+    (p.tasks) |> Enum.count(fn %Task{} = t ->
+                            is_nil(t.parent_id) and t.status_id == 5
+                            end)
+  end
+
+  def count_primaries(%Project{} = p) do
+    (p.tasks) |> Enum.count(fn %Task{} = t -> is_nil(t.parent_id) end)
+  end
+
+  def update_project_progression(%Project{} = project, attrs) do
+    project
+    |> Project.update_progression_cs(attrs)
+    |> Repo.update()
+    |> broadcast_change([:project, :updated])
+  end
+
   @doc """
   Gets a single project.
 
@@ -369,6 +426,14 @@ def validate_start_deadline(changeset) do
 
   """
   def get_project!(id), do: Repo.get!(Project, id)
+
+  def get_project_with_tasks!(id) do
+    tasks_query = from t in Task
+    project_query = from p in Project,
+                    preload: [tasks: ^tasks_query],
+                    where: p.id == ^id
+    Repo.one!(project_query)
+  end
 
   @doc """
   Creates a project.
@@ -607,7 +672,7 @@ def validate_start_deadline(changeset) do
 
   def substract_mother_task_progression_when_creating_child(%Task{} = child) do
     t = get_task_with_children!(child.parent_id)
-    nb_children = (length(t.children))+1
+    nb_children = (length(t.children))
     down_rate = (1/nb_children) *100
     prog = t.progression - trunc(down_rate)
     update_mother_progression(t, %{"progression" => prog})
@@ -675,6 +740,18 @@ def validate_start_deadline(changeset) do
     task
     |> Task.update_changeset(attrs)
     |> Repo.update()
+  end
+
+  def round_project_progression(id) do
+    project = get_project_with_tasks!(id)
+    len = count_primaries(project)
+    achieved = count_achieved_primaries(project)
+
+    case achieved do
+      ^len -> 100
+      0 -> 0
+      _ -> project.progression
+    end
   end
 
   def round_mother_progression(id) do

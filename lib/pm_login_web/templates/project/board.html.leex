@@ -196,6 +196,11 @@
                      card: @card_with_comments)
   %>
 <% end %>
+<div class="meter">
+  <span class="prog_bar" style="width: <%= @board.project.progression %>%">
+    <%= @board.project.progression %>%
+  </span>
+</div>
 
 <br/>
 <%= if @is_admin do %>

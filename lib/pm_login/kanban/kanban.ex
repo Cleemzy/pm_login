@@ -25,7 +25,10 @@ defmodule PmLogin.Kanban do
             )
         ]
 
-      project_query = from pro in Project
+      p_tasks_query = from tas in Task
+      project_query = from pro in Project,
+                      preload: [tasks: ^p_tasks_query]
+
 
       board_query =
         from b in Board,

@@ -86,12 +86,26 @@ defmodule PmLoginWeb.Project.BoardLive do
         IO.inspect card
         IO.inspect Kanban.get_stage!(card.stage_id)
 
-        if Monitoring.is_a_child?(real_task) and real_task.status_id == 5 do
+        #ADDING CHILD TASK TO ACHIEVED STAGE
+        if Monitoring.is_a_child?(real_task) and Kanban.get_stage!(card.stage_id).status_id != 5 and real_task.status_id == 5 do
           Monitoring.update_mother_task_progression(real_task)
         end
 
+        #REMOVING CHILD TASK FROM ACHIEVED STAGE
         if Monitoring.is_a_child?(real_task) and Kanban.get_stage!(card.stage_id).status_id == 5 and real_task.status_id != 5  do
           Monitoring.substract_mother_task_progression_when_removing_child_from_achieved(real_task)
+        end
+
+        #ADDING PRIMARY TASK TO ACHIEVED STAGE
+        if Monitoring.is_task_primary?(real_task) and Kanban.get_stage!(card.stage_id).status_id != 5 and real_task.status_id == 5 do
+          project = socket.assigns.board.project
+          Monitoring.add_progression_to_project(project)
+        end
+
+        #REMOVING PRIMARY TASK FROM ACHIEVED STAGE
+        if Monitoring.is_task_primary?(real_task) and Kanban.get_stage!(card.stage_id).status_id == 5 and real_task.status_id != 5 do
+          project = socket.assigns.board.project
+          Monitoring.substract_progression_to_project(project)
         end
 
         {:noreply, socket |> put_flash(:info, "Tâche #{Monitoring.get_task_with_status!(real_task.id).title} mise dans \" #{Monitoring.get_task_with_status!(real_task.id).status.title} \" ") |> assign(:board, this_board)}
@@ -132,6 +146,11 @@ defmodule PmLoginWeb.Project.BoardLive do
     list_primaries = my_primary_tasks |> Enum.map(fn (%Task{} = p) -> {p.title, p.id} end)
 
     {:noreply, assign(socket, board: Kanban.get_board!(board_id), primaries: list_primaries)}
+  end
+
+  def handle_info({Monitoring, [:project, :updated], _}, socket) do
+    board_id = socket.assigns.board.id
+    {:noreply, assign(socket, board: Kanban.get_board!(board_id))}
   end
 
   def handle_info({Monitoring, [:mother, :updated], _}, socket) do
@@ -249,6 +268,10 @@ defmodule PmLoginWeb.Project.BoardLive do
     case Monitoring.create_task_with_card(params) do
       {:ok, task} ->
         this_board = socket.assigns.board
+
+        this_project = socket.assigns.board.project
+        Monitoring.substract_project_progression_when_creating_primary(this_project)
+
         [head | _] = this_board.stages
         Kanban.create_card(%{name: task.title, stage_id: head.id ,task_id: task.id})
         {:noreply, socket
