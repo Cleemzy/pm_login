@@ -17,6 +17,12 @@
   z-index: 999;
 }
 
+@media (max-width: 638px) {
+  .modal-inner-container {
+    margin: auto;
+  }
+}
+
 .modal-card {
   height: auto;
   width: 28rem;

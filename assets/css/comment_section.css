@@ -53,9 +53,20 @@
 }
 
 .comment__modal__footer{
-  /* white-space: nowrap; */
+  /* white-space: nowrap !important; */
   margin-top: 10px;
   margin-bottom: -15px;
+}
+
+@media (max-width: 638px){
+  .comment__modal__footer{
+    white-space: nowrap !important;
+    /* max-width: 300px !important; */
+  }
+  .col__com__footer{
+    /* background-color: black; */
+    white-space: nowrap !important;
+  }
 }
 
 .form__wrapper{
@@ -80,3 +91,15 @@
 .load__icons{
   margin-left: 60%;
 }
+
+.quit__link p {
+  display: none;
+}
+
+/* .quit__link:hover {
+  display: block;
+} */
+
+/* .quit__link:hover p {
+  display: block;
+} */

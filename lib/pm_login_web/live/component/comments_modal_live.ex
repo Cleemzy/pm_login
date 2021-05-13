@@ -66,8 +66,9 @@ defmodule PmLoginWeb.LiveComponent.CommentsModalLive do
               <div class="row modal-title">
                 <%= @title %>
                 <div class="load__icons">
-                  <a href="#" phx-click="scroll-bot"><i class="bi bi-arrow-bar-down"></i></a>
-                  <a href="#" phx-click="load_comments"><i class="bi bi-arrow-clockwise"></i></a>
+                  <a href="#" title="derniers commentaires" phx-click="scroll-bot"><i class="bi bi-arrow-bar-down"></i></a>
+                  <a href="#" title="charger anciennes commentaires" phx-click="load_comments"><i class="bi bi-arrow-clockwise"></i></a>
+                  <a href="#" title="Fermer" phx-click="left-button-click" phx-target="#modal-<%= @id %>"><i class="bi bi-x"></i></a>
                 </div>
               </div>
               <% end %>
@@ -149,11 +150,13 @@ defmodule PmLoginWeb.LiveComponent.CommentsModalLive do
               <div class="row comment__modal__footer">
 
                 <!-- Left Button -->
-                <div class="column column-10">
+
+                <!-- <div class="column column-10 col__com__footer">
                   <i class="bi bi-arrow-bar-left comment__back" phx-click="left-button-click" phx-target="#modal-<%= @id %>"></i>
-                </div>
+                </div> -->
+
                 <!-- Right Button -->
-                <div class="column column-80">
+                <div class="column column-90 col__com__footer">
                   <form phx-submit="send-comment">
                     <div class="form__wrapper">
                       <input type="text" name="com">
