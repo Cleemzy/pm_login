@@ -4,7 +4,7 @@ defmodule PmLogin.Services.Company do
 
   schema "companies" do
     field :name, :string
-
+    field :logo, :string
     timestamps()
   end
 

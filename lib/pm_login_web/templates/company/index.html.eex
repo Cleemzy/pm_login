@@ -22,6 +22,6 @@
 <% end %>
   </tbody>
 </table>
-<span><a href="<%= Routes.company_path(@conn, :new) %>" class="btn btn-lg btn-primary"><i class="bi bi-plus-circle"></i> Nouveau société</a></span>
+<span><a href="<%= Routes.company_path(@conn, :new) %>" class="btn btn-lg btn-primary"><i class="bi bi-plus-circle"></i> Nouvelle société</a></span>
 
 <!-- <span><%= link " +  Nouvelle société", to: Routes.company_path(@conn, :new),class: "btn btn-primary btn-lg" %></span> -->

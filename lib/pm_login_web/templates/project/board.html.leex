@@ -1,33 +1,46 @@
 <div role="main" class="container">
-  <p class="alert alert-info" role="alert"
+  <p class="alert alert-info basecontents" role="alert"
     phx-click="lv:clear-flash"
     phx-value-key="info"><%= live_flash(@flash, :info) %></p>
 
-  <p class="alert alert-danger" role="alert"
+  <p class="alert alert-danger basecontents" role="alert"
     phx-click="lv:clear-flash"
     phx-value-key="error"><%= live_flash(@flash, :error) %></p>
 </div>
 
 <div class="boardcontainer">
   <div class="boardheader">
-      <%= cond do %>
-      <% @is_admin -> %><h2><i class="bi bi-list-task"></i> <%= @board.project.title %></h2>
-      <% @is_contributor -> %><h2><i class="bi bi-list-task"></i> Mes tâches sur  "<%= @board.project.title %>"</h2>
-      <% true -> %><h2></h2>
-      <% end %>
-
     <div class="row">
-      <p><u><b> Description:</b></u> <%= @board.project.description %></p>
+      <div class="column column-80">
+          <div class="key__cancel" phx-window-keydown="key_cancel">
+
+          </div>
+          <%= cond do %>
+          <% @is_admin -> %><h2><i class="bi bi-list-task"></i> <%= @board.project.title %></h2>
+          <% @is_contributor -> %><h2><i class="bi bi-list-task"></i> Mes tâches sur  "<%= @board.project.title %>"</h2>
+          <% true -> %><h2></h2>
+          <% end %>
+
+        <div class="row">
+          <p><u><b> Description:</b></u> <%= @board.project.description %></p>
+        </div>
+
+        <%= if @is_admin do%>
+          <a href="#" class="btn btn-lg btn-primary" phx-click="show_task_modal"><i class="bi bi-plus-circle"></i> Nouvelle tâche</a>
+        <% end %>
+
+        <%= if @is_contributor do%>
+          <a href="#" class="btn btn-lg btn-secondary" phx-click="show-secondary"><i class="bi bi-plus-circle"></i> Créer tâche secondaire</a>
+        <% end %>
+      </div>
+      <div class="column column-20">
+        <div class="basecontents">
+          <div class="column">
+            <div class="row"><p>pour <h1 style="margin-left: 2%;"> <%= @board.project.active_client.company.name %></h1></p></div>
+          </div>
+        </div>
+      </div>
     </div>
-
-    <%= if @is_admin do%>
-      <a href="#" class="btn btn-lg btn-primary" phx-click="show_task_modal"><i class="bi bi-plus-circle"></i> Nouvelle tâche</a>
-    <% end %>
-
-    <%= if @is_contributor do%>
-      <a href="#" class="btn btn-lg btn-secondary" phx-click="show-secondary"><i class="bi bi-plus-circle"></i> Créer tâche secondaire</a>
-    <% end %>
-
   </div>
 
   <section class="board" phx-hook="Board" style="">

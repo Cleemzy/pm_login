@@ -27,6 +27,7 @@ defmodule PmLoginWeb.LiveComponent.TaskModalLive do
               <%= if @title != nil do %>
               <div class="modal-title">
                 <%= @title %>
+                <a href="#" style="position: relative; left: 30%;" title="Fermer" phx-click="left-button-click" phx-target="#modal-<%= @id %>"><i class="bi bi-x"></i></a>
               </div>
               <% end %>
 
@@ -69,7 +70,7 @@ defmodule PmLoginWeb.LiveComponent.TaskModalLive do
                       <%= error_tag f, :estimated_duration %>
                       <%= error_tag f, :negative_estimated %>
                     </div>
-                  
+
                   </div>
 
                   <!-- Buttons -->

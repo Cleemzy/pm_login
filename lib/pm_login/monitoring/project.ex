@@ -4,6 +4,7 @@ defmodule PmLogin.Monitoring.Project do
   alias PmLogin.Monitoring
   alias PmLogin.Monitoring.Task
   alias PmLogin.Kanban
+  alias PmLogin.Services.ActiveClient
 
   schema "projects" do
     field :date_end, :date
@@ -14,10 +15,11 @@ defmodule PmLogin.Monitoring.Project do
     field :performed_duration, :integer
     field :progression, :integer
     field :title, :string
-    field :active_client_id, :id
+    # field :active_client_id, :id
     field :status_id, :id
     field :board_id, :id
     has_many :tasks, Task
+    belongs_to :active_client, ActiveClient
 
     timestamps()
   end

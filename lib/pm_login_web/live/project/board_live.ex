@@ -46,6 +46,29 @@ defmodule PmLoginWeb.Project.BoardLive do
                   }
   end
 
+  def handle_event("key_cancel", %{"key" => key}, socket) do
+
+    show_task_modal = socket.assigns.show_task_modal
+    show_secondary = socket.assigns.show_secondary
+    show_plus_modal = socket.assigns.show_plus_modal
+    show_modif_modal = socket.assigns.show_modif_modal
+    show_comments_modal = socket.assigns.show_comments_modal
+
+    s_task_modal = if (key == "Escape" and show_task_modal == true) ,do: false ,else: show_task_modal
+    s_secondary = if (key == "Escape" and show_secondary == true) ,do: false ,else: show_secondary
+    s_plus_modal = if (key == "Escape" and show_plus_modal == true) ,do: false ,else: show_plus_modal
+    s_modif_modal = if (key == "Escape" and show_modif_modal == true) ,do: false ,else: show_modif_modal
+    s_comments_modal = if (key == "Escape" and show_comments_modal == true) ,do: false ,else: show_comments_modal
+
+    {:noreply, socket
+               |> assign(show_task_modal: s_task_modal,
+                          show_secondary: s_secondary,
+                          show_plus_modal: s_plus_modal,
+                          show_modif_modal: s_modif_modal,
+                          show_comments_modal: s_comments_modal)}
+  end
+
+
   def handle_event("show-secondary", %{}, socket) do
     {:noreply, socket |> assign(show_secondary: true)}
   end

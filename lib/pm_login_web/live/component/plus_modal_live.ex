@@ -28,6 +28,7 @@ defmodule PmLoginWeb.LiveComponent.PlusModalLive do
               <%= if @title != nil do %>
               <div class="modal-title" style="margin-bottom: 30px;">
                 <%= @title %>
+                <a href="#" style="position: relative; left: 40%;" title="Fermer" phx-click="left-button-click" phx-target="#modal-<%= @id %>"><i class="bi bi-x"></i></a>
               </div>
               <% end %>
 
