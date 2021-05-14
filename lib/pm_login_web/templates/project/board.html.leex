@@ -36,7 +36,7 @@
       <div class="column column-20">
         <div class="basecontents">
           <div class="column">
-            <div class="row"><p>pour <h1 style="margin-left: 2%;"> <%= @board.project.active_client.company.name %></h1></p></div>
+            <div class="row"><p>pour <h1 style="margin-left: 2%;"> <%= @board.project.active_client.company.name %></h1><img class="profile-pic-header" src="<%= Routes.static_path(@socket, "/#{@board.project.active_client.company.logo}") %>" width="50" style="margin-left: 10px;"/></p></div>
           </div>
         </div>
       </div>

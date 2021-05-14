@@ -61,7 +61,7 @@ defmodule PmLogin.Services do
   """
   def create_company(attrs \\ %{}) do
     %Company{}
-    |> Company.changeset(attrs)
+    |> Company.create_changeset(attrs)
     |> Repo.insert()
   end
 
