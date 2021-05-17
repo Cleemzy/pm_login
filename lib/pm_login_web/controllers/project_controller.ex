@@ -31,8 +31,11 @@ defmodule PmLoginWeb.ProjectController do
     if Login.is_connected?(conn) do
       cond do
         Login.is_admin?(conn) ->
-          projects = Monitoring.list_projects()
-          render(conn, "index.html", projects: projects, layout: {PmLoginWeb.LayoutView, "board_layout_live.html"})
+          LiveView.Controller.live_render(conn, PmLoginWeb.Project.IndexLive, session: %{"curr_user_id" => get_session(conn, :curr_user_id)}, router: PmLoginWeb.Router)
+
+          # BY THE OLD WAY
+          # projects = Monitoring.list_projects()
+          # render(conn, "index.html", projects: projects, layout: {PmLoginWeb.LayoutView, "board_layout_live.html"})
 
         true ->
           conn

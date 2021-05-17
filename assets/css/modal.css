@@ -10,6 +10,11 @@
   justify-content: center;
   z-index: 998;
   background-color: rgba(0, 0, 0, 0.7);
+  /* background-color: red; */
+}
+
+.outter-modal{
+  background-color: red;
 }
 
 .modal-inner-container {

@@ -18,7 +18,7 @@
     <tbody>
   <%= for project <- @projects do %>
       <tr>
-        <td><%= link "#{project.title}", to: Routes.project_path(@conn, :board, project) %></td>
+        <td><%= link "#{project.title}", to: Routes.project_path(@socket, :board, project) %></td>
         <td><%= project.description %></td>
         <td><%= project.progression %> %</td>
         <td><%= project.date_start %></td>
@@ -28,12 +28,12 @@
         <td><%= project.deadline %></td>
 
         <td>
-          <span><a href="<%= Routes.project_path(@conn, :show, project) %>"><i class="bi bi-info-circle btn btn-info btn-lg" style="font-size: 20px;"></i></a></span>
-          <span><a href="<%= Routes.project_path(@conn, :edit, project) %>"><i class="bi bi-pencil-square btn btn-warning btn-lg" style="font-size: 20px;"></i></a></span>
-          <!-- <span><%= link "Supprimer", to: Routes.project_path(@conn, :delete, project), method: :delete, data: [confirm: "Are you sure?"] %></span> -->
+          <span><a href="<%= Routes.project_path(@socket, :show, project) %>"><i class="bi bi-info-circle btn btn-info btn-lg" style="font-size: 20px;"></i></a></span>
+          <span><a href="<%= Routes.project_path(@socket, :edit, project) %>"><i class="bi bi-pencil-square btn btn-warning btn-lg" style="font-size: 20px;"></i></a></span>
+          <!-- <span><%= link "Supprimer", to: Routes.project_path(@socket, :delete, project), method: :delete, data: [confirm: "Are you sure?"] %></span> -->
         </td>
       </tr>
   <% end %>
     </tbody>
   </table>
-  <span><a href="<%= Routes.project_path(@conn, :new) %>" class="btn btn-lg btn-primary"><i class="bi bi-plus-circle"></i> Nouveau projet</a></span>
+  <span><a href="<%= Routes.project_path(@socket, :new) %>" class="btn btn-lg btn-primary"><i class="bi bi-plus-circle"></i> Nouveau projet</a></span>

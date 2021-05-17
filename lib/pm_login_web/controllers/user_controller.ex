@@ -18,9 +18,9 @@ defmodule PmLoginWeb.UserController do
           Login.is_admin?(conn) -> render(conn, "admin_index.html", current_user: Login.get_curr_user(conn), layout: {PmLoginWeb.LayoutView, "admin_layout.html"})
           Login.is_attributor?(conn) -> render(conn, "attributor_index.html", current_user: Login.get_curr_user(conn))
           Login.is_contributor?(conn) -> render(conn, "contributor_index.html", current_user: Login.get_curr_user(conn), layout: {PmLoginWeb.LayoutView, "contributor_layout.html"})
-          Login.is_client?(conn) -> render(conn, "client_index.html", current_user: Login.get_curr_user(conn))
+          Login.is_client?(conn) -> render(conn, "client_index.html", current_user: Login.get_curr_user(conn), layout: {PmLoginWeb.LayoutView, "client_layout.html"})
           Login.is_not_attributed?(conn) -> render(conn, "unattributed_index.html", current_user: Login.get_curr_user(conn))
-          Login.is_archived?(conn) -> conn |> put_flash(:error, "Votre compte a été archivé!") |> redirect(to: Routes.page_path(conn, :index))
+          Login.is_archived?(conn) -> conn |> put_flash(:error, "Votre compte a été archivé!")|> delete_session(:curr_user_id) |>redirect(to: Routes.page_path(conn, :index))
           true -> redirect(conn, to: Routes.page_path(conn, :index))
         end
 
@@ -80,6 +80,7 @@ defmodule PmLoginWeb.UserController do
       case user.right_id do
         1 -> render(conn, "show.html", user: user, layout: {PmLoginWeb.LayoutView, "admin_layout.html"})
         3 -> render(conn, "show.html", user: user, layout: {PmLoginWeb.LayoutView, "contributor_layout.html"})
+        4 -> render(conn, "show.html", user: user, layout: {PmLoginWeb.LayoutView, "client_layout.html"})
         _ -> render(conn, "show.html", user: user)
       end
 
@@ -97,6 +98,7 @@ defmodule PmLoginWeb.UserController do
       changeset = Login.change_user(user)
       cond do
           Login.is_admin?(conn) -> render(conn, "edit_profile.html", user: user, changeset: changeset, layout: {PmLoginWeb.LayoutView, "admin_layout.html"})
+          Login.is_client?(conn) -> render(conn, "edit_profile.html", user: user, changeset: changeset, layout: {PmLoginWeb.LayoutView, "client_layout.html"})
           true -> render(conn, "edit_profile.html", user: user, changeset: changeset)
       end
 

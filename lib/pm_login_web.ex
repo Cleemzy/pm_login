@@ -42,6 +42,15 @@ defmodule PmLoginWeb do
     end
   end
 
+  def live_view do
+    quote do
+      use Phoenix.LiveView,
+        layout: {PmLoginWeb.LayoutView, "live.html"}
+
+      unquote(view_helpers())
+    end
+  end
+
   def router do
     quote do
       use Phoenix.Router
