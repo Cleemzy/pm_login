@@ -38,6 +38,7 @@ COMMENTED ROUTES ARE NOT TO BE DELETED BUT JUST NOT USED AT THE TIME
 
     #Services context
     resources "/companies", CompanyController
+    # resources "/notifications", NotificationController
     # resources "/editors", EditorController
     # resources "/softwares", SoftwareController
     # resources "/licenses", LicenseController

@@ -9,6 +9,7 @@ defmodule PmLoginWeb.Project.BoardLive do
   alias PmLogin.Monitoring.{Task, Priority}
   alias PmLogin.Login
   alias PmLogin.Login.User
+  alias PmLogin.Services
 
 
   def mount(_params,%{"curr_user_id" => curr_user_id ,"pro_id" => pro_id}, socket) do
@@ -42,8 +43,22 @@ defmodule PmLoginWeb.Project.BoardLive do
     {:ok, socket |> assign(is_admin: Monitoring.is_admin?(curr_user_id), show_plus_modal: false,curr_user_id: curr_user_id, pro_id: pro_id, show_secondary: false,
                     contributors: list_contributors, priorities: list_priorities, board: Kanban.get_board!(project.board_id), show_task_modal: false, show_modif_modal: false,
                     primaries: list_primaries, is_contributor: Monitoring.is_contributor?(curr_user_id),task_changeset: task_changeset, modif_changeset: modif_changeset, show_comments_modal: false,
-                    secondary_changeset: secondary_changeset), layout: layout
+                    show_notif: false, notifs: Services.list_my_notifications(curr_user_id), secondary_changeset: secondary_changeset), layout: layout
                   }
+  end
+
+  def handle_event("switch-notif", %{}, socket) do
+    curr_user_id = socket.assigns.curr_user_id
+    switch = if socket.assigns.show_notif do
+              ids = socket.assigns.notifs
+                    |> Enum.filter(fn(x) -> !(x.seen) end)
+                    |> Enum.map(fn(x) -> x.id  end)
+              Services.put_seen_some_notifs(ids)
+                false
+              else
+                true
+             end
+    {:noreply, socket |> assign(show_notif: switch, notifs: Services.list_my_notifications(curr_user_id))}
   end
 
   def handle_event("key_cancel", %{"key" => key}, socket) do
@@ -68,10 +83,7 @@ defmodule PmLoginWeb.Project.BoardLive do
                           show_comments_modal: s_comments_modal)}
   end
 
-  def handle_event("switch-notif", %{}, socket) do
-    IO.puts "switched"
-    {:noreply, socket}
-  end
+
 
   def handle_event("show-secondary", %{}, socket) do
     {:noreply, socket |> assign(show_secondary: true)}

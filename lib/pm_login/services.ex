@@ -709,4 +709,139 @@ defmodule PmLogin.Services do
   def change_clients_request(%ClientsRequest{} = clients_request, attrs \\ %{}) do
     ClientsRequest.changeset(clients_request, attrs)
   end
+
+  alias PmLogin.Services.Notification
+
+  @doc """
+  Returns the list of notifications.
+
+  ## Examples
+
+      iex> list_notifications()
+      [%Notification{}, ...]
+
+  """
+  def list_notifications do
+    Repo.all(Notification)
+  end
+
+  def list_my_notifications(id) do
+    query = from n in Notification,
+            where: n.receiver_id == ^id,
+            order_by: n.inserted_at
+    Repo.all(query)
+  end
+
+  def list_my_unseen_notifications(id) do
+    query = from n in Notification,
+            where: n.receiver_id == ^id and not n.seen,
+            order_by: n.inserted_at
+    Repo.all(query)
+  end
+  @doc """
+  Gets a single notification.
+
+  Raises `Ecto.NoResultsError` if the Notification does not exist.
+
+  ## Examples
+
+      iex> get_notification!(123)
+      %Notification{}
+
+      iex> get_notification!(456)
+      ** (Ecto.NoResultsError)
+
+  """
+  def get_notification!(id), do: Repo.get!(Notification, id)
+
+  @doc """
+  Creates a notification.
+
+  ## Examples
+
+      iex> create_notification(%{field: value})
+      {:ok, %Notification{}}
+
+      iex> create_notification(%{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+
+  def put_seen_some_notifs(ids) do
+    query = from n in Notification,
+            where: n.id in ^ids
+    Repo.update_all(query, set: [seen: true])
+  end
+
+  def create_notification(attrs \\ %{}) do
+    %Notification{}
+    |> Notification.changeset(attrs)
+    |> Repo.insert()
+  end
+
+  def send_notification(attrs \\ %{}) do
+    %Notification{}
+    |> Notification.create_changeset(attrs)
+    |> Repo.insert()
+  end
+
+  @doc """
+  Updates a notification.
+
+  ## Examples
+
+      iex> update_notification(notification, %{field: new_value})
+      {:ok, %Notification{}}
+
+      iex> update_notification(notification, %{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def update_notification(%Notification{} = notification, attrs) do
+    notification
+    |> Notification.changeset(attrs)
+    |> Repo.update()
+  end
+
+  def put_seen_notification(%Notification{} = notification, attrs \\ %{}) do
+    notification
+    |> Notification.seen_changeset(attrs)
+    |> Repo.update()
+  end
+
+  #SEEN NOTIF TO FALSE
+  def put_unseen_notification(%Notification{} = notification, attrs \\ %{}) do
+    notification
+    |> Notification.unseen_changeset(attrs)
+    |> Repo.update()
+  end
+
+  @doc """
+  Deletes a notification.
+
+  ## Examples
+
+      iex> delete_notification(notification)
+      {:ok, %Notification{}}
+
+      iex> delete_notification(notification)
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def delete_notification(%Notification{} = notification) do
+    Repo.delete(notification)
+  end
+
+  @doc """
+  Returns an `%Ecto.Changeset{}` for tracking notification changes.
+
+  ## Examples
+
+      iex> change_notification(notification)
+      %Ecto.Changeset{data: %Notification{}}
+
+  """
+  def change_notification(%Notification{} = notification, attrs \\ %{}) do
+    Notification.changeset(notification, attrs)
+  end
 end

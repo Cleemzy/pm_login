@@ -7,6 +7,11 @@ defmodule PmLoginWeb.Project.IndexLive do
     {:ok, socket |> assign(projects: Monitoring.list_projects(), curr_user_id: curr_user_id), layout: {PmLoginWeb.LayoutView, "board_layout_live.html"}}
   end
 
+  def handle_event("switch-notif", %{}, socket) do
+    IO.puts "switched"
+    {:noreply, socket}
+  end
+  
   def render(assigns) do
     ProjectView.render("index.html", assigns)
   end
