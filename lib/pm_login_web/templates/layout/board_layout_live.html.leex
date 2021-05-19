@@ -39,7 +39,11 @@
                 <a href="#" title="Notifications" phx-click="switch-notif"><i class="bi bi-bell-fill notification-icon"></i><span class="notification-span" style="background-color: <%= if (@notifs |> Enum.count(fn(x) -> !(x.seen) end)) == 0 do "transparent" end %> !important;"><b class="notification-nb"><%= @notifs |> Enum.count(fn(x) -> !(x.seen) end) %></b></span></a>
                 <div class="dropdown-notif basecontents" style="display: <%= if @show_notif, do: "block", else: "none" %>;">
                 <%= for notif <- @notifs do %>
-                  <a href="#" class="basecontents" style="background-color: <%= if not notif.seen, do: "lightgray" %> ; margin-bottom: 5px;"><%= notif.content %></a>
+                  <a href="#" class="basecontents notif-link" style="background-color: <%= if not notif.seen, do: "lightgray" %> ;">
+                    <img class="profile-pic-notif" src="<%= Routes.static_path(@socket, "/#{PmLogin.Login.get_profile_picture(notif.sender_id) }") %>" width="20"/>
+                    <p class="notif-text"><%= notif.content %></p>
+                    <i class="notif-date">Date</i>
+                  </a>
                 <% end %>
                 </div>
               </div>
@@ -54,7 +58,7 @@
     </header>
 
 
-    <main id="main" role="main" class="boardcontainer">
+    <main id="main" role="main" class="boardcontainer" phx-click="cancel-notif">
       <div class="container">
         <p class="alert alert-info basecontents" role="alert"
           phx-click="lv:clear-flash"

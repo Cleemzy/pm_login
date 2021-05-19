@@ -738,6 +738,13 @@ defmodule PmLogin.Services do
             order_by: n.inserted_at
     Repo.all(query)
   end
+
+  def time_ago(%Notification{} = n) do
+    IO.puts NaiveDateTime.utc_now
+    IO.puts n.inserted_at
+    NaiveDateTime.diff(NaiveDateTime.utc_now, n.inserted_at)
+  end
+
   @doc """
   Gets a single notification.
 

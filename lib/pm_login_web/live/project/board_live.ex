@@ -61,6 +61,11 @@ defmodule PmLoginWeb.Project.BoardLive do
     {:noreply, socket |> assign(show_notif: switch, notifs: Services.list_my_notifications(curr_user_id))}
   end
 
+  def handle_event("cancel-notif", %{}, socket) do
+    cancel = if socket.assigns.show_notif, do: false
+    {:noreply, socket |> assign(show_notif: cancel)}
+  end
+
   def handle_event("key_cancel", %{"key" => key}, socket) do
 
     show_task_modal = socket.assigns.show_task_modal
