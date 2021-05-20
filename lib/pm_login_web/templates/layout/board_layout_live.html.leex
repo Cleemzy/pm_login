@@ -39,11 +39,16 @@
                 <a href="#" title="Notifications" phx-click="switch-notif"><i class="bi bi-bell-fill notification-icon"></i><span class="notification-span" style="background-color: <%= if (@notifs |> Enum.count(fn(x) -> !(x.seen) end)) == 0 do "transparent" end %> !important;"><b class="notification-nb"><%= @notifs |> Enum.count(fn(x) -> !(x.seen) end) %></b></span></a>
                 <div class="dropdown-notif basecontents" style="display: <%= if @show_notif, do: "block", else: "none" %>;">
                 <%= for notif <- @notifs do %>
-                  <a href="#" class="basecontents notif-link" style="background-color: <%= if not notif.seen, do: "lightgray" %> ;">
-                    <img class="profile-pic-notif" src="<%= Routes.static_path(@socket, "/#{PmLogin.Login.get_profile_picture(notif.sender_id) }") %>" width="20"/>
-                    <p class="notif-text"><%= notif.content %></p>
-                    <i class="notif-date">Date</i>
-                  </a>
+                  <div class="row notif-link basecontents" style="background-color: <%= if not notif.seen, do: "lightgray" %> ;">
+                    <div class="column column-10">
+                      <img class="profile-pic-notif" src="<%= Routes.static_path(@socket, "/#{PmLogin.Login.get_profile_picture(notif.sender_id) }") %>" width="20"/>
+                    </div>
+                    <div class="column" style="width: 150px;">
+                      <p class="notif-text"><%= notif.content %></p>
+                      <br/>
+                      <i class="notif-date">il y a <%= PmLogin.Services.time_ago notif %></i>
+                    </div>
+                  </div>
                 <% end %>
                 </div>
               </div>

@@ -15,7 +15,7 @@ defmodule PmLoginWeb.Project.BoardLive do
   def mount(_params,%{"curr_user_id" => curr_user_id ,"pro_id" => pro_id}, socket) do
     if connected?(socket), do: Kanban.subscribe()
     Monitoring.subscribe()
-
+    Services.subscribe()
     layout = if Monitoring.is_admin?(curr_user_id) do
       {PmLoginWeb.LayoutView, "board_layout_live.html"}
     else
@@ -152,7 +152,19 @@ defmodule PmLoginWeb.Project.BoardLive do
           Monitoring.substract_progression_to_project(project)
         end
 
-        {:noreply, socket |> put_flash(:info, "Tâche #{Monitoring.get_task_with_status!(real_task.id).title} mise dans \" #{Monitoring.get_task_with_status!(real_task.id).status.title} \" ") |> assign(:board, this_board)}
+        #IF TASK IS UPTADET ON THE SAME STAGE
+        post_socket = if Kanban.get_stage!(card.stage_id).status_id == real_task.status_id do
+
+          socket
+        else
+          curr_user_id = socket.assigns.curr_user_id
+          Services.send_notifs_to_admins_and_attributors(curr_user_id, "Tâche \"#{Monitoring.get_task_with_status!(real_task.id).title}\"
+          du projet #{socket.assigns.board.project.title} mise dans \" #{Monitoring.get_task_with_status!(real_task.id).status.title} \" par #{Login.get_user!(curr_user_id).username}")
+
+          socket |> put_flash(:info, "Tâche \"#{Monitoring.get_task_with_status!(real_task.id).title}\" mise dans \" #{Monitoring.get_task_with_status!(real_task.id).status.title} \" ")
+        end
+
+        {:noreply, post_socket |> assign(:board, this_board)}
         # {:noreply, update(socket, :board, fn _ -> Kanban.get_board!() end)}
 
       {:error, changeset} ->
@@ -172,6 +184,11 @@ defmodule PmLoginWeb.Project.BoardLive do
   #       {:noreply, {:error, %{message: changeset.message}, socket}}
   #   end
   # end
+
+  def handle_info({Services, [:notifs, :sent], _}, socket) do
+    curr_user_id = socket.assigns.curr_user_id
+    {:noreply, socket |> assign(notifs: Services.list_my_notifications(curr_user_id))}
+  end
 
   def handle_info({Monitoring, [:comment, :posted], _}, socket) do
     card_id = socket.assigns.card_with_comments.id

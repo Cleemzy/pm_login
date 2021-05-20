@@ -68,13 +68,14 @@
   /* display: none; */
   overflow: scroll;
   position: absolute;
-  left: -100px;
+  left: -150px;
   /* background-color: #f1f1f1; */
   /* height: 300px; */
   max-height: 400px;
   background-color: white;
-  min-width: 200px;
+  max-width: 300px;
   box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  width: 250px;
   z-index: 1;
 }
 
@@ -84,15 +85,28 @@
 }
 
 .notif-link{
-
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  text-align: right;
   margin-bottom: 5px;
+  /* background-color: red; */
 }
 
-.notif-text{
+.notif-link p{
+  /* overflow-wrap: break-word; */
+  word-wrap: break-word;
   font-size: 11px;
 }
 
+.notif-text{
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  font-size: 11px;
+  /* background-color: black; */
+}
+
 .notif-date{
+  word-wrap: break-word;
   font-size: 11px;
 }
 

@@ -8,7 +8,7 @@ defmodule PmLogin.Services do
 
   alias PmLogin.Services.Company
   alias PmLogin.Login.User
-
+  alias PmLogin.Login
 
   @topic inspect(__MODULE__)
   def subscribe do
@@ -18,6 +18,12 @@ defmodule PmLogin.Services do
   defp broadcast_change({:ok, result}, event) do
     Phoenix.PubSub.broadcast(PmLogin.PubSub, @topic, {__MODULE__, event, result})
   end
+
+  defp broadcast_notifs({nbs, nil}, event) do
+    Phoenix.PubSub.broadcast(PmLogin.PubSub, @topic, {__MODULE__, event, nbs})
+  end
+
+
   @doc """
   Returns the list of companies.
 
@@ -728,7 +734,7 @@ defmodule PmLogin.Services do
   def list_my_notifications(id) do
     query = from n in Notification,
             where: n.receiver_id == ^id,
-            order_by: n.inserted_at
+            order_by: [desc: n.inserted_at]
     Repo.all(query)
   end
 
@@ -740,9 +746,16 @@ defmodule PmLogin.Services do
   end
 
   def time_ago(%Notification{} = n) do
-    IO.puts NaiveDateTime.utc_now
-    IO.puts n.inserted_at
-    NaiveDateTime.diff(NaiveDateTime.utc_now, n.inserted_at)
+    seconds_ago = NaiveDateTime.diff(NaiveDateTime.utc_now, n.inserted_at)
+    # IO.puts seconds_ago
+    cond do
+      seconds_ago > 59 and seconds_ago < 3600 -> "#{trunc(seconds_ago / 60)} minute(s)"
+      seconds_ago > 3599 and seconds_ago < 86400 -> "#{trunc(seconds_ago / 3600)} heure(s)"
+      seconds_ago > 86399 and seconds_ago < 2592000 -> "#{trunc(seconds_ago / 86400)} jour(s)"
+      seconds_ago > 2591999 and seconds_ago < 31104000 -> "#{trunc(seconds_ago / 2592000)} mois"
+      seconds_ago > 31103999 -> "#{trunc(seconds_ago / 31104000)} an(s)"
+      true -> "#{seconds_ago} secondes"
+    end
   end
 
   @doc """
@@ -785,6 +798,21 @@ defmodule PmLogin.Services do
     |> Notification.changeset(attrs)
     |> Repo.insert()
   end
+
+  def send_notifs_to_admins_and_attributors(curr_user_id, content) do
+    notifs = Login.list_admins_and_attributors(curr_user_id)
+    |> Enum.map(fn id ->
+       [sender_id: curr_user_id, content: content,
+       receiver_id: id, seen: false,
+       inserted_at: (NaiveDateTime.utc_now)|>NaiveDateTime.truncate(:second),
+       updated_at: (NaiveDateTime.utc_now)|>NaiveDateTime.truncate(:second)]
+     end)
+
+    Repo.insert_all(Notification, notifs)
+    |> broadcast_notifs([:notifs, :sent])
+  end
+
+
 
   def send_notification(attrs \\ %{}) do
     %Notification{}
