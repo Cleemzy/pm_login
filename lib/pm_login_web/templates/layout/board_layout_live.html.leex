@@ -44,8 +44,8 @@
                       <img class="profile-pic-notif" src="<%= Routes.static_path(@socket, "/#{PmLogin.Login.get_profile_picture(notif.sender_id) }") %>" width="20"/>
                     </div>
                     <div class="column" style="width: 150px;">
-                      <p class="notif-text"><%= notif.content %></p>
-                      <br/>
+                      <b class="notif-text"><%= notif.content %></b>
+                      <br/><br/>
                       <i class="notif-date">il y a <%= PmLogin.Services.time_ago notif %></i>
                     </div>
                   </div>

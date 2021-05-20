@@ -73,10 +73,10 @@
   /* height: 300px; */
   max-height: 400px;
   background-color: white;
-  max-width: 300px;
+
   box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-  width: 250px;
   z-index: 1;
+  /* background-color: red; */
 }
 
 .dropdown-notif a:hover {
@@ -85,23 +85,30 @@
 }
 
 .notif-link{
-  overflow-wrap: break-word;
-  word-wrap: break-word;
+  width: 200px;
+  max-width: 200px;
   text-align: right;
   margin-bottom: 5px;
-  /* background-color: red; */
+  color: blue;
+  /* background-color: blue; */
 }
 
-.notif-link p{
-  /* overflow-wrap: break-word; */
-  word-wrap: break-word;
-  font-size: 11px;
+.notif-link:hover{
+  background-color: lightgray;
 }
 
-.notif-text{
+/* .notif-link p{
   overflow-wrap: break-word;
   word-wrap: break-word;
   font-size: 11px;
+} */
+
+.notif-text{
+  white-space:normal;
+  text-align: left;
+  font-size: 11px;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
   /* background-color: black; */
 }
 
