@@ -738,6 +738,14 @@ defmodule PmLogin.Services do
     Repo.all(query)
   end
 
+  def list_my_notifications_with_limit(id, limit) do
+    query = from n in Notification,
+            where: n.receiver_id == ^id,
+            order_by: [desc: n.inserted_at],
+            limit: ^limit
+    Repo.all(query)
+  end
+
   def list_my_unseen_notifications(id) do
     query = from n in Notification,
             where: n.receiver_id == ^id and not n.seen,

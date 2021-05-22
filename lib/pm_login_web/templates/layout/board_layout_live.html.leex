@@ -36,8 +36,18 @@
             <li class="nav__item"><a href="<%= Routes.user_path(@socket, :index) %>"><i class="bi bi-house-fill"></i> Accueil</a></li>
             <li class="nav__item">
               <div class="dropdown">
-                <a href="#" title="Notifications" phx-click="switch-notif"><i class="bi bi-bell-fill notification-icon"></i><span class="notification-span" style="background-color: <%= if (@notifs |> Enum.count(fn(x) -> !(x.seen) end)) == 0 do "transparent" end %> !important;"><b class="notification-nb"><%= @notifs |> Enum.count(fn(x) -> !(x.seen) end) %></b></span></a>
+                <% unseens = PmLogin.Services.list_my_notifications(@curr_user_id)
+                |> Enum.count(fn(x) -> !(x.seen) end) %>
+                <a href="#" title="Notifications" phx-click="switch-notif"><i class="bi bi-bell-fill notification-icon"></i><span class="notification-span" style="background-color: <%= if unseens == 0 do "transparent" end %> !important;"><b class="notification-nb" style="position: relative; left:<%= if unseens > 9 do "1px !important" end %>;"><%=
+                  if unseens < 10 do
+                    unseens
+                  else
+                    "9+"
+                  end
+                  %></b></span></a>
+
                 <div class="dropdown-notif basecontents" style="display: <%= if @show_notif, do: "block", else: "none" %>;">
+                <a href="#" title="charger notifications" class="basecontents" style="text-align: center;" phx-click="load-notifs"><i class="bi bi-arrow-clockwise"></i></a>
                 <%= for notif <- @notifs do %>
                   <div class="row notif-link basecontents" style="background-color: <%= if not notif.seen, do: "lightgray" %> ;">
                     <div class="column column-10">

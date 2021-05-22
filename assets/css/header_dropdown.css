@@ -41,25 +41,26 @@
 /* NOTIFICATIONS */
 .notification-icon{
   position: relative;
-  top: -3px;
+  top: -5px;
 }
 
 .notification-span{
   display: inline-block;
   position: relative;
-  top: -5px;
+  top: -7px;
   left: -5px;
   border-radius: 999px;
   background-color: red;
-  width: 12px;
-  height: 12px;
+  width: 14px;
+  height: 14px;
   font-size: 12px;
   color: white;
   margin-top: 10px;
 }
 
 .notification-nb{
-  position: relative;
+  /* position: relative; */
+  text-align: center;
   left: -3px;
   top: -3px;
 }
@@ -87,7 +88,7 @@
 .notif-link{
   width: 200px;
   max-width: 200px;
-  text-align: right;
+  text-align: left;
   margin-bottom: 5px;
   color: blue;
   /* background-color: blue; */
@@ -107,6 +108,7 @@
   white-space:normal;
   text-align: left;
   font-size: 11px;
+  margin-left: 5px;
   word-wrap: break-word;
   overflow-wrap: break-word;
   /* background-color: black; */
@@ -115,6 +117,7 @@
 .notif-date{
   word-wrap: break-word;
   font-size: 11px;
+  float: right;
 }
 
 .profile-pic-notif{

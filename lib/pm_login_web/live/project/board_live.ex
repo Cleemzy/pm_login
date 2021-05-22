@@ -43,11 +43,12 @@ defmodule PmLoginWeb.Project.BoardLive do
     {:ok, socket |> assign(is_admin: Monitoring.is_admin?(curr_user_id), show_plus_modal: false,curr_user_id: curr_user_id, pro_id: pro_id, show_secondary: false,
                     contributors: list_contributors, priorities: list_priorities, board: Kanban.get_board!(project.board_id), show_task_modal: false, show_modif_modal: false,
                     primaries: list_primaries, is_contributor: Monitoring.is_contributor?(curr_user_id),task_changeset: task_changeset, modif_changeset: modif_changeset, show_comments_modal: false,
-                    show_notif: false, notifs: Services.list_my_notifications(curr_user_id), secondary_changeset: secondary_changeset), layout: layout
+                    show_notif: false, notifs: Services.list_my_notifications_with_limit(curr_user_id, 4), secondary_changeset: secondary_changeset), layout: layout
                   }
   end
 
   def handle_event("switch-notif", %{}, socket) do
+    notifs_length = socket.assigns.notifs |> length
     curr_user_id = socket.assigns.curr_user_id
     switch = if socket.assigns.show_notif do
               ids = socket.assigns.notifs
@@ -58,7 +59,13 @@ defmodule PmLoginWeb.Project.BoardLive do
               else
                 true
              end
-    {:noreply, socket |> assign(show_notif: switch, notifs: Services.list_my_notifications(curr_user_id))}
+    {:noreply, socket |> assign(show_notif: switch, notifs: Services.list_my_notifications_with_limit(curr_user_id, notifs_length))}
+  end
+
+  def handle_event("load-notifs", %{}, socket) do
+    curr_user_id = socket.assigns.curr_user_id
+    notifs_length = socket.assigns.notifs |> length
+    {:noreply, socket |> assign(notifs: Services.list_my_notifications_with_limit(curr_user_id, notifs_length+4))}
   end
 
   def handle_event("cancel-notif", %{}, socket) do
