@@ -60,9 +60,10 @@
 
 .notification-nb{
   /* position: relative; */
+  /* font-size: 10px; */
   text-align: center;
-  left: -3px;
-  top: -3px;
+  left: -4px;
+  top: -2px;
 }
 
 .dropdown-notif {

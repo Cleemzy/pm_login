@@ -72,6 +72,7 @@ end
   def create(conn, %{"project" => project_params}) do
     case Monitoring.create_project(project_params) do
       {:ok, project} ->
+        Services.send_notifs_to_admins_and_attributors(Login.get_curr_user_id(conn), "Un projet du nom de #{project.title} a été crée par #{Login.get_curr_user(conn).username}")
         conn
         |> put_flash(:info, "Projet #{Monitoring.get_project!(project.id).title} crée avec succès")
         |> redirect(to: Routes.project_path(conn, :board, project))
@@ -131,6 +132,7 @@ end
 
     case Monitoring.update_project(project, project_params) do
       {:ok, project} ->
+        Services.send_notifs_to_admins_and_attributors(Login.get_curr_user_id(conn), "Le projet \"#{project.title}\" a été mise à jour par #{Login.get_curr_user(conn).username}")
         conn
         |> put_flash(:info, "Project updated successfully.")
         |> redirect(to: Routes.project_path(conn, :show, project))

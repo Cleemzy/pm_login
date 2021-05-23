@@ -194,7 +194,8 @@ defmodule PmLoginWeb.Project.BoardLive do
 
   def handle_info({Services, [:notifs, :sent], _}, socket) do
     curr_user_id = socket.assigns.curr_user_id
-    {:noreply, socket |> assign(notifs: Services.list_my_notifications(curr_user_id))}
+    length = socket.assigns.notifs |> length
+    {:noreply, socket |> assign(notifs: Services.list_my_notifications_with_limit(curr_user_id, length))}
   end
 
   def handle_info({Monitoring, [:comment, :posted], _}, socket) do
@@ -321,6 +322,8 @@ defmodule PmLoginWeb.Project.BoardLive do
         this_board = socket.assigns.board
         [head | _] = this_board.stages
         Kanban.create_card(%{name: task.title, stage_id: head.id ,task_id: task.id})
+        #NOTIFY ATTRIBUTOR THAT A SECONDARY TASK HAS BEEN CREATED
+        Services.send_notif_to_one(task.contributor_id, task.attributor_id, "Une tâche fille de votre tâche primaire #{Monitoring.get_task!(task.parent_id).title} du nom de #{task.title} a été créee par #{Login.get_user!(task.contributor_id).username} dans le projet #{this_board.project.title}")
         {:noreply, socket
         |> put_flash(:info, "La tâche secondaire #{Monitoring.get_task!(task.id).title} a bien été créee")
         |> assign(show_secondary: false)}
@@ -342,6 +345,9 @@ defmodule PmLoginWeb.Project.BoardLive do
 
         [head | _] = this_board.stages
         Kanban.create_card(%{name: task.title, stage_id: head.id ,task_id: task.id})
+        #SEND NEW TASK NOTIFICATION TO ADMINS AND ATTRIBUTORS
+        curr_user_id = socket.assigns.curr_user_id
+        Services.send_notifs_to_admins_and_attributors(curr_user_id,"Tâche nouvellement créee du nom de #{task.title} par #{Login.get_user!(curr_user_id).username} dans le projet #{this_project.title}.")
         {:noreply, socket
         |> put_flash(:info, "La tâche #{Monitoring.get_task!(task.id).title} a bien été créee")
         |> assign(show_task_modal: false)}

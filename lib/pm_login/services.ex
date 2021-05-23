@@ -23,6 +23,10 @@ defmodule PmLogin.Services do
     Phoenix.PubSub.broadcast(PmLogin.PubSub, @topic, {__MODULE__, event, nbs})
   end
 
+  defp broadcast_notif({:ok, result}, event) do
+    Phoenix.PubSub.broadcast(PmLogin.PubSub, @topic, {__MODULE__, event, result})
+  end
+
 
   @doc """
   Returns the list of companies.
@@ -807,6 +811,11 @@ defmodule PmLogin.Services do
     |> Repo.insert()
   end
 
+  def send_notif_to_one(sender_id, receiver_id, content) do
+  %{"content" => content, "seen" => false, "sender_id" => sender_id, "receiver_id" => receiver_id}
+  |> send_notification
+  end
+
   def send_notifs_to_admins_and_attributors(curr_user_id, content) do
     notifs = Login.list_admins_and_attributors(curr_user_id)
     |> Enum.map(fn id ->
@@ -826,6 +835,7 @@ defmodule PmLogin.Services do
     %Notification{}
     |> Notification.create_changeset(attrs)
     |> Repo.insert()
+    |> broadcast_notif([:notifs, :sent])
   end
 
   @doc """
