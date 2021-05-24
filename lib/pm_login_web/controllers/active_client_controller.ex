@@ -13,7 +13,8 @@ defmodule PmLoginWeb.ActiveClientController do
       cond do
         Login.is_admin?(conn) ->
             active_clients = Services.list_active_clients()
-            render(conn, "index.html", active_clients: active_clients, layout: {PmLoginWeb.LayoutView, "admin_layout.html"})
+            # render(conn, "index.html", active_clients: active_clients, layout: {PmLoginWeb.LayoutView, "admin_layout.html"})
+            LiveView.Controller.live_render(conn, PmLogin.ActiveClient.IndexLive, session: %{"active_clients" => active_clients, "curr_user_id" => get_session(conn, :curr_user_id)}, router: PmLoginWeb.Router)
 
         true ->
           conn

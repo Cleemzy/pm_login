@@ -18,7 +18,7 @@
     <%= error_tag f, :email %>
   </div>
   <div id="pic-sqr" class="col-6 col40">
-    <img class="profile-pic-edit" src="<%= Routes.static_path(@conn, "/#{@user.profile_picture}") %>" />
+    <img class="profile-pic-edit" src="<%= Routes.static_path(@socket, "/#{@user.profile_picture}") %>" />
   </div>
 </div>
 

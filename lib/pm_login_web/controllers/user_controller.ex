@@ -15,7 +15,8 @@ defmodule PmLoginWeb.UserController do
     if Login.is_connected?(conn) do
       # current_user = Login.get_user!(current_id)
         cond do
-          Login.is_admin?(conn) -> render(conn, "admin_index.html", current_user: Login.get_curr_user(conn), layout: {PmLoginWeb.LayoutView, "admin_layout.html"})
+          # Login.is_admin?(conn) -> render(conn, "admin_index.html", current_user: Login.get_curr_user(conn), layout: {PmLoginWeb.LayoutView, "admin_layout.html"})
+          Login.is_admin?(conn) -> LiveView.Controller.live_render(conn, PmLoginWeb.User.AdminIndexLive, session: %{"current_user" => Login.get_curr_user(conn),"curr_user_id" => Login.get_curr_user(conn).id}, router: PmLoginWeb.Router)
           Login.is_attributor?(conn) -> render(conn, "attributor_index.html", current_user: Login.get_curr_user(conn))
           Login.is_contributor?(conn) -> render(conn, "contributor_index.html", current_user: Login.get_curr_user(conn), layout: {PmLoginWeb.LayoutView, "contributor_layout.html"})
           Login.is_client?(conn) -> render(conn, "client_index.html", current_user: Login.get_curr_user(conn), layout: {PmLoginWeb.LayoutView, "client_layout.html"})
@@ -78,7 +79,8 @@ defmodule PmLoginWeb.UserController do
     if Login.is_connected?(conn) do
       user = Login.get_curr_user_id(conn) |> Login.get_auth!
       case user.right_id do
-        1 -> render(conn, "show.html", user: user, layout: {PmLoginWeb.LayoutView, "admin_layout.html"})
+        # 1 -> render(conn, "show.html", user: user, layout: {PmLoginWeb.LayoutView, "admin_layout.html"})
+        1 -> LiveView.Controller.live_render(conn, PmLoginWeb.User.AdminProfileLive, session: %{"user" => user,"curr_user_id" => get_session(conn, :curr_user_id)}, router: PmLoginWeb.Router)
         3 -> render(conn, "show.html", user: user, layout: {PmLoginWeb.LayoutView, "contributor_layout.html"})
         4 -> render(conn, "show.html", user: user, layout: {PmLoginWeb.LayoutView, "client_layout.html"})
         _ -> render(conn, "show.html", user: user)
@@ -97,7 +99,8 @@ defmodule PmLoginWeb.UserController do
       user = Login.get_curr_user(conn)
       changeset = Login.change_user(user)
       cond do
-          Login.is_admin?(conn) -> render(conn, "edit_profile.html", user: user, changeset: changeset, layout: {PmLoginWeb.LayoutView, "admin_layout.html"})
+          # Login.is_admin?(conn) -> render(conn, "edit_profile.html", user: user, changeset: changeset, layout: {PmLoginWeb.LayoutView, "admin_layout.html"})
+          Login.is_admin?(conn) -> LiveView.Controller.live_render(conn, PmLoginWeb.User.AdminEditprofileLive, session: %{"user" => user,"changeset" => changeset,"curr_user_id" => get_session(conn, :curr_user_id)}, router: PmLoginWeb.Router)
           Login.is_client?(conn) -> render(conn, "edit_profile.html", user: user, changeset: changeset, layout: {PmLoginWeb.LayoutView, "client_layout.html"})
           true -> render(conn, "edit_profile.html", user: user, changeset: changeset)
       end
@@ -123,10 +126,12 @@ defmodule PmLoginWeb.UserController do
       user = Login.get_user!(id)
       cond do
          Login.is_admin?(conn) ->
-           changeset = Login.change_user(user)
-           rights = Login.list_rights_without_archived
-           str_rights = Enum.map(rights, fn (%Right{} = r)  -> {String.to_atom(r.title), r.id} end)
-           render(conn, "edit.html", user: user, changeset: changeset, rights: rights, str_rights: str_rights, layout: {PmLoginWeb.LayoutView, "admin_layout.html"})
+           # changeset = Login.change_user(user)
+           # rights = Login.list_rights_without_archived
+           # str_rights = Enum.map(rights, fn (%Right{} = r)  -> {String.to_atom(r.title), r.id} end)
+           # render(conn, "edit.html", user: user, changeset: changeset, rights: rights, str_rights: str_rights, layout: {PmLoginWeb.LayoutView, "admin_layout.html"})
+           LiveView.Controller.live_render(conn, PmLoginWeb.User.EditLive, session: %{"user" => user,"curr_user_id" => get_session(conn, :curr_user_id)}, router: PmLoginWeb.Router)
+
          true ->
          conn
          |> put_flash(:error, "Vous n'êtes pas administrateur!")

@@ -11,6 +11,6 @@
 </ul>
 
 <%= if @right.id not in undeletable_rights do %>
-  <span><%= link "Modifier", to: Routes.right_path(@conn, :edit, @right) %></span>
+  <span><%= link "Modifier", to: Routes.right_path(@socket, :edit, @right) %></span>
 <% end %>
-<span><a href="<%= Routes.right_path(@conn, :index) %>" class="btn btn-lg btn-secondary"><i class="bi bi-arrow-bar-left"></i> Retour</a></span>
+<span><a href="<%= Routes.right_path(@socket, :index) %>" class="btn btn-lg btn-secondary"><i class="bi bi-arrow-bar-left"></i> Retour</a></span>

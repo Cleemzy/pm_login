@@ -38,7 +38,9 @@ defmodule PmLoginWeb.RightController do
       case current_user.right_id do
         1 ->
           changeset = Login.change_right(%Right{})
-          render(conn, "new.html", changeset: changeset, layout: {PmLoginWeb.LayoutView, "admin_layout.html"})
+          # render(conn, "new.html", changeset: changeset, layout: {PmLoginWeb.LayoutView, "admin_layout.html"})
+          LiveView.Controller.live_render(conn,PmLoginWeb.Right.NewLive, session: %{"changeset" => changeset, "curr_user_id" => get_session(conn, :curr_user_id)})
+
         _ ->
         conn
           |> put_flash(:error, "Désolé, vous n'êtes pas administrateur!")
@@ -71,7 +73,9 @@ defmodule PmLoginWeb.RightController do
       case current_user.right_id do
         1 ->
           right = Login.get_right!(id)
-          render(conn, "show.html", right: right, layout: {PmLoginWeb.LayoutView, "admin_layout.html"})
+          # render(conn, "show.html", right: right, layout: {PmLoginWeb.LayoutView, "admin_layout.html"})
+          LiveView.Controller.live_render(conn,PmLoginWeb.Right.ShowLive, session: %{"right" => right, "curr_user_id" => get_session(conn, :curr_user_id)})
+
         _ ->
           conn
           |> put_flash(:error, "Désolé, vous n'êtes pas administrateur!")
