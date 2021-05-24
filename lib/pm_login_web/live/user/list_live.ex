@@ -8,6 +8,7 @@ defmodule PmLoginWeb.User.ListLive do
   alias PmLogin.Services
 
   def mount(_params, %{"curr_user_id" => curr_user_id}, socket) do
+    Services.subscribe()
     Login.subscribe()
    {:ok,
       socket
@@ -31,7 +32,7 @@ defmodule PmLoginWeb.User.ListLive do
              end
     {:noreply, socket |> assign(show_notif: switch, notifs: Services.list_my_notifications_with_limit(curr_user_id, notifs_length))}
   end
-  
+
   def handle_event("load-notifs", %{}, socket) do
     curr_user_id = socket.assigns.curr_user_id
     notifs_length = socket.assigns.notifs |> length

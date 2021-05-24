@@ -1,10 +1,10 @@
 <% alias PmLoginWeb.LiveComponent.ModalLive %>
-  <h1><i class="bi bi-card-list"></i> Liste des utilisateurs</h1>
+  <h1><span class="material-icons" style="font-size: 40px;">supervisor_account</span> Liste des utilisateurs</h1>
 
   <div class="row">
     <div class="column column-10">
       <!-- <b style="position: relative; top: 8px;">Filtre :</b> -->
-      <i class="bi bi-filter filter__icon"></i>
+      <span class="material-icons-round filter__icon">filter_list</span>
     </div>
 
     <div class="column column-20">
@@ -23,7 +23,7 @@
 
     <div class="column column-10">
       <!-- <b style="position: relative; top: 8px;"></b> -->
-      <i class="bi bi-sort-alpha-down sort__icon"></i>
+      <span class="material-icons-round sort__icon">sort_by_alpha</span>
     </div>
 
     <div class="column column-20">
@@ -39,7 +39,7 @@
     </div>
 
     <div class="column column-10">
-      <i class="bi bi-search srch__icon"></i>
+      <span class="material-icons-round srch__icon">search</span>
     </div>
 
     <div class="column column-20">
@@ -58,9 +58,9 @@
     <thead>
       <tr>
         <th></th>
-        <th><span><i class="bi bi-caret-down-fill arr__sorted" phx-click="sorted_by_username"></i></span> Nom d'utilisateur</th>
-        <th><span><i class="bi bi-caret-down-fill arr__sorted" phx-click="sorted_by_email"></i></span> Email</th>
-        <th><span><i class="bi bi-caret-down-fill arr__sorted" phx-click="sorted_by_status"></i></span> Statut</th>
+        <th><span><span class="material-icons-round arr__sorted" phx-click="sorted_by_username"><%= if not @sorted_by_username do "keyboard_arrow_down" else "keyboard_arrow_right" end %></span></span> Nom d'utilisateur</th>
+        <th><span><span class="material-icons-round arr__sorted" phx-click="sorted_by_email"><%= if not @sorted_by_email do "keyboard_arrow_down" else "keyboard_arrow_right" end %></span></span> Email</th>
+        <th><span><span class="material-icons-round arr__sorted" phx-click="sorted_by_status"><%= if not @sorted_by_status do "keyboard_arrow_down" else "keyboard_arrow_right" end %></span></span> Statut</th>
 
         <th>Actions</th>
       </tr>

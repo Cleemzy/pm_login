@@ -39,6 +39,14 @@ module.exports = (env, options) => {
                    // },
                }
            },
+           {
+              test: /\.(woff|woff2|eot|otf|css|scss|ttf|png|jpg|gif|svg)$/i,
+              include: path.resolve(__dirname, './node_modules/material-icons/iconfont'),
+              use: {
+                  loader: 'file-loader',
+              }
+          },
+
         {
           test: /\.js$/,
           exclude: /node_modules/,

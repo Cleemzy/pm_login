@@ -4,14 +4,16 @@ defmodule PmLoginWeb.CompanyController do
   alias PmLogin.Services
   alias PmLogin.Services.Company
   alias PmLogin.Login
+  alias Phoenix.LiveView
 
   def index(conn, _params) do
 
     if Login.is_connected?(conn) do
       cond do
         Login.is_admin?(conn) ->
-          companies = Services.list_companies()
-          render(conn, "index.html", companies: companies, layout: {PmLoginWeb.LayoutView, "admin_layout.html"})
+          # companies = Services.list_companies()
+          # render(conn, "index.html", companies: companies, layout: {PmLoginWeb.LayoutView, "admin_layout.html"})
+          LiveView.Controller.live_render(conn, PmLoginWeb.Company.IndexLive, session: %{"curr_user_id" => get_session(conn, :curr_user_id)}, router: PmLoginWeb.Router)
 
         true ->
           conn
@@ -29,8 +31,9 @@ defmodule PmLoginWeb.CompanyController do
     if Login.is_connected?(conn) do
       cond do
         Login.is_admin?(conn) ->
-          changeset = Services.change_company(%Company{})
-          render(conn, "new.html", changeset: changeset, layout: {PmLoginWeb.LayoutView, "admin_layout.html"})
+          # changeset = Services.change_company(%Company{})
+          # render(conn, "new.html", changeset: changeset, layout: {PmLoginWeb.LayoutView, "admin_layout.html"})
+          LiveView.Controller.live_render(conn, PmLoginWeb.Company.NewLive, session: %{"curr_user_id" => get_session(conn, :curr_user_id)}, router: PmLoginWeb.Router)
 
         true ->
           conn
@@ -60,8 +63,9 @@ defmodule PmLoginWeb.CompanyController do
     if Login.is_connected?(conn) do
       cond do
         Login.is_admin?(conn) ->
-          company = Services.get_company!(id)
-          render(conn, "show.html", company: company, layout: {PmLoginWeb.LayoutView, "admin_layout.html"})
+          # company = Services.get_company!(id)
+          # render(conn, "show.html", company: company, layout: {PmLoginWeb.LayoutView, "admin_layout.html"})
+          LiveView.Controller.live_render(conn, PmLoginWeb.Company.ShowLive, session: %{"curr_user_id" => get_session(conn, :curr_user_id),"company_id" => id}, router: PmLoginWeb.Router)
 
         true ->
           conn
@@ -79,9 +83,10 @@ defmodule PmLoginWeb.CompanyController do
     if Login.is_connected?(conn) do
       cond do
         Login.is_admin?(conn) ->
-          company = Services.get_company!(id)
-          changeset = Services.change_company(company)
-          render(conn, "edit.html", company: company, changeset: changeset, layout: {PmLoginWeb.LayoutView, "admin_layout.html"})
+          # company = Services.get_company!(id)
+          # changeset = Services.change_company(company)
+          # render(conn, "edit.html", company: company, changeset: changeset, layout: {PmLoginWeb.LayoutView, "admin_layout.html"})
+          LiveView.Controller.live_render(conn, PmLoginWeb.Company.EditLive, session: %{"curr_user_id" => get_session(conn, :curr_user_id), "company_id" => id}, router: PmLoginWeb.Router)
 
         true ->
           conn

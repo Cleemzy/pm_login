@@ -19,19 +19,20 @@
 }
 
 .filter__icon{
-  font-size: 30px;
+  font-size: 30px !important;
 }
 .sort__icon{
-  font-size: 30px;
+  font-size: 30px !important;
 }
 .srch__icon{
-  font-size: 30px;
+  font-size: 30px !important;
 }
 .srch__input{
   size: 50px;
 }
 .arr__sorted{
-
+  position: relative;
+  top: 5px;
 }
 .arr__sorted:hover{
   cursor: pointer;

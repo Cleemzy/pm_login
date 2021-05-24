@@ -1,0 +1,5 @@
+<h1>Nouvelle société</h1>
+
+<%= render "form.html", Map.put(assigns, :action, Routes.company_path(@socket, :create)) %>
+
+<span><%= link "Retour", to: Routes.company_path(@socket, :index) %></span>

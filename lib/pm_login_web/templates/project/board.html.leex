@@ -6,7 +6,7 @@
 
           </div>
           <%= cond do %>
-          <% @is_admin -> %><h2><i class="bi bi-list-task"></i> <%= @board.project.title %></h2>
+          <% @is_admin -> %><h2><span class="material-icons">checklist_rtl</span> <%= @board.project.title %></h2>
           <% @is_contributor -> %><h2><i class="bi bi-list-task"></i> Mes tâches sur  "<%= @board.project.title %>"</h2>
           <% true -> %><h2></h2>
           <% end %>

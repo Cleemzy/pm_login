@@ -22,7 +22,7 @@
 
             <li class="nav__item">
               <div class="dropdown">
-                <a href="#" class="dropbtn">▼<i class="bi bi-people-fill"></i> Espace administrateur</a>
+                <a href="#" class="dropbtn"><span class="material-icons">admin_panel_settings</span> Espace administrateur</a>
                 <div class="dropdown-content basecontents">
                   <%= link "Projets", to: Routes.project_path(@socket, :index)%>
                   <%= link "Sociétés", to: Routes.company_path(@socket, :index) %>
@@ -33,12 +33,12 @@
               </div>
             </li>
 
-            <li class="nav__item"><a href="<%= Routes.user_path(@socket, :index) %>"><i class="bi bi-house-fill"></i> Accueil</a></li>
+            <li class="nav__item"><a href="<%= Routes.user_path(@socket, :index) %>"><span class="material-icons">home</span> Accueil</a></li>
             <li class="nav__item">
               <div class="dropdown">
                 <% unseens = PmLogin.Services.list_my_notifications(@curr_user_id)
                 |> Enum.count(fn(x) -> !(x.seen) end) %>
-                <a href="#" title="Notifications" phx-click="switch-notif"><i class="bi bi-bell-fill notification-icon"></i><span class="notification-span" style="background-color: <%= if unseens == 0 do "transparent" end %> !important;"><b class="notification-nb" style="position: relative; left:<%= if unseens > 9 do "0px !important" end %>;"><%=
+                <a href="#" title="Notifications" phx-click="switch-notif"><span class="material-icons">notifications</span><span class="notification-span" style="background-color: <%= if unseens == 0 do "transparent" end %> !important;"><b class="notification-nb" style="position: relative; left:<%= if unseens > 9 do "0px !important" end %>;"><%=
                   if unseens < 10 do
                     unseens
                   else
@@ -64,7 +64,7 @@
               </div>
             </li>
 
-            <li class="nav__item"><a href="<%= Routes.user_path(@socket, :show, @curr_user_id) %>"><i class="bi bi-person-circle"></i> Profil</a></li>
+            <li class="nav__item"><a href="<%= Routes.user_path(@socket, :show, @curr_user_id) %>"><span class="material-icons">account_circle</span> Profil</a></li>
           </ul>
         </nav>
       </div>

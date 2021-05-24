@@ -5,10 +5,16 @@
     </div>
   <% end %>
 
-  <%= text_input f, :username, class: "un", id: "iu", align: "center", placeholder: "Utilisateur", value: "Mgbi" %>
+  <div class="row login__input">
+    <span class="material-icons-round" style="font-size: 35px;color: gray;">account_box</span>
+    <%= text_input f, :username, class: "un", id: "iu", align: "center", placeholder: "Utilisateur", value: "Mgbi" %>
+  </div>
   <%= error_tag f, :req_uname_error %>
 
+<div class="row login__input">
+  <span class="material-icons-round" style="font-size: 35px;color: gray;">password</span>
   <%= password_input f, :password, class: "pass", align: "center", placeholder: "Mot de passe" %>
+</div>
   <%= error_tag f, :req_pass_error %>
 
   <%= submit "Se connecter", class: "submit", align: "center" %>

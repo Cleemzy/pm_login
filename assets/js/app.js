@@ -15,6 +15,7 @@ import "../css/app.scss"
 //     import socket from "./socket"
 //
 require('bootstrap-icons/font/bootstrap-icons.css');
+require('material-icons/iconfont/material-icons.css')
 import "phoenix_html"
 import {Socket} from "phoenix"
 import {LiveSocket} from "phoenix_live_view"
