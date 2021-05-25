@@ -7,28 +7,28 @@
 
   <div class="row">
     <div class="column basecontents esp__adm__col">
-      <h3><%= link "Projets", to: Routes.project_path(@socket, :index), id: "adm"%></h3>
+      <h3 class="header__link__title"><a href="<%= Routes.project_path(@socket, :index) %>" id="adm">Projets <br/><span class="material-icons mat__ico">insert_chart</span></a></h3>
     </div>
     <div class="column basecontents esp__adm__col">
-      <h3><%= link "Sociétés", to: Routes.company_path(@socket, :index), id: "adm" %></h3>
-    </div>
-  </div>
-
-  <div class="row">
-    <div class="column basecontents esp__adm__col">
-      <h3><%= link "Utilisateurs", to: Routes.user_path(@socket, :list), id: "adm" %></h3>
-    </div>
-    <div class="column basecontents esp__adm__col">
-      <h3><%= link "Droits/Statuts", to: Routes.right_path(@socket, :index), id: "adm" %></h3>
+      <h3 class="header__link__title"><a href="<%= Routes.company_path(@socket, :index) %>" id="adm">Sociétés <br/><i class="bi bi-building"></i></a></h3>
     </div>
   </div>
 
   <div class="row">
     <div class="column basecontents esp__adm__col">
-      <h3><%= link "Clients actifs", to: Routes.active_client_path(@socket, :index), id: "adm" %></h3>
+      <h3 class="header__link__title"><a href="<%= Routes.user_path(@socket, :list) %>" id="adm">Utilisateurs <br/><span class="material-icons mat__ico">supervisor_account</span></a></h3>
     </div>
     <div class="column basecontents esp__adm__col">
-      <h3><%= link "Clients inactifs", to: Routes.active_client_path(@socket, :new), id: "adm" %></h3>
+      <h3 class="header__link__title"><a href="<%= Routes.right_path(@socket, :index) %>" id="adm">Droits/Statuts <br/><span class="material-icons mat__ico">shield</span></a></h3>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="column basecontents esp__adm__col">
+      <h3 class="header__link__title"><a href="<%= Routes.active_client_path(@socket, :index) %>" id="adm">Clients actifs <br/><i class="bi bi-people-fill"></i></a></h3>
+    </div>
+    <div class="column basecontents esp__adm__col">
+      <h3 class="header__link__title"><a href="<%= Routes.active_client_path(@socket, :new) %>" id="adm">Clients inactifs <br/><i class="bi bi-people"></i></a></h3>
     </div>
   </div>
 

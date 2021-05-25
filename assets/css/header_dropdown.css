@@ -131,3 +131,8 @@
   border-radius: 60%;
   float: left;
 }
+
+.admin__links{
+  display: inline-block;
+  text-align: center;
+}

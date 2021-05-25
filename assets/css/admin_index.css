@@ -20,12 +20,14 @@
   justify-content: center;
 }
 
-
-
 .esp__adm__col{
   margin: 15px;
   height: 150px;
   display: flex !important;
   align-items: center !important;
   justify-content: center !important;
+}
+
+.header__link__title{
+  text-align: center;
 }

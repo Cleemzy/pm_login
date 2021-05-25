@@ -24,11 +24,11 @@
               <div class="dropdown">
                 <a href="#" class="dropbtn"><span class="material-icons">admin_panel_settings</span> Espace administrateur</a>
                 <div class="dropdown-content basecontents">
-                  <%= link "Projets", to: Routes.project_path(@socket, :index)%>
-                  <%= link "Sociétés", to: Routes.company_path(@socket, :index) %>
-                  <%= link "Utilisateurs", to: Routes.user_path(@socket, :list) %>
-                  <%= link "Droits/Statuts", to: Routes.right_path(@socket, :index) %>
-                  <%= link "Clients", to: Routes.active_client_path(@socket, :index) %>
+                  <a href="<%= Routes.project_path(@socket, :index) %>" class="admin__links">Projets | <span class="material-icons mat__ico">insert_chart</span></a>
+                  <a href="<%= Routes.company_path(@socket, :index) %>" class="admin__links">Sociétés | <i class="bi bi-building"></i></a>
+                  <a href="<%= Routes.user_path(@socket, :list) %>" class="admin__links">Utilisateurs | <span class="material-icons mat__ico">supervisor_account</span></a>
+                  <a href="<%= Routes.right_path(@socket, :index) %>" class="admin__links">Droits/Statuts | <span class="material-icons mat__ico">shield</span></a>
+                  <a href="<%= Routes.active_client_path(@socket, :index) %>" class="admin__links">Clients | <span class="material-icons mat__ico">person</span></a>
                 </div>
               </div>
             </li>
