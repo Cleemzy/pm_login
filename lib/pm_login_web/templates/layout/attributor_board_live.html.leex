@@ -19,8 +19,11 @@
         <nav class="nav">
           <input id="hamburger" type="image"  src="<%= Routes.static_path(@socket, "/images/hamburger.png") %>" class="nav__toggle">
           <ul class="nav__wrapper">
-            <li class="nav__item"><a href="<%= Routes.contributor_path(@socket, :my_projects) %>"><span class="material-icons">insert_chart</span>Mes Projets</a></li>
+
+            <li class="nav__item"><a href="<%= Routes.project_path(@socket, :index) %>"><span class="material-icons">insert_chart</span> Projets</a></li>
+
             <li class="nav__item"><a href="<%= Routes.user_path(@socket, :index) %>"><span class="material-icons">home</span> Accueil</a></li>
+
             <li class="nav__item">
               <div class="dropdown">
                 <% unseens = PmLogin.Services.list_my_notifications(@curr_user_id)
@@ -59,20 +62,25 @@
 
     </header>
 
-    <input type="hidden" name="" value="" class="nav__toggle__proj">
-    <main id="main" role="main" class="boardcontainer" phx-click="cancel-notif">
 
+    <main id="main" role="main" class="boardcontainer" phx-click="cancel-notif">
+      <p class="alert alert-info basecontents" role="alert"
+        phx-click="lv:clear-flash"
+        phx-value-key="info"><%= live_flash(@flash, :info) %></p>
+
+      <p class="alert alert-danger" role="alert"
+        phx-click="lv:clear-flash"
+        phx-value-key="error"><%= live_flash(@flash, :error) %></p>
       <%= @inner_content %>
       <br/>
       <br/>
-
       <span>
         <a href="<%= Routes.auth_path(@socket, :sign_out) %>" class="btn btn-outline-danger btn-lg"><i class="bi bi-box-arrow-left"></i> Déconnexion</a>
       </span>
-        </main>
+    </main>
   </body>
-  <footer id="foot" class="boardcontainer">
-    <div id="footcont" class="boardcontainer">
+  <footer id="foot" class="container-fluid">
+    <div id="footcont" class="container">
         <p>copyright @Cleemzy / Project monitoring</p>
     </div>
 

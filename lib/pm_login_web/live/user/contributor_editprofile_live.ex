@@ -1,18 +1,15 @@
-defmodule PmLoginWeb.Project.IndexLive do
+defmodule PmLoginWeb.User.ContributorEditprofileLive do
   use Phoenix.LiveView
-  alias PmLoginWeb.ProjectView
-  alias PmLogin.Monitoring
   alias PmLogin.Services
-  alias PmLogin.Login
-  def mount(_params, %{"curr_user_id" => curr_user_id}, socket) do
+
+  def mount(_params, %{"curr_user_id" => curr_user_id, "user" => user,"changeset" => changeset}, socket) do
     Services.subscribe()
-    layout = case Login.get_user!(curr_user_id).right_id do
-      1 -> {PmLoginWeb.LayoutView, "board_layout_live.html"}
-      2 -> {PmLoginWeb.LayoutView, "attributor_board_live.html"}
-      _ -> {}
-    end
-    {:ok, socket |> assign(projects: Monitoring.list_projects(), curr_user_id: curr_user_id, show_notif: false,notifs: Services.list_my_notifications_with_limit(curr_user_id, 4)),
-            layout: layout}
+
+    {:ok,
+       socket
+       |> assign(user: user, changeset: changeset,curr_user_id: curr_user_id, show_notif: false, notifs: Services.list_my_notifications_with_limit(curr_user_id, 4)),
+       layout: {PmLoginWeb.LayoutView, "attributor_layout_live.html"}
+       }
   end
 
   def handle_event("switch-notif", %{}, socket) do
@@ -41,12 +38,6 @@ defmodule PmLoginWeb.Project.IndexLive do
     {:noreply, socket |> assign(show_notif: cancel)}
   end
 
-  def handle_event("load-notifs", %{}, socket) do
-    curr_user_id = socket.assigns.curr_user_id
-    notifs_length = socket.assigns.notifs |> length
-    {:noreply, socket |> assign(notifs: Services.list_my_notifications_with_limit(curr_user_id, notifs_length+4))}
-  end
-
   def handle_info({Services, [:notifs, :sent], _}, socket) do
     curr_user_id = socket.assigns.curr_user_id
     length = socket.assigns.notifs |> length
@@ -54,6 +45,7 @@ defmodule PmLoginWeb.Project.IndexLive do
   end
 
   def render(assigns) do
-    ProjectView.render("index.html", assigns)
+   PmLoginWeb.UserView.render("edit_profile.html", assigns)
   end
+
 end

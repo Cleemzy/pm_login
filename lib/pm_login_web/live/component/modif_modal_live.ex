@@ -80,7 +80,7 @@ defmodule PmLoginWeb.LiveComponent.ModifModalLive do
                         <div class="column">
 
                               <%= label f, "Durée estimée (en heure(s)):" %>
-                              <%= if @is_admin do %>
+                              <%= if @is_admin or @is_attributor do %>
                                 <b><%= number_input f, :estimated_duration, style: "width: 70px", value: @card.task.estimated_duration %> h</b>
                                 <%= error_tag f, :negative_estimated %>
                               <% else %>
@@ -108,7 +108,7 @@ defmodule PmLoginWeb.LiveComponent.ModifModalLive do
                           <div class="row">
 
                             <div class="column">
-                                <%= if @is_admin do %>
+                                <%= if @is_admin or @is_attributor do %>
                                   <%= label f, "Assigner contributeur" %>
                                   <%= select f, :contributor_id, @contributors, prompt: "Contributeurs:", selected: @card.task.contributor_id %>
                                   <%= error_tag f, :contributor_id %>
@@ -140,7 +140,7 @@ defmodule PmLoginWeb.LiveComponent.ModifModalLive do
                   <div class="row">
                     <div class="column">
                       <%= label f, "Date de début" %>
-                      <%= if (@is_admin and is_nil(@card.task.parent_id)) or (@is_contributor and !is_nil(@card.task.parent_id)) do %>
+                      <%= if ((@is_admin or @is_attributor) and is_nil(@card.task.parent_id)) or (@is_contributor and !is_nil(@card.task.parent_id)) do %>
                         <%= date_input f, :date_start, value: @card.task.date_start %>
                       <% else %>
                         <p><%= @card.task.date_start %></p>

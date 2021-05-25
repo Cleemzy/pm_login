@@ -16,11 +16,12 @@ defmodule PmLoginWeb.Project.BoardLive do
     if connected?(socket), do: Kanban.subscribe()
     Monitoring.subscribe()
     Services.subscribe()
-    layout = if Monitoring.is_admin?(curr_user_id) do
-      {PmLoginWeb.LayoutView, "board_layout_live.html"}
-    else
-      # {PmLoginWeb.LayoutView, "board_layout_live.html"}
-      {PmLoginWeb.LayoutView, "contributor_board_live.html"}
+
+    layout = case Login.get_user!(curr_user_id).right_id do
+      1 -> {PmLoginWeb.LayoutView, "board_layout_live.html"}
+      2 -> {PmLoginWeb.LayoutView, "attributor_board_live.html"}
+      3 -> {PmLoginWeb.LayoutView, "contributor_board_live.html"}
+      _ -> {}
     end
 
 
@@ -40,7 +41,7 @@ defmodule PmLoginWeb.Project.BoardLive do
     my_primary_tasks = Monitoring.list_primary_tasks(curr_user_id)
     list_primaries = my_primary_tasks |> Enum.map(fn (%Task{} = p) -> {p.title, p.id} end)
 
-    {:ok, socket |> assign(is_admin: Monitoring.is_admin?(curr_user_id), show_plus_modal: false,curr_user_id: curr_user_id, pro_id: pro_id, show_secondary: false,
+    {:ok, socket |> assign(is_attributor: Monitoring.is_attributor?(curr_user_id),is_admin: Monitoring.is_admin?(curr_user_id), show_plus_modal: false,curr_user_id: curr_user_id, pro_id: pro_id, show_secondary: false,
                     contributors: list_contributors, priorities: list_priorities, board: Kanban.get_board!(project.board_id), show_task_modal: false, show_modif_modal: false,
                     primaries: list_primaries, is_contributor: Monitoring.is_contributor?(curr_user_id),task_changeset: task_changeset, modif_changeset: modif_changeset, show_comments_modal: false,
                     show_notif: false, notifs: Services.list_my_notifications_with_limit(curr_user_id, 4), secondary_changeset: secondary_changeset), layout: layout
@@ -368,11 +369,18 @@ defmodule PmLoginWeb.Project.BoardLive do
     # IO.inspect task
     # IO.inspect Monitoring.update_task(task, params)
     case Monitoring.update_task(task, attrs) do
-      {:ok, task} ->
+      {:ok, updated_task} ->
         # IO.inspect task
         # IO.inspect attrs
-        {:ok, task} |> Monitoring.broadcast_updated_task
-        {:noreply, socket |> put_flash(:info, "Tâche #{task.title} mise à jour") |> assign(show_modif_modal: false)}
+        {:ok, updated_task} |> Monitoring.broadcast_updated_task
+
+        IO.inspect {:ok, task}
+        IO.inspect {:ok, updated_task}
+
+        if (is_nil task.contributor_id) and not (is_nil updated_task.contributor_id) do
+          Services.send_notif_to_one(updated_task.attributor_id, updated_task.contributor_id, "#{Login.get_user!(updated_task.attributor_id).username} vous a assigné à la tâche #{updated_task.title}.")
+        end
+        {:noreply, socket |> put_flash(:info, "Tâche #{updated_task.title} mise à jour") |> assign(show_modif_modal: false)}
 
       {:error, %Ecto.Changeset{} = changeset} ->
         # IO.inspect changeset

@@ -43,6 +43,11 @@ defmodule PmLogin.Monitoring do
     user.right_id == 1
   end
 
+  def is_attributor?(id) do
+    user = Login.get_user!(id)
+    user.right_id == 2
+  end
+
   def is_contributor?(id) do
     user = Login.get_user!(id)
     user.right_id == 3

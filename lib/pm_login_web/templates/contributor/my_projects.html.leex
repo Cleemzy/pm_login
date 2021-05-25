@@ -4,7 +4,7 @@
 
   <ul>
     <%= for project <- @projects do %>
-      <li><%= link "#{project.title}", to: Routes.project_path(@conn, :board, project) %></li>
+      <li><%= link "#{project.title}", to: Routes.project_path(@socket, :board, project) %></li>
     <% end %>
   </ul>
 

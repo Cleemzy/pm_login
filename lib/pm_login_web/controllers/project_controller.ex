@@ -12,7 +12,7 @@ defmodule PmLoginWeb.ProjectController do
 
     if Login.is_connected?(conn) do
       cond do
-        Login.is_admin?(conn) or Login.is_contributor?(conn) ->
+        Login.is_admin?(conn) or Login.is_contributor?(conn) or Login.is_attributor?(conn) ->
           LiveView.Controller.live_render(conn, PmLoginWeb.Project.BoardLive, session: %{"curr_user_id" => get_session(conn, :curr_user_id), "pro_id" => id}, router: PmLoginWeb.Router)
 
         true ->
@@ -30,7 +30,7 @@ defmodule PmLoginWeb.ProjectController do
 
     if Login.is_connected?(conn) do
       cond do
-        Login.is_admin?(conn) ->
+        Login.is_admin?(conn) or Login.is_attributor?(conn) ->
           LiveView.Controller.live_render(conn, PmLoginWeb.Project.IndexLive, session: %{"curr_user_id" => get_session(conn, :curr_user_id)}, router: PmLoginWeb.Router)
 
           # BY THE OLD WAY
