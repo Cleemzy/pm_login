@@ -166,6 +166,20 @@
   margin-bottom: -10px;
 }
 
+.card__recap {
+  list-style: none;
+  /* border: 1px solid rgb(181, 181, 181); */
+  border-radius: 3px;
+  background-color: #ffffff;
+  /* padding: -5em; */
+  /* cursor: move; */
+  width: 90%;
+  height: auto;
+  margin-top: 10px;
+  margin-bottom: 20px;
+  /* margin-bottom: -10px; */
+}
+
 .card__name {
   font-weight: bold;
 }

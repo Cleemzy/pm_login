@@ -40,7 +40,7 @@
           <span class="stage__counter"><b class="counter__nb"><%= length(stage.cards) %></b></span>
         </div>
 
-        <%= if (not @is_admin or not @is_attributor) and stage.status_id == 5 do %>
+        <%= if (not @is_admin and not @is_attributor) and stage.status_id == 5 do %>
         <ul data-stage-id="<%= stage.id %>" class="">
         <% else %>
         <ul data-stage-id="<%= stage.id %>" class="stage__cards">

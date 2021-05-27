@@ -897,4 +897,11 @@ defmodule PmLogin.Services do
   def change_notification(%Notification{} = notification, attrs \\ %{}) do
     Notification.changeset(notification, attrs)
   end
+
+  def current_date do
+    {:ok, date} = :calendar.universal_time
+    |> :calendar.universal_time_to_local_time
+    |> NaiveDateTime.from_erl
+    date
+  end
 end

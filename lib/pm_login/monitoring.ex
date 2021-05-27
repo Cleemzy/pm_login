@@ -9,6 +9,9 @@ defmodule PmLogin.Monitoring do
   alias PmLogin.Monitoring.Status
   alias PmLogin.Monitoring.Task
   alias PmLogin.Login
+  alias PmLogin.Services
+  alias PmLogin.Login.User
+
 
   @topic inspect(__MODULE__)
   def subscribe do
@@ -20,6 +23,7 @@ defmodule PmLogin.Monitoring do
   end
 
   #DATE CALCULUS
+
   def avg_working_hours(%Task{} = t) do
       trunc(t.estimated_duration / working_days(t.date_start, t.deadline))
   end
@@ -618,6 +622,52 @@ def validate_start_deadline(changeset) do
     Repo.all(query)
   end
 
+  def list_achieved_tasks_today do
+    achieved_tasks = list_achieved_tasks
+    curr_date = Services.current_date
+    achieved_tasks
+    |> Enum.filter(fn x ->
+      (curr_date |> NaiveDateTime.to_date |> Date.day_of_era) == (x.achieved_at |> NaiveDateTime.to_date |> Date.day_of_era)
+    end)
+
+  end
+
+  def list_achieved_tasks_this_week do
+    achieved_tasks = list_achieved_tasks
+    curr_date = Services.current_date
+    achieved_tasks
+    |> Enum.filter(fn x ->
+      (curr_date |> NaiveDateTime.to_date |> Date.end_of_week) == (x.achieved_at |> NaiveDateTime.to_date |> Date.end_of_week)
+    end)
+
+  end
+
+  def list_achieved_tasks_this_month do
+    achieved_tasks = list_achieved_tasks
+    curr_date = Services.current_date
+    achieved_tasks
+    |> Enum.filter(fn x ->
+      (curr_date |> NaiveDateTime.to_date |> Date.end_of_month) == (x.achieved_at |> NaiveDateTime.to_date |> Date.end_of_month)
+    end)
+
+  end
+
+  def naive_to_dt do
+    Services.current_date
+    |> NaiveDateTime.to_date
+  end
+
+  def list_achieved_tasks do
+    attributor_query = from attr in User
+    contributor_query = from contr in User
+    project_query = from p in Project
+    query = from t in Task,
+            preload: [project: ^project_query, attributor: ^attributor_query, contributor: ^contributor_query],
+            where: not is_nil t.achieved_at
+
+    Repo.all(query)
+  end
+
   def list_tasks do
     Repo.all(Task)
   end
@@ -788,6 +838,12 @@ def validate_start_deadline(changeset) do
     task
     |> Task.update_status_changeset(attrs)
     |> Repo.update()
+
+  end
+
+  def broadcast_status_change(tuple) do
+    tuple
+    |> broadcast_change([:status, :updated])
   end
 
   def broadcast_updated_task(tuple),do: tuple |> broadcast_change([:task, :updated])

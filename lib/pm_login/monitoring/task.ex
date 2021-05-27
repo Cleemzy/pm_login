@@ -5,7 +5,8 @@ defmodule PmLogin.Monitoring.Task do
   alias PmLogin.Kanban
   alias PmLogin.Kanban.Card
   alias PmLogin.Login.User
-  alias PmLogin.Monitoring.{Status,Priorty,Comment}
+  alias PmLogin.Services
+  alias PmLogin.Monitoring.{Status,Priorty,Comment,Project}
 
   schema "tasks" do
     field :date_end, :date
@@ -15,9 +16,10 @@ defmodule PmLogin.Monitoring.Task do
     field :performed_duration, :integer
     field :progression, :integer
     field :title, :string
+    field :achieved_at, :naive_datetime
     # field :parent_id, :id
     # field :parent_id, :id
-    field :project_id, :id
+    # field :project_id, :id
     # field :contributor_id, :id
     # field :status_id, :id
     # field :priority_id, :id
@@ -29,6 +31,7 @@ defmodule PmLogin.Monitoring.Task do
     belongs_to :attributor, User
     belongs_to :status, Status
     has_many :comments, Comment
+    belongs_to :project, Project
     # has_many :children, Task
     timestamps()
   end
@@ -49,11 +52,14 @@ defmodule PmLogin.Monitoring.Task do
     |> Monitoring.validate_positive_performed
     |> Monitoring.validate_progression
     |> Monitoring.del_contrib_id_if_nil
+    |> put_change(:updated_at, Services.current_date)
   end
 
   def update_status_changeset(task, attrs) do
     task
     |> cast(attrs, [:status_id])
+    |> record_achievement(attrs, task)
+    |> put_change(:updated_at, Services.current_date)
   end
 
   def secondary_changeset(task, attrs) do
@@ -72,6 +78,7 @@ defmodule PmLogin.Monitoring.Task do
     |> put_change(:progression, 0)
     |> put_change(:performed_duration, 0)
     |> put_change(:status_id, 1)
+    |> put_change(:inserted_at, Services.current_date)
   end
 
   def create_changeset(task, attrs) do
@@ -99,6 +106,7 @@ defmodule PmLogin.Monitoring.Task do
         |> put_change(:performed_duration, 0)
         |> put_change(:priority_id, 2)
         |> put_change(:status_id, 1)
+        |> put_change(:inserted_at, Services.current_date)
 
 
         # {:error, %Ecto.Changeset{} = changeset} ->
@@ -130,5 +138,19 @@ defmodule PmLogin.Monitoring.Task do
     |> Monitoring.validate_progression_mother
   end
 
+  def record_achievement(changeset, attrs, task) do
+    # IO.puts "/////"
+    # IO.inspect task.status_id
+    # IO.inspect attrs
+    # changeset |> get_field(:status_id) |> IO.inspect
+    new_status = changeset |> get_field(:status_id) |> IO.inspect
+    cond do
+      task.status_id != 5 and new_status == 5 ->
+        IO.puts "achevée"
+        changeset |> put_change(:achieved_at, Services.current_date)
+      true -> changeset
+    end
+
+  end
 
 end

@@ -129,7 +129,8 @@ defmodule PmLoginWeb.Project.BoardLive do
         updated_stage = card_attrs["stage_id"] |> Kanban.get_stage!
         task_attrs = %{"status_id" => updated_stage.status_id}
         IO.inspect Monitoring.update_task_status(updated_task, task_attrs)
-        {_, real_task} = Monitoring.update_task_status(updated_task, task_attrs)
+        {:ok, real_task} = Monitoring.update_task_status(updated_task, task_attrs)
+        {:ok, real_task} |> Monitoring.broadcast_status_change
         # IO.inspect real_task
         # IO.inspect Monitoring.get_task!(real_task.id)
         this_board = socket.assigns.board
@@ -208,6 +209,17 @@ defmodule PmLoginWeb.Project.BoardLive do
   end
 
   def handle_info({Monitoring, [:task, :updated], _}, socket) do
+    board_id = socket.assigns.board.id
+
+    #for secondary task modal select form
+    curr_user_id = socket.assigns.curr_user_id
+    my_primary_tasks = Monitoring.list_primary_tasks(curr_user_id)
+    list_primaries = my_primary_tasks |> Enum.map(fn (%Task{} = p) -> {p.title, p.id} end)
+
+    {:noreply, assign(socket, board: Kanban.get_board!(board_id), primaries: list_primaries)}
+  end
+
+  def handle_info({Monitoring, [:status, :updated], _}, socket) do
     board_id = socket.assigns.board.id
 
     #for secondary task modal select form

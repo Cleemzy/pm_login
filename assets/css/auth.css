@@ -8,6 +8,10 @@
   padding-right: 10px;
 }
 
+#tb-body{
+  transition: height 1s; 
+}
+
 .info__user{
   /* font-size: 20px; */
 }

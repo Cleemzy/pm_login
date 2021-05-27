@@ -24,7 +24,7 @@ COMMENTED ROUTES ARE NOT TO BE DELETED BUT JUST NOT USED AT THE TIME
 
     #Project LiveView
     get "/boards/:id", ProjectController, :board
-
+    get "/recaps", ProjectController, :recaps
     #Monitoring context
     # resources "/statuses", StatusController
     resources "/projects", ProjectController

@@ -2,6 +2,7 @@ defmodule PmLogin.Monitoring.Comment do
   use Ecto.Schema
   import Ecto.Changeset
   alias PmLogin.Login.User
+  alias PmLogin.Services
 
   schema "comments" do
     field :content, :string
@@ -23,5 +24,6 @@ defmodule PmLogin.Monitoring.Comment do
     comment
     |> cast(attrs, [:content, :poster_id, :task_id])
     |> validate_required([:content])
+    |> put_change(:inserted_at, Services.todays_date)
   end
 end

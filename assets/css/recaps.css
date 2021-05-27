@@ -1,0 +1,5 @@
+.recaps__chart{
+  padding-top: 20px;
+  overflow-y: scroll;
+  height: 500px;
+}

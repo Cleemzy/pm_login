@@ -1,12 +1,19 @@
 <h1>Bienvenue administrateur <%= @current_user.username %>!</h1>
+  <div class="row">
+    <div class="column">
+      <h3 style="text-align: right;"><a href="<%= Routes.project_path(@socket, :recaps) %>" class="basecontents" style="padding-bottom: : 10px;" id="adm">>>Récapitulatifs>></a></h3>
+    </div>
+  </div>
 
 <div class="container">
   <div id="esp__adm__row" class="row basecontents">
-    <a id="adm" href="<%= Routes.user_path(@socket, :index)  %>"><h2>Espace administrateur</h2></a>
+    <div class="column">
+      <a id="adm" href="<%= Routes.user_path(@socket, :index)  %>"><h2>Espace administrateur</h2></a>
+    </div>
   </div>
 
   <div class="row">
-    <div class="column basecontents esp__adm__col">
+    <div class="column basecontents esp__adm__col hover__growing">
       <h3 class="header__link__title"><a href="<%= Routes.project_path(@socket, :index) %>" id="adm">Projets <br/><span class="material-icons mat__ico">insert_chart</span></a></h3>
     </div>
     <div class="column basecontents esp__adm__col">
