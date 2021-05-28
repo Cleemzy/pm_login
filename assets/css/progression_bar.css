@@ -11,10 +11,14 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
-  background-color: #faf089;
+  background-color: #e63946;
   text-align: center;
   white-space: nowrap;
   font-weight: 700;
   font-size: 3rem;
   transition: width 2s ease;
+}
+.progression__nb{
+  position: relative;
+  top: 10px;
 }

@@ -200,8 +200,18 @@
   %>
 <% end %>
 <div class="meter">
-  <span class="prog_bar" style="width: <%= @board.project.progression %>%">
-    <%= @board.project.progression %>%
+  <%
+  prog_color = cond do
+    @board.project.progression <= 20  -> "#e63946"
+    @board.project.progression > 20 and @board.project.progression <= 40 -> "#e76f51"
+    @board.project.progression > 40 and @board.project.progression <= 60 -> "#ffba08"
+    @board.project.progression > 60 and @board.project.progression <= 80 -> "#457b9d"
+    @board.project.progression >80 and @board.project.progression <= 100 -> "#2a9d8f"
+    true -> "black"
+  end
+  %>
+  <span class="prog_bar" style="width: <%= @board.project.progression %>%; background-color: <%= prog_color %>;">
+    <h2 class="progression__nb"><%= @board.project.progression %>%</h2>
   </span>
 </div>
 
