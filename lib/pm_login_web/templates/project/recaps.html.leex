@@ -7,20 +7,20 @@
 
 <div class="row">
   <div class="column basecontents__without__radius desktop__header">
-    <h2>ce jour,</h2>
+    <h2>ce jour,<p class="recap__length"><%= length(@todays) %></p></h2>
   </div>
   <div class="column basecontents__without__radius desktop__header">
-    <h2>cette semaine,</h2>
+    <h2>cette semaine,<p class="recap__length"><%= length(@weeks) %></p></h2>
   </div>
   <div class="column basecontents__without__radius desktop__header">
-    <h2>ce mois,</h2>
+    <h2>ce mois,<p class="recap__length"><%= length(@months) %></p></h2>
   </div>
 </div>
 
 <div class="row" style="margin-top: 20px;">
   <div class="column basecontents__without__radius recaps__chart">
     <div class="mobile__header basecontents__without__radius">
-      <h2>ce jour,</h2>
+      <h2>ce jour,<p class="recap__length"><%= length(@todays) %></p></h2>
     </div>
 
     <%= if length(@todays)!=0 do %>
@@ -61,7 +61,7 @@
 
   <div class="column basecontents__without__radius recaps__chart">
     <div class="mobile__header basecontents__without__radius">
-      <h2>cette semaine,</h2>
+      <h2>cette semaine,<p class="recap__length"><%= length(@weeks) %></p></h2>
     </div>
     <%= if length(@weeks)!=0 do %>
 
@@ -101,7 +101,7 @@
 
   <div class="column basecontents__without__radius recaps__chart">
     <div class="mobile__header basecontents__without__radius">
-      <h2>ce mois,</h2>
+      <h2>ce mois,<p class="recap__length"><%= length(@months) %></p></h2>
     </div>
     <%= if length(@months)!=0 do %>
 

@@ -23,3 +23,7 @@
     display: block;
   }
 }
+
+.recap__length{
+  float: right;
+}
