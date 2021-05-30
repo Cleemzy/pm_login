@@ -5,6 +5,13 @@
   border-radius: 10px;
 }
 
+@media (max-width: 638px){
+  .login__input{
+    margin-bottom: 50px;
+    border-style: none;
+  }
+}
+
 /* .login__icons{
   font-size: 35px;
   color: gray;

@@ -310,6 +310,12 @@ justify-content: center;
 /* display:inline-block; */
 }
 
+@media (max-width: 638px){
+  .submit{
+    margin-top: 20px;
+  }
+}
+
 .containers{
   max-width: 600px;
 }
