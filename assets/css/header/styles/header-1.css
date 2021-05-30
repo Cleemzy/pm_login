@@ -9,6 +9,8 @@
 #hamburger{
   width: 40px;
   height: 45px;
+  font-size: 50px;
+  margin-right: 10px;
 }
 
 .brand {
@@ -17,7 +19,7 @@
   margin: auto;
 }
 
-@media (max-width: 600px){
+@media (max-width: 650px){
   .brand {
     position: relative;
     font-weight: bold;
@@ -42,7 +44,7 @@
       padding-top: 20%;
     }
   }
-  @media (max-width: 600px){
+  @media (max-width: 650px){
     .site-header{
       position: fixed;
       height: 65px;
@@ -55,20 +57,20 @@
   padding-bottom: 1rem;
   margin: auto;
  }
-  @media (min-width: 600px) {
+  @media (min-width: 650px) {
     .site-header__wrapper {
       display: flex;
       justify-content: space-between;
       align-items: center;
       padding-top: 0;
       padding-bottom: 0; } }
-@media (min-width: 600px) {
+@media (min-width: 650px) {
   .nav__wrapper {
     display: flex;
     margin: auto;
     } }
 
-@media (max-width: 599px) {
+@media (max-width: 650px) {
   .nav__wrapper {
     margin: auto;
     position: absolute;
@@ -123,7 +125,7 @@
 
 .nav__toggle {
   display: none; }
-  @media (max-width: 599px) {
+  @media (max-width: 650px) {
     .nav__toggle {
       display: block;
       position: absolute;

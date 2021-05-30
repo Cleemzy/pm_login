@@ -3,3 +3,23 @@
   overflow-y: scroll;
   height: 500px;
 }
+
+.desktop__header{
+  display: block;
+}
+
+@media (max-width: 638px){
+  .desktop__header{
+    display: none !important;
+  }
+}
+
+.mobile__header{
+  display: none;
+}
+
+@media (max-width: 638px){
+  .mobile__header{
+    display: block;
+  }
+}
