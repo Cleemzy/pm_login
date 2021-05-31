@@ -75,6 +75,8 @@
   left: -150px;
   /* background-color: #f1f1f1; */
   /* height: 300px; */
+  width: 220px;
+  /* max-width: 200px; */
   max-height: 400px;
   background-color: white;
 

@@ -47,21 +47,26 @@
                   end
                   %></b></span></a>
 
-                <div class="dropdown-notif basecontents" style="display: <%= if @show_notif, do: "block", else: "none" %>;">
-                <a href="#" title="charger notifications" class="basecontents" style="text-align: center;" phx-click="load-notifs"><i class="bi bi-arrow-clockwise"></i></a>
-                <%= for notif <- @notifs do %>
-                  <div class="row notif-link basecontents" style="background-color: <%= if not notif.seen, do: "lightgray" %> ;">
-                    <div class="column column-10">
-                      <img class="profile-pic-notif" src="<%= Routes.static_path(@socket, "/#{PmLogin.Login.get_profile_picture(notif.sender_id) }") %>" width="20"/>
-                    </div>
-                    <div class="column" style="width: 150px;">
-                      <b class="notif-text"><%= notif.content %></b>
-                      <br/><br/>
-                      <i class="notif-date">il y a <%= PmLogin.Services.time_ago notif %></i>
-                    </div>
+                  <div class="dropdown-notif basecontents" style="display: <%= if @show_notif, do: "block", else: "none" %>;">
+                    <%= if length(@notifs)!=0 do %>
+                    <a href="#" title="charger notifications" class="basecontents" style="text-align: center;" phx-click="load-notifs"><i class="bi bi-arrow-clockwise"></i></a>
+                    <% end %>
+                    <%= for notif <- @notifs do %>
+                      <div class="row notif-link basecontents" style="background-color: <%= if not notif.seen, do: "lightgray" %> ;">
+                        <div class="column column-10">
+                          <img class="profile-pic-notif" src="<%= Routes.static_path(@socket, "/#{PmLogin.Login.get_profile_picture(notif.sender_id) }") %>" width="20"/>
+                        </div>
+                        <div class="column" style="width: 150px;">
+                          <b class="notif-text"><%= notif.content %></b>
+                          <br/><br/>
+                          <i class="notif-date">il y a <%= PmLogin.Services.time_ago notif %></i>
+                        </div>
+                      </div>
+                    <% end %>
+                    <%= if length(@notifs)==0 do %>
+                      <p>Aucune notification</p>
+                    <% end %>
                   </div>
-                <% end %>
-                </div>
               </div>
             </li>
 
