@@ -23,7 +23,7 @@
             <li class="nav__item">
               <div class="dropdown">
                 <a href="#" class="dropbtn">▼<i class="bi bi-people-fill"></i> Espace administrateur</a>
-                <div class="dropdown-content basecontents">
+                <div class="dropdown-content basecontents__without__radius">
                   <%= link "Projets", to: Routes.project_path(@conn, :index)%>
                   <%= link "Sociétés", to: Routes.company_path(@conn, :index) %>
                   <%= link "Utilisateurs", to: Routes.user_path(@conn, :list) %>

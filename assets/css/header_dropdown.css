@@ -119,6 +119,16 @@
   /* background-color: black; */
 }
 
+.notif__load{
+  font-size: 20px;
+  color: blue;
+}
+
+.notif__load:hover{
+  cursor: pointer;
+  color: gray;
+}
+
 .notif-date{
   word-wrap: break-word;
   font-size: 11px;

@@ -88,7 +88,7 @@ defmodule PmLoginWeb.LiveComponent.CommentsModalLive do
 
                   <!-- start of one comment -->
                     <%= for comment <- Enum.reverse(@card.task.comments) do %>
-                    <div class="basecontents__without__shadow comment__div">
+                    <div class="basecontents__without__shadow__and__radius comment__div">
 
                     <%= if comment.poster_id == @curr_user_id do %>
                     <div class="row comment__header">
@@ -162,7 +162,7 @@ defmodule PmLoginWeb.LiveComponent.CommentsModalLive do
                       <input type="text" name="com">
                       <input type="hidden" name="poster_id" value="<%= @curr_user_id %>">
                       <input type="hidden" name="task_id" value="<%= @card.task_id %>">
-                      <button type="submit" class="bt__com__form"><span class="material-icons" style="font-size: 200% !important;color: gray;">send</span></button>
+                      <button type="submit" class="bt__com__form"><span class="material-icons bt__com__form__ico">send</span></button>
                     </div>
                     <!-- <button type="submit" style="background-color: transparent;"><i class="bi bi-symmetry-horizontal" style="font-size: 200%;color: gray;"></i></button> -->
                   </form>

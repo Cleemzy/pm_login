@@ -81,10 +81,25 @@
   cursor: pointer;
   color: lightgray;
 }
+
 .bt__com__form{
   border: none;
   width: 10px;
   background-color: transparent;
+}
+
+.bt__com__form:hover{
+  background-color: transparent;
+}
+
+.bt__com__form__ico{
+  font-size: 25px;
+  color: blue;
+}
+
+.bt__com__form__ico:hover{
+  /* font-size: 30px; */
+  color: gray;
 }
 
 
