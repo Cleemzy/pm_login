@@ -39,17 +39,17 @@
           <% end %>
 
         </div>
-        <div class="column column-40">
+        <div class="column column-40 recap__cols">
           <div>Tâche: <%= task.title %></div>
           <div>Projet: <%= task.project.title %></div>
         </div>
-        <div class="column column-50">
+        <div class="column column-50 recap__cols">
         <%= if not is_nil(task.contributor) do %>
         <div class="row">Intervenant: <img class="profile-pic-notif" src="<%= Routes.static_path(@socket, "/#{task.contributor.profile_picture}") %>" width="50" style="margin-left: 10px;margin-right: 10px;"/>  <%= task.contributor.username %></div>
         <% end %>
         <div>Attributeur: <%= task.attributor.username %></div>
         </div>
-  
+
       </div>
     </div>
     <% end %>
@@ -80,11 +80,11 @@
           <% end %>
 
         </div>
-        <div class="column column-40">
+        <div class="column column-40 recap__cols">
           <div>Tâche: <%= task.title %></div>
           <div>Projet: <%= task.project.title %></div>
         </div>
-        <div class="column column-50">
+        <div class="column column-50 recap__cols">
         <%= if not is_nil(task.contributor) do %>
         <div class="row">Intervenant: <img class="profile-pic-notif" src="<%= Routes.static_path(@socket, "/#{task.contributor.profile_picture}") %>" width="50" style="margin-left: 10px;margin-right: 10px;"/>  <%= task.contributor.username %></div>
         <% end %>
@@ -120,11 +120,11 @@
           <% end %>
 
         </div>
-        <div class="column column-40">
+        <div class="column column-40 recap__cols">
           <div>Tâche: <%= task.title %></div>
           <div>Projet: <%= task.project.title %></div>
         </div>
-        <div class="column column-50">
+        <div class="column column-50 recap__cols">
           <%= if not is_nil(task.contributor) do %>
           <div class="row">Intervenant: <img class="profile-pic-notif" src="<%= Routes.static_path(@socket, "/#{task.contributor.profile_picture}") %>" width="50" style="margin-left: 10px;margin-right: 10px;"/>  <%= task.contributor.username %></div>
           <% end %>
