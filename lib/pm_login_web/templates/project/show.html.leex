@@ -1,5 +1,5 @@
 <h1><i class="bi bi-info-circle"></i> <%= @project.title %></h1>
-<div class="basecontents project-show">
+<div class="basecontents__without__radius project-show">
 <ul>
 
   <li>
@@ -45,6 +45,6 @@
 </ul>
 </div>
 <span>
-  <a href="<%= Routes.project_path(@conn, :edit, @project) %>" class="btn btn-lg btn-warning"><i class="bi bi-pencil-square"></i> Modifier informations</a>
+  <a href="<%= Routes.project_path(@socket, :edit, @project) %>" class="btn btn-lg btn-warning"><i class="bi bi-pencil-square"></i> Modifier informations</a>
 </span>
-<span><a href="<%= Routes.project_path(@conn, :index) %>" class="btn btn-lg btn-secondary"><i class="bi bi-arrow-bar-left"></i> Retour</a></span>
+<span><a href="<%= Routes.project_path(@socket, :index) %>" class="btn btn-lg btn-secondary"><i class="bi bi-arrow-bar-left"></i> Retour</a></span>

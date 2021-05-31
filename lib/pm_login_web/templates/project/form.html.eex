@@ -62,6 +62,6 @@
 
 
   <div>
-    <%= submit "Créer projet",class: "btn btn-lg btn-primary" %>
+    <%= submit "Valider projet",class: "btn btn-lg btn-primary" %>
   </div>
 <% end %>
