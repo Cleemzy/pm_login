@@ -1,14 +1,14 @@
-defmodule PmLoginWeb.Services.AssistContractLive do
+defmodule PmLoginWeb.Services.ShowContractLive do
   use Phoenix.LiveView
   alias PmLogin.Services
-  alias PmLoginWeb.LiveComponent.ModalLive
+  alias PmLogin.Services.Company
 
-  def mount(_params, %{"curr_user_id"=>curr_user_id, "assist_contracts" => assist_contracts}, socket) do
+  def mount(_params, %{"curr_user_id"=>curr_user_id, "assist_contract" => assist_contract}, socket) do
     Services.subscribe()
 
     {:ok,
        socket
-       |> assign(show_modal: false, contr_id: nil,curr_user_id: curr_user_id,show_notif: false, notifs: Services.list_my_notifications_with_limit(curr_user_id, 4), assist_contracts: assist_contracts),
+       |> assign(curr_user_id: curr_user_id,show_notif: false, notifs: Services.list_my_notifications_with_limit(curr_user_id, 4), assist_contract: assist_contract),
        layout: {PmLoginWeb.LayoutView, "admin_layout_live.html"}
        }
   end
@@ -39,11 +39,6 @@ defmodule PmLoginWeb.Services.AssistContractLive do
     {:noreply, socket |> assign(show_notif: cancel)}
   end
 
-  def handle_info({Services, [:contract, :deleted], _}, socket) do
-    assist_contracts = Services.list_contracts
-    {:noreply, socket |> assign(assist_contracts: assist_contracts)}
-  end
-
   def handle_info({Services, [:notifs, :sent], _}, socket) do
     curr_user_id = socket.assigns.curr_user_id
     length = socket.assigns.notifs |> length
@@ -51,36 +46,7 @@ defmodule PmLoginWeb.Services.AssistContractLive do
   end
 
   def render(assigns) do
-   PmLoginWeb.AssistContractView.render("index.html", assigns)
-  end
-
-  #del modal component
-
-  def handle_info(
-      {ModalLive, :button_clicked, %{action: "cancel-del"}},
-      socket
-    ) do
-  {:noreply, assign(socket, show_modal: false)}
-  end
-
-  def handle_info(
-      {ModalLive, :button_clicked, %{action: "del", param: contr_id}},
-      socket
-    ) do
-      contract = Services.get_assist_contract!(contr_id)
-      Services.delete_assist_contract(contract)
-      # PmLoginWeb.UserController.archive(socket, user.id)
-  {:noreply,
-    socket
-    |> put_flash(:info, "Le contrat d'assistance #{contract.title} a bien été supprimé!")
-    |> assign(show_modal: false)
-      }
-  end
-
-  def handle_event("go-del", %{"id" => id}, socket) do
-    # Phoenix.LiveView.get_connect_info(socket)
-    # put_session(socket, del_id: id)
-    {:noreply, assign(socket, show_modal: true, contr_id: id)}
+   PmLoginWeb.AssistContractView.render("show.html", assigns)
   end
 
 end

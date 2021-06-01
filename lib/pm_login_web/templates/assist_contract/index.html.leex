@@ -4,6 +4,7 @@
   <thead>
     <tr>
       <th>Titre</th>
+      <th>Société</th>
       <th>Date de début</th>
       <th>Date de fin</th>
 
@@ -14,13 +15,16 @@
 <%= for assist_contract <- @assist_contracts do %>
     <tr>
       <td><%= assist_contract.title %></td>
+      <td><%= assist_contract.company.name %></td>
       <td><%= assist_contract.date_start %></td>
       <td><%= assist_contract.date_end %></td>
 
       <td>
-        <span><%= link "Show", to: Routes.assist_contract_path(@socket, :show, assist_contract) %></span>
-        <span><%= link "Edit", to: Routes.assist_contract_path(@socket, :edit, assist_contract) %></span>
-        <span><%= link "Delete", to: Routes.assist_contract_path(@socket, :delete, assist_contract), method: :delete, data: [confirm: "Are you sure?"] %></span>
+
+        <span><a href="<%= Routes.assist_contract_path(@socket, :show, assist_contract) %>"><i class="bi bi-info-circle btn btn-info btn-lg" style="font-size: 20px;"></i></a></span>
+        <span><a href="<%= Routes.assist_contract_path(@socket, :edit, assist_contract) %>"><i class="bi bi-pencil-square btn btn-warning btn-lg" style="font-size: 20px;"></i></a></span>
+        <span><a href="#" phx-click="go-del" phx-value-id="<%= assist_contract.id %>"><i class="bi bi-x btn btn-danger btn-lg" style="font-size: 20px;"></i></a></span>
+
       </td>
     </tr>
 <% end %>
@@ -29,3 +33,18 @@
 
 <span><a href="<%= Routes.assist_contract_path(@socket, :new) %>" class="btn btn-lg btn-primary"><i class="bi bi-plus-circle"></i> Nouveau contrat d'assistance</a></span>
 <!-- <span><%= link "Nouveau contrat d'assistance", to: Routes.assist_contract_path(@socket, :new) %></span> -->
+
+<% alias PmLoginWeb.LiveComponent.ModalLive %>
+<%= if @show_modal do %>
+<%= live_component(@socket,
+                   ModalLive,
+                   id: "confirm-del",
+                   title: "Supprimer contrat?",
+                   body: "Etes-vous sûr de supprimer le contrat d'assistance #{PmLogin.Services.get_assist_contract!(@contr_id).title}?",
+                   right_button: "OUI",
+                   right_button_action: "del",
+                   right_button_param: @contr_id,
+                   left_button: "ANNULER",
+                   left_button_action: "cancel-del")
+%>
+<% end %>

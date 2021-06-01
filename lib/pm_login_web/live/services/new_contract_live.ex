@@ -1,12 +1,14 @@
 defmodule PmLoginWeb.Services.NewContractLive do
   use Phoenix.LiveView
   alias PmLogin.Services
+  alias PmLogin.Services.Company
 
   def mount(_params, %{"curr_user_id"=>curr_user_id, "changeset" => changeset}, socket) do
     Services.subscribe()
 
     {:ok,
        socket
+       |> assign(companies: Enum.map(Services.list_companies, fn %Company{} = c -> {c.name, c.id} end))
        |> assign(curr_user_id: curr_user_id,show_notif: false, notifs: Services.list_my_notifications_with_limit(curr_user_id, 4), changeset: changeset),
        layout: {PmLoginWeb.LayoutView, "admin_layout_live.html"}
        }

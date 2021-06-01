@@ -11,7 +11,7 @@ defmodule PmLoginWeb.AssistContractController do
     if Login.is_connected?(conn) do
       cond do
         Login.is_admin?(conn) ->
-          assist_contracts = Services.list_assist_contracts()
+          assist_contracts = Services.list_contracts()
           LiveView.Controller.live_render(conn, PmLoginWeb.Services.AssistContractLive, session: %{"curr_user_id" => get_session(conn, :curr_user_id), "assist_contracts" => assist_contracts}, router: PmLoginWeb.Router)
 
         true ->
@@ -47,23 +47,29 @@ defmodule PmLoginWeb.AssistContractController do
     case Services.create_assist_contract(assist_contract_params) do
       {:ok, assist_contract} ->
         conn
-        |> put_flash(:info, "Assist contract created successfully.")
+        |> put_flash(:info, "Contrat d'assistance créé avec succès")
         |> redirect(to: Routes.assist_contract_path(conn, :show, assist_contract))
 
       {:error, %Ecto.Changeset{} = changeset} ->
-        render(conn, "new.html", changeset: changeset)
+        # render(conn, "new.html", changeset: changeset)
+        LiveView.Controller.live_render(conn, PmLoginWeb.Services.NewContractLive, session: %{"curr_user_id" => get_session(conn, :curr_user_id), "changeset" => changeset}, router: PmLoginWeb.Router)
+
     end
   end
 
   def show(conn, %{"id" => id}) do
-    assist_contract = Services.get_assist_contract!(id)
-    render(conn, "show.html", assist_contract: assist_contract)
+    assist_contract = Services.get_contract!(id)
+    # render(conn, "show.html", assist_contract: assist_contract)
+    LiveView.Controller.live_render(conn, PmLoginWeb.Services.ShowContractLive, session: %{"curr_user_id" => get_session(conn, :curr_user_id), "assist_contract" => assist_contract}, router: PmLoginWeb.Router)
+
   end
 
   def edit(conn, %{"id" => id}) do
     assist_contract = Services.get_assist_contract!(id)
     changeset = Services.change_assist_contract(assist_contract)
-    render(conn, "edit.html", assist_contract: assist_contract, changeset: changeset)
+    # render(conn, "edit.html", assist_contract: assist_contract, changeset: changeset)
+    LiveView.Controller.live_render(conn, PmLoginWeb.Services.EditContractLive, session: %{"curr_user_id" => get_session(conn, :curr_user_id), "assist_contract" => assist_contract, "changeset" => changeset}, router: PmLoginWeb.Router)
+
   end
 
   def update(conn, %{"id" => id, "assist_contract" => assist_contract_params}) do

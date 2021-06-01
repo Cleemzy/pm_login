@@ -1,5 +1,0 @@
-<h1>Edit Assist contract</h1>
-
-<%= render "form.html", Map.put(assigns, :action, Routes.assist_contract_path(@socket, :update, @assist_contract)) %>
-
-<span><%= link "Back", to: Routes.assist_contract_path(@socket, :index) %></span>

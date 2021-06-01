@@ -27,6 +27,10 @@ defmodule PmLogin.Services do
     Phoenix.PubSub.broadcast(PmLogin.PubSub, @topic, {__MODULE__, event, result})
   end
 
+  defp broadcast_contract_deleted({:ok, result}, event) do
+    Phoenix.PubSub.broadcast(PmLogin.PubSub, @topic, {__MODULE__, event, result})
+  end
+
 
   @doc """
   Returns the list of companies.
@@ -425,6 +429,13 @@ defmodule PmLogin.Services do
     Repo.all(AssistContract)
   end
 
+  def list_contracts do
+    company_query = from c in Company
+    query = from ac in AssistContract,
+            preload: [company: ^company_query]
+    Repo.all(query)
+  end
+
   @doc """
   Gets a single assist_contract.
 
@@ -441,6 +452,13 @@ defmodule PmLogin.Services do
   """
   def get_assist_contract!(id), do: Repo.get!(AssistContract, id)
 
+  def get_contract!(id) do
+    company_query = from c in Company
+    query = from ac in AssistContract,
+            where: ac.id == ^id,
+            preload: [company: ^company_query]
+    Repo.one!(query)
+  end
   @doc """
   Creates a assist_contract.
 
@@ -455,7 +473,7 @@ defmodule PmLogin.Services do
   """
   def create_assist_contract(attrs \\ %{}) do
     %AssistContract{}
-    |> AssistContract.changeset(attrs)
+    |> AssistContract.create_changeset(attrs)
     |> Repo.insert()
   end
 
@@ -491,6 +509,7 @@ defmodule PmLogin.Services do
   """
   def delete_assist_contract(%AssistContract{} = assist_contract) do
     Repo.delete(assist_contract)
+    |> broadcast_contract_deleted([:contract,:deleted])
   end
 
   @doc """
