@@ -7,7 +7,7 @@ defmodule PmLogin.Login do
   import Ecto.Query, warn: false
   alias PmLogin.Repo
   alias PmLogin.Services.ActiveClient
-
+  alias PmLogin.Services
   alias PmLogin.Login.Right
 
   @topic inspect(__MODULE__)
@@ -172,6 +172,12 @@ defmodule PmLogin.Login do
     |> redirect(to: Routes.user_path(conn, :index))
   end
 
+  def not_active_client_redirection(conn) do
+    conn
+    |> put_flash(:error, "Désolé, vous n'êtes pas un client actif!")
+    |> redirect(to: Routes.user_path(conn, :index))
+  end
+
   def not_connected_redirection(conn) do
     conn
     |> put_flash(:error, "Connectez-vous d'abord!")
@@ -212,6 +218,20 @@ defmodule PmLogin.Login do
     user_id = get_curr_user_id(conn)
     user = get_user!(user_id)
     user.right_id == 4
+  end
+
+  def is_id_active_client?(id) do
+    active_clients = Services.list_active_clients
+    ac_ids = active_clients |> Enum.map(fn x -> x.user_id end)
+    id in ac_ids
+  end
+
+  def is_active_client?(conn) do
+    user_id = get_curr_user_id(conn)
+
+    active_clients = Services.list_active_clients
+    ac_ids = active_clients |> Enum.map(fn x -> x.user_id end)
+    is_client?(conn) and (user_id in ac_ids)
   end
 
   def is_not_attributed?(conn) do

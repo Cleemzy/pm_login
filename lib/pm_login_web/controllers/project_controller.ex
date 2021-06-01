@@ -74,8 +74,8 @@ defmodule PmLoginWeb.ProjectController do
           changeset = Monitoring.change_project(%Project{})
           ac_list = Services.list_active_clients
           ac_ids = Enum.map(ac_list, fn(%ActiveClient{} = ac) -> {ac.user.username, ac.id} end )
-          render(conn, "new.html", changeset: changeset, ac_ids: ac_ids, layout: {PmLoginWeb.LayoutView, "admin_layout.html"})
-
+          # render(conn, "new.html", changeset: changeset, ac_ids: ac_ids, layout: {PmLoginWeb.LayoutView, "admin_layout.html"})
+          LiveView.Controller.live_render(conn, PmLoginWeb.Project.NewLive, session: %{"curr_user_id" => get_session(conn, :curr_user_id), "changeset" => changeset, "ac_ids" => ac_ids}, router: PmLoginWeb.Router)
         true ->
           conn
             |> Login.not_admin_redirection
@@ -99,7 +99,8 @@ end
       {:error, %Ecto.Changeset{} = changeset} ->
         ac_list = Services.list_active_clients
         ac_ids = Enum.map(ac_list, fn(%ActiveClient{} = ac) -> {ac.user.username, ac.id} end )
-        render(conn, "new.html", changeset: changeset, ac_ids: ac_ids)
+        # render(conn, "new.html", changeset: changeset, ac_ids: ac_ids)
+        LiveView.Controller.live_render(conn, PmLoginWeb.Project.NewLive, session: %{"curr_user_id" => get_session(conn, :curr_user_id), "changeset" => changeset, "ac_ids" => ac_ids}, router: PmLoginWeb.Router)
     end
   end
 
@@ -154,11 +155,15 @@ end
       {:ok, project} ->
         Services.send_notifs_to_admins_and_attributors(Login.get_curr_user_id(conn), "Le projet \"#{project.title}\" a été mise à jour par #{Login.get_curr_user(conn).username}")
         conn
-        |> put_flash(:info, "Project updated successfully.")
+        |> put_flash(:info, "Projet mis à jour.")
         |> redirect(to: Routes.project_path(conn, :show, project))
 
       {:error, %Ecto.Changeset{} = changeset} ->
-        render(conn, "edit.html", project: project, changeset: changeset)
+        # render(conn, "edit.html", project: project, changeset: changeset)
+        ac_list = Services.list_active_clients
+        ac_ids = Enum.map(ac_list, fn(%ActiveClient{} = ac) -> {ac.user.username, ac.id} end )
+        LiveView.Controller.live_render(conn, PmLoginWeb.Project.EditLive, session: %{"curr_user_id" => get_session(conn, :curr_user_id), "project" => project, "changeset" => changeset, "ac_ids" => ac_ids}, router: PmLoginWeb.Router)
+
     end
   end
 

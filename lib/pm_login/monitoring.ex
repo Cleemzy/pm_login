@@ -476,7 +476,7 @@ def validate_start_deadline(changeset) do
   """
   def update_project(%Project{} = project, attrs) do
     project
-    |> Project.changeset(attrs)
+    |> Project.update_changeset(attrs)
     |> Repo.update()
   end
 

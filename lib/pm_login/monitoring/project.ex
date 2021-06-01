@@ -31,6 +31,20 @@ defmodule PmLogin.Monitoring.Project do
     |> validate_required([:title, :description, :progression, :date_start, :date_end, :estimated_duration, :performed_duration, :deadline, :active_client_id, :status_id])
   end
 
+  def update_changeset(project, attrs) do
+    project
+    |> cast(attrs, [:title, :description,:date_start, :date_end, :estimated_duration, :deadline, :active_client_id])
+    |> foreign_key_constraint(:active_client_id)
+    |> unique_constraint(:title, message: "Ce nom de projet existe déjà")
+    |> validate_required(:estimated_duration, message: "Entrez la durée estimée du projet")
+    |> validate_required(:title, message: "Veuillez entrer le nom de votre projet")
+    |> validate_required(:description, message: "Aucune description donnée")
+    |> validate_required(:date_start, message: "Entrez une date de début")
+    |> validate_required(:date_end, message: "Entrez une date de fin")
+    |> validate_required(:estimated_duration, message: "Entrez une estimation en heure")
+    |> validate_required(:deadline, message: "Entrez la date d'échéance")
+  end
+
   def create_changeset(project, attrs) do
     %{"title" => project_title} = attrs
 
