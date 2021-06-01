@@ -67,9 +67,9 @@ defmodule PmLoginWeb.CompanyController do
     if Login.is_connected?(conn) do
       cond do
         Login.is_admin?(conn) ->
-          # changeset = Services.change_company(%Company{})
+          changeset = Services.change_company(%Company{})
           # render(conn, "new.html", changeset: changeset, layout: {PmLoginWeb.LayoutView, "admin_layout.html"})
-          LiveView.Controller.live_render(conn, PmLoginWeb.Company.NewLive, session: %{"curr_user_id" => get_session(conn, :curr_user_id)}, router: PmLoginWeb.Router)
+          LiveView.Controller.live_render(conn, PmLoginWeb.Company.NewLive, session: %{"curr_user_id" => get_session(conn, :curr_user_id),"changeset" => changeset}, router: PmLoginWeb.Router)
 
         true ->
           conn
@@ -90,7 +90,9 @@ defmodule PmLoginWeb.CompanyController do
         |> redirect(to: Routes.company_path(conn, :show, company))
 
       {:error, %Ecto.Changeset{} = changeset} ->
-        render(conn, "new.html", changeset: changeset, layout: {PmLoginWeb.LayoutView, "admin_layout.html"})
+        # render(conn, "new.html", changeset: changeset, layout: {PmLoginWeb.LayoutView, "admin_layout.html"})
+        LiveView.Controller.live_render(conn, PmLoginWeb.Company.NewLive, session: %{"curr_user_id" => get_session(conn, :curr_user_id),"changeset" => changeset}, router: PmLoginWeb.Router)
+
     end
   end
 
@@ -119,10 +121,10 @@ defmodule PmLoginWeb.CompanyController do
     if Login.is_connected?(conn) do
       cond do
         Login.is_admin?(conn) ->
-          # company = Services.get_company!(id)
-          # changeset = Services.change_company(company)
+          company = Services.get_company!(id)
+          changeset = Services.change_company(company)
           # render(conn, "edit.html", company: company, changeset: changeset, layout: {PmLoginWeb.LayoutView, "admin_layout.html"})
-          LiveView.Controller.live_render(conn, PmLoginWeb.Company.EditLive, session: %{"curr_user_id" => get_session(conn, :curr_user_id), "company_id" => id}, router: PmLoginWeb.Router)
+          LiveView.Controller.live_render(conn, PmLoginWeb.Company.EditLive, session: %{"curr_user_id" => get_session(conn, :curr_user_id), "company" => company, "changeset" => changeset}, router: PmLoginWeb.Router)
 
         true ->
           conn
@@ -145,7 +147,7 @@ defmodule PmLoginWeb.CompanyController do
         |> redirect(to: Routes.company_path(conn, :show, company))
 
       {:error, %Ecto.Changeset{} = changeset} ->
-        render(conn, "edit.html", company: company, changeset: changeset, layout: {PmLoginWeb.LayoutView, "admin_layout.html"})
+        LiveView.Controller.live_render(conn, PmLoginWeb.Company.EditLive, session: %{"curr_user_id" => get_session(conn, :curr_user_id), "company" => company, "changeset" => changeset}, router: PmLoginWeb.Router)
     end
   end
 

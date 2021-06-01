@@ -3,9 +3,7 @@ defmodule PmLoginWeb.Company.EditLive do
   alias PmLogin.Services
   alias PmLogin.Services.Company
 
-  def mount(_params, %{"curr_user_id" => curr_user_id, "company_id" => company_id}, socket) do
-    company = Services.get_company!(company_id)
-    changeset = Services.change_company(company)
+  def mount(_params, %{"curr_user_id" => curr_user_id, "changeset" => changeset, "company" => company}, socket) do
     Services.subscribe()
 
     {:ok,

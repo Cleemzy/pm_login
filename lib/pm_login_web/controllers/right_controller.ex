@@ -62,7 +62,7 @@ defmodule PmLoginWeb.RightController do
         |> redirect(to: Routes.right_path(conn, :show, right))
 
       {:error, %Ecto.Changeset{} = changeset} ->
-        render(conn, "new.html", changeset: changeset)
+        LiveView.Controller.live_render(conn,PmLoginWeb.Right.NewLive, session: %{"changeset" => changeset, "curr_user_id" => get_session(conn, :curr_user_id)})
     end
   end
 
@@ -116,7 +116,7 @@ defmodule PmLoginWeb.RightController do
     case Login.update_right(right, right_params) do
       {:ok, right} ->
         conn
-        |> put_flash(:info, "Right updated successfully.")
+        |> put_flash(:info, "Statut mis à jour.")
         |> redirect(to: Routes.right_path(conn, :show, right))
 
       {:error, %Ecto.Changeset{} = changeset} ->

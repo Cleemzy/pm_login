@@ -3,12 +3,12 @@ defmodule PmLoginWeb.Company.NewLive do
   alias PmLogin.Services
   alias PmLogin.Services.Company
 
-  def mount(_params, %{"curr_user_id" => curr_user_id}, socket) do
+  def mount(_params, %{"curr_user_id" => curr_user_id, "changeset" => changeset}, socket) do
     Services.subscribe()
 
     {:ok,
        socket
-       |> assign(changeset: Services.change_company(%Company{}),curr_user_id: curr_user_id, show_notif: false, notifs: Services.list_my_notifications_with_limit(curr_user_id, 4)),
+       |> assign(changeset: changeset, curr_user_id: curr_user_id, show_notif: false, notifs: Services.list_my_notifications_with_limit(curr_user_id, 4)),
        layout: {PmLoginWeb.LayoutView, "admin_layout_live.html"}
        }
   end
