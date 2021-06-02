@@ -16,8 +16,6 @@
     <%= select f, :company_id, @companies %>
     <%= error_tag f, :company_id %>
   </div>
-
-
 </div>
 
 

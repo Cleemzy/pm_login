@@ -41,7 +41,7 @@ COMMENTED ROUTES ARE NOT TO BE DELETED BUT JUST NOT USED AT THE TIME
     get "/my_company", CompanyController, :my_company
     get "/services", CompanyController, :services
     # resources "/notifications", NotificationController
-    # resources "/editors", EditorController
+    resources "/editors", EditorController
     # resources "/softwares", SoftwareController
     # resources "/licenses", LicenseController
     resources "/assist_contracts", AssistContractController

@@ -12,12 +12,14 @@ defmodule PmLogin.Services.Company do
   def changeset(company, attrs) do
     company
     |> cast(attrs, [:name])
+    |> unique_constraint(:name, message: "Nom de société déjà pris")
     |> validate_required(:name, message: "Ne peut pas être vide")
   end
 
   def create_changeset(company, attrs) do
     company
     |> cast(attrs, [:name])
+    |> unique_constraint(:name, message: "Nom de société déjà pris")
     |> validate_required(:name, message: "Ne peut pas être vide")
     |> upload_logo(attrs)
   end

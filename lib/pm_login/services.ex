@@ -237,6 +237,13 @@ defmodule PmLogin.Services do
     Repo.all(Editor)
   end
 
+  def list_all_editors do
+    company_query = from c in Company
+    query = from e in Editor,
+            preload: [company: ^company_query]
+    Repo.all(query)
+  end
+
   @doc """
   Gets a single editor.
 
@@ -253,6 +260,13 @@ defmodule PmLogin.Services do
   """
   def get_editor!(id), do: Repo.get!(Editor, id)
 
+  def get_editor_with_company!(id) do
+    company_query = from c in Company
+    query = from e in Editor,
+            where: e.id == ^id,
+            preload: [company: ^company_query]
+    Repo.one!(query)
+  end
   @doc """
   Creates a editor.
 
@@ -267,7 +281,7 @@ defmodule PmLogin.Services do
   """
   def create_editor(attrs \\ %{}) do
     %Editor{}
-    |> Editor.changeset(attrs)
+    |> Editor.create_changeset(attrs)
     |> Repo.insert()
   end
 
@@ -285,7 +299,7 @@ defmodule PmLogin.Services do
   """
   def update_editor(%Editor{} = editor, attrs) do
     editor
-    |> Editor.changeset(attrs)
+    |> Editor.update_changeset(attrs)
     |> Repo.update()
   end
 
@@ -303,6 +317,7 @@ defmodule PmLogin.Services do
   """
   def delete_editor(%Editor{} = editor) do
     Repo.delete(editor)
+    |> broadcast_change([:editor, :deleted])
   end
 
   @doc """
