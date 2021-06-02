@@ -141,6 +141,12 @@ defmodule PmLogin.Services do
     Repo.all(Software)
   end
 
+  def list_softwares_with_company do
+    company_query = from c in Company
+    query = from sw in Software,
+            preload: [company: ^company_query]
+    Repo.all(query)
+  end
   @doc """
   Gets a single software.
 
@@ -157,6 +163,13 @@ defmodule PmLogin.Services do
   """
   def get_software!(id), do: Repo.get!(Software, id)
 
+  def get_software_with_company!(id) do
+    company_query = from c in Company
+    query = from sw in Software,
+            where: sw.id == ^id,
+            preload: [company: ^company_query]
+    Repo.one!(query)
+  end
   @doc """
   Creates a software.
 
@@ -207,6 +220,7 @@ defmodule PmLogin.Services do
   """
   def delete_software(%Software{} = software) do
     Repo.delete(software)
+    |> broadcast_change([:software,:deleted])
   end
 
   @doc """
@@ -348,6 +362,13 @@ defmodule PmLogin.Services do
     Repo.all(License)
   end
 
+  def list_licenses_with_company do
+    company_query = from c in Company
+    query = from l in License,
+            preload: [company: ^company_query]
+    Repo.all(query)
+  end
+
   @doc """
   Gets a single license.
 
@@ -364,6 +385,13 @@ defmodule PmLogin.Services do
   """
   def get_license!(id), do: Repo.get!(License, id)
 
+  def get_license_with_company!(id) do
+    company_query = from c in Company
+    query = from l in License,
+            where: l.id == ^id,
+            preload: [company: ^company_query]
+    Repo.one!(query)
+  end
   @doc """
   Creates a license.
 
@@ -414,6 +442,7 @@ defmodule PmLogin.Services do
   """
   def delete_license(%License{} = license) do
     Repo.delete(license)
+    |> broadcast_change([:license,:deleted])
   end
 
   @doc """
