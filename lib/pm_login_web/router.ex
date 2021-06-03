@@ -46,7 +46,8 @@ COMMENTED ROUTES ARE NOT TO BE DELETED BUT JUST NOT USED AT THE TIME
     resources "/licenses", LicenseController
     resources "/assist_contracts", AssistContractController
     resources "/active_clients", ActiveClientController, except: [:edit, :show]
-    # resources "/clients_requests", ClientsRequestController
+    resources "/clients_requests", ClientsRequestController
+    get "/my_requests", ClientsRequestController, :my_requests
 
     get "/users/:id/edit_profile", UserController, :edit_profile
     get "/list_users", UserController, :list

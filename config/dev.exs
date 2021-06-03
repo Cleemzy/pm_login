@@ -65,7 +65,9 @@ config :pm_login, PmLoginWeb.Endpoint,
       ~r"priv/gettext/.*(po)$",
       ~r"lib/pm_login_web/(live|views)/.*(ex)$",
       ~r"lib/pm_login_web/templates/.*(eex)$",
-      ~r"lib/pm_login_web/live/.*(eex)$"
+      ~r"lib/pm_login_web/templates/.*(leex)$",
+      ~r"lib/pm_login_web/live/.*(eex)$",
+      ~r"lib/pm_login_web/live/.*(ex)$"
     ]
   ]
 

@@ -18,11 +18,25 @@
 
 /* Alerts and form errors */
 .alert {
+  float: right;
+  position: fixed;
+  top: 80px;
+  right: 270px;
   padding: 15px;
   margin-bottom: 20px;
   border: 1px solid transparent;
   border-radius: 4px;
+  z-index: 999;
 }
+
+@media (max-width: 650px){
+  .alert {
+    top: 80px;
+    right: 20px;
+  }
+}
+
+
 .alert-info {
   color: #31708f;
   background-color: #d9edf7;

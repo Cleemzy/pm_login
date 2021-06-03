@@ -1,12 +1,16 @@
 defmodule PmLogin.Services.ClientsRequest do
   use Ecto.Schema
   import Ecto.Changeset
-
+  alias PmLogin.Services.ActiveClient
   schema "clients_requests" do
+    field :title, :string
     field :content, :string
     field :date_post, :naive_datetime
-    field :active_client_id, :id
-    field :company_id, :id
+    field :seen, :boolean
+    field :ongoing, :boolean
+    field :done, :boolean
+    # field :active_client_id, :id
+    belongs_to :active_client, ActiveClient
 
     timestamps()
   end
@@ -14,7 +18,8 @@ defmodule PmLogin.Services.ClientsRequest do
   @doc false
   def changeset(clients_request, attrs) do
     clients_request
-    |> cast(attrs, [:content, :date_post])
-    |> validate_required([:content, :date_post])
+    |> cast(attrs, [:title ,:content, :date_post, :seen, :ongoing, :done])
+    |> unique_constraint(:title, message: "Titre de requête déjà existant")
+    |> validate_required(:content, message: "Entrez le contenu de votre requête")
   end
 end

@@ -31,3 +31,9 @@
 .recap__cols{
   word-break: break-word;
 }
+
+.my__requests{
+  text-decoration-line: underline;
+  text-decoration-thickness: 0.5px;
+  text-decoration-color: gray;
+}
