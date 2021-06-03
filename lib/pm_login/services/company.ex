@@ -1,10 +1,16 @@
 defmodule PmLogin.Services.Company do
   use Ecto.Schema
   import Ecto.Changeset
+  alias PmLogin.Services.{AssistContract, Editor, License, Software}
 
   schema "companies" do
     field :name, :string
     field :logo, :string
+
+    has_many :assist_contracts, AssistContract
+    has_many :editors, Editor
+    has_many :licenses, License
+    has_many :softwares, Software
     timestamps()
   end
 

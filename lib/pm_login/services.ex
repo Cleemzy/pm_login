@@ -9,6 +9,7 @@ defmodule PmLogin.Services do
   alias PmLogin.Services.Company
   alias PmLogin.Login.User
   alias PmLogin.Login
+  alias PmLogin.Services.{Software, Editor, License, AssistContract}
 
   @topic inspect(__MODULE__)
   def subscribe do
@@ -126,7 +127,6 @@ defmodule PmLogin.Services do
     Company.changeset(company, attrs)
   end
 
-  alias PmLogin.Services.Software
 
   @doc """
   Returns the list of softwares.
@@ -236,7 +236,6 @@ defmodule PmLogin.Services do
     Software.changeset(software, attrs)
   end
 
-  alias PmLogin.Services.Editor
 
   @doc """
   Returns the list of editors.
@@ -347,7 +346,6 @@ defmodule PmLogin.Services do
     Editor.changeset(editor, attrs)
   end
 
-  alias PmLogin.Services.License
 
   @doc """
   Returns the list of licenses.
@@ -458,7 +456,6 @@ defmodule PmLogin.Services do
     License.changeset(license, attrs)
   end
 
-  alias PmLogin.Services.AssistContract
 
   @doc """
   Returns the list of assist_contracts.
@@ -610,6 +607,25 @@ defmodule PmLogin.Services do
     query = from ac in ActiveClient,
           preload: [user: ^from u in User],
           where: ac.id == ^id
+    Repo.one!(query)
+
+  end
+
+  def get_active_client_from_userid!(user_id) do
+    # |> Repo.preload(User)
+    # |> Repo.get!(id)
+    editor_query = from e in Editor
+    ac_query = from assc in AssistContract
+    li_query = from li in License
+    software_query = from e in Software
+
+    company_query = from c in Company,
+                    preload: [editors: ^editor_query,assist_contracts: ^ac_query,licenses: ^li_query,softwares: ^software_query]
+    user_query = from u in User
+
+    query = from ac in ActiveClient,
+          preload: [user: ^user_query, company: ^company_query],
+          where: ac.user_id == ^user_id
     Repo.one!(query)
 
   end

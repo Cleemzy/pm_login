@@ -4,10 +4,10 @@ defmodule PmLoginWeb.Services.MyCompanyLive do
 
   def mount(_params, %{"curr_user_id"=>curr_user_id}, socket) do
     Services.subscribe()
-
+    active_client = Services.get_active_client_from_userid!(curr_user_id)
     {:ok,
        socket
-       |> assign(curr_user_id: curr_user_id,show_notif: false, notifs: Services.list_my_notifications_with_limit(curr_user_id, 4)),
+       |> assign(curr_user_id: curr_user_id,show_notif: false, notifs: Services.list_my_notifications_with_limit(curr_user_id, 4), active_client: active_client),
        layout: {PmLoginWeb.LayoutView, "active_client_layout_live.html"}
        }
   end
