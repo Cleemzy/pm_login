@@ -372,7 +372,8 @@ defmodule PmLoginWeb.Project.BoardLive do
 
   def handle_event("update_task", %{"task" => params}, socket) do
     #progression to int
-    IO.inspect params
+    IO.puts "OIIIIIIIIII"
+    # IO.inspect params
     int_progression = params["progression"] |> Float.parse |> elem(0) |> trunc
     attrs = %{params | "progression" => int_progression}
           #UPDATING
@@ -386,8 +387,8 @@ defmodule PmLoginWeb.Project.BoardLive do
         # IO.inspect attrs
         {:ok, updated_task} |> Monitoring.broadcast_updated_task
 
-        IO.inspect {:ok, task}
-        IO.inspect {:ok, updated_task}
+        # IO.inspect {:ok, task}
+        # IO.inspect {:ok, updated_task}
 
         if (is_nil task.contributor_id) and not (is_nil updated_task.contributor_id) do
           Services.send_notif_to_one(updated_task.attributor_id, updated_task.contributor_id, "#{Login.get_user!(updated_task.attributor_id).username} vous a assigné à la tâche #{updated_task.title}.")

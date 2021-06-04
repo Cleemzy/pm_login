@@ -748,7 +748,7 @@ defmodule PmLogin.Services do
   """
   def create_clients_request(attrs \\ %{}) do
     %ClientsRequest{}
-    |> ClientsRequest.changeset(attrs)
+    |> ClientsRequest.create_changeset(attrs)
     |> Repo.insert()
   end
 

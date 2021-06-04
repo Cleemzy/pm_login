@@ -107,8 +107,10 @@ defmodule PmLoginWeb.User.ListLive do
   def handle_event("sort_users", %{"_target" => ["sort_select"]},socket), do:
     {:noreply, socket}
 
-  def handle_event("right_selected", %{"_target" => ["right_select"], "right_select" => id}, socket), do:
+  def handle_event("right_selected", %{"_target" => ["right_select"], "right_select" => id}, socket) do
+    IO.inspect id
     {:noreply, assign(socket, users: Login.filter_auth(id |> String.to_integer))}
+  end
 
   def handle_event("right_selected", %{"_target" => ["right_select"]}, socket), do:
     {:noreply, socket}

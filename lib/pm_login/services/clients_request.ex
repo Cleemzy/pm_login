@@ -19,7 +19,16 @@ defmodule PmLogin.Services.ClientsRequest do
   def changeset(clients_request, attrs) do
     clients_request
     |> cast(attrs, [:title ,:content, :date_post, :seen, :ongoing, :done])
-    |> unique_constraint(:title, message: "Titre de requête déjà existant")
-    |> validate_required(:content, message: "Entrez le contenu de votre requête")
+    # |> unique_constraint(:title, message: "Titre de requête déjà existant")
+    # |> validate_required(:content, message: "Entrez le contenu de votre requête")
+  end
+
+  def create_changeset(clients_request, attrs) do
+    clients_request
+    |> cast(attrs, [:title ,:content, :date_post, :seen, :ongoing, :done])
+    |> validate_required(:title, message: "Entrez l'intitulé de votre requête.")
+    |> unique_constraint(:title, message: "Titre de requête déjà existant.")
+    |> validate_required(:content, message: "Entrez le contenu de votre requête.")
+    |> put_change(:date_post, NaiveDateTime.local_now)
   end
 end

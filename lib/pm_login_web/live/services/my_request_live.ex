@@ -2,15 +2,28 @@ defmodule PmLoginWeb.Services.MyRequestsLive do
   use Phoenix.LiveView
   alias PmLogin.Services
   alias PmLoginWeb.LiveComponent.ModalLive
+  alias PmLogin.Services
+  alias PmLogin.Services.ClientsRequest
 
   def mount(_params, %{"curr_user_id"=>curr_user_id}, socket) do
     Services.subscribe()
 
     {:ok,
        socket
-       |> assign(show_modal: false, service_id: nil,curr_user_id: curr_user_id,show_notif: false, notifs: Services.list_my_notifications_with_limit(curr_user_id, 4)),
+       |> assign(changeset:  Services.change_clients_request(%ClientsRequest{}),show_modal: false, service_id: nil,curr_user_id: curr_user_id,show_notif: false, notifs: Services.list_my_notifications_with_limit(curr_user_id, 4)),
        layout: {PmLoginWeb.LayoutView, "active_client_layout_live.html"}
        }
+  end
+
+  def handle_event("send-request", %{"clients_request" => params}, socket) do
+
+    case Services.create_clients_request(params) do
+      {:ok, result} ->
+          {:noreply, socket}
+      {:error, %Ecto.Changeset{} = changeset} ->
+          {:noreply, socket |> assign(changeset: changeset)}
+    end
+
   end
 
   def handle_event("switch-notif", %{}, socket) do
