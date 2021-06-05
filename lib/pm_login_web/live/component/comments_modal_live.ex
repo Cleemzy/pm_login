@@ -1,5 +1,6 @@
 defmodule PmLoginWeb.LiveComponent.CommentsModalLive do
   alias PmLoginWeb.Router.Helpers, as: Routes
+  alias PmLogin.Utilities
   @moduledoc """
   This is a general modal component with title, body text, and two buttons.
 
@@ -34,7 +35,9 @@ defmodule PmLoginWeb.LiveComponent.CommentsModalLive do
       %>
   """
   use Phoenix.LiveComponent
-
+  import Phoenix.HTML.Form
+  import PmLoginWeb.ErrorHelpers
+  
   @defaults %{
     left_button: "Cancel",
     left_button_action: nil,
@@ -121,7 +124,7 @@ defmodule PmLoginWeb.LiveComponent.CommentsModalLive do
                       <div class="row comment__footer">
                       <%= if @curr_user_id == comment.poster_id do %>
                         <div class="column column-30">
-                        <i class="date__footer"><%= comment.inserted_at %></i>
+                        <i class="date__footer"><%= Utilities.simple_date_format_with_hours(comment.inserted_at) %></i>
                         </div>
                         <div class="column column-70">
                         </div>
@@ -129,7 +132,7 @@ defmodule PmLoginWeb.LiveComponent.CommentsModalLive do
                         <div class="column column-70">
                         </div>
                         <div class="column column-30">
-                          <i class="date__footer"><%= comment.inserted_at %></i>
+                          <i class="date__footer"><%= Utilities.simple_date_format_with_hours(comment.inserted_at) %></i>
                         </div>
                       <% end %>
                       </div>
@@ -157,11 +160,12 @@ defmodule PmLoginWeb.LiveComponent.CommentsModalLive do
 
                 <!-- Right Button -->
                 <div class="column column-90 col__com__footer">
-                  <form phx-submit="send-comment">
+                  <%= f = form_for @changeset, "#",[phx_submit: "send-comment"]%>
                     <div class="form__wrapper">
-                      <input type="text" name="com">
-                      <input type="hidden" name="poster_id" value="<%= @curr_user_id %>">
-                      <input type="hidden" name="task_id" value="<%= @card.task_id %>">
+                        <%= text_input f, :content %>
+                        <%= error_tag f, :content %>
+                        <%= hidden_input f, :poster_id, value: @curr_user_id %>
+                        <%= hidden_input f, :task_id, value: @card.task_id %>
                       <button type="submit" class="bt__com__form"><span class="material-icons bt__com__form__ico">send</span></button>
                     </div>
                     <!-- <button type="submit" style="background-color: transparent;"><i class="bi bi-symmetry-horizontal" style="font-size: 200%;color: gray;"></i></button> -->

@@ -85,10 +85,14 @@
 .bt__com__form{
   border: none;
   width: 10px;
-  background-color: transparent;
+  background-color: transparent !important;
 }
 
 .bt__com__form:hover{
+  background-color: transparent;
+}
+
+.bt__com__form:active{
   background-color: transparent;
 }
 

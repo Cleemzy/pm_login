@@ -10,7 +10,7 @@ defmodule PmLoginWeb.Project.BoardLive do
   alias PmLogin.Login
   alias PmLogin.Login.User
   alias PmLogin.Services
-
+  alias PmLogin.Monitoring.Comment
 
   def mount(_params,%{"curr_user_id" => curr_user_id ,"pro_id" => pro_id}, socket) do
     if connected?(socket), do: Kanban.subscribe()
@@ -44,7 +44,7 @@ defmodule PmLoginWeb.Project.BoardLive do
     {:ok, socket |> assign(is_attributor: Monitoring.is_attributor?(curr_user_id),is_admin: Monitoring.is_admin?(curr_user_id), show_plus_modal: false,curr_user_id: curr_user_id, pro_id: pro_id, show_secondary: false,
                     contributors: list_contributors, priorities: list_priorities, board: Kanban.get_board!(project.board_id), show_task_modal: false, show_modif_modal: false,
                     primaries: list_primaries, is_contributor: Monitoring.is_contributor?(curr_user_id),task_changeset: task_changeset, modif_changeset: modif_changeset, show_comments_modal: false,
-                    show_notif: false, notifs: Services.list_my_notifications_with_limit(curr_user_id, 4), secondary_changeset: secondary_changeset), layout: layout
+                    show_notif: false, notifs: Services.list_my_notifications_with_limit(curr_user_id, 4), secondary_changeset: secondary_changeset, comment_changeset: Monitoring.change_comment(%Comment{})), layout: layout
                   }
   end
 
@@ -106,15 +106,26 @@ defmodule PmLoginWeb.Project.BoardLive do
     {:noreply, assign(socket, show_secondary: false, secondary_changeset: Monitoring.change_task(%Task{}))}
   end
 
-  def handle_event("send-comment", %{"com" => content, "poster_id" => poster_id, "task_id" => task_id}, socket) do
-    IO.puts task_id
-    IO.puts poster_id
-    IO.puts content
+  def handle_event("send-comment", %{"comment" => params}, socket) do
+    # IO.puts task_id
+    # IO.puts poster_id
+    # IO.puts content
 
-    Monitoring.post_comment(%{"content" => content, "task_id" => task_id, "poster_id" => poster_id})
-    card_id = socket.assigns.card_with_comments.id
-    nb_com = socket.assigns.com_nb
-    {:noreply, socket |> assign(card_with_comments: Kanban.get_card_for_comment_limit!(card_id, nb_com), com_nb: nb_com) |>push_event("updateScroll", %{})}
+    case Monitoring.post_comment(params) do
+      {:ok, result} ->
+        card_id = socket.assigns.card_with_comments.id
+        nb_com = socket.assigns.com_nb
+        {:ok, result} |> Monitoring.broadcast_com
+        {:noreply, socket |> assign(comment_changeset:  Monitoring.change_comment(%Comment{}),card_with_comments: Kanban.get_card_for_comment_limit!(card_id, nb_com), com_nb: nb_com) |>push_event("updateScroll", %{})}
+
+      {:error, %Ecto.Changeset{} = changeset} ->
+        card_id = socket.assigns.card_with_comments.id
+        nb_com = socket.assigns.com_nb
+        {:noreply, socket |> assign(comment_changeset: changeset) |> push_event("updateScroll", %{})}
+
+    end
+
+
   end
 
   def handle_event("update_card", %{"card" => card_attrs}, socket) do

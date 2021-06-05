@@ -1,3 +1,4 @@
+<% alias PmLogin.Utilities %>
 <h1><i class="bi bi-info-circle"></i> <%= @project.title %></h1>
 <div class="basecontents__without__radius project-show">
 <ul>
@@ -19,12 +20,12 @@
 
   <li>
     <strong>Début du projet</strong>
-    <%= @project.date_start %>
+    <%= Utilities.letters_date_format(@project.date_start) %>
   </li>
 
   <li>
     <strong>Fin du projet</strong>
-    <%= @project.date_end %>
+    <%= Utilities.letters_date_format(@project.date_end) %>
   </li>
 
   <li>
@@ -39,7 +40,7 @@
 
   <li>
     <strong>Date d'échéance:</strong>
-    <%= @project.deadline %>
+    <%= Utilities.letters_date_format(@project.deadline) %>
   </li>
 
 </ul>

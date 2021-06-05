@@ -8,6 +8,7 @@
   </thead>
   <tbody>
     <%= for client <- @inactives do %>
+    <tr>
     <%= f = form_for nil, "#", [phx_submit: :activate_c] %>
       <input type="hidden" name="client_id" value="<%= client.id %>">
         <td><%= client.username %></td>
@@ -15,6 +16,7 @@
         <td><%= select f, "company_id", @companies %></td>
         <td><%= submit "Rendre actif", class: "btn btn-lg btn-primary" %></td>
     </form>
+  </tr>
     <% end %>
   </tbody>
 </table>

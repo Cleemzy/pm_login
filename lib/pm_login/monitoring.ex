@@ -942,7 +942,11 @@ def validate_start_deadline(changeset) do
     %Comment{}
     |> Comment.create_changeset(attrs)
     |> Repo.insert()
-    |> broadcast_change([:comment, :posted])
+    # |> broadcast_change([:comment, :posted])
+  end
+
+  def broadcast_com(tuple) do
+    broadcast_change(tuple ,[:comment, :posted])
   end
 
   @doc """

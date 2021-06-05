@@ -1,3 +1,4 @@
+  <% alias PmLogin.Utilities %>
   <h1><i class="bi bi-kanban"></i> Les projets</h1>
 
   <table id="tb-auth">
@@ -21,11 +22,11 @@
         <td><%= link "#{project.title}", to: Routes.project_path(@socket, :board, project) %></td>
         <td><%= project.description %></td>
         <td><%= project.progression %> %</td>
-        <td><%= project.date_start %></td>
-        <td><%= project.date_end %></td>
+        <td><%= Utilities.simple_date_format(project.date_start) %></td>
+        <td><%= Utilities.simple_date_format(project.date_end) %></td>
         <td><%= project.estimated_duration %> h</td>
         <td><%= project.performed_duration %> h</td>
-        <td><%= project.deadline %></td>
+        <td><%= Utilities.simple_date_format(project.deadline) %></td>
 
         <td>
           <span><a href="<%= Routes.project_path(@socket, :show, project) %>"><i class="bi bi-info-circle btn btn-info btn-lg" style="font-size: 20px;"></i></a></span>

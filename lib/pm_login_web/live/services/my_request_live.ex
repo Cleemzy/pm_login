@@ -19,7 +19,7 @@ defmodule PmLoginWeb.Services.MyRequestsLive do
 
     case Services.create_clients_request(params) do
       {:ok, result} ->
-          {:noreply, socket}
+          {:noreply, socket |> assign(changeset:  Services.change_clients_request(%ClientsRequest{}))}
       {:error, %Ecto.Changeset{} = changeset} ->
           {:noreply, socket |> assign(changeset: changeset)}
     end

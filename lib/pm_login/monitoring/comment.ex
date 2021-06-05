@@ -23,7 +23,7 @@ defmodule PmLogin.Monitoring.Comment do
   def create_changeset(comment, attrs) do
     comment
     |> cast(attrs, [:content, :poster_id, :task_id])
-    |> validate_required([:content])
-    |> put_change(:inserted_at, Services.todays_date)
+    |> validate_required(:content, message: "Vous ne pouvez pas entrer un commentaire vide.")
+    |> put_change(:inserted_at, NaiveDateTime.local_now)
   end
 end

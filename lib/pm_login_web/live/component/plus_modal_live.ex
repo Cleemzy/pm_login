@@ -3,6 +3,7 @@ defmodule PmLoginWeb.LiveComponent.PlusModalLive do
   import Phoenix.HTML.Form
   import PmLoginWeb.ErrorHelpers
   alias PmLoginWeb.Router.Helpers, as: Routes
+  alias PmLogin.Utilities
 
   @defaults %{
     left_button: "Cancel",
@@ -134,13 +135,13 @@ defmodule PmLoginWeb.LiveComponent.PlusModalLive do
 
                             <div class="column">
                                   <label>Date de début:</label>
-                                  <%= @card.task.date_start %>
+                                  <%= Utilities.letters_date_format(@card.task.date_start) %>
                             </div>
 
                             <div class="column">
                                   <label>Date de fin:</label>
                                   <%= if @card.task.date_end != nil do
-                                        @card.task.date_end
+                                        Utilities.letters_date_format(@card.task.date_end)
                                       else
                                         "En attente"
                                       end %>
@@ -175,7 +176,7 @@ defmodule PmLoginWeb.LiveComponent.PlusModalLive do
 
                                 <div class="column">
                                       <label>Date d'échéance:</label>
-                                      <p><%= @card.task.deadline%></p>
+                                      <p><%= Utilities.letters_date_format(@card.task.deadline)%></p>
                                 </div>
 
                               </div>
@@ -212,7 +213,7 @@ defmodule PmLoginWeb.LiveComponent.PlusModalLive do
                     <div class="column column-50">
                     </div>
                       <div class="column column-50">
-                        <i style="font-size: 10px;">Créee le <%= @card.task.inserted_at %></i>
+                        <i style="font-size: 10px;">Créee le <%= Utilities.simple_date_format_with_hours(@card.task.inserted_at) %></i>
                       </div>
                     </div>
 

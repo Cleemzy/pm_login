@@ -30,5 +30,8 @@ defmodule PmLogin.Services.ClientsRequest do
     |> unique_constraint(:title, message: "Titre de requête déjà existant.")
     |> validate_required(:content, message: "Entrez le contenu de votre requête.")
     |> put_change(:date_post, NaiveDateTime.local_now)
+    |> put_change(:seen, false)
+    |> put_change(:ongoing, false)
+    |> put_change(:done, false)
   end
 end

@@ -1,3 +1,4 @@
+<% alias PmLogin.Utilities %>
 <div class="boardcontainer">
   <div class="boardheader">
     <div class="row">
@@ -66,7 +67,7 @@
 
                 <div class="card__name"><%= card.task.title %></div>
 
-                <i class="card__date">Créee le <%= card.task.inserted_at %>, par</i>
+                <i class="card__date">Créee le <%= Utilities.simple_date_format_with_hours(card.task.inserted_at) %>, par</i>
                 <br/>
                 <i><img class="profile-pic-mini" src="<%= Routes.static_path(@socket, "/#{card.task.attributor.profile_picture}") %>" width="50" style="position: relative; top:10px;"/>
                  <%= if card.task.contributor != nil do %>pour <img class="profile-pic-mini" src="<%= Routes.static_path(@socket, "/#{card.task.contributor.profile_picture}") %>" width="50" style="position: relative; top:10px;"/><% end %></i>
@@ -197,6 +198,7 @@
                      left_button: "ANNULER",
                      left_button_action: "cancel-comments",
                      curr_user_id: @curr_user_id,
+                     changeset: @comment_changeset,
                      card: @card_with_comments)
   %>
 <% end %>

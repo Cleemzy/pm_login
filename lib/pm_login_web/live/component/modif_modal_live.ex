@@ -3,7 +3,7 @@ defmodule PmLoginWeb.LiveComponent.ModifModalLive do
   import Phoenix.HTML.Form
   import PmLoginWeb.ErrorHelpers
   alias PmLoginWeb.Router.Helpers, as: Routes
-
+  alias PmLogin.Utilities
   @defaults %{
     left_button: "Cancel",
     left_button_action: nil,
@@ -143,7 +143,7 @@ defmodule PmLoginWeb.LiveComponent.ModifModalLive do
                       <%= if ((@is_admin or @is_attributor) and is_nil(@card.task.parent_id)) or (@is_contributor and !is_nil(@card.task.parent_id)) do %>
                         <%= date_input f, :date_start, value: @card.task.date_start %>
                       <% else %>
-                        <p><%= @card.task.date_start %></p>
+                        <p><%= Utilities.letters_date_format(@card.task.date_start) %></p>
                       <% end %>
                     </div>
 
@@ -154,7 +154,7 @@ defmodule PmLoginWeb.LiveComponent.ModifModalLive do
                         <%= error_tag f, :dt_end_lt_start %>
                       <% else %>
                           <%= if !is_nil(@card.task.date_end) do %>
-                            <p><%= @card.task.date_end %></p>
+                            <p><%= Utilities.letters_date_format(@card.task.date_end) %></p>
                           <% else %>
                             <p>En attente</p>
                           <% end %>
