@@ -637,6 +637,12 @@ defmodule PmLogin.Services do
     Repo.one!(query)
 
   end
+
+  def get_ac_id_from_user_id(user_id) do
+    query = from ac in ActiveClient,
+            where: ac.user_id == ^user_id
+    Repo.one!(query).id
+  end
   @doc """
   Creates a active_client.
 
@@ -726,6 +732,18 @@ defmodule PmLogin.Services do
     Repo.all(ClientsRequest)
   end
 
+  def list_my_requests(user_id) do
+    company_query = from c in Company
+    user_query = from u in User
+    ac_query = from ac in ActiveClient,
+            preload: [user: ^user_query, company: ^company_query]
+    query = from req in ClientsRequest,
+            preload: [active_client: ^ac_query],
+            where: req.active_client_id == ^get_ac_id_from_user_id(user_id)
+    Repo.all(query)
+
+  end
+
   def list_requests do
     company_query = from c in Company
     user_query = from u in User
@@ -734,7 +752,6 @@ defmodule PmLogin.Services do
     query = from req in ClientsRequest,
             preload: [active_client: ^ac_query]
     Repo.all(query)
-
   end
   # def function_name do
   #
@@ -755,6 +772,14 @@ defmodule PmLogin.Services do
 
   """
   def get_clients_request!(id), do: Repo.get!(ClientsRequest, id)
+
+  def get_request_with_user_id!(id) do
+    ac_request = from ac in ActiveClient
+    query = from req in ClientsRequest,
+            preload: [active_client: ^ac_request],
+            where: req.id == ^id
+    Repo.one!(query)
+  end
 
   @doc """
   Creates a clients_request.
@@ -794,6 +819,17 @@ defmodule PmLogin.Services do
     clients_request
     |> ClientsRequest.changeset(attrs)
     |> Repo.update()
+  end
+
+  def update_request_bool(%ClientsRequest{} = clients_request, attrs) do
+    clients_request
+    |> ClientsRequest.changeset(attrs)
+    |> Repo.update()
+    |> broadcast_request_update
+  end
+
+  def broadcast_request_update(tuple) do
+    broadcast_request_change(tuple, [:request, :updated])
   end
 
   @doc """

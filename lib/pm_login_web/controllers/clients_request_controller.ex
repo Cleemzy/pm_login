@@ -10,6 +10,22 @@ defmodule PmLoginWeb.ClientsRequestController do
     render(conn, "index.html", clients_requests: clients_requests)
   end
 
+  def requests(conn, _params) do
+    if Login.is_connected?(conn) do
+      cond do
+        Login.is_admin?(conn) ->
+            LiveView.Controller.live_render(conn, PmLoginWeb.Services.RequestsLive, session: %{"curr_user_id" => get_session(conn, :curr_user_id)}, router: PmLoginWeb.Router)
+
+        true ->
+          conn
+            |> Login.not_admin_redirection
+      end
+    else
+      conn
+      |> Login.not_connected_redirection
+    end
+  end
+
   def my_requests(conn, _params) do
     if Login.is_connected?(conn) do
       cond do

@@ -11,7 +11,7 @@ defmodule PmLoginWeb.Services.MyRequestsLive do
     {:ok,
        socket
        |> assign(display_form: false,changeset:  Services.change_clients_request(%ClientsRequest{}),show_modal: false, service_id: nil,curr_user_id: curr_user_id,show_notif: false, notifs: Services.list_my_notifications_with_limit(curr_user_id, 4),
-       requests: Services.list_requests),
+       requests: Services.list_my_requests(curr_user_id)),
        layout: {PmLoginWeb.LayoutView, "active_client_layout_live.html"}
        }
   end
@@ -29,7 +29,7 @@ defmodule PmLoginWeb.Services.MyRequestsLive do
     case Services.create_clients_request(params) do
       {:ok, result} ->
           {:ok, result} |> Services.broadcast_request
-          {:noreply, socket |> assign(changeset:  Services.change_clients_request(%ClientsRequest{}))}
+          {:noreply, socket |> assign(changeset:  Services.change_clients_request(%ClientsRequest{})) |> put_flash(:info, "Requête envoyée")}
 
       {:error, %Ecto.Changeset{} = changeset} ->
           {:noreply, socket |> assign(changeset: changeset)}
@@ -39,7 +39,11 @@ defmodule PmLoginWeb.Services.MyRequestsLive do
   end
 
   def handle_info({"request_topic", [:request, :sent], _}, socket) do
-    {:noreply, socket |> assign(requests: Services.list_requests)}
+    {:noreply, socket |> assign(requests: Services.list_my_requests(socket.assigns.curr_user_id))}
+  end
+
+  def handle_info({"request_topic", [:request, :updated], _}, socket) do
+    {:noreply, socket |> assign(requests: Services.list_my_requests(socket.assigns.curr_user_id))}
   end
 
   def handle_event("switch-notif", %{}, socket) do
