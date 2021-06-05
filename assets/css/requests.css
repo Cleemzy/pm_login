@@ -24,6 +24,7 @@
   max-width: 500px;
   white-space: normal;
   word-wrap: break-word;
+  margin-bottom: 20px;
 }
 
 @media (max-width: 650px) {
@@ -34,9 +35,55 @@
 }
 
 .request__form{
+  position: fixed;
+  top: 10%;
+  left: 50%;
+  /* display: block; */
   margin-top: 200px !important;
-  margin: auto;
+  /* margin: auto; */
+  width: 500px;
   max-width: 500px;
   white-space: normal;
   word-wrap: break-word;
+  z-index: 999;
+  margin-bottom: 50px;
+}
+
+.profile-pic-ultramini{
+  width: 20px;
+  height: 20px;
+  max-width: 20px;
+  max-height: 20px;
+  border: 1px solid gray;
+  border-style: solid;
+  border-radius: 60%;
+}
+
+.form__open{
+  position: fixed;
+  float: right;
+  transition: font-size 0.5s ease;
+}
+
+.form__open:hover{
+  cursor: pointer;
+  font-size: 50px;
+}
+
+@media (max-width: 950px) {
+  .request__form{
+    top: -15%;
+    left: 0%;
+  }
+}
+
+.form__close{
+  font-size: 20px;
+  float: right;
+  transition: font-size 0.5s ease;
+}
+
+.form__close:hover{
+  font-size: 30px;
+  cursor: pointer;
 }

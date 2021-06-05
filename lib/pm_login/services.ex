@@ -16,6 +16,14 @@ defmodule PmLogin.Services do
     Phoenix.PubSub.subscribe(PmLogin.PubSub, @topic)
   end
 
+  def subscribe_to_request_topic do
+    Phoenix.PubSub.subscribe(PmLogin.PubSub, "request_topic")
+  end
+
+  def broadcast_request_change({:ok, result}, event) do
+    Phoenix.PubSub.broadcast(PmLogin.PubSub, "request_topic", {"request_topic", event, result})
+  end
+
   defp broadcast_change({:ok, result}, event) do
     Phoenix.PubSub.broadcast(PmLogin.PubSub, @topic, {__MODULE__, event, result})
   end
@@ -718,6 +726,20 @@ defmodule PmLogin.Services do
     Repo.all(ClientsRequest)
   end
 
+  def list_requests do
+    company_query = from c in Company
+    user_query = from u in User
+    ac_query = from ac in ActiveClient,
+            preload: [user: ^user_query, company: ^company_query]
+    query = from req in ClientsRequest,
+            preload: [active_client: ^ac_query]
+    Repo.all(query)
+
+  end
+  # def function_name do
+  #
+  # end
+
   @doc """
   Gets a single clients_request.
 
@@ -750,6 +772,10 @@ defmodule PmLogin.Services do
     %ClientsRequest{}
     |> ClientsRequest.create_changeset(attrs)
     |> Repo.insert()
+  end
+
+  def broadcast_request(tuple) do
+    broadcast_request_change(tuple, [:request , :sent])
   end
 
   @doc """

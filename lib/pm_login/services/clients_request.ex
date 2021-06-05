@@ -18,14 +18,15 @@ defmodule PmLogin.Services.ClientsRequest do
   @doc false
   def changeset(clients_request, attrs) do
     clients_request
-    |> cast(attrs, [:title ,:content, :date_post, :seen, :ongoing, :done])
+    |> cast(attrs, [:title ,:content, :date_post, :seen, :ongoing, :done, :active_client_id])
     # |> unique_constraint(:title, message: "Titre de requête déjà existant")
     # |> validate_required(:content, message: "Entrez le contenu de votre requête")
   end
 
   def create_changeset(clients_request, attrs) do
     clients_request
-    |> cast(attrs, [:title ,:content, :date_post, :seen, :ongoing, :done])
+    |> cast(attrs, [:title ,:content, :date_post, :seen, :ongoing, :done, :active_client_id])
+    |> foreign_key_constraint(:active_client_id)
     |> validate_required(:title, message: "Entrez l'intitulé de votre requête.")
     |> unique_constraint(:title, message: "Titre de requête déjà existant.")
     |> validate_required(:content, message: "Entrez le contenu de votre requête.")

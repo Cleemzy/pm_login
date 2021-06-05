@@ -7,23 +7,39 @@ defmodule PmLoginWeb.Services.MyRequestsLive do
 
   def mount(_params, %{"curr_user_id"=>curr_user_id}, socket) do
     Services.subscribe()
-
+    Services.subscribe_to_request_topic()
     {:ok,
        socket
-       |> assign(changeset:  Services.change_clients_request(%ClientsRequest{}),show_modal: false, service_id: nil,curr_user_id: curr_user_id,show_notif: false, notifs: Services.list_my_notifications_with_limit(curr_user_id, 4)),
+       |> assign(display_form: false,changeset:  Services.change_clients_request(%ClientsRequest{}),show_modal: false, service_id: nil,curr_user_id: curr_user_id,show_notif: false, notifs: Services.list_my_notifications_with_limit(curr_user_id, 4),
+       requests: Services.list_requests),
        layout: {PmLoginWeb.LayoutView, "active_client_layout_live.html"}
        }
+  end
+
+  def handle_event("form-on", _params, socket) do
+    {:noreply, socket |> assign(display_form: true)}
+  end
+
+  def handle_event("form-off", _params, socket) do
+    {:noreply, socket |> assign(display_form: false)}
   end
 
   def handle_event("send-request", %{"clients_request" => params}, socket) do
 
     case Services.create_clients_request(params) do
       {:ok, result} ->
+          {:ok, result} |> Services.broadcast_request
           {:noreply, socket |> assign(changeset:  Services.change_clients_request(%ClientsRequest{}))}
+
       {:error, %Ecto.Changeset{} = changeset} ->
           {:noreply, socket |> assign(changeset: changeset)}
+
     end
 
+  end
+
+  def handle_info({"request_topic", [:request, :sent], _}, socket) do
+    {:noreply, socket |> assign(requests: Services.list_requests)}
   end
 
   def handle_event("switch-notif", %{}, socket) do
