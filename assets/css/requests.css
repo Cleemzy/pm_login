@@ -47,6 +47,7 @@
   word-wrap: break-word;
   z-index: 999;
   margin-bottom: 50px;
+  transition: visibility 0.2s, opacity 0.2s linear;
 }
 
 .profile-pic-ultramini{
