@@ -36,8 +36,10 @@
 
 .request__form{
   position: fixed;
-  top: 10%;
-  left: 50%;
+
+  top: -15%;
+  left: 30%;
+
   /* display: block; */
   margin-top: 200px !important;
   /* margin: auto; */
@@ -73,7 +75,7 @@
 
 @media (max-width: 950px) {
   .request__form{
-    top: -15%;
+    top: -30%;
     left: 0%;
   }
 }
