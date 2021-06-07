@@ -21,7 +21,8 @@
         <%= if Path.extname(url)==".jpg" do %>
           <a href="<%= url %>" style="margin-bottom: 10px;"><img src="<%= url %>" alt="" height="150"/></a>
           <% else %>
-          <a href="<%= url %>"><%= url %></a>
+          <a href="<%= url %>"><%= Path.basename(url) %></a>
+          <br>
           <% end %>
         <% end %>
       </div>

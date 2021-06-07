@@ -739,7 +739,8 @@ defmodule PmLogin.Services do
             preload: [user: ^user_query, company: ^company_query]
     query = from req in ClientsRequest,
             preload: [active_client: ^ac_query],
-            where: req.active_client_id == ^get_ac_id_from_user_id(user_id)
+            where: req.active_client_id == ^get_ac_id_from_user_id(user_id),
+            order_by: [desc: req.date_post]
     Repo.all(query)
 
   end
@@ -750,7 +751,8 @@ defmodule PmLogin.Services do
     ac_query = from ac in ActiveClient,
             preload: [user: ^user_query, company: ^company_query]
     query = from req in ClientsRequest,
-            preload: [active_client: ^ac_query]
+            preload: [active_client: ^ac_query],
+            order_by: [desc: req.date_post]
     Repo.all(query)
   end
   # def function_name do

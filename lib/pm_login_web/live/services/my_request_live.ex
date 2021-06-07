@@ -49,8 +49,8 @@ defmodule PmLoginWeb.Services.MyRequestsLive do
   def handle_event("send-request", %{"clients_request" => params}, socket) do
     # IO.inspect params
 
-    # {entries, []} = uploaded_entries(socket, :file)
-    # IO.inspect entries
+    {entries, []} = uploaded_entries(socket, :file)
+    IO.inspect entries
 
     # urls = for entry <- entries do
     #   Routes.static_path(socket, "/uploads/#{entry.uuid}#{Path.extname(entry.client_name)}")
@@ -68,14 +68,18 @@ defmodule PmLoginWeb.Services.MyRequestsLive do
       {:ok, result} ->
 
         consume_uploaded_entries(socket, :file, fn meta, entry ->
-          dest = Path.join("priv/static/uploads", "#{entry.uuid}#{Path.extname(entry.client_name)}")
+          ext = Path.extname(entry.client_name)
+          file_name = Path.basename(entry.client_name, ext)
+          dest = Path.join("priv/static/uploads", "#{file_name}#{entry.uuid}#{ext}")
           File.cp!(meta.path, dest)
         end)
 
           {entries, []} = uploaded_entries(socket, :file)
 
           urls = for entry <- entries do
-            Routes.static_path(socket, "/uploads/#{entry.uuid}#{Path.extname(entry.client_name)}")
+            ext = Path.extname(entry.client_name)
+            file_name = Path.basename(entry.client_name, ext)
+            Routes.static_path(socket, "/uploads/#{file_name}#{entry.uuid}#{ext}")
           end
 
           Services.update_request_files(result, %{"file_urls" => urls})

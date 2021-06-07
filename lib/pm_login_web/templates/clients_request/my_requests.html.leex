@@ -22,7 +22,8 @@
         <%= if Path.extname(url)==".jpg" do %>
           <a href="<%= url %>" style="margin-bottom: 10px;"><img src="<%= url %>" alt="" height="150"/></a>
           <% else %>
-          <a href="<%= url %>"><%= url %></a>
+          <a href="<%= url %>"><%= Path.basename(url) %></a>
+          <br>
           <% end %>
         <% end %>
       </div>
@@ -73,7 +74,13 @@
         <%= for entry <- @uploads.file.entries do %>
         <div class="row">
           <div class="column">
+
+            <%= if Path.extname(entry.client_name)==".jpg" or Path.extname(entry.client_name)==".png" do %>
             <%= live_img_preview entry, height: 50 %>
+              <% else %>
+              <p class="file__name__upload"><%= entry.client_name %></p>
+              <% end %>
+
           </div>
           <div class="column">
             <progress value="<%= entry.progress %>" max="100"/>

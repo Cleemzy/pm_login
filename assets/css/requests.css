@@ -105,3 +105,9 @@
   font-size: 30px;
   cursor: pointer;
 }
+
+.file__name__upload{
+  max-width: 200px;
+  max-height: 50px;
+  overflow-y: hidden;
+}
