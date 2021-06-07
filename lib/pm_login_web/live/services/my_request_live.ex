@@ -89,7 +89,7 @@ defmodule PmLoginWeb.Services.MyRequestsLive do
           #sending notifs to admins
           curr_user_id = socket.assigns.curr_user_id
           the_client = Services.get_active_client_from_userid!(curr_user_id)
-          Services.send_notifs_to_admins(curr_user_id, "Le client #{the_client.user.username} de la société #{the_client.company.name} a envoyé une requête intitulée #{result.title}.")
+          Services.send_notifs_to_admins(curr_user_id, "Le client #{the_client.user.username} de la société #{the_client.company.name} a envoyé une requête intitulée \"#{result.title}\".")
 
           {:noreply, socket |> assign(changeset:  Services.change_clients_request(%ClientsRequest{})) |> put_flash(:info, "Requête envoyée")}
 
