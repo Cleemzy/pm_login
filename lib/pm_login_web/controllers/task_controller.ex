@@ -18,7 +18,7 @@ defmodule PmLoginWeb.TaskController do
     case Monitoring.create_task(task_params) do
       {:ok, task} ->
         conn
-        |> put_flash(:info, "Task created successfully.")
+        |> put_flash(:info, "Tâche créée.")
         |> redirect(to: Routes.task_path(conn, :show, task))
 
       {:error, %Ecto.Changeset{} = changeset} ->
@@ -43,7 +43,7 @@ defmodule PmLoginWeb.TaskController do
     case Monitoring.update_task(task, task_params) do
       {:ok, task} ->
         conn
-        |> put_flash(:info, "Task updated successfully.")
+        |> put_flash(:info, "Tâche mise à jour.")
         |> redirect(to: Routes.task_path(conn, :show, task))
 
       {:error, %Ecto.Changeset{} = changeset} ->
@@ -56,7 +56,7 @@ defmodule PmLoginWeb.TaskController do
     {:ok, _task} = Monitoring.delete_task(task)
 
     conn
-    |> put_flash(:info, "Task deleted successfully.")
+    |> put_flash(:info, "Tâche supprimée.")
     |> redirect(to: Routes.task_path(conn, :index))
   end
 end

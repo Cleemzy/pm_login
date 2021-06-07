@@ -86,7 +86,7 @@ defmodule PmLoginWeb.CompanyController do
     case Services.create_company(company_params) do
       {:ok, company} ->
         conn
-        |> put_flash(:info, "Company created successfully.")
+        |> put_flash(:info, "Société enregistrée.")
         |> redirect(to: Routes.company_path(conn, :show, company))
 
       {:error, %Ecto.Changeset{} = changeset} ->
@@ -143,7 +143,7 @@ defmodule PmLoginWeb.CompanyController do
     case Services.update_company(company, company_params) do
       {:ok, company} ->
         conn
-        |> put_flash(:info, "Company updated successfully.")
+        |> put_flash(:info, "Société mise à jour.")
         |> redirect(to: Routes.company_path(conn, :show, company))
 
       {:error, %Ecto.Changeset{} = changeset} ->

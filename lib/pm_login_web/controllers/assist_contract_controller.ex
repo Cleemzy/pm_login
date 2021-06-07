@@ -78,7 +78,7 @@ defmodule PmLoginWeb.AssistContractController do
     case Services.update_assist_contract(assist_contract, assist_contract_params) do
       {:ok, assist_contract} ->
         conn
-        |> put_flash(:info, "Assist contract updated successfully.")
+        |> put_flash(:info, "Contrat d'assistance mis à jour.")
         |> redirect(to: Routes.assist_contract_path(conn, :show, assist_contract))
 
       {:error, %Ecto.Changeset{} = changeset} ->
@@ -91,7 +91,7 @@ defmodule PmLoginWeb.AssistContractController do
     {:ok, _assist_contract} = Services.delete_assist_contract(assist_contract)
 
     conn
-    |> put_flash(:info, "Assist contract deleted successfully.")
+    |> put_flash(:info, "Contrat d'assistance supprimé.")
     |> redirect(to: Routes.assist_contract_path(conn, :index))
   end
 

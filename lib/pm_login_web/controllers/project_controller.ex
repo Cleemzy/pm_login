@@ -172,7 +172,7 @@ end
     {:ok, _project} = Monitoring.delete_project(project)
 
     conn
-    |> put_flash(:info, "Project deleted successfully.")
+    |> put_flash(:info, "Projet supprimé.")
     |> redirect(to: Routes.project_path(conn, :index))
   end
 end

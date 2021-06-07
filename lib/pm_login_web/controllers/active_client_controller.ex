@@ -52,7 +52,7 @@ defmodule PmLoginWeb.ActiveClientController do
     case Services.create_active_client(active_client_params) do
       {:ok, active_client} ->
         conn
-        |> put_flash(:info, "Active client created successfully.")
+        |> put_flash(:info, "Client actif créé.")
         |> redirect(to: Routes.active_client_path(conn, :show, active_client))
 
       {:error, %Ecto.Changeset{} = changeset} ->
@@ -80,7 +80,7 @@ defmodule PmLoginWeb.ActiveClientController do
     case Services.update_active_client(active_client, active_client_params) do
       {:ok, active_client} ->
         conn
-        |> put_flash(:info, "Active client updated successfully.")
+        |> put_flash(:info, "Client actif mis à jour.")
         |> redirect(to: Routes.active_client_path(conn, :show, active_client))
 
       {:error, %Ecto.Changeset{} = changeset} ->
@@ -93,7 +93,7 @@ defmodule PmLoginWeb.ActiveClientController do
     {:ok, _active_client} = Services.delete_active_client(active_client)
 
     conn
-    |> put_flash(:info, "Active client deleted successfully.")
+    |> put_flash(:info, "Client actif supprimé.")
     |> redirect(to: Routes.active_client_path(conn, :index))
   end
 end

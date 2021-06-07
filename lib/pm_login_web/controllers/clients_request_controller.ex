@@ -52,7 +52,7 @@ defmodule PmLoginWeb.ClientsRequestController do
     case Services.create_clients_request(clients_request_params) do
       {:ok, clients_request} ->
         conn
-        |> put_flash(:info, "Clients request created successfully.")
+        |> put_flash(:info, "Requête créée.")
         |> redirect(to: Routes.clients_request_path(conn, :show, clients_request))
 
       {:error, %Ecto.Changeset{} = changeset} ->
@@ -77,7 +77,7 @@ defmodule PmLoginWeb.ClientsRequestController do
     case Services.update_clients_request(clients_request, clients_request_params) do
       {:ok, clients_request} ->
         conn
-        |> put_flash(:info, "Clients request updated successfully.")
+        |> put_flash(:info, "Requête mise à jour.")
         |> redirect(to: Routes.clients_request_path(conn, :show, clients_request))
 
       {:error, %Ecto.Changeset{} = changeset} ->
@@ -90,7 +90,7 @@ defmodule PmLoginWeb.ClientsRequestController do
     {:ok, _clients_request} = Services.delete_clients_request(clients_request)
 
     conn
-    |> put_flash(:info, "Clients request deleted successfully.")
+    |> put_flash(:info, "Requête supprimée.")
     |> redirect(to: Routes.clients_request_path(conn, :index))
   end
 end
