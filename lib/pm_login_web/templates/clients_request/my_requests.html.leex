@@ -20,7 +20,7 @@
       <div class="column" style="margin-bottom: 20px;">
         <%= for url <- request.file_urls do %>
         <%= if Path.extname(url)==".jpg" do %>
-          <a href="<%= url %>"><img src="<%= url %>" alt="" height="150"/></a>
+          <a href="<%= url %>" style="margin-bottom: 10px;"><img src="<%= url %>" alt="" height="150"/></a>
           <% else %>
           <a href="<%= url %>"><%= url %></a>
           <% end %>
