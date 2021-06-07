@@ -828,6 +828,13 @@ defmodule PmLogin.Services do
     |> broadcast_request_update
   end
 
+  def update_request_files(%ClientsRequest{} = clients_request, attrs) do
+    clients_request
+    |> ClientsRequest.upload_changeset(attrs)
+    |> Repo.update()
+    |> broadcast_request_update
+  end
+
   def broadcast_request_update(tuple) do
     broadcast_request_change(tuple, [:request, :updated])
   end

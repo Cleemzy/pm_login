@@ -17,6 +17,16 @@
 
       <p><%= request.content %></p>
 
+      <div class="column" style="margin-bottom: 20px;">
+        <%= for url <- request.file_urls do %>
+        <%= if Path.extname(url)==".jpg" do %>
+          <a href="<%= url %>"><img src="<%= url %>" alt="" height="150"/></a>
+          <% else %>
+          <a href="<%= url %>"><%= url %></a>
+          <% end %>
+        <% end %>
+      </div>
+
       <i><img class="profile-pic-ultramini" src="<%= Routes.static_path(@socket, "/#{request.active_client.user.profile_picture}") %>" width="20"/> <%= request.active_client.user.username %></i>
 <br/>
       <i><%= request.active_client.user.email %></i><br/>
@@ -42,7 +52,7 @@
       <a class="form__close" title="Fermer" phx-click="form-off"><i class="bi bi-x"></i></a>
       <h2><i class="bi bi-pencil-square"></i> Faire une requête</h2>
       <div class="request__form__content">
-        <%= f = form_for @changeset, "#",[phx_submit: "send-request", phx_change: "change-request"]  %>
+        <%= f = form_for @changeset, "#",[phx_submit: "send-request", phx_change: "change-request", multipart: true]  %>
         <label for="title"><h3>Titre</h3></label>
         <%= text_input f, :title %>
         <%= error_tag f, :title %>
@@ -53,6 +63,13 @@
           <%= error_tag f, :content %>
         </div>
         <%=  live_file_input @uploads.file %>
+
+        <%= for {_ref, msg} <- @uploads.file.errors do %>
+          <%= if Phoenix.Naming.humanize(msg)=="Too many files" do %>
+            <p class="alert alert-danger"><%= "Nombre de fichiers max : 5." %></p>
+          <% end %>
+        <% end %>
+
         <%= for entry <- @uploads.file.entries do %>
         <div class="row">
           <div class="column">
@@ -62,7 +79,7 @@
             <progress value="<%= entry.progress %>" max="100"/>
             </div>
             <div class="column">
-              cancel
+              <a href="#" phx-click="cancel-entry" phx-value-ref="<%= entry.ref %>">annuler</a>
             </div>
           </div>
           <% end %>

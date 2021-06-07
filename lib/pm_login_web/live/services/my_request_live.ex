@@ -4,6 +4,7 @@ defmodule PmLoginWeb.Services.MyRequestsLive do
   alias PmLoginWeb.LiveComponent.ModalLive
   alias PmLogin.Services
   alias PmLogin.Services.ClientsRequest
+  alias PmLoginWeb.Router.Helpers, as: Routes
 
   def mount(_params, %{"curr_user_id"=>curr_user_id}, socket) do
     Services.subscribe()
@@ -12,9 +13,13 @@ defmodule PmLoginWeb.Services.MyRequestsLive do
        socket
        |> assign(display_form: false,changeset:  Services.change_clients_request(%ClientsRequest{}),show_modal: false, service_id: nil,curr_user_id: curr_user_id,show_notif: false, notifs: Services.list_my_notifications_with_limit(curr_user_id, 4),
        requests: Services.list_my_requests(curr_user_id))
-       |> allow_upload(:file, accept: ~w(.png .jpeg .jpg .zip), max_entries: 2),
+       |> allow_upload(:file, accept: ~w(.png .jpeg .jpg .pdf), max_entries: 5),
        layout: {PmLoginWeb.LayoutView, "active_client_layout_live.html"}
        }
+  end
+
+  def handle_event("cancel-entry", %{"ref" => ref}, socket) do
+    {:noreply, socket |> cancel_upload(:file, ref)}
   end
 
   def handle_event("cancel-request", %{"key" => key}, socket) do
@@ -39,10 +44,43 @@ defmodule PmLoginWeb.Services.MyRequestsLive do
     {:noreply, socket}
   end
 
+
+
   def handle_event("send-request", %{"clients_request" => params}, socket) do
+    # IO.inspect params
+
+    # {entries, []} = uploaded_entries(socket, :file)
+    # IO.inspect entries
+
+    # urls = for entry <- entries do
+    #   Routes.static_path(socket, "/uploads/#{entry.uuid}#{Path.extname(entry.client_name)}")
+    # end
+
+    # IO.inspect urls
+
+    # consume_uploaded_entries(socket, :file, fn meta, entry ->
+    #   dest = Path.join("priv/static/uploads", "#{entry.uuid}#{Path.extname(entry.client_name)}")
+    #   File.cp!(meta.path, dest)
+    #  end)
+    # IO.inspect socket.assigns.uploads[:file].entries
 
     case Services.create_clients_request(params) do
       {:ok, result} ->
+
+        consume_uploaded_entries(socket, :file, fn meta, entry ->
+          dest = Path.join("priv/static/uploads", "#{entry.uuid}#{Path.extname(entry.client_name)}")
+          File.cp!(meta.path, dest)
+        end)
+
+          {entries, []} = uploaded_entries(socket, :file)
+
+          urls = for entry <- entries do
+            Routes.static_path(socket, "/uploads/#{entry.uuid}#{Path.extname(entry.client_name)}")
+          end
+
+          Services.update_request_files(result, %{"file_urls" => urls})
+
+
           {:ok, result} |> Services.broadcast_request
           {:noreply, socket |> assign(changeset:  Services.change_clients_request(%ClientsRequest{})) |> put_flash(:info, "Requête envoyée")}
 

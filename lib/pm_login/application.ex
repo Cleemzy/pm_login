@@ -6,6 +6,8 @@ defmodule PmLogin.Application do
   use Application
 
   def start(_type, _args) do
+    uploads_priv_dir = PmLogin.uploads_priv_dir()
+    File.mkdir_p!(uploads_priv_dir)
     children = [
       # Start the Ecto repository
       PmLogin.Repo,

@@ -9,6 +9,7 @@ defmodule PmLogin.Services.ClientsRequest do
     field :seen, :boolean
     field :ongoing, :boolean
     field :done, :boolean
+    field :file_urls, {:array, :string}, default: []
     # field :active_client_id, :id
     belongs_to :active_client, ActiveClient
 
@@ -34,5 +35,10 @@ defmodule PmLogin.Services.ClientsRequest do
     |> put_change(:seen, false)
     |> put_change(:ongoing, false)
     |> put_change(:done, false)
+  end
+
+  def upload_changeset(clients_request, attrs) do
+    clients_request
+    |> cast(attrs, [:file_urls])
   end
 end

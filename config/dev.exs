@@ -61,7 +61,7 @@ config :pm_login, PmLoginWeb.Endpoint,
 config :pm_login, PmLoginWeb.Endpoint,
   live_reload: [
     patterns: [
-      ~r"priv/static/.*(js|css|png|jpeg|jpg|gif|svg)$",
+      ~r"priv/static/[^uploads].*(js|css|png|jpeg|jpg|gif|svg)$",
       ~r"priv/gettext/.*(po)$",
       ~r"lib/pm_login_web/(live|views)/.*(ex)$",
       ~r"lib/pm_login_web/templates/.*(eex)$",
