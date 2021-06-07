@@ -32,9 +32,16 @@ defmodule PmLoginWeb.AuthController do
     case Login.log_user(user_params) do
       {:ok, user} ->
         users_list = Login.list_users
-        us = Enum.find(users_list, fn %User{} = u -> u.username === user.username end )
+
+        identifier = user_params["username"]
+
+        us = cond do
+          is_user?(identifier) -> Enum.find(users_list, fn %User{} = u -> u.username === identifier end )
+          is_email?(identifier) -> Enum.find(users_list, fn %User{} = u -> u.email === identifier end )
+        end
+
         conn
-        |> put_flash(:info, "Bienvenue, "<>user.username<>" !")
+        |> put_flash(:info, "Bienvenue, "<>us.username<>" !")
         |> put_session(:curr_user_id, us.id)
         |> redirect(to: Routes.user_path(conn, :index))
         # conn
@@ -91,4 +98,17 @@ defmodule PmLoginWeb.AuthController do
     end
 
   end
+
+  defp is_user?(string) do
+    list = Login.list_users
+    usernames = Enum.map(list, fn %User{} = user -> user.username end )
+    Enum.member?(usernames, string)
+  end
+
+  defp is_email?(string) do
+    list = Login.list_users
+    emails = Enum.map(list, fn %User{} = user -> user.email end )
+    Enum.member?(emails, string)
+  end
+
 end

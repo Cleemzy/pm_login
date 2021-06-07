@@ -54,24 +54,54 @@ defmodule PmLogin.Login.User do
     username = get_field(changeset, :username)
     list = Login.list_users
     usernames = Enum.map(list, fn %User{} = user -> user.username end )
-    is_user = Enum.member?(usernames, username)
-    if username != nil do
-        case is_user do
-          false -> add_error(changeset, :not_user, "Ce nom d'utlisateur n'existe pas")
-          _ -> changeset
-        end
-      else
-        changeset
+    emails = Enum.map(list, fn %User{} = user -> user.email end )
+    # is_user = Enum.member?(usernames, username)
+
+    # if Enum.member?(usernames, username) or Enum.member?(emails, username) do
+    #
+    # end
+
+    cond do
+      Enum.member?(usernames, username) -> changeset
+      Enum.member?(emails, username) -> changeset
+      true -> add_error(changeset, :not_user, "Identifiant inexistant")
     end
+
+    # if username != nil do
+    #     case is_user do
+    #       false -> add_error(changeset, :not_user, "Ce nom d'utlisateur n'existe pas")
+    #       _ -> changeset
+    #     end
+    #   else
+    #     changeset
+    # end
 
 
   end
+
+  defp is_user?(string) do
+    list = Login.list_users
+    usernames = Enum.map(list, fn %User{} = user -> user.username end )
+    Enum.member?(usernames, string)
+  end
+
+  defp is_email?(string) do
+    list = Login.list_users
+    emails = Enum.map(list, fn %User{} = user -> user.email end )
+    Enum.member?(emails, string)
+  end
+
 
   defp check_password(changeset) do
     user_name = get_field(changeset, :username)
     pwd = get_field(changeset, :password)
     list = Login.list_users
-    user = Enum.find(list, fn %User{} = u -> u.username === user_name end )
+
+    user = cond do
+      is_user?(user_name) -> Enum.find(list, fn %User{} = u -> u.username === user_name end )
+      is_email?(user_name) -> Enum.find(list, fn %User{} = u -> u.email === user_name end )
+      true -> add_error(changeset, :not_user, "Identifiant inexistant")
+    end
 
       if user != nil and pwd != nil do
         str_pwd = to_string(pwd)

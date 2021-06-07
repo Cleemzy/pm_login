@@ -1,8 +1,8 @@
 <% alias PmLogin.Services %>
 <% alias PmLogin.Utilities %>
 
+<h1 class="my__requests"><span class="material-icons mat__ico__big">receipt_long</span>Mes requêtes</h1>
 <div class="container request__container" style="">
-  <h1 class="my__requests"><span class="material-icons mat__ico__big">receipt_long</span>Mes requêtes</h1>
   <h1 class="form__open"><a title="Faire une requête" phx-click="form-on"><i class="bi bi-pencil-square"></i></a></h1>
 <%= for request <- @requests do %>
   <div class="basecontents__without__radius request__panel">

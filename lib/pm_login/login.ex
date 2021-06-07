@@ -280,6 +280,15 @@ defmodule PmLogin.Login do
     |> Enum.filter(&(&1!=current_user_id))
   end
 
+  def list_admins(current_user_id) do
+    query = from u in User,
+            where: u.right_id == 1
+
+    Repo.all(query)
+    |> Enum.map(fn x -> x.id end)
+    |> Enum.filter(&(&1!=current_user_id))
+  end
+
   def list_contributors do
     contrib_query = from u in User,
                     where: u.right_id == 3

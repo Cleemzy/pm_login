@@ -13,7 +13,7 @@ defmodule PmLoginWeb.Services.MyRequestsLive do
        socket
        |> assign(display_form: false,changeset:  Services.change_clients_request(%ClientsRequest{}),show_modal: false, service_id: nil,curr_user_id: curr_user_id,show_notif: false, notifs: Services.list_my_notifications_with_limit(curr_user_id, 4),
        requests: Services.list_my_requests(curr_user_id))
-       |> allow_upload(:file, accept: ~w(.png .jpeg .jpg .pdf), max_entries: 5),
+       |> allow_upload(:file, accept: ~w(.png .jpeg .jpg .pdf .txt), max_entries: 5),
        layout: {PmLoginWeb.LayoutView, "active_client_layout_live.html"}
        }
   end
@@ -86,6 +86,11 @@ defmodule PmLoginWeb.Services.MyRequestsLive do
 
 
           {:ok, result} |> Services.broadcast_request
+          #sending notifs to admins
+          curr_user_id = socket.assigns.curr_user_id
+          the_client = Services.get_active_client_from_userid!(curr_user_id)
+          Services.send_notifs_to_admins(curr_user_id, "Le client #{the_client.user.username} de la société #{the_client.company.name} a envoyé une requête intitulée #{result.title}.")
+
           {:noreply, socket |> assign(changeset:  Services.change_clients_request(%ClientsRequest{})) |> put_flash(:info, "Requête envoyée")}
 
       {:error, %Ecto.Changeset{} = changeset} ->

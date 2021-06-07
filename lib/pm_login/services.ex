@@ -979,6 +979,19 @@ defmodule PmLogin.Services do
     |> broadcast_notifs([:notifs, :sent])
   end
 
+  def send_notifs_to_admins(curr_user_id, content) do
+    notifs = Login.list_admins(curr_user_id)
+    |> Enum.map(fn id ->
+       [sender_id: curr_user_id, content: content,
+       receiver_id: id, seen: false,
+       inserted_at: (NaiveDateTime.utc_now)|>NaiveDateTime.truncate(:second),
+       updated_at: (NaiveDateTime.utc_now)|>NaiveDateTime.truncate(:second)]
+     end)
+
+    Repo.insert_all(Notification, notifs)
+    |> broadcast_notifs([:notifs, :sent])
+  end
+
 
 
   def send_notification(attrs \\ %{}) do
