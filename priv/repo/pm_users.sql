@@ -225,9 +225,13 @@ CREATE TABLE public.clients_requests (
     content character varying(255),
     date_post timestamp(0) without time zone,
     active_client_id bigint,
-    company_id bigint,
     inserted_at timestamp(0) without time zone NOT NULL,
-    updated_at timestamp(0) without time zone NOT NULL
+    updated_at timestamp(0) without time zone NOT NULL,
+    title character varying(255),
+    seen boolean,
+    ongoing boolean,
+    done boolean,
+    file_urls character varying(255)[] DEFAULT ARRAY[]::character varying[] NOT NULL
 );
 
 
@@ -870,6 +874,7 @@ COPY public.active_clients (id, user_id, company_id, inserted_at, updated_at) FR
 --
 
 COPY public.assist_contracts (id, title, date_start, date_end, company_id, inserted_at, updated_at) FROM stdin;
+1	CONT/SOC/001	2021-06-09	2021-06-12	1	2021-06-01 22:03:42	2021-06-01 22:03:42
 \.
 
 
@@ -888,40 +893,42 @@ COPY public.boards (id, name, inserted_at, updated_at) FROM stdin;
 --
 
 COPY public.cards (id, name, stage_id, "position", inserted_at, updated_at, task_id) FROM stdin;
-15	EXEMPLE	40	0	2021-05-07 14:49:09	2021-05-27 18:04:31	11
-45	date_insert	40	1	2021-05-27 14:25:58	2021-05-27 18:18:43	41
-10	pubsub	39	2	2021-05-01 13:00:55	2021-05-28 18:36:12	6
-22	tacheee	42	1	2021-05-10 23:26:33	2021-05-28 18:34:25	18
-40	TACHE POUR MATTHIEU	42	6	2021-05-17 13:52:19	2021-05-28 18:34:23	36
-28	children_length_test	42	4	2021-05-11 12:22:08	2021-05-23 13:49:26	24
-43	notifs_length	42	5	2021-05-23 14:17:54	2021-05-23 14:39:34	39
-14	second_task	42	3	2021-05-03 10:18:08	2021-05-22 21:01:22	10
-37	cerise sur le gâteau	42	2	2021-05-12 14:19:24	2021-05-28 18:34:26	33
-33	half_append	43	5	2021-05-11 12:42:06	2021-05-21 09:53:45	29
-42	notif2	43	4	2021-05-23 14:15:08	2021-05-23 14:39:35	38
-20	ectoassoc	43	3	2021-05-10 23:15:14	2021-05-27 23:36:09	16
-6	Seconde tâche	39	1	2021-04-29 06:25:23	2021-05-28 18:36:18	2
-12	CHECK	39	0	2021-05-01 13:10:32	2021-05-28 18:36:21	8
+22	tacheee	42	0	2021-05-10 23:26:33	2021-05-28 18:34:25	18
 9	cinquième	38	0	2021-04-29 08:37:56	2021-05-28 18:36:27	5
 7	une nouvelle	38	1	2021-04-29 06:27:21	2021-05-28 18:36:29	3
-46	date_insert2	37	0	2021-05-27 14:28:06	2021-05-28 18:36:35	42
-11	kanban	37	1	2021-05-01 13:07:10	2021-05-28 18:36:42	7
-8	4eme	36	0	2021-04-29 08:37:15	2021-05-28 18:36:48	4
-1	Vraie tâche	36	1	2021-04-28 19:36:59	2021-05-28 18:36:50	1
-36	89	42	0	2021-05-12 13:59:05	2021-05-25 17:22:22	32
-34	assoc2nde	41	1	2021-05-11 21:12:51	2021-05-23 15:07:48	30
-27	cinquième tâche secondaire pour first	41	0	2021-05-11 12:12:04	2021-05-25 17:22:30	23
-18	sans dt de fin	44	3	2021-05-10 15:26:00	2021-05-21 11:58:41	14
-24	task_children	43	2	2021-05-11 10:39:51	2021-05-22 21:01:17	20
+16	tâche secondaire pour first task	44	3	2021-05-10 11:04:55	2021-05-27 08:27:45	12
+24	task_children	45	8	2021-05-11 10:39:51	2021-06-08 07:58:45	20
+14	second_task	45	7	2021-05-03 10:18:08	2021-06-08 07:58:48	10
+41	notification_secondaire	45	6	2021-05-23 14:13:06	2021-05-31 19:25:26	37
+47	tâche test	45	5	2021-05-31 19:27:05	2021-06-08 07:58:57	43
+44	tache notif	45	4	2021-05-23 14:19:32	2021-05-31 19:09:02	40
+18	sans dt de fin	45	3	2021-05-10 15:26:00	2021-06-08 07:59:02	14
+42	notif2	43	4	2021-05-23 14:15:08	2021-05-23 14:39:35	38
+33	half_append	43	3	2021-05-11 12:42:06	2021-06-08 07:58:40	29
+30	test_append	42	1	2021-05-11 12:34:43	2021-06-04 15:13:56	26
+20	ectoassoc	45	9	2021-05-10 23:15:14	2021-06-08 07:59:04	16
+36	89	43	1	2021-05-12 13:59:05	2021-06-04 15:13:59	32
+12	CHECK	40	0	2021-05-01 13:10:32	2021-06-04 15:37:14	8
 31	append%2==1	44	2	2021-05-11 12:35:49	2021-05-17 13:55:19	27
-30	test_append	43	0	2021-05-11 12:34:43	2021-05-26 20:14:51	26
 23	work	44	1	2021-05-11 10:08:44	2021-05-28 18:33:26	19
+37	cerise sur le gâteau	43	0	2021-05-12 14:19:24	2021-05-31 19:29:16	33
+10	pubsub	39	0	2021-05-01 13:00:55	2021-05-28 18:36:12	6
+6	Seconde tâche	40	1	2021-04-29 06:25:23	2021-06-04 15:37:15	2
+48	new_one	38	2	2021-06-05 10:54:41	2021-06-05 10:54:57	44
+28	children_length_test	41	3	2021-05-11 12:22:08	2021-05-31 19:19:44	24
+43	notifs_length	41	4	2021-05-23 14:17:54	2021-05-31 19:19:45	39
+34	assoc2nde	41	2	2021-05-11 21:12:51	2021-05-23 15:07:48	30
+27	cinquième tâche secondaire pour first	41	1	2021-05-11 12:12:04	2021-05-25 17:22:30	23
+40	TACHE POUR MATTHIEU	41	0	2021-05-17 13:52:19	2021-06-05 12:32:16	36
+1	Vraie tâche	36	0	2021-04-28 19:36:59	2021-05-28 18:36:50	1
 13	first_task	44	0	2021-05-03 10:07:31	2021-05-28 18:33:31	9
+8	4eme	37	0	2021-04-29 08:37:15	2021-06-05 20:39:15	4
+11	kanban	37	1	2021-05-01 13:07:10	2021-05-28 18:36:42	7
 35	primaire	45	0	2021-05-12 11:02:47	2021-05-28 18:33:36	31
+45	date_insert	37	2	2021-05-27 14:25:58	2021-06-04 15:37:09	41
+15	EXEMPLE	36	2	2021-05-07 14:49:09	2021-06-04 15:23:44	11
 38	dodosy	45	1	2021-05-13 21:36:00	2021-05-28 18:33:37	34
-44	tache notif	44	4	2021-05-23 14:19:32	2021-05-23 14:39:36	40
-41	notification_secondaire	44	5	2021-05-23 14:13:06	2021-05-27 08:27:38	37
-16	tâche secondaire pour first task	44	6	2021-05-10 11:04:55	2021-05-27 08:27:45	12
+46	date_insert2	36	1	2021-05-27 14:28:06	2021-06-05 20:39:20	42
 39	doudousy2	45	2	2021-05-13 21:42:44	2021-05-28 18:33:41	35
 \.
 
@@ -930,7 +937,16 @@ COPY public.cards (id, name, stage_id, "position", inserted_at, updated_at, task
 -- Data for Name: clients_requests; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.clients_requests (id, content, date_post, active_client_id, company_id, inserted_at, updated_at) FROM stdin;
+COPY public.clients_requests (id, content, date_post, active_client_id, inserted_at, updated_at, title, seen, ongoing, done, file_urls) FROM stdin;
+14	3eme requête	2021-06-05 18:14:45	1	2021-06-05 15:14:45	2021-06-05 15:14:45	Requête 3	f	f	f	{}
+26	ceci est une collection de fonds d'écran	2021-06-08 11:04:07	1	2021-06-08 08:04:07	2021-06-08 08:04:38	Fond d'écran	f	f	f	{/uploads/1361846e69b9740-e234-494e-ae88-6383904579d0.jpg,/uploads/SBKjnxm4e3aa22e-f0b5-4229-8cb4-5192c6325dd3.jpg}
+15	ceci est une requête flash	2021-06-05 21:01:44	1	2021-06-05 18:01:44	2021-06-05 18:55:16	Requête flash	f	f	f	{}
+13	deuxième requête 	2021-06-05 18:13:24	1	2021-06-05 15:13:24	2021-06-05 18:56:19	Requête 2	f	f	f	{}
+12	Voici la première requête	2021-06-05 17:39:41	1	2021-06-05 14:39:41	2021-06-07 14:41:16	Requête 1	t	f	f	{}
+21	samurai pictures	2021-06-07 20:44:26	1	2021-06-07 17:44:26	2021-06-07 17:44:27	Samuraï	f	f	f	{/uploads/136201116337dd3-836b-44e6-a5fa-cf2cd07416b8.jpg,/uploads/winter_samuraiea311a63-ef6c-4184-8329-32dd542f488e.jpg}
+22	des fichiers	2021-06-07 20:59:51	1	2021-06-07 17:59:51	2021-06-07 17:59:51	Fichiers	f	f	f	{/uploads/cert-21413040-107362b713fa-34ee-4193-80f3-af48536efc2d.pdf,"/uploads/cert-21413040-1024 (copy)qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq7e55d38a-a14a-43ce-adeb-7153f5d79c2a.pdf"}
+23	ceci est un fichier texte	2021-06-07 21:16:55	1	2021-06-07 18:16:55	2021-06-07 18:16:55	Fichier texte	f	f	f	{/uploads/test1703fef2-905a-4e5f-9396-067124e1eaaa.txt}
+25	Êtes-vous notifié de cette requête?	2021-06-07 23:43:47	1	2021-06-07 20:43:47	2021-06-07 20:43:47	Notification?	f	f	f	{}
 \.
 
 
@@ -1002,6 +1018,11 @@ COPY public.comments (id, content, task_id, poster_id, inserted_at, updated_at) 
 61	assssssssssssssssssssssssssoooooooooooooooooooooocccccccccccccccccccccccc	16	57	2021-05-20 20:12:37	2021-05-20 20:12:37
 62	today ? 	32	57	2021-05-27 13:24:11	2021-05-27 13:24:11
 63	is the date correct ?	32	57	2021-05-27 17:06:40	2021-05-27 14:06:40
+64	date date	9	57	2021-06-05 14:13:32	2021-06-05 11:13:32
+65	datuu	9	57	2021-06-05 16:17:05	2021-06-05 13:17:05
+66	amor fati	9	57	2021-06-05 16:21:15	2021-06-05 13:21:15
+67	commentaire de test	9	41	2021-06-07 18:32:54	2021-06-07 15:32:54
+68	réponse test	9	57	2021-06-07 18:33:09	2021-06-07 15:33:09
 \.
 
 
@@ -1021,6 +1042,7 @@ COPY public.companies (id, name, inserted_at, updated_at, logo) FROM stdin;
 --
 
 COPY public.editors (id, title, company_id, inserted_at, updated_at) FROM stdin;
+1	SOC-EDITOR1	1	2021-06-02 15:10:15	2021-06-02 15:10:15
 \.
 
 
@@ -1029,6 +1051,7 @@ COPY public.editors (id, title, company_id, inserted_at, updated_at) FROM stdin;
 --
 
 COPY public.licenses (id, title, date_start, date_end, company_id, inserted_at, updated_at) FROM stdin;
+1	LIC--SOC1	2021-06-10	2021-06-12	1	2021-06-02 20:27:41	2021-06-02 20:27:41
 \.
 
 
@@ -1058,12 +1081,10 @@ COPY public.notifications (id, content, seen, sender_id, receiver_id, inserted_a
 59	Tâche "second_task"\n          du projet mon_projet mise dans " En cours " par Mgbi	t	57	53	2021-05-21 06:20:55	2021-05-21 06:20:55
 308	Tâche "cinquième tâche secondaire pour first"\n          du projet mon_projet mise dans " A faire " par Attributeur	f	53	52	2021-05-25 17:22:30	2021-05-25 17:22:30
 16	Tâche "TACHE POUR MATTHIEU"\n          du projet mon_projet mise dans " En cours " par Admin	t	52	57	2021-05-20 20:01:51	2021-05-20 20:01:51
-310	Tâche "cinquième tâche secondaire pour first"\n          du projet mon_projet mise dans " A faire " par Attributeur	f	53	41	2021-05-25 17:22:30	2021-05-25 17:22:30
 4	Notification 1	t	57	56	2021-05-18 11:39:55	2021-05-18 11:39:55
 309	Tâche "cinquième tâche secondaire pour first"\n          du projet mon_projet mise dans " A faire " par Attributeur	t	53	57	2021-05-25 17:22:30	2021-05-25 17:22:30
 311	Tâche "first_task"\n          du projet mon_projet mise dans " Achevée(s) " par Mgbi	f	57	52	2021-05-26 20:16:28	2021-05-26 20:16:28
 312	Tâche "first_task"\n          du projet mon_projet mise dans " Achevée(s) " par Mgbi	f	57	53	2021-05-26 20:16:28	2021-05-26 20:16:28
-313	Tâche "first_task"\n          du projet mon_projet mise dans " Achevée(s) " par Mgbi	f	57	41	2021-05-26 20:16:28	2021-05-26 20:16:28
 314	Tâche "notification_secondaire"\n          du projet mon_projet mise dans " En contrôle " par Mgbi	f	57	52	2021-05-27 08:27:38	2021-05-27 08:27:38
 42	Tâche "second_task"\n          du projet mon_projet mise dans " En attente " par Mgbi	t	57	41	2021-05-21 06:20:18	2021-05-21 06:20:18
 45	Tâche "second_task"\n          du projet mon_projet mise dans " A faire " par Mgbi	t	57	41	2021-05-21 06:20:27	2021-05-21 06:20:27
@@ -1081,12 +1102,11 @@ COPY public.notifications (id, content, seen, sender_id, receiver_id, inserted_a
 36	Tâche "cinquième tâche secondaire pour first"\n          du projet mon_projet mise dans " En attente " par Mgbi	t	57	41	2021-05-21 06:19:36	2021-05-21 06:19:36
 39	Tâche "second_task"\n          du projet mon_projet mise dans " A faire " par Mgbi	t	57	41	2021-05-21 06:20:15	2021-05-21 06:20:15
 315	Tâche "notification_secondaire"\n          du projet mon_projet mise dans " En contrôle " par Mgbi	f	57	53	2021-05-27 08:27:38	2021-05-27 08:27:38
-316	Tâche "notification_secondaire"\n          du projet mon_projet mise dans " En contrôle " par Mgbi	f	57	41	2021-05-27 08:27:38	2021-05-27 08:27:38
 332	Tâche "CHECK"\n          du projet Premier test mise dans " En contrôle " par Mgbi	f	57	52	2021-05-27 14:34:15	2021-05-27 14:34:15
 333	Tâche "CHECK"\n          du projet Premier test mise dans " En contrôle " par Mgbi	f	57	53	2021-05-27 14:34:15	2021-05-27 14:34:15
-334	Tâche "CHECK"\n          du projet Premier test mise dans " En contrôle " par Mgbi	f	57	41	2021-05-27 14:34:15	2021-05-27 14:34:15
 371	Tâche "date_insert"\n          du projet Premier test mise dans " Achevée(s) " par Mgbi	f	57	52	2021-05-27 14:36:54	2021-05-27 14:36:54
 372	Tâche "date_insert"\n          du projet Premier test mise dans " Achevée(s) " par Mgbi	f	57	53	2021-05-27 14:36:54	2021-05-27 14:36:54
+671	Le projet "Premier test" a été mise à jour par Mgbi	f	57	53	2021-06-01 19:58:39	2021-06-01 19:58:39
 65	Tâche "second_task"\n          du projet mon_projet mise dans " A faire " par Mgbi	t	57	53	2021-05-21 06:21:13	2021-05-21 06:21:13
 68	Tâche "second_task"\n          du projet mon_projet mise dans " En attente " par Mgbi	t	57	53	2021-05-21 06:21:18	2021-05-21 06:21:18
 71	Tâche "second_task"\n          du projet mon_projet mise dans " A faire " par Mgbi	t	57	53	2021-05-21 06:21:25	2021-05-21 06:21:25
@@ -1127,16 +1147,13 @@ COPY public.notifications (id, content, seen, sender_id, receiver_id, inserted_a
 94	Tâche "cerise sur le gâteau"\n          du projet mon_projet mise dans " En contrôle " par Admin	t	52	57	2021-05-21 08:12:09	2021-05-21 08:12:09
 317	Tâche "tâche secondaire pour first task"\n          du projet mon_projet mise dans " En contrôle " par Mgbi	f	57	52	2021-05-27 08:27:45	2021-05-27 08:27:45
 318	Tâche "tâche secondaire pour first task"\n          du projet mon_projet mise dans " En contrôle " par Mgbi	f	57	53	2021-05-27 08:27:45	2021-05-27 08:27:45
-319	Tâche "tâche secondaire pour first task"\n          du projet mon_projet mise dans " En contrôle " par Mgbi	f	57	41	2021-05-27 08:27:45	2021-05-27 08:27:45
-373	Tâche "date_insert"\n          du projet Premier test mise dans " Achevée(s) " par Mgbi	f	57	41	2021-05-27 14:36:54	2021-05-27 14:36:54
 383	Tâche "kanban"\n          du projet Premier test mise dans " Achevée(s) " par Mgbi	f	57	52	2021-05-27 14:37:08	2021-05-27 14:37:08
 384	Tâche "kanban"\n          du projet Premier test mise dans " Achevée(s) " par Mgbi	f	57	53	2021-05-27 14:37:08	2021-05-27 14:37:08
-385	Tâche "kanban"\n          du projet Premier test mise dans " Achevée(s) " par Mgbi	f	57	41	2021-05-27 14:37:08	2021-05-27 14:37:08
 389	Tâche "EXEMPLE"\n          du projet Premier test mise dans " Achevée(s) " par Mgbi	f	57	52	2021-05-27 14:37:15	2021-05-27 14:37:15
 390	Tâche "EXEMPLE"\n          du projet Premier test mise dans " Achevée(s) " par Mgbi	f	57	53	2021-05-27 14:37:15	2021-05-27 14:37:15
-391	Tâche "EXEMPLE"\n          du projet Premier test mise dans " Achevée(s) " par Mgbi	f	57	41	2021-05-27 14:37:15	2021-05-27 14:37:15
 398	Tâche "pubsub"\n          du projet Premier test mise dans " En contrôle " par Mgbi	f	57	52	2021-05-27 14:37:21	2021-05-27 14:37:21
 399	Tâche "pubsub"\n          du projet Premier test mise dans " En contrôle " par Mgbi	f	57	53	2021-05-27 14:37:21	2021-05-27 14:37:21
+319	Tâche "tâche secondaire pour first task"\n          du projet mon_projet mise dans " En contrôle " par Mgbi	t	57	41	2021-05-27 08:27:45	2021-05-27 08:27:45
 98	Tâche "cerise sur le gâteau"\n          du projet mon_projet mise dans " Achevée(s) " par Admin	t	52	53	2021-05-21 08:12:11	2021-05-21 08:12:11
 101	Tâche "CHECK"\n          du projet Premier test mise dans " En contrôle " par Mgbi	t	57	53	2021-05-21 08:33:37	2021-05-21 08:33:37
 104	Tâche "CHECK"\n          du projet Premier test mise dans " Achevée(s) " par Mgbi	t	57	53	2021-05-21 08:33:40	2021-05-21 08:33:40
@@ -1152,7 +1169,6 @@ COPY public.notifications (id, content, seen, sender_id, receiver_id, inserted_a
 134	Tâche "first_task"\n          du projet mon_projet mise dans " Achevée(s) " par Mgbi	t	57	53	2021-05-21 11:57:31	2021-05-21 11:57:31
 320	Tâche nouvellement créee du nom de date_insert par Mgbi dans le projet Premier test.	f	57	52	2021-05-27 14:25:58	2021-05-27 14:25:58
 321	Tâche nouvellement créee du nom de date_insert par Mgbi dans le projet Premier test.	f	57	53	2021-05-27 14:25:58	2021-05-27 14:25:58
-322	Tâche nouvellement créee du nom de date_insert par Mgbi dans le projet Premier test.	f	57	41	2021-05-27 14:25:58	2021-05-27 14:25:58
 99	Tâche "cerise sur le gâteau"\n          du projet mon_projet mise dans " Achevée(s) " par Admin	t	52	41	2021-05-21 08:12:11	2021-05-21 08:12:11
 102	Tâche "CHECK"\n          du projet Premier test mise dans " En contrôle " par Mgbi	t	57	41	2021-05-21 08:33:37	2021-05-21 08:33:37
 105	Tâche "CHECK"\n          du projet Premier test mise dans " Achevée(s) " par Mgbi	t	57	41	2021-05-21 08:33:40	2021-05-21 08:33:40
@@ -1175,17 +1191,15 @@ COPY public.notifications (id, content, seen, sender_id, receiver_id, inserted_a
 143	Tâche "second_task"\n          du projet mon_projet mise dans " Achevée(s) " par Mgbi	t	57	53	2021-05-21 11:57:34	2021-05-21 11:57:34
 326	Tâche "date_insert2"\n          du projet Premier test mise dans " En cours " par Mgbi	f	57	52	2021-05-27 14:28:10	2021-05-27 14:28:10
 327	Tâche "date_insert2"\n          du projet Premier test mise dans " En cours " par Mgbi	f	57	53	2021-05-27 14:28:10	2021-05-27 14:28:10
-328	Tâche "date_insert2"\n          du projet Premier test mise dans " En cours " par Mgbi	f	57	41	2021-05-27 14:28:10	2021-05-27 14:28:10
 344	Tâche "CHECK"\n          du projet Premier test mise dans " Achevée(s) " par Mgbi	f	57	52	2021-05-27 14:34:38	2021-05-27 14:34:38
 345	Tâche "CHECK"\n          du projet Premier test mise dans " Achevée(s) " par Mgbi	f	57	53	2021-05-27 14:34:38	2021-05-27 14:34:38
-346	Tâche "CHECK"\n          du projet Premier test mise dans " Achevée(s) " par Mgbi	f	57	41	2021-05-27 14:34:38	2021-05-27 14:34:38
 375	Tâche "Vraie tâche"\n          du projet Premier test mise dans " En contrôle " par Mgbi	f	57	53	2021-05-27 14:37:01	2021-05-27 14:37:01
-376	Tâche "Vraie tâche"\n          du projet Premier test mise dans " En contrôle " par Mgbi	f	57	41	2021-05-27 14:37:01	2021-05-27 14:37:01
 425	Tâche "date_insert"\n          du projet Premier test mise dans " En cours " par Mgbi	f	57	52	2021-05-27 14:39:53	2021-05-27 14:39:53
 426	Tâche "date_insert"\n          du projet Premier test mise dans " En cours " par Mgbi	f	57	53	2021-05-27 14:39:53	2021-05-27 14:39:53
-427	Tâche "date_insert"\n          du projet Premier test mise dans " En cours " par Mgbi	f	57	41	2021-05-27 14:39:53	2021-05-27 14:39:53
 440	Tâche "Seconde tâche"\n          du projet Premier test mise dans " Achevée(s) " par Mgbi	f	57	52	2021-05-27 17:54:08	2021-05-27 17:54:08
 441	Tâche "Seconde tâche"\n          du projet Premier test mise dans " Achevée(s) " par Mgbi	f	57	53	2021-05-27 17:54:08	2021-05-27 17:54:08
+322	Tâche nouvellement créee du nom de date_insert par Mgbi dans le projet Premier test.	t	57	41	2021-05-27 14:25:58	2021-05-27 14:25:58
+328	Tâche "date_insert2"\n          du projet Premier test mise dans " En cours " par Mgbi	t	57	41	2021-05-27 14:28:10	2021-05-27 14:28:10
 163	Tâche "dodosy"\n          du projet mon_projet mise dans " En contrôle " par Mgbi	t	57	52	2021-05-21 11:58:26	2021-05-21 11:58:26
 147	Tâche "sans dt de fin"\n          du projet mon_projet mise dans " Achevée(s) " par Mgbi	t	57	41	2021-05-21 11:57:35	2021-05-21 11:57:35
 165	Tâche "dodosy"\n          du projet mon_projet mise dans " En contrôle " par Mgbi	t	57	41	2021-05-21 11:58:26	2021-05-21 11:58:26
@@ -1193,37 +1207,41 @@ COPY public.notifications (id, content, seen, sender_id, receiver_id, inserted_a
 164	Tâche "dodosy"\n          du projet mon_projet mise dans " En contrôle " par Mgbi	t	57	53	2021-05-21 11:58:26	2021-05-21 11:58:26
 323	Tâche nouvellement créee du nom de date_insert2 par Mgbi dans le projet Premier test.	f	57	52	2021-05-27 14:28:06	2021-05-27 14:28:06
 324	Tâche nouvellement créee du nom de date_insert2 par Mgbi dans le projet Premier test.	f	57	53	2021-05-27 14:28:06	2021-05-27 14:28:06
-325	Tâche nouvellement créee du nom de date_insert2 par Mgbi dans le projet Premier test.	f	57	41	2021-05-27 14:28:06	2021-05-27 14:28:06
 395	Tâche "CHECK"\n          du projet Premier test mise dans " En contrôle " par Mgbi	f	57	52	2021-05-27 14:37:19	2021-05-27 14:37:19
 396	Tâche "CHECK"\n          du projet Premier test mise dans " En contrôle " par Mgbi	f	57	53	2021-05-27 14:37:19	2021-05-27 14:37:19
-397	Tâche "CHECK"\n          du projet Premier test mise dans " En contrôle " par Mgbi	f	57	41	2021-05-27 14:37:19	2021-05-27 14:37:19
 401	Tâche "cinquième"\n          du projet Premier test mise dans " En cours " par Mgbi	f	57	52	2021-05-27 14:37:22	2021-05-27 14:37:22
 402	Tâche "cinquième"\n          du projet Premier test mise dans " En cours " par Mgbi	f	57	53	2021-05-27 14:37:22	2021-05-27 14:37:22
-403	Tâche "cinquième"\n          du projet Premier test mise dans " En cours " par Mgbi	f	57	41	2021-05-27 14:37:22	2021-05-27 14:37:22
-442	Tâche "Seconde tâche"\n          du projet Premier test mise dans " Achevée(s) " par Mgbi	f	57	41	2021-05-27 17:54:08	2021-05-27 17:54:08
 518	Tâche "first_task"\n          du projet mon_projet mise dans " En contrôle " par Mgbi	f	57	52	2021-05-28 18:33:31	2021-05-28 18:33:31
 519	Tâche "first_task"\n          du projet mon_projet mise dans " En contrôle " par Mgbi	f	57	53	2021-05-28 18:33:31	2021-05-28 18:33:31
-520	Tâche "first_task"\n          du projet mon_projet mise dans " En contrôle " par Mgbi	f	57	41	2021-05-28 18:33:31	2021-05-28 18:33:31
 552	Tâche "cinquième"\n          du projet Premier test mise dans " Achevée(s) " par Admin	f	52	53	2021-05-28 18:35:13	2021-05-28 18:35:13
-553	Tâche "cinquième"\n          du projet Premier test mise dans " Achevée(s) " par Admin	f	52	41	2021-05-28 18:35:13	2021-05-28 18:35:13
-554	Tâche "une nouvelle"\n          du projet Premier test mise dans " Achevée(s) " par Admin	f	52	57	2021-05-28 18:35:16	2021-05-28 18:35:16
 555	Tâche "une nouvelle"\n          du projet Premier test mise dans " Achevée(s) " par Admin	f	52	53	2021-05-28 18:35:16	2021-05-28 18:35:16
-556	Tâche "une nouvelle"\n          du projet Premier test mise dans " Achevée(s) " par Admin	f	52	41	2021-05-28 18:35:16	2021-05-28 18:35:16
-581	Tâche "pubsub"\n          du projet Premier test mise dans " En contrôle " par Admin	f	52	57	2021-05-28 18:35:55	2021-05-28 18:35:55
 582	Tâche "pubsub"\n          du projet Premier test mise dans " En contrôle " par Admin	f	52	53	2021-05-28 18:35:55	2021-05-28 18:35:55
-583	Tâche "pubsub"\n          du projet Premier test mise dans " En contrôle " par Admin	f	52	41	2021-05-28 18:35:55	2021-05-28 18:35:55
-593	Tâche "pubsub"\n          du projet Premier test mise dans " En contrôle " par Admin	f	52	57	2021-05-28 18:36:12	2021-05-28 18:36:12
 594	Tâche "pubsub"\n          du projet Premier test mise dans " En contrôle " par Admin	f	52	53	2021-05-28 18:36:12	2021-05-28 18:36:12
-595	Tâche "pubsub"\n          du projet Premier test mise dans " En contrôle " par Admin	f	52	41	2021-05-28 18:36:12	2021-05-28 18:36:12
-602	Tâche "kanban"\n          du projet Premier test mise dans " En contrôle " par Admin	f	52	57	2021-05-28 18:36:15	2021-05-28 18:36:15
 603	Tâche "kanban"\n          du projet Premier test mise dans " En contrôle " par Admin	f	52	53	2021-05-28 18:36:15	2021-05-28 18:36:15
-604	Tâche "kanban"\n          du projet Premier test mise dans " En contrôle " par Admin	f	52	41	2021-05-28 18:36:15	2021-05-28 18:36:15
-608	Tâche "cinquième"\n          du projet Premier test mise dans " En contrôle " par Admin	f	52	57	2021-05-28 18:36:17	2021-05-28 18:36:17
 609	Tâche "cinquième"\n          du projet Premier test mise dans " En contrôle " par Admin	f	52	53	2021-05-28 18:36:17	2021-05-28 18:36:17
-610	Tâche "cinquième"\n          du projet Premier test mise dans " En contrôle " par Admin	f	52	41	2021-05-28 18:36:17	2021-05-28 18:36:17
-611	Tâche "4eme"\n          du projet Premier test mise dans " En contrôle " par Admin	f	52	57	2021-05-28 18:36:18	2021-05-28 18:36:18
 612	Tâche "4eme"\n          du projet Premier test mise dans " En contrôle " par Admin	f	52	53	2021-05-28 18:36:18	2021-05-28 18:36:18
-613	Tâche "4eme"\n          du projet Premier test mise dans " En contrôle " par Admin	f	52	41	2021-05-28 18:36:18	2021-05-28 18:36:18
+647	Tâche "tache notif"\n          du projet mon_projet mise dans " Achevée(s) " par Mgbi	f	57	52	2021-05-31 19:09:02	2021-05-31 19:09:02
+648	Tâche "tache notif"\n          du projet mon_projet mise dans " Achevée(s) " par Mgbi	f	57	53	2021-05-31 19:09:02	2021-05-31 19:09:02
+650	Tâche "children_length_test"\n          du projet mon_projet mise dans " A faire " par Mgbi	f	57	52	2021-05-31 19:19:44	2021-05-31 19:19:44
+651	Tâche "children_length_test"\n          du projet mon_projet mise dans " A faire " par Mgbi	f	57	53	2021-05-31 19:19:44	2021-05-31 19:19:44
+653	Tâche "notifs_length"\n          du projet mon_projet mise dans " A faire " par Mgbi	f	57	52	2021-05-31 19:19:45	2021-05-31 19:19:45
+654	Tâche "notifs_length"\n          du projet mon_projet mise dans " A faire " par Mgbi	f	57	53	2021-05-31 19:19:45	2021-05-31 19:19:45
+656	Tâche "notification_secondaire"\n          du projet mon_projet mise dans " Achevée(s) " par Mgbi	f	57	52	2021-05-31 19:25:26	2021-05-31 19:25:26
+657	Tâche "notification_secondaire"\n          du projet mon_projet mise dans " Achevée(s) " par Mgbi	f	57	53	2021-05-31 19:25:26	2021-05-31 19:25:26
+659	Tâche nouvellement créee du nom de tâche test par Mgbi dans le projet mon_projet.	f	57	52	2021-05-31 19:27:05	2021-05-31 19:27:05
+553	Tâche "cinquième"\n          du projet Premier test mise dans " Achevée(s) " par Admin	t	52	41	2021-05-28 18:35:13	2021-05-28 18:35:13
+556	Tâche "une nouvelle"\n          du projet Premier test mise dans " Achevée(s) " par Admin	t	52	41	2021-05-28 18:35:16	2021-05-28 18:35:16
+397	Tâche "CHECK"\n          du projet Premier test mise dans " En contrôle " par Mgbi	t	57	41	2021-05-27 14:37:19	2021-05-27 14:37:19
+403	Tâche "cinquième"\n          du projet Premier test mise dans " En cours " par Mgbi	t	57	41	2021-05-27 14:37:22	2021-05-27 14:37:22
+442	Tâche "Seconde tâche"\n          du projet Premier test mise dans " Achevée(s) " par Mgbi	t	57	41	2021-05-27 17:54:08	2021-05-27 17:54:08
+520	Tâche "first_task"\n          du projet mon_projet mise dans " En contrôle " par Mgbi	t	57	41	2021-05-28 18:33:31	2021-05-28 18:33:31
+325	Tâche nouvellement créee du nom de date_insert2 par Mgbi dans le projet Premier test.	t	57	41	2021-05-27 14:28:06	2021-05-27 14:28:06
+554	Tâche "une nouvelle"\n          du projet Premier test mise dans " Achevée(s) " par Admin	t	52	57	2021-05-28 18:35:16	2021-05-28 18:35:16
+581	Tâche "pubsub"\n          du projet Premier test mise dans " En contrôle " par Admin	t	52	57	2021-05-28 18:35:55	2021-05-28 18:35:55
+593	Tâche "pubsub"\n          du projet Premier test mise dans " En contrôle " par Admin	t	52	57	2021-05-28 18:36:12	2021-05-28 18:36:12
+602	Tâche "kanban"\n          du projet Premier test mise dans " En contrôle " par Admin	t	52	57	2021-05-28 18:36:15	2021-05-28 18:36:15
+608	Tâche "cinquième"\n          du projet Premier test mise dans " En contrôle " par Admin	t	52	57	2021-05-28 18:36:17	2021-05-28 18:36:17
+611	Tâche "4eme"\n          du projet Premier test mise dans " En contrôle " par Admin	t	52	57	2021-05-28 18:36:18	2021-05-28 18:36:18
 148	Tâche "work"\n          du projet mon_projet mise dans " En cours " par Mgbi	t	57	52	2021-05-21 11:58:15	2021-05-21 11:58:15
 151	Tâche "dodosy"\n          du projet mon_projet mise dans " En cours " par Mgbi	t	57	52	2021-05-21 11:58:16	2021-05-21 11:58:16
 154	Tâche "doudousy2"\n          du projet mon_projet mise dans " En cours " par Mgbi	t	57	52	2021-05-21 11:58:17	2021-05-21 11:58:17
@@ -1247,34 +1265,28 @@ COPY public.notifications (id, content, seen, sender_id, receiver_id, inserted_a
 176	Tâche "sans dt de fin"\n          du projet mon_projet mise dans " En contrôle " par Mgbi	t	57	53	2021-05-21 11:58:41	2021-05-21 11:58:41
 329	Tâche "date_insert"\n          du projet Premier test mise dans " En attente " par Mgbi	f	57	52	2021-05-27 14:28:10	2021-05-27 14:28:10
 330	Tâche "date_insert"\n          du projet Premier test mise dans " En attente " par Mgbi	f	57	53	2021-05-27 14:28:10	2021-05-27 14:28:10
-331	Tâche "date_insert"\n          du projet Premier test mise dans " En attente " par Mgbi	f	57	41	2021-05-27 14:28:10	2021-05-27 14:28:10
-400	Tâche "pubsub"\n          du projet Premier test mise dans " En contrôle " par Mgbi	f	57	41	2021-05-27 14:37:21	2021-05-27 14:37:21
 443	Tâche "Seconde tâche"\n          du projet Premier test mise dans " En contrôle " par Mgbi	f	57	52	2021-05-27 17:58:51	2021-05-27 17:58:51
 444	Tâche "Seconde tâche"\n          du projet Premier test mise dans " En contrôle " par Mgbi	f	57	53	2021-05-27 17:58:51	2021-05-27 17:58:51
-445	Tâche "Seconde tâche"\n          du projet Premier test mise dans " En contrôle " par Mgbi	f	57	41	2021-05-27 17:58:51	2021-05-27 17:58:51
 470	Tâche "date_insert"\n          du projet Premier test mise dans " En cours " par Mgbi	f	57	52	2021-05-27 18:14:38	2021-05-27 18:14:38
 471	Tâche "date_insert"\n          du projet Premier test mise dans " En cours " par Mgbi	f	57	53	2021-05-27 18:14:38	2021-05-27 18:14:38
-472	Tâche "date_insert"\n          du projet Premier test mise dans " En cours " par Mgbi	f	57	41	2021-05-27 18:14:38	2021-05-27 18:14:38
 491	Tâche "ectoassoc"\n          du projet mon_projet mise dans " En cours " par Mgbi	f	57	52	2021-05-27 23:36:09	2021-05-27 23:36:09
 492	Tâche "ectoassoc"\n          du projet mon_projet mise dans " En cours " par Mgbi	f	57	53	2021-05-27 23:36:09	2021-05-27 23:36:09
-493	Tâche "ectoassoc"\n          du projet mon_projet mise dans " En cours " par Mgbi	f	57	41	2021-05-27 23:36:09	2021-05-27 23:36:09
 500	Tâche "primaire"\n          du projet mon_projet mise dans " En contrôle " par Mgbi	f	57	52	2021-05-28 18:20:04	2021-05-28 18:20:04
 501	Tâche "primaire"\n          du projet mon_projet mise dans " En contrôle " par Mgbi	f	57	53	2021-05-28 18:20:04	2021-05-28 18:20:04
-502	Tâche "primaire"\n          du projet mon_projet mise dans " En contrôle " par Mgbi	f	57	41	2021-05-28 18:20:04	2021-05-28 18:20:04
 524	Tâche "dodosy"\n          du projet mon_projet mise dans " Achevée(s) " par Mgbi	f	57	52	2021-05-28 18:33:37	2021-05-28 18:33:37
 525	Tâche "dodosy"\n          du projet mon_projet mise dans " Achevée(s) " par Mgbi	f	57	53	2021-05-28 18:33:37	2021-05-28 18:33:37
-526	Tâche "dodosy"\n          du projet mon_projet mise dans " Achevée(s) " par Mgbi	f	57	41	2021-05-28 18:33:37	2021-05-28 18:33:37
-557	Tâche "kanban"\n          du projet Premier test mise dans " En cours " par Admin	f	52	57	2021-05-28 18:35:27	2021-05-28 18:35:27
 558	Tâche "kanban"\n          du projet Premier test mise dans " En cours " par Admin	f	52	53	2021-05-28 18:35:27	2021-05-28 18:35:27
-559	Tâche "kanban"\n          du projet Premier test mise dans " En cours " par Admin	f	52	41	2021-05-28 18:35:27	2021-05-28 18:35:27
-566	Tâche "Vraie tâche"\n          du projet Premier test mise dans " En contrôle " par Admin	f	52	57	2021-05-28 18:35:38	2021-05-28 18:35:38
 567	Tâche "Vraie tâche"\n          du projet Premier test mise dans " En contrôle " par Admin	f	52	53	2021-05-28 18:35:38	2021-05-28 18:35:38
-568	Tâche "Vraie tâche"\n          du projet Premier test mise dans " En contrôle " par Admin	f	52	41	2021-05-28 18:35:38	2021-05-28 18:35:38
-629	Tâche "kanban"\n          du projet Premier test mise dans " En cours " par Admin	f	52	57	2021-05-28 18:36:33	2021-05-28 18:36:33
 630	Tâche "kanban"\n          du projet Premier test mise dans " En cours " par Admin	f	52	53	2021-05-28 18:36:33	2021-05-28 18:36:33
-631	Tâche "kanban"\n          du projet Premier test mise dans " En cours " par Admin	f	52	41	2021-05-28 18:36:33	2021-05-28 18:36:33
-635	Tâche "kanban"\n          du projet Premier test mise dans " En attente " par Admin	f	52	57	2021-05-28 18:36:42	2021-05-28 18:36:42
 636	Tâche "kanban"\n          du projet Premier test mise dans " En attente " par Admin	f	52	53	2021-05-28 18:36:42	2021-05-28 18:36:42
+559	Tâche "kanban"\n          du projet Premier test mise dans " En cours " par Admin	t	52	41	2021-05-28 18:35:27	2021-05-28 18:35:27
+400	Tâche "pubsub"\n          du projet Premier test mise dans " En contrôle " par Mgbi	t	57	41	2021-05-27 14:37:21	2021-05-27 14:37:21
+445	Tâche "Seconde tâche"\n          du projet Premier test mise dans " En contrôle " par Mgbi	t	57	41	2021-05-27 17:58:51	2021-05-27 17:58:51
+331	Tâche "date_insert"\n          du projet Premier test mise dans " En attente " par Mgbi	t	57	41	2021-05-27 14:28:10	2021-05-27 14:28:10
+557	Tâche "kanban"\n          du projet Premier test mise dans " En cours " par Admin	t	52	57	2021-05-28 18:35:27	2021-05-28 18:35:27
+566	Tâche "Vraie tâche"\n          du projet Premier test mise dans " En contrôle " par Admin	t	52	57	2021-05-28 18:35:38	2021-05-28 18:35:38
+629	Tâche "kanban"\n          du projet Premier test mise dans " En cours " par Admin	t	52	57	2021-05-28 18:36:33	2021-05-28 18:36:33
+635	Tâche "kanban"\n          du projet Premier test mise dans " En attente " par Admin	t	52	57	2021-05-28 18:36:42	2021-05-28 18:36:42
 160	Tâche "doudousy2"\n          du projet mon_projet mise dans " En contrôle " par Mgbi	t	57	52	2021-05-21 11:58:25	2021-05-21 11:58:25
 184	Tâche "ectoassoc"\n          du projet mon_projet mise dans " En contrôle " par Mgbi	t	57	52	2021-05-21 11:58:45	2021-05-21 11:58:45
 162	Tâche "doudousy2"\n          du projet mon_projet mise dans " En contrôle " par Mgbi	t	57	41	2021-05-21 11:58:25	2021-05-21 11:58:25
@@ -1283,49 +1295,41 @@ COPY public.notifications (id, content, seen, sender_id, receiver_id, inserted_a
 185	Tâche "ectoassoc"\n          du projet mon_projet mise dans " En contrôle " par Mgbi	t	57	53	2021-05-21 11:58:45	2021-05-21 11:58:45
 335	Tâche "CHECK"\n          du projet Premier test mise dans " Achevée(s) " par Mgbi	f	57	52	2021-05-27 14:34:23	2021-05-27 14:34:23
 336	Tâche "CHECK"\n          du projet Premier test mise dans " Achevée(s) " par Mgbi	f	57	53	2021-05-27 14:34:23	2021-05-27 14:34:23
-337	Tâche "CHECK"\n          du projet Premier test mise dans " Achevée(s) " par Mgbi	f	57	41	2021-05-27 14:34:23	2021-05-27 14:34:23
 407	Tâche "date_insert2"\n          du projet Premier test mise dans " En cours " par Mgbi	f	57	52	2021-05-27 14:37:24	2021-05-27 14:37:24
 408	Tâche "date_insert2"\n          du projet Premier test mise dans " En cours " par Mgbi	f	57	53	2021-05-27 14:37:24	2021-05-27 14:37:24
-409	Tâche "date_insert2"\n          du projet Premier test mise dans " En cours " par Mgbi	f	57	41	2021-05-27 14:37:24	2021-05-27 14:37:24
 446	Tâche "date_insert"\n          du projet Premier test mise dans " En contrôle " par Mgbi	f	57	52	2021-05-27 17:59:07	2021-05-27 17:59:07
 447	Tâche "date_insert"\n          du projet Premier test mise dans " En contrôle " par Mgbi	f	57	53	2021-05-27 17:59:07	2021-05-27 17:59:07
-448	Tâche "date_insert"\n          du projet Premier test mise dans " En contrôle " par Mgbi	f	57	41	2021-05-27 17:59:07	2021-05-27 17:59:07
 473	Tâche "date_insert"\n          du projet Premier test mise dans " En contrôle " par Mgbi	f	57	52	2021-05-27 18:15:03	2021-05-27 18:15:03
 474	Tâche "date_insert"\n          du projet Premier test mise dans " En contrôle " par Mgbi	f	57	53	2021-05-27 18:15:03	2021-05-27 18:15:03
-475	Tâche "date_insert"\n          du projet Premier test mise dans " En contrôle " par Mgbi	f	57	41	2021-05-27 18:15:03	2021-05-27 18:15:03
 482	Tâche "ectoassoc"\n          du projet mon_projet mise dans " Achevée(s) " par Mgbi	f	57	52	2021-05-27 23:14:48	2021-05-27 23:14:48
 483	Tâche "ectoassoc"\n          du projet mon_projet mise dans " Achevée(s) " par Mgbi	f	57	53	2021-05-27 23:14:48	2021-05-27 23:14:48
-484	Tâche "ectoassoc"\n          du projet mon_projet mise dans " Achevée(s) " par Mgbi	f	57	41	2021-05-27 23:14:48	2021-05-27 23:14:48
 485	Tâche "ectoassoc"\n          du projet mon_projet mise dans " En cours " par Mgbi	f	57	52	2021-05-27 23:34:43	2021-05-27 23:34:43
 486	Tâche "ectoassoc"\n          du projet mon_projet mise dans " En cours " par Mgbi	f	57	53	2021-05-27 23:34:43	2021-05-27 23:34:43
-487	Tâche "ectoassoc"\n          du projet mon_projet mise dans " En cours " par Mgbi	f	57	41	2021-05-27 23:34:43	2021-05-27 23:34:43
 503	Tâche "primaire"\n          du projet mon_projet mise dans " Achevée(s) " par Mgbi	f	57	52	2021-05-28 18:20:06	2021-05-28 18:20:06
 504	Tâche "primaire"\n          du projet mon_projet mise dans " Achevée(s) " par Mgbi	f	57	53	2021-05-28 18:20:06	2021-05-28 18:20:06
-505	Tâche "primaire"\n          du projet mon_projet mise dans " Achevée(s) " par Mgbi	f	57	41	2021-05-28 18:20:06	2021-05-28 18:20:06
 530	Tâche "TACHE POUR MATTHIEU"\n          du projet mon_projet mise dans " En attente " par Mgbi	f	57	52	2021-05-28 18:34:23	2021-05-28 18:34:23
 531	Tâche "TACHE POUR MATTHIEU"\n          du projet mon_projet mise dans " En attente " par Mgbi	f	57	53	2021-05-28 18:34:23	2021-05-28 18:34:23
-532	Tâche "TACHE POUR MATTHIEU"\n          du projet mon_projet mise dans " En attente " par Mgbi	f	57	41	2021-05-28 18:34:23	2021-05-28 18:34:23
-545	Tâche "cinquième"\n          du projet Premier test mise dans " En contrôle " par Admin	f	52	57	2021-05-28 18:35:08	2021-05-28 18:35:08
 546	Tâche "cinquième"\n          du projet Premier test mise dans " En contrôle " par Admin	f	52	53	2021-05-28 18:35:08	2021-05-28 18:35:08
-547	Tâche "cinquième"\n          du projet Premier test mise dans " En contrôle " par Admin	f	52	41	2021-05-28 18:35:08	2021-05-28 18:35:08
-560	Tâche "Vraie tâche"\n          du projet Premier test mise dans " En cours " par Admin	f	52	57	2021-05-28 18:35:28	2021-05-28 18:35:28
 561	Tâche "Vraie tâche"\n          du projet Premier test mise dans " En cours " par Admin	f	52	53	2021-05-28 18:35:28	2021-05-28 18:35:28
-562	Tâche "Vraie tâche"\n          du projet Premier test mise dans " En cours " par Admin	f	52	41	2021-05-28 18:35:28	2021-05-28 18:35:28
-578	Tâche "pubsub"\n          du projet Premier test mise dans " En attente " par Admin	f	52	57	2021-05-28 18:35:49	2021-05-28 18:35:49
 579	Tâche "pubsub"\n          du projet Premier test mise dans " En attente " par Admin	f	52	53	2021-05-28 18:35:49	2021-05-28 18:35:49
-580	Tâche "pubsub"\n          du projet Premier test mise dans " En attente " par Admin	f	52	41	2021-05-28 18:35:49	2021-05-28 18:35:49
-584	Tâche "date_insert2"\n          du projet Premier test mise dans " En contrôle " par Admin	f	52	57	2021-05-28 18:35:56	2021-05-28 18:35:56
 585	Tâche "date_insert2"\n          du projet Premier test mise dans " En contrôle " par Admin	f	52	53	2021-05-28 18:35:56	2021-05-28 18:35:56
-586	Tâche "date_insert2"\n          du projet Premier test mise dans " En contrôle " par Admin	f	52	41	2021-05-28 18:35:56	2021-05-28 18:35:56
-599	Tâche "Vraie tâche"\n          du projet Premier test mise dans " En contrôle " par Admin	f	52	57	2021-05-28 18:36:14	2021-05-28 18:36:14
 600	Tâche "Vraie tâche"\n          du projet Premier test mise dans " En contrôle " par Admin	f	52	53	2021-05-28 18:36:14	2021-05-28 18:36:14
-601	Tâche "Vraie tâche"\n          du projet Premier test mise dans " En contrôle " par Admin	f	52	41	2021-05-28 18:36:14	2021-05-28 18:36:14
-620	Tâche "cinquième"\n          du projet Premier test mise dans " En cours " par Admin	f	52	57	2021-05-28 18:36:27	2021-05-28 18:36:27
 621	Tâche "cinquième"\n          du projet Premier test mise dans " En cours " par Admin	f	52	53	2021-05-28 18:36:27	2021-05-28 18:36:27
-622	Tâche "cinquième"\n          du projet Premier test mise dans " En cours " par Admin	f	52	41	2021-05-28 18:36:27	2021-05-28 18:36:27
-637	Tâche "kanban"\n          du projet Premier test mise dans " En attente " par Admin	f	52	41	2021-05-28 18:36:42	2021-05-28 18:36:42
-644	Tâche "Vraie tâche"\n          du projet Premier test mise dans " A faire " par Admin	f	52	57	2021-05-28 18:36:50	2021-05-28 18:36:50
 645	Tâche "Vraie tâche"\n          du projet Premier test mise dans " A faire " par Admin	f	52	53	2021-05-28 18:36:50	2021-05-28 18:36:50
+580	Tâche "pubsub"\n          du projet Premier test mise dans " En attente " par Admin	t	52	41	2021-05-28 18:35:49	2021-05-28 18:35:49
+532	Tâche "TACHE POUR MATTHIEU"\n          du projet mon_projet mise dans " En attente " par Mgbi	t	57	41	2021-05-28 18:34:23	2021-05-28 18:34:23
+547	Tâche "cinquième"\n          du projet Premier test mise dans " En contrôle " par Admin	t	52	41	2021-05-28 18:35:08	2021-05-28 18:35:08
+562	Tâche "Vraie tâche"\n          du projet Premier test mise dans " En cours " par Admin	t	52	41	2021-05-28 18:35:28	2021-05-28 18:35:28
+409	Tâche "date_insert2"\n          du projet Premier test mise dans " En cours " par Mgbi	t	57	41	2021-05-27 14:37:24	2021-05-27 14:37:24
+448	Tâche "date_insert"\n          du projet Premier test mise dans " En contrôle " par Mgbi	t	57	41	2021-05-27 17:59:07	2021-05-27 17:59:07
+475	Tâche "date_insert"\n          du projet Premier test mise dans " En contrôle " par Mgbi	t	57	41	2021-05-27 18:15:03	2021-05-27 18:15:03
+484	Tâche "ectoassoc"\n          du projet mon_projet mise dans " Achevée(s) " par Mgbi	t	57	41	2021-05-27 23:14:48	2021-05-27 23:14:48
+337	Tâche "CHECK"\n          du projet Premier test mise dans " Achevée(s) " par Mgbi	t	57	41	2021-05-27 14:34:23	2021-05-27 14:34:23
+545	Tâche "cinquième"\n          du projet Premier test mise dans " En contrôle " par Admin	t	52	57	2021-05-28 18:35:08	2021-05-28 18:35:08
+560	Tâche "Vraie tâche"\n          du projet Premier test mise dans " En cours " par Admin	t	52	57	2021-05-28 18:35:28	2021-05-28 18:35:28
+578	Tâche "pubsub"\n          du projet Premier test mise dans " En attente " par Admin	t	52	57	2021-05-28 18:35:49	2021-05-28 18:35:49
+584	Tâche "date_insert2"\n          du projet Premier test mise dans " En contrôle " par Admin	t	52	57	2021-05-28 18:35:56	2021-05-28 18:35:56
+599	Tâche "Vraie tâche"\n          du projet Premier test mise dans " En contrôle " par Admin	t	52	57	2021-05-28 18:36:14	2021-05-28 18:36:14
 169	Tâche "doudousy2"\n          du projet mon_projet mise dans " Achevée(s) " par Mgbi	t	57	52	2021-05-21 11:58:35	2021-05-21 11:58:35
 178	Tâche "cerise sur le gâteau"\n          du projet mon_projet mise dans " En contrôle " par Mgbi	t	57	52	2021-05-21 11:58:43	2021-05-21 11:58:43
 171	Tâche "doudousy2"\n          du projet mon_projet mise dans " Achevée(s) " par Mgbi	t	57	41	2021-05-21 11:58:35	2021-05-21 11:58:35
@@ -1334,99 +1338,79 @@ COPY public.notifications (id, content, seen, sender_id, receiver_id, inserted_a
 179	Tâche "cerise sur le gâteau"\n          du projet mon_projet mise dans " En contrôle " par Mgbi	t	57	53	2021-05-21 11:58:43	2021-05-21 11:58:43
 338	Tâche "CHECK"\n          du projet Premier test mise dans " En contrôle " par Mgbi	f	57	52	2021-05-27 14:34:25	2021-05-27 14:34:25
 339	Tâche "CHECK"\n          du projet Premier test mise dans " En contrôle " par Mgbi	f	57	53	2021-05-27 14:34:25	2021-05-27 14:34:25
-340	Tâche "CHECK"\n          du projet Premier test mise dans " En contrôle " par Mgbi	f	57	41	2021-05-27 14:34:25	2021-05-27 14:34:25
 341	Tâche "4eme"\n          du projet Premier test mise dans " En contrôle " par Mgbi	f	57	52	2021-05-27 14:34:37	2021-05-27 14:34:37
 342	Tâche "4eme"\n          du projet Premier test mise dans " En contrôle " par Mgbi	f	57	53	2021-05-27 14:34:37	2021-05-27 14:34:37
-343	Tâche "4eme"\n          du projet Premier test mise dans " En contrôle " par Mgbi	f	57	41	2021-05-27 14:34:37	2021-05-27 14:34:37
 419	Tâche "pubsub"\n          du projet Premier test mise dans " A faire " par Mgbi	f	57	52	2021-05-27 14:37:36	2021-05-27 14:37:36
 420	Tâche "pubsub"\n          du projet Premier test mise dans " A faire " par Mgbi	f	57	53	2021-05-27 14:37:36	2021-05-27 14:37:36
-421	Tâche "pubsub"\n          du projet Premier test mise dans " A faire " par Mgbi	f	57	41	2021-05-27 14:37:36	2021-05-27 14:37:36
 449	Tâche "date_insert"\n          du projet Premier test mise dans " Achevée(s) " par Mgbi	f	57	52	2021-05-27 17:59:09	2021-05-27 17:59:09
 450	Tâche "date_insert"\n          du projet Premier test mise dans " Achevée(s) " par Mgbi	f	57	53	2021-05-27 17:59:09	2021-05-27 17:59:09
-451	Tâche "date_insert"\n          du projet Premier test mise dans " Achevée(s) " par Mgbi	f	57	41	2021-05-27 17:59:09	2021-05-27 17:59:09
 461	Tâche "EXEMPLE"\n          du projet Premier test mise dans " Achevée(s) " par Mgbi	f	57	52	2021-05-27 18:04:27	2021-05-27 18:04:27
 462	Tâche "EXEMPLE"\n          du projet Premier test mise dans " Achevée(s) " par Mgbi	f	57	53	2021-05-27 18:04:27	2021-05-27 18:04:27
-463	Tâche "EXEMPLE"\n          du projet Premier test mise dans " Achevée(s) " par Mgbi	f	57	41	2021-05-27 18:04:27	2021-05-27 18:04:27
 506	Tâche "primaire"\n          du projet mon_projet mise dans " En contrôle " par Mgbi	f	57	52	2021-05-28 18:33:12	2021-05-28 18:33:12
 507	Tâche "primaire"\n          du projet mon_projet mise dans " En contrôle " par Mgbi	f	57	53	2021-05-28 18:33:12	2021-05-28 18:33:12
-508	Tâche "primaire"\n          du projet mon_projet mise dans " En contrôle " par Mgbi	f	57	41	2021-05-28 18:33:12	2021-05-28 18:33:12
 533	Tâche "tacheee"\n          du projet mon_projet mise dans " En attente " par Mgbi	f	57	52	2021-05-28 18:34:25	2021-05-28 18:34:25
 534	Tâche "tacheee"\n          du projet mon_projet mise dans " En attente " par Mgbi	f	57	53	2021-05-28 18:34:25	2021-05-28 18:34:25
-535	Tâche "tacheee"\n          du projet mon_projet mise dans " En attente " par Mgbi	f	57	41	2021-05-28 18:34:25	2021-05-28 18:34:25
-563	Tâche "kanban"\n          du projet Premier test mise dans " En contrôle " par Admin	f	52	57	2021-05-28 18:35:37	2021-05-28 18:35:37
 564	Tâche "kanban"\n          du projet Premier test mise dans " En contrôle " par Admin	f	52	53	2021-05-28 18:35:37	2021-05-28 18:35:37
-565	Tâche "kanban"\n          du projet Premier test mise dans " En contrôle " par Admin	f	52	41	2021-05-28 18:35:37	2021-05-28 18:35:37
-572	Tâche "Vraie tâche"\n          du projet Premier test mise dans " Achevée(s) " par Admin	f	52	57	2021-05-28 18:35:41	2021-05-28 18:35:41
 573	Tâche "Vraie tâche"\n          du projet Premier test mise dans " Achevée(s) " par Admin	f	52	53	2021-05-28 18:35:41	2021-05-28 18:35:41
-574	Tâche "Vraie tâche"\n          du projet Premier test mise dans " Achevée(s) " par Admin	f	52	41	2021-05-28 18:35:41	2021-05-28 18:35:41
-596	Tâche "date_insert2"\n          du projet Premier test mise dans " En contrôle " par Admin	f	52	57	2021-05-28 18:36:13	2021-05-28 18:36:13
 597	Tâche "date_insert2"\n          du projet Premier test mise dans " En contrôle " par Admin	f	52	53	2021-05-28 18:36:13	2021-05-28 18:36:13
-598	Tâche "date_insert2"\n          du projet Premier test mise dans " En contrôle " par Admin	f	52	41	2021-05-28 18:36:13	2021-05-28 18:36:13
-605	Tâche "une nouvelle"\n          du projet Premier test mise dans " En contrôle " par Admin	f	52	57	2021-05-28 18:36:16	2021-05-28 18:36:16
 606	Tâche "une nouvelle"\n          du projet Premier test mise dans " En contrôle " par Admin	f	52	53	2021-05-28 18:36:16	2021-05-28 18:36:16
-607	Tâche "une nouvelle"\n          du projet Premier test mise dans " En contrôle " par Admin	f	52	41	2021-05-28 18:36:16	2021-05-28 18:36:16
-614	Tâche "Seconde tâche"\n          du projet Premier test mise dans " En contrôle " par Admin	f	52	57	2021-05-28 18:36:18	2021-05-28 18:36:18
 615	Tâche "Seconde tâche"\n          du projet Premier test mise dans " En contrôle " par Admin	f	52	53	2021-05-28 18:36:18	2021-05-28 18:36:18
-616	Tâche "Seconde tâche"\n          du projet Premier test mise dans " En contrôle " par Admin	f	52	41	2021-05-28 18:36:18	2021-05-28 18:36:18
-617	Tâche "CHECK"\n          du projet Premier test mise dans " En contrôle " par Admin	f	52	57	2021-05-28 18:36:22	2021-05-28 18:36:22
 618	Tâche "CHECK"\n          du projet Premier test mise dans " En contrôle " par Admin	f	52	53	2021-05-28 18:36:22	2021-05-28 18:36:22
-619	Tâche "CHECK"\n          du projet Premier test mise dans " En contrôle " par Admin	f	52	41	2021-05-28 18:36:22	2021-05-28 18:36:22
-626	Tâche "Vraie tâche"\n          du projet Premier test mise dans " En cours " par Admin	f	52	57	2021-05-28 18:36:32	2021-05-28 18:36:32
 627	Tâche "Vraie tâche"\n          du projet Premier test mise dans " En cours " par Admin	f	52	53	2021-05-28 18:36:32	2021-05-28 18:36:32
-628	Tâche "Vraie tâche"\n          du projet Premier test mise dans " En cours " par Admin	f	52	41	2021-05-28 18:36:32	2021-05-28 18:36:32
-641	Tâche "4eme"\n          du projet Premier test mise dans " A faire " par Admin	f	52	57	2021-05-28 18:36:48	2021-05-28 18:36:48
 642	Tâche "4eme"\n          du projet Premier test mise dans " A faire " par Admin	f	52	53	2021-05-28 18:36:48	2021-05-28 18:36:48
-643	Tâche "4eme"\n          du projet Premier test mise dans " A faire " par Admin	f	52	41	2021-05-28 18:36:48	2021-05-28 18:36:48
+565	Tâche "kanban"\n          du projet Premier test mise dans " En contrôle " par Admin	t	52	41	2021-05-28 18:35:37	2021-05-28 18:35:37
+535	Tâche "tacheee"\n          du projet mon_projet mise dans " En attente " par Mgbi	t	57	41	2021-05-28 18:34:25	2021-05-28 18:34:25
+421	Tâche "pubsub"\n          du projet Premier test mise dans " A faire " par Mgbi	t	57	41	2021-05-27 14:37:36	2021-05-27 14:37:36
+451	Tâche "date_insert"\n          du projet Premier test mise dans " Achevée(s) " par Mgbi	t	57	41	2021-05-27 17:59:09	2021-05-27 17:59:09
+463	Tâche "EXEMPLE"\n          du projet Premier test mise dans " Achevée(s) " par Mgbi	t	57	41	2021-05-27 18:04:27	2021-05-27 18:04:27
+508	Tâche "primaire"\n          du projet mon_projet mise dans " En contrôle " par Mgbi	t	57	41	2021-05-28 18:33:12	2021-05-28 18:33:12
+340	Tâche "CHECK"\n          du projet Premier test mise dans " En contrôle " par Mgbi	t	57	41	2021-05-27 14:34:25	2021-05-27 14:34:25
+343	Tâche "4eme"\n          du projet Premier test mise dans " En contrôle " par Mgbi	t	57	41	2021-05-27 14:34:37	2021-05-27 14:34:37
+563	Tâche "kanban"\n          du projet Premier test mise dans " En contrôle " par Admin	t	52	57	2021-05-28 18:35:37	2021-05-28 18:35:37
+572	Tâche "Vraie tâche"\n          du projet Premier test mise dans " Achevée(s) " par Admin	t	52	57	2021-05-28 18:35:41	2021-05-28 18:35:41
+596	Tâche "date_insert2"\n          du projet Premier test mise dans " En contrôle " par Admin	t	52	57	2021-05-28 18:36:13	2021-05-28 18:36:13
+605	Tâche "une nouvelle"\n          du projet Premier test mise dans " En contrôle " par Admin	t	52	57	2021-05-28 18:36:16	2021-05-28 18:36:16
+614	Tâche "Seconde tâche"\n          du projet Premier test mise dans " En contrôle " par Admin	t	52	57	2021-05-28 18:36:18	2021-05-28 18:36:18
 181	Tâche "TACHE POUR MATTHIEU"\n          du projet mon_projet mise dans " En contrôle " par Mgbi	t	57	52	2021-05-21 11:58:43	2021-05-21 11:58:43
 183	Tâche "TACHE POUR MATTHIEU"\n          du projet mon_projet mise dans " En contrôle " par Mgbi	t	57	41	2021-05-21 11:58:43	2021-05-21 11:58:43
 182	Tâche "TACHE POUR MATTHIEU"\n          du projet mon_projet mise dans " En contrôle " par Mgbi	t	57	53	2021-05-21 11:58:43	2021-05-21 11:58:43
 347	Tâche "CHECK"\n          du projet Premier test mise dans " En contrôle " par Mgbi	f	57	52	2021-05-27 14:36:43	2021-05-27 14:36:43
 348	Tâche "CHECK"\n          du projet Premier test mise dans " En contrôle " par Mgbi	f	57	53	2021-05-27 14:36:43	2021-05-27 14:36:43
-349	Tâche "CHECK"\n          du projet Premier test mise dans " En contrôle " par Mgbi	f	57	41	2021-05-27 14:36:43	2021-05-27 14:36:43
 365	Tâche "une nouvelle"\n          du projet Premier test mise dans " Achevée(s) " par Mgbi	f	57	52	2021-05-27 14:36:52	2021-05-27 14:36:52
 366	Tâche "une nouvelle"\n          du projet Premier test mise dans " Achevée(s) " par Mgbi	f	57	53	2021-05-27 14:36:52	2021-05-27 14:36:52
-367	Tâche "une nouvelle"\n          du projet Premier test mise dans " Achevée(s) " par Mgbi	f	57	41	2021-05-27 14:36:52	2021-05-27 14:36:52
 386	Tâche "Vraie tâche"\n          du projet Premier test mise dans " Achevée(s) " par Mgbi	f	57	52	2021-05-27 14:37:11	2021-05-27 14:37:11
 387	Tâche "Vraie tâche"\n          du projet Premier test mise dans " Achevée(s) " par Mgbi	f	57	53	2021-05-27 14:37:11	2021-05-27 14:37:11
-388	Tâche "Vraie tâche"\n          du projet Premier test mise dans " Achevée(s) " par Mgbi	f	57	41	2021-05-27 14:37:11	2021-05-27 14:37:11
 392	Tâche "4eme"\n          du projet Premier test mise dans " En contrôle " par Mgbi	f	57	52	2021-05-27 14:37:18	2021-05-27 14:37:18
 393	Tâche "4eme"\n          du projet Premier test mise dans " En contrôle " par Mgbi	f	57	53	2021-05-27 14:37:18	2021-05-27 14:37:18
-394	Tâche "4eme"\n          du projet Premier test mise dans " En contrôle " par Mgbi	f	57	41	2021-05-27 14:37:18	2021-05-27 14:37:18
 413	Tâche "Vraie tâche"\n          du projet Premier test mise dans " En attente " par Mgbi	f	57	52	2021-05-27 14:37:27	2021-05-27 14:37:27
 414	Tâche "Vraie tâche"\n          du projet Premier test mise dans " En attente " par Mgbi	f	57	53	2021-05-27 14:37:27	2021-05-27 14:37:27
-415	Tâche "Vraie tâche"\n          du projet Premier test mise dans " En attente " par Mgbi	f	57	41	2021-05-27 14:37:27	2021-05-27 14:37:27
 428	Tâche "date_insert"\n          du projet Premier test mise dans " Achevée(s) " par Mgbi	f	57	52	2021-05-27 14:43:54	2021-05-27 14:43:54
 429	Tâche "date_insert"\n          du projet Premier test mise dans " Achevée(s) " par Mgbi	f	57	53	2021-05-27 14:43:54	2021-05-27 14:43:54
-430	Tâche "date_insert"\n          du projet Premier test mise dans " Achevée(s) " par Mgbi	f	57	41	2021-05-27 14:43:54	2021-05-27 14:43:54
 452	Tâche "date_insert"\n          du projet Premier test mise dans " En cours " par Mgbi	f	57	52	2021-05-27 18:04:08	2021-05-27 18:04:08
 453	Tâche "date_insert"\n          du projet Premier test mise dans " En cours " par Mgbi	f	57	53	2021-05-27 18:04:08	2021-05-27 18:04:08
-454	Tâche "date_insert"\n          du projet Premier test mise dans " En cours " par Mgbi	f	57	41	2021-05-27 18:04:08	2021-05-27 18:04:08
 464	Tâche "EXEMPLE"\n          du projet Premier test mise dans " En contrôle " par Mgbi	f	57	52	2021-05-27 18:04:29	2021-05-27 18:04:29
 465	Tâche "EXEMPLE"\n          du projet Premier test mise dans " En contrôle " par Mgbi	f	57	53	2021-05-27 18:04:29	2021-05-27 18:04:29
-466	Tâche "EXEMPLE"\n          du projet Premier test mise dans " En contrôle " par Mgbi	f	57	41	2021-05-27 18:04:29	2021-05-27 18:04:29
 488	Tâche "ectoassoc"\n          du projet mon_projet mise dans " En contrôle " par Mgbi	f	57	52	2021-05-27 23:36:07	2021-05-27 23:36:07
 489	Tâche "ectoassoc"\n          du projet mon_projet mise dans " En contrôle " par Mgbi	f	57	53	2021-05-27 23:36:07	2021-05-27 23:36:07
-490	Tâche "ectoassoc"\n          du projet mon_projet mise dans " En contrôle " par Mgbi	f	57	41	2021-05-27 23:36:07	2021-05-27 23:36:07
 509	Tâche "dodosy"\n          du projet mon_projet mise dans " En contrôle " par Mgbi	f	57	52	2021-05-28 18:33:18	2021-05-28 18:33:18
 510	Tâche "dodosy"\n          du projet mon_projet mise dans " En contrôle " par Mgbi	f	57	53	2021-05-28 18:33:18	2021-05-28 18:33:18
-511	Tâche "dodosy"\n          du projet mon_projet mise dans " En contrôle " par Mgbi	f	57	41	2021-05-28 18:33:18	2021-05-28 18:33:18
 536	Tâche "cerise sur le gâteau"\n          du projet mon_projet mise dans " En attente " par Mgbi	f	57	52	2021-05-28 18:34:26	2021-05-28 18:34:26
 537	Tâche "cerise sur le gâteau"\n          du projet mon_projet mise dans " En attente " par Mgbi	f	57	53	2021-05-28 18:34:26	2021-05-28 18:34:26
-538	Tâche "cerise sur le gâteau"\n          du projet mon_projet mise dans " En attente " par Mgbi	f	57	41	2021-05-28 18:34:26	2021-05-28 18:34:26
-539	Tâche "CHECK"\n          du projet Premier test mise dans " Achevée(s) " par Admin	f	52	57	2021-05-28 18:34:51	2021-05-28 18:34:51
 540	Tâche "CHECK"\n          du projet Premier test mise dans " Achevée(s) " par Admin	f	52	53	2021-05-28 18:34:51	2021-05-28 18:34:51
-541	Tâche "CHECK"\n          du projet Premier test mise dans " Achevée(s) " par Admin	f	52	41	2021-05-28 18:34:51	2021-05-28 18:34:51
-542	Tâche "4eme"\n          du projet Premier test mise dans " Achevée(s) " par Admin	f	52	57	2021-05-28 18:34:54	2021-05-28 18:34:54
 543	Tâche "4eme"\n          du projet Premier test mise dans " Achevée(s) " par Admin	f	52	53	2021-05-28 18:34:54	2021-05-28 18:34:54
-544	Tâche "4eme"\n          du projet Premier test mise dans " Achevée(s) " par Admin	f	52	41	2021-05-28 18:34:54	2021-05-28 18:34:54
-569	Tâche "kanban"\n          du projet Premier test mise dans " Achevée(s) " par Admin	f	52	57	2021-05-28 18:35:40	2021-05-28 18:35:40
 570	Tâche "kanban"\n          du projet Premier test mise dans " Achevée(s) " par Admin	f	52	53	2021-05-28 18:35:40	2021-05-28 18:35:40
-571	Tâche "kanban"\n          du projet Premier test mise dans " Achevée(s) " par Admin	f	52	41	2021-05-28 18:35:40	2021-05-28 18:35:40
-575	Tâche "date_insert2"\n          du projet Premier test mise dans " En attente " par Admin	f	52	57	2021-05-28 18:35:48	2021-05-28 18:35:48
 576	Tâche "date_insert2"\n          du projet Premier test mise dans " En attente " par Admin	f	52	53	2021-05-28 18:35:48	2021-05-28 18:35:48
-577	Tâche "date_insert2"\n          du projet Premier test mise dans " En attente " par Admin	f	52	41	2021-05-28 18:35:48	2021-05-28 18:35:48
-590	Tâche "date_insert2"\n          du projet Premier test mise dans " Achevée(s) " par Admin	f	52	57	2021-05-28 18:36:04	2021-05-28 18:36:04
 591	Tâche "date_insert2"\n          du projet Premier test mise dans " Achevée(s) " par Admin	f	52	53	2021-05-28 18:36:04	2021-05-28 18:36:04
+538	Tâche "cerise sur le gâteau"\n          du projet mon_projet mise dans " En attente " par Mgbi	t	57	41	2021-05-28 18:34:26	2021-05-28 18:34:26
+541	Tâche "CHECK"\n          du projet Premier test mise dans " Achevée(s) " par Admin	t	52	41	2021-05-28 18:34:51	2021-05-28 18:34:51
+349	Tâche "CHECK"\n          du projet Premier test mise dans " En contrôle " par Mgbi	t	57	41	2021-05-27 14:36:43	2021-05-27 14:36:43
+367	Tâche "une nouvelle"\n          du projet Premier test mise dans " Achevée(s) " par Mgbi	t	57	41	2021-05-27 14:36:52	2021-05-27 14:36:52
+388	Tâche "Vraie tâche"\n          du projet Premier test mise dans " Achevée(s) " par Mgbi	t	57	41	2021-05-27 14:37:11	2021-05-27 14:37:11
+539	Tâche "CHECK"\n          du projet Premier test mise dans " Achevée(s) " par Admin	t	52	57	2021-05-28 18:34:51	2021-05-28 18:34:51
+542	Tâche "4eme"\n          du projet Premier test mise dans " Achevée(s) " par Admin	t	52	57	2021-05-28 18:34:54	2021-05-28 18:34:54
+569	Tâche "kanban"\n          du projet Premier test mise dans " Achevée(s) " par Admin	t	52	57	2021-05-28 18:35:40	2021-05-28 18:35:40
+575	Tâche "date_insert2"\n          du projet Premier test mise dans " En attente " par Admin	t	52	57	2021-05-28 18:35:48	2021-05-28 18:35:48
+590	Tâche "date_insert2"\n          du projet Premier test mise dans " Achevée(s) " par Admin	t	52	57	2021-05-28 18:36:04	2021-05-28 18:36:04
 350	Tâche "CHECK"\n          du projet Premier test mise dans " Achevée(s) " par Mgbi	f	57	52	2021-05-27 14:36:46	2021-05-27 14:36:46
 88	Tâche "cinquième"\n          du projet Premier test mise dans " En cours " par Mgbi	t	57	52	2021-05-21 07:40:31	2021-05-21 07:40:31
 91	Tâche "Seconde tâche"\n          du projet Premier test mise dans " En attente " par Mgbi	t	57	52	2021-05-21 07:41:33	2021-05-21 07:41:33
@@ -1462,84 +1446,61 @@ COPY public.notifications (id, content, seen, sender_id, receiver_id, inserted_a
 189	Tâche "89"\n          du projet mon_projet mise dans " En contrôle " par Mgbi	t	57	41	2021-05-21 11:58:45	2021-05-21 11:58:45
 192	Tâche "task_children"\n          du projet mon_projet mise dans " En contrôle " par Mgbi	t	57	41	2021-05-21 12:00:28	2021-05-21 12:00:28
 193	Tâche "test_append"\n          du projet mon_projet mise dans " En attente " par Mgbi	f	57	52	2021-05-22 10:07:08	2021-05-22 10:07:08
-352	Tâche "CHECK"\n          du projet Premier test mise dans " Achevée(s) " par Mgbi	f	57	41	2021-05-27 14:36:46	2021-05-27 14:36:46
-195	Tâche "test_append"\n          du projet mon_projet mise dans " En attente " par Mgbi	f	57	41	2021-05-22 10:07:08	2021-05-22 10:07:08
 196	Tâche "cinquième tâche secondaire pour first"\n          du projet mon_projet mise dans " A faire " par Mgbi	f	57	52	2021-05-22 10:07:10	2021-05-22 10:07:10
 362	Tâche "date_insert2"\n          du projet Premier test mise dans " Achevée(s) " par Mgbi	f	57	52	2021-05-27 14:36:51	2021-05-27 14:36:51
-198	Tâche "cinquième tâche secondaire pour first"\n          du projet mon_projet mise dans " A faire " par Mgbi	f	57	41	2021-05-22 10:07:10	2021-05-22 10:07:10
 199	Tâche "cinquième tâche secondaire pour first"\n          du projet mon_projet mise dans " En attente " par Mgbi	f	57	52	2021-05-22 10:07:12	2021-05-22 10:07:12
 363	Tâche "date_insert2"\n          du projet Premier test mise dans " Achevée(s) " par Mgbi	f	57	53	2021-05-27 14:36:51	2021-05-27 14:36:51
-201	Tâche "cinquième tâche secondaire pour first"\n          du projet mon_projet mise dans " En attente " par Mgbi	f	57	41	2021-05-22 10:07:12	2021-05-22 10:07:12
 202	Tâche "cinquième tâche secondaire pour first"\n          du projet mon_projet mise dans " A faire " par Mgbi	f	57	52	2021-05-22 10:07:12	2021-05-22 10:07:12
-364	Tâche "date_insert2"\n          du projet Premier test mise dans " Achevée(s) " par Mgbi	f	57	41	2021-05-27 14:36:51	2021-05-27 14:36:51
-204	Tâche "cinquième tâche secondaire pour first"\n          du projet mon_projet mise dans " A faire " par Mgbi	f	57	41	2021-05-22 10:07:12	2021-05-22 10:07:12
 205	Tâche "cinquième tâche secondaire pour first"\n          du projet mon_projet mise dans " En attente " par Mgbi	f	57	52	2021-05-22 10:07:13	2021-05-22 10:07:13
 374	Tâche "Vraie tâche"\n          du projet Premier test mise dans " En contrôle " par Mgbi	f	57	52	2021-05-27 14:37:01	2021-05-27 14:37:01
-207	Tâche "cinquième tâche secondaire pour first"\n          du projet mon_projet mise dans " En attente " par Mgbi	f	57	41	2021-05-22 10:07:13	2021-05-22 10:07:13
-210	Tâche "cinquième tâche secondaire pour first"\n          du projet mon_projet mise dans " A faire " par Mgbi	f	57	41	2021-05-22 10:07:14	2021-05-22 10:07:14
+195	Tâche "test_append"\n          du projet mon_projet mise dans " En attente " par Mgbi	t	57	41	2021-05-22 10:07:08	2021-05-22 10:07:08
+198	Tâche "cinquième tâche secondaire pour first"\n          du projet mon_projet mise dans " A faire " par Mgbi	t	57	41	2021-05-22 10:07:10	2021-05-22 10:07:10
 208	Tâche "cinquième tâche secondaire pour first"\n          du projet mon_projet mise dans " A faire " par Mgbi	t	57	52	2021-05-22 10:07:14	2021-05-22 10:07:14
 209	Tâche "cinquième tâche secondaire pour first"\n          du projet mon_projet mise dans " A faire " par Mgbi	t	57	53	2021-05-22 10:07:14	2021-05-22 10:07:14
 353	Tâche "4eme"\n          du projet Premier test mise dans " Achevée(s) " par Mgbi	f	57	52	2021-05-27 14:36:48	2021-05-27 14:36:48
 354	Tâche "4eme"\n          du projet Premier test mise dans " Achevée(s) " par Mgbi	f	57	53	2021-05-27 14:36:48	2021-05-27 14:36:48
-355	Tâche "4eme"\n          du projet Premier test mise dans " Achevée(s) " par Mgbi	f	57	41	2021-05-27 14:36:48	2021-05-27 14:36:48
 404	Tâche "une nouvelle"\n          du projet Premier test mise dans " En cours " par Mgbi	f	57	52	2021-05-27 14:37:23	2021-05-27 14:37:23
 405	Tâche "une nouvelle"\n          du projet Premier test mise dans " En cours " par Mgbi	f	57	53	2021-05-27 14:37:23	2021-05-27 14:37:23
-406	Tâche "une nouvelle"\n          du projet Premier test mise dans " En cours " par Mgbi	f	57	41	2021-05-27 14:37:23	2021-05-27 14:37:23
 416	Tâche "date_insert2"\n          du projet Premier test mise dans " A faire " par Mgbi	f	57	52	2021-05-27 14:37:34	2021-05-27 14:37:34
 417	Tâche "date_insert2"\n          du projet Premier test mise dans " A faire " par Mgbi	f	57	53	2021-05-27 14:37:34	2021-05-27 14:37:34
-418	Tâche "date_insert2"\n          du projet Premier test mise dans " A faire " par Mgbi	f	57	41	2021-05-27 14:37:34	2021-05-27 14:37:34
 422	Tâche "Seconde tâche"\n          du projet Premier test mise dans " En contrôle " par Mgbi	f	57	52	2021-05-27 14:38:25	2021-05-27 14:38:25
 423	Tâche "Seconde tâche"\n          du projet Premier test mise dans " En contrôle " par Mgbi	f	57	53	2021-05-27 14:38:25	2021-05-27 14:38:25
-424	Tâche "Seconde tâche"\n          du projet Premier test mise dans " En contrôle " par Mgbi	f	57	41	2021-05-27 14:38:25	2021-05-27 14:38:25
 431	Tâche "Seconde tâche"\n          du projet Premier test mise dans " En contrôle " par Mgbi	f	57	52	2021-05-27 16:33:39	2021-05-27 16:33:39
 432	Tâche "Seconde tâche"\n          du projet Premier test mise dans " En contrôle " par Mgbi	f	57	53	2021-05-27 16:33:39	2021-05-27 16:33:39
-433	Tâche "Seconde tâche"\n          du projet Premier test mise dans " En contrôle " par Mgbi	f	57	41	2021-05-27 16:33:39	2021-05-27 16:33:39
 458	Tâche "Seconde tâche"\n          du projet Premier test mise dans " Achevée(s) " par Mgbi	f	57	52	2021-05-27 18:04:22	2021-05-27 18:04:22
 459	Tâche "Seconde tâche"\n          du projet Premier test mise dans " Achevée(s) " par Mgbi	f	57	53	2021-05-27 18:04:22	2021-05-27 18:04:22
-460	Tâche "Seconde tâche"\n          du projet Premier test mise dans " Achevée(s) " par Mgbi	f	57	41	2021-05-27 18:04:22	2021-05-27 18:04:22
 476	Tâche "date_insert"\n          du projet Premier test mise dans " En cours " par Mgbi	f	57	52	2021-05-27 18:15:28	2021-05-27 18:15:28
 477	Tâche "date_insert"\n          du projet Premier test mise dans " En cours " par Mgbi	f	57	53	2021-05-27 18:15:28	2021-05-27 18:15:28
-478	Tâche "date_insert"\n          du projet Premier test mise dans " En cours " par Mgbi	f	57	41	2021-05-27 18:15:28	2021-05-27 18:15:28
 497	Tâche "primaire"\n          du projet mon_projet mise dans " Achevée(s) " par Mgbi	f	57	52	2021-05-27 23:38:11	2021-05-27 23:38:11
 498	Tâche "primaire"\n          du projet mon_projet mise dans " Achevée(s) " par Mgbi	f	57	53	2021-05-27 23:38:11	2021-05-27 23:38:11
-499	Tâche "primaire"\n          du projet mon_projet mise dans " Achevée(s) " par Mgbi	f	57	41	2021-05-27 23:38:11	2021-05-27 23:38:11
 512	Tâche "doudousy2"\n          du projet mon_projet mise dans " En contrôle " par Mgbi	f	57	52	2021-05-28 18:33:22	2021-05-28 18:33:22
 513	Tâche "doudousy2"\n          du projet mon_projet mise dans " En contrôle " par Mgbi	f	57	53	2021-05-28 18:33:22	2021-05-28 18:33:22
-514	Tâche "doudousy2"\n          du projet mon_projet mise dans " En contrôle " par Mgbi	f	57	41	2021-05-28 18:33:22	2021-05-28 18:33:22
 527	Tâche "doudousy2"\n          du projet mon_projet mise dans " Achevée(s) " par Mgbi	f	57	52	2021-05-28 18:33:41	2021-05-28 18:33:41
 528	Tâche "doudousy2"\n          du projet mon_projet mise dans " Achevée(s) " par Mgbi	f	57	53	2021-05-28 18:33:41	2021-05-28 18:33:41
-529	Tâche "doudousy2"\n          du projet mon_projet mise dans " Achevée(s) " par Mgbi	f	57	41	2021-05-28 18:33:41	2021-05-28 18:33:41
-548	Tâche "une nouvelle"\n          du projet Premier test mise dans " En contrôle " par Admin	f	52	57	2021-05-28 18:35:09	2021-05-28 18:35:09
 549	Tâche "une nouvelle"\n          du projet Premier test mise dans " En contrôle " par Admin	f	52	53	2021-05-28 18:35:09	2021-05-28 18:35:09
-550	Tâche "une nouvelle"\n          du projet Premier test mise dans " En contrôle " par Admin	f	52	41	2021-05-28 18:35:09	2021-05-28 18:35:09
-587	Tâche "pubsub"\n          du projet Premier test mise dans " Achevée(s) " par Admin	f	52	57	2021-05-28 18:36:01	2021-05-28 18:36:01
 588	Tâche "pubsub"\n          du projet Premier test mise dans " Achevée(s) " par Admin	f	52	53	2021-05-28 18:36:01	2021-05-28 18:36:01
-589	Tâche "pubsub"\n          du projet Premier test mise dans " Achevée(s) " par Admin	f	52	41	2021-05-28 18:36:01	2021-05-28 18:36:01
-592	Tâche "date_insert2"\n          du projet Premier test mise dans " Achevée(s) " par Admin	f	52	41	2021-05-28 18:36:04	2021-05-28 18:36:04
-623	Tâche "une nouvelle"\n          du projet Premier test mise dans " En cours " par Admin	f	52	57	2021-05-28 18:36:29	2021-05-28 18:36:29
 624	Tâche "une nouvelle"\n          du projet Premier test mise dans " En cours " par Admin	f	52	53	2021-05-28 18:36:29	2021-05-28 18:36:29
-625	Tâche "une nouvelle"\n          du projet Premier test mise dans " En cours " par Admin	f	52	41	2021-05-28 18:36:29	2021-05-28 18:36:29
-632	Tâche "date_insert2"\n          du projet Premier test mise dans " En attente " par Admin	f	52	57	2021-05-28 18:36:35	2021-05-28 18:36:35
 633	Tâche "date_insert2"\n          du projet Premier test mise dans " En attente " par Admin	f	52	53	2021-05-28 18:36:35	2021-05-28 18:36:35
-634	Tâche "date_insert2"\n          du projet Premier test mise dans " En attente " par Admin	f	52	41	2021-05-28 18:36:35	2021-05-28 18:36:35
-638	Tâche "4eme"\n          du projet Premier test mise dans " En attente " par Admin	f	52	57	2021-05-28 18:36:44	2021-05-28 18:36:44
 639	Tâche "4eme"\n          du projet Premier test mise dans " En attente " par Admin	f	52	53	2021-05-28 18:36:44	2021-05-28 18:36:44
-640	Tâche "4eme"\n          du projet Premier test mise dans " En attente " par Admin	f	52	41	2021-05-28 18:36:44	2021-05-28 18:36:44
-646	Tâche "Vraie tâche"\n          du projet Premier test mise dans " A faire " par Admin	f	52	41	2021-05-28 18:36:50	2021-05-28 18:36:50
+670	Le projet "Premier test" a été mise à jour par Mgbi	f	57	52	2021-06-01 19:58:39	2021-06-01 19:58:39
+529	Tâche "doudousy2"\n          du projet mon_projet mise dans " Achevée(s) " par Mgbi	t	57	41	2021-05-28 18:33:41	2021-05-28 18:33:41
+550	Tâche "une nouvelle"\n          du projet Premier test mise dans " En contrôle " par Admin	t	52	41	2021-05-28 18:35:09	2021-05-28 18:35:09
+355	Tâche "4eme"\n          du projet Premier test mise dans " Achevée(s) " par Mgbi	t	57	41	2021-05-27 14:36:48	2021-05-27 14:36:48
+406	Tâche "une nouvelle"\n          du projet Premier test mise dans " En cours " par Mgbi	t	57	41	2021-05-27 14:37:23	2021-05-27 14:37:23
+418	Tâche "date_insert2"\n          du projet Premier test mise dans " A faire " par Mgbi	t	57	41	2021-05-27 14:37:34	2021-05-27 14:37:34
+424	Tâche "Seconde tâche"\n          du projet Premier test mise dans " En contrôle " par Mgbi	t	57	41	2021-05-27 14:38:25	2021-05-27 14:38:25
+433	Tâche "Seconde tâche"\n          du projet Premier test mise dans " En contrôle " par Mgbi	t	57	41	2021-05-27 16:33:39	2021-05-27 16:33:39
+210	Tâche "cinquième tâche secondaire pour first"\n          du projet mon_projet mise dans " A faire " par Mgbi	t	57	41	2021-05-22 10:07:14	2021-05-22 10:07:14
+548	Tâche "une nouvelle"\n          du projet Premier test mise dans " En contrôle " par Admin	t	52	57	2021-05-28 18:35:09	2021-05-28 18:35:09
+587	Tâche "pubsub"\n          du projet Premier test mise dans " Achevée(s) " par Admin	t	52	57	2021-05-28 18:36:01	2021-05-28 18:36:01
+623	Tâche "une nouvelle"\n          du projet Premier test mise dans " En cours " par Admin	t	52	57	2021-05-28 18:36:29	2021-05-28 18:36:29
+632	Tâche "date_insert2"\n          du projet Premier test mise dans " En attente " par Admin	t	52	57	2021-05-28 18:36:35	2021-05-28 18:36:35
+638	Tâche "4eme"\n          du projet Premier test mise dans " En attente " par Admin	t	52	57	2021-05-28 18:36:44	2021-05-28 18:36:44
 356	Tâche "pubsub"\n          du projet Premier test mise dans " Achevée(s) " par Mgbi	f	57	52	2021-05-27 14:36:49	2021-05-27 14:36:49
-213	Tâche "cinquième tâche secondaire pour first"\n          du projet mon_projet mise dans " En attente " par Mgbi	f	57	41	2021-05-22 10:07:14	2021-05-22 10:07:14
 357	Tâche "pubsub"\n          du projet Premier test mise dans " Achevée(s) " par Mgbi	f	57	53	2021-05-27 14:36:49	2021-05-27 14:36:49
-216	Tâche "cinquième tâche secondaire pour first"\n          du projet mon_projet mise dans " A faire " par Mgbi	f	57	41	2021-05-22 10:07:15	2021-05-22 10:07:15
-358	Tâche "pubsub"\n          du projet Premier test mise dans " Achevée(s) " par Mgbi	f	57	41	2021-05-27 14:36:49	2021-05-27 14:36:49
-219	Tâche "cinquième tâche secondaire pour first"\n          du projet mon_projet mise dans " En attente " par Mgbi	f	57	41	2021-05-22 10:07:15	2021-05-22 10:07:15
 377	Tâche "kanban"\n          du projet Premier test mise dans " En contrôle " par Mgbi	f	57	52	2021-05-27 14:37:02	2021-05-27 14:37:02
-222	Tâche "cinquième tâche secondaire pour first"\n          du projet mon_projet mise dans " A faire " par Mgbi	f	57	41	2021-05-22 10:07:16	2021-05-22 10:07:16
 378	Tâche "kanban"\n          du projet Premier test mise dans " En contrôle " par Mgbi	f	57	53	2021-05-27 14:37:02	2021-05-27 14:37:02
-225	Tâche "cinquième tâche secondaire pour first"\n          du projet mon_projet mise dans " En attente " par Mgbi	f	57	41	2021-05-22 10:07:17	2021-05-22 10:07:17
-379	Tâche "kanban"\n          du projet Premier test mise dans " En contrôle " par Mgbi	f	57	41	2021-05-27 14:37:02	2021-05-27 14:37:02
-228	Tâche "cinquième tâche secondaire pour first"\n          du projet mon_projet mise dans " A faire " par Mgbi	f	57	41	2021-05-22 10:07:18	2021-05-22 10:07:18
 434	Tâche "Seconde tâche"\n          du projet Premier test mise dans " Achevée(s) " par Mgbi	f	57	52	2021-05-27 16:59:29	2021-05-27 16:59:29
-231	Tâche "cinquième tâche secondaire pour first"\n          du projet mon_projet mise dans " En attente " par Mgbi	f	57	41	2021-05-22 10:07:18	2021-05-22 10:07:18
 220	Tâche "cinquième tâche secondaire pour first"\n          du projet mon_projet mise dans " A faire " par Mgbi	t	57	52	2021-05-22 10:07:16	2021-05-22 10:07:16
 223	Tâche "cinquième tâche secondaire pour first"\n          du projet mon_projet mise dans " En attente " par Mgbi	t	57	52	2021-05-22 10:07:17	2021-05-22 10:07:17
 226	Tâche "cinquième tâche secondaire pour first"\n          du projet mon_projet mise dans " A faire " par Mgbi	t	57	52	2021-05-22 10:07:18	2021-05-22 10:07:18
@@ -1549,63 +1510,39 @@ COPY public.notifications (id, content, seen, sender_id, receiver_id, inserted_a
 217	Tâche "cinquième tâche secondaire pour first"\n          du projet mon_projet mise dans " En attente " par Mgbi	t	57	52	2021-05-22 10:07:15	2021-05-22 10:07:15
 232	Tâche "children_length_test"\n          du projet mon_projet mise dans " En contrôle " par Mgbi	f	57	52	2021-05-22 16:50:00	2021-05-22 16:50:00
 435	Tâche "Seconde tâche"\n          du projet Premier test mise dans " Achevée(s) " par Mgbi	f	57	53	2021-05-27 16:59:29	2021-05-27 16:59:29
-234	Tâche "children_length_test"\n          du projet mon_projet mise dans " En contrôle " par Mgbi	f	57	41	2021-05-22 16:50:00	2021-05-22 16:50:00
 235	Tâche "children_length_test"\n          du projet mon_projet mise dans " Achevée(s) " par Mgbi	f	57	52	2021-05-22 16:50:03	2021-05-22 16:50:03
-436	Tâche "Seconde tâche"\n          du projet Premier test mise dans " Achevée(s) " par Mgbi	f	57	41	2021-05-27 16:59:29	2021-05-27 16:59:29
-237	Tâche "children_length_test"\n          du projet mon_projet mise dans " Achevée(s) " par Mgbi	f	57	41	2021-05-22 16:50:03	2021-05-22 16:50:03
 238	Tâche "primaire"\n          du projet mon_projet mise dans " En contrôle " par Mgbi	f	57	52	2021-05-22 16:50:10	2021-05-22 16:50:10
 467	Tâche "EXEMPLE"\n          du projet Premier test mise dans " Achevée(s) " par Mgbi	f	57	52	2021-05-27 18:04:31	2021-05-27 18:04:31
-240	Tâche "primaire"\n          du projet mon_projet mise dans " En contrôle " par Mgbi	f	57	41	2021-05-22 16:50:10	2021-05-22 16:50:10
 241	Tâche "primaire"\n          du projet mon_projet mise dans " Achevée(s) " par Mgbi	f	57	52	2021-05-22 16:50:12	2021-05-22 16:50:12
 468	Tâche "EXEMPLE"\n          du projet Premier test mise dans " Achevée(s) " par Mgbi	f	57	53	2021-05-27 18:04:31	2021-05-27 18:04:31
-243	Tâche "primaire"\n          du projet mon_projet mise dans " Achevée(s) " par Mgbi	f	57	41	2021-05-22 16:50:12	2021-05-22 16:50:12
 244	Tâche "test_append"\n          du projet mon_projet mise dans " En cours " par Mgbi	f	57	52	2021-05-22 19:29:05	2021-05-22 19:29:05
-469	Tâche "EXEMPLE"\n          du projet Premier test mise dans " Achevée(s) " par Mgbi	f	57	41	2021-05-27 18:04:31	2021-05-27 18:04:31
-246	Tâche "test_append"\n          du projet mon_projet mise dans " En cours " par Mgbi	f	57	41	2021-05-22 19:29:05	2021-05-22 19:29:05
 247	Tâche "task_children"\n          du projet mon_projet mise dans " En cours " par Mgbi	f	57	52	2021-05-22 21:01:17	2021-05-22 21:01:17
 479	Tâche "date_insert"\n          du projet Premier test mise dans " Achevée(s) " par Mgbi	f	57	52	2021-05-27 18:18:43	2021-05-27 18:18:43
-249	Tâche "task_children"\n          du projet mon_projet mise dans " En cours " par Mgbi	f	57	41	2021-05-22 21:01:17	2021-05-22 21:01:17
 250	Tâche "89"\n          du projet mon_projet mise dans " En attente " par Mgbi	f	57	52	2021-05-22 21:01:17	2021-05-22 21:01:17
 480	Tâche "date_insert"\n          du projet Premier test mise dans " Achevée(s) " par Mgbi	f	57	53	2021-05-27 18:18:43	2021-05-27 18:18:43
-252	Tâche "89"\n          du projet mon_projet mise dans " En attente " par Mgbi	f	57	41	2021-05-22 21:01:17	2021-05-22 21:01:17
 253	Tâche "ectoassoc"\n          du projet mon_projet mise dans " En cours " par Mgbi	f	57	52	2021-05-22 21:01:19	2021-05-22 21:01:19
-481	Tâche "date_insert"\n          du projet Premier test mise dans " Achevée(s) " par Mgbi	f	57	41	2021-05-27 18:18:43	2021-05-27 18:18:43
-255	Tâche "ectoassoc"\n          du projet mon_projet mise dans " En cours " par Mgbi	f	57	41	2021-05-22 21:01:19	2021-05-22 21:01:19
 256	Tâche "second_task"\n          du projet mon_projet mise dans " En attente " par Mgbi	f	57	52	2021-05-22 21:01:23	2021-05-22 21:01:23
 494	Tâche "primaire"\n          du projet mon_projet mise dans " En contrôle " par Mgbi	f	57	52	2021-05-27 23:38:08	2021-05-27 23:38:08
 495	Tâche "primaire"\n          du projet mon_projet mise dans " En contrôle " par Mgbi	f	57	53	2021-05-27 23:38:08	2021-05-27 23:38:08
-496	Tâche "primaire"\n          du projet mon_projet mise dans " En contrôle " par Mgbi	f	57	41	2021-05-27 23:38:08	2021-05-27 23:38:08
-258	Tâche "second_task"\n          du projet mon_projet mise dans " En attente " par Mgbi	f	57	41	2021-05-22 21:01:23	2021-05-22 21:01:23
+213	Tâche "cinquième tâche secondaire pour first"\n          du projet mon_projet mise dans " En attente " par Mgbi	t	57	41	2021-05-22 10:07:14	2021-05-22 10:07:14
+216	Tâche "cinquième tâche secondaire pour first"\n          du projet mon_projet mise dans " A faire " par Mgbi	t	57	41	2021-05-22 10:07:15	2021-05-22 10:07:15
+219	Tâche "cinquième tâche secondaire pour first"\n          du projet mon_projet mise dans " En attente " par Mgbi	t	57	41	2021-05-22 10:07:15	2021-05-22 10:07:15
+222	Tâche "cinquième tâche secondaire pour first"\n          du projet mon_projet mise dans " A faire " par Mgbi	t	57	41	2021-05-22 10:07:16	2021-05-22 10:07:16
+225	Tâche "cinquième tâche secondaire pour first"\n          du projet mon_projet mise dans " En attente " par Mgbi	t	57	41	2021-05-22 10:07:17	2021-05-22 10:07:17
 259	Tâche "tacheee"\n          du projet mon_projet mise dans " En attente " par Mgbi	f	57	52	2021-05-22 21:01:24	2021-05-22 21:01:24
-261	Tâche "tacheee"\n          du projet mon_projet mise dans " En attente " par Mgbi	f	57	41	2021-05-22 21:01:24	2021-05-22 21:01:24
 262	Tâche "children_length_test"\n          du projet mon_projet mise dans " En attente " par Mgbi	f	57	52	2021-05-23 13:49:26	2021-05-23 13:49:26
-264	Tâche "children_length_test"\n          du projet mon_projet mise dans " En attente " par Mgbi	f	57	41	2021-05-23 13:49:26	2021-05-23 13:49:26
 265	Tâche "tacheee"\n          du projet mon_projet mise dans " A faire " par Mgbi	f	57	52	2021-05-23 13:49:38	2021-05-23 13:49:38
-267	Tâche "tacheee"\n          du projet mon_projet mise dans " A faire " par Mgbi	f	57	41	2021-05-23 13:49:38	2021-05-23 13:49:38
 268	Tâche "cerise sur le gâteau"\n          du projet mon_projet mise dans " A faire " par Mgbi	f	57	52	2021-05-23 13:49:42	2021-05-23 13:49:42
-270	Tâche "cerise sur le gâteau"\n          du projet mon_projet mise dans " A faire " par Mgbi	f	57	41	2021-05-23 13:49:42	2021-05-23 13:49:42
 271	Tâche "TACHE POUR MATTHIEU"\n          du projet mon_projet mise dans " A faire " par Mgbi	f	57	52	2021-05-23 13:49:44	2021-05-23 13:49:44
-273	Tâche "TACHE POUR MATTHIEU"\n          du projet mon_projet mise dans " A faire " par Mgbi	f	57	41	2021-05-23 13:49:44	2021-05-23 13:49:44
 274	Tâche "first_task"\n          du projet mon_projet mise dans " En contrôle " par Mgbi	f	57	52	2021-05-23 13:49:48	2021-05-23 13:49:48
-276	Tâche "first_task"\n          du projet mon_projet mise dans " En contrôle " par Mgbi	f	57	41	2021-05-23 13:49:48	2021-05-23 13:49:48
 280	Tâche nouvellement créee du nom de tache notif par Mgbi dans le projet mon_projet.	f	57	52	2021-05-23 14:19:32	2021-05-23 14:19:32
-282	Tâche nouvellement créee du nom de tache notif par Mgbi dans le projet mon_projet.	f	57	41	2021-05-23 14:19:32	2021-05-23 14:19:32
 283	Tâche "notifs_length"\n          du projet mon_projet mise dans " En attente " par Mgbi	f	57	52	2021-05-23 14:39:34	2021-05-23 14:39:34
-285	Tâche "notifs_length"\n          du projet mon_projet mise dans " En attente " par Mgbi	f	57	41	2021-05-23 14:39:34	2021-05-23 14:39:34
 286	Tâche "notif2"\n          du projet mon_projet mise dans " En cours " par Mgbi	f	57	52	2021-05-23 14:39:35	2021-05-23 14:39:35
-288	Tâche "notif2"\n          du projet mon_projet mise dans " En cours " par Mgbi	f	57	41	2021-05-23 14:39:35	2021-05-23 14:39:35
 289	Tâche "tache notif"\n          du projet mon_projet mise dans " En contrôle " par Mgbi	f	57	52	2021-05-23 14:39:36	2021-05-23 14:39:36
-291	Tâche "tache notif"\n          du projet mon_projet mise dans " En contrôle " par Mgbi	f	57	41	2021-05-23 14:39:36	2021-05-23 14:39:36
 292	Tâche "tâche secondaire pour first task"\n          du projet mon_projet mise dans " Achevée(s) " par Mgbi	f	57	52	2021-05-23 14:44:31	2021-05-23 14:44:31
-294	Tâche "tâche secondaire pour first task"\n          du projet mon_projet mise dans " Achevée(s) " par Mgbi	f	57	41	2021-05-23 14:44:31	2021-05-23 14:44:31
 359	Tâche "cinquième"\n          du projet Premier test mise dans " Achevée(s) " par Mgbi	f	57	52	2021-05-27 14:36:50	2021-05-27 14:36:50
-297	Tâche "cinquième tâche secondaire pour first"\n          du projet mon_projet mise dans " A faire " par Admin	f	52	41	2021-05-23 15:04:22	2021-05-23 15:04:22
 360	Tâche "cinquième"\n          du projet Premier test mise dans " Achevée(s) " par Mgbi	f	57	53	2021-05-27 14:36:50	2021-05-27 14:36:50
-300	Tâche "cinquième tâche secondaire pour first"\n          du projet mon_projet mise dans " En attente " par Admin	f	52	41	2021-05-23 15:04:29	2021-05-23 15:04:29
-361	Tâche "cinquième"\n          du projet Premier test mise dans " Achevée(s) " par Mgbi	f	57	41	2021-05-27 14:36:50	2021-05-27 14:36:50
-303	Tâche "assoc2nde"\n          du projet mon_projet mise dans " En attente " par Admin	f	52	41	2021-05-23 15:07:37	2021-05-23 15:07:37
 368	Tâche "Seconde tâche"\n          du projet Premier test mise dans " Achevée(s) " par Mgbi	f	57	52	2021-05-27 14:36:53	2021-05-27 14:36:53
-306	Tâche "assoc2nde"\n          du projet mon_projet mise dans " A faire " par Admin	f	52	41	2021-05-23 15:07:48	2021-05-23 15:07:48
 277	Une tâche fille de votre tâche primaire second_task du nom de notification_secondaire a été créee par Mgbi2	t	56	57	2021-05-23 14:13:06	2021-05-23 14:13:06
 278	Une tâche fille de votre tâche primaire cerise sur le gâteau du nom de notif2 a été créee par Mgbi2 dans le projet mon_projet	t	56	57	2021-05-23 14:15:08	2021-05-23 14:15:08
 279	Une tâche fille de votre tâche primaire cerise sur le gâteau du nom de notifs_length a été créee par Mgbi2 dans le projet mon_projet	t	56	57	2021-05-23 14:17:54	2021-05-23 14:17:54
@@ -1624,6 +1561,7 @@ COPY public.notifications (id, content, seen, sender_id, receiver_id, inserted_a
 260	Tâche "tacheee"\n          du projet mon_projet mise dans " En attente " par Mgbi	t	57	53	2021-05-22 21:01:24	2021-05-22 21:01:24
 263	Tâche "children_length_test"\n          du projet mon_projet mise dans " En attente " par Mgbi	t	57	53	2021-05-23 13:49:26	2021-05-23 13:49:26
 266	Tâche "tacheee"\n          du projet mon_projet mise dans " A faire " par Mgbi	t	57	53	2021-05-23 13:49:38	2021-05-23 13:49:38
+258	Tâche "second_task"\n          du projet mon_projet mise dans " En attente " par Mgbi	t	57	41	2021-05-22 21:01:23	2021-05-22 21:01:23
 295	Tâche "cinquième tâche secondaire pour first"\n          du projet mon_projet mise dans " A faire " par Admin	t	52	57	2021-05-23 15:04:22	2021-05-23 15:04:22
 298	Tâche "cinquième tâche secondaire pour first"\n          du projet mon_projet mise dans " En attente " par Admin	t	52	57	2021-05-23 15:04:29	2021-05-23 15:04:29
 301	Tâche "assoc2nde"\n          du projet mon_projet mise dans " En attente " par Admin	t	52	57	2021-05-23 15:07:37	2021-05-23 15:07:37
@@ -1653,26 +1591,243 @@ COPY public.notifications (id, content, seen, sender_id, receiver_id, inserted_a
 257	Tâche "second_task"\n          du projet mon_projet mise dans " En attente " par Mgbi	t	57	53	2021-05-22 21:01:23	2021-05-22 21:01:23
 307	Mgbi vous a assigné à la tâche tacheee.	t	57	56	2021-05-25 05:23:16	2021-05-25 05:23:16
 369	Tâche "Seconde tâche"\n          du projet Premier test mise dans " Achevée(s) " par Mgbi	f	57	53	2021-05-27 14:36:53	2021-05-27 14:36:53
-370	Tâche "Seconde tâche"\n          du projet Premier test mise dans " Achevée(s) " par Mgbi	f	57	41	2021-05-27 14:36:53	2021-05-27 14:36:53
 380	Tâche "EXEMPLE"\n          du projet Premier test mise dans " En contrôle " par Mgbi	f	57	52	2021-05-27 14:37:03	2021-05-27 14:37:03
 381	Tâche "EXEMPLE"\n          du projet Premier test mise dans " En contrôle " par Mgbi	f	57	53	2021-05-27 14:37:03	2021-05-27 14:37:03
-382	Tâche "EXEMPLE"\n          du projet Premier test mise dans " En contrôle " par Mgbi	f	57	41	2021-05-27 14:37:03	2021-05-27 14:37:03
 410	Tâche "kanban"\n          du projet Premier test mise dans " En attente " par Mgbi	f	57	52	2021-05-27 14:37:25	2021-05-27 14:37:25
 411	Tâche "kanban"\n          du projet Premier test mise dans " En attente " par Mgbi	f	57	53	2021-05-27 14:37:25	2021-05-27 14:37:25
-412	Tâche "kanban"\n          du projet Premier test mise dans " En attente " par Mgbi	f	57	41	2021-05-27 14:37:25	2021-05-27 14:37:25
 437	Tâche "Seconde tâche"\n          du projet Premier test mise dans " En contrôle " par Mgbi	f	57	52	2021-05-27 17:53:57	2021-05-27 17:53:57
 438	Tâche "Seconde tâche"\n          du projet Premier test mise dans " En contrôle " par Mgbi	f	57	53	2021-05-27 17:53:57	2021-05-27 17:53:57
-439	Tâche "Seconde tâche"\n          du projet Premier test mise dans " En contrôle " par Mgbi	f	57	41	2021-05-27 17:53:57	2021-05-27 17:53:57
 455	Tâche "EXEMPLE"\n          du projet Premier test mise dans " En contrôle " par Mgbi	f	57	52	2021-05-27 18:04:19	2021-05-27 18:04:19
 456	Tâche "EXEMPLE"\n          du projet Premier test mise dans " En contrôle " par Mgbi	f	57	53	2021-05-27 18:04:19	2021-05-27 18:04:19
-457	Tâche "EXEMPLE"\n          du projet Premier test mise dans " En contrôle " par Mgbi	f	57	41	2021-05-27 18:04:19	2021-05-27 18:04:19
 515	Tâche "work"\n          du projet mon_projet mise dans " En contrôle " par Mgbi	f	57	52	2021-05-28 18:33:26	2021-05-28 18:33:26
 516	Tâche "work"\n          du projet mon_projet mise dans " En contrôle " par Mgbi	f	57	53	2021-05-28 18:33:26	2021-05-28 18:33:26
-517	Tâche "work"\n          du projet mon_projet mise dans " En contrôle " par Mgbi	f	57	41	2021-05-28 18:33:26	2021-05-28 18:33:26
 521	Tâche "primaire"\n          du projet mon_projet mise dans " Achevée(s) " par Mgbi	f	57	52	2021-05-28 18:33:36	2021-05-28 18:33:36
 522	Tâche "primaire"\n          du projet mon_projet mise dans " Achevée(s) " par Mgbi	f	57	53	2021-05-28 18:33:36	2021-05-28 18:33:36
-523	Tâche "primaire"\n          du projet mon_projet mise dans " Achevée(s) " par Mgbi	f	57	41	2021-05-28 18:33:36	2021-05-28 18:33:36
-551	Tâche "cinquième"\n          du projet Premier test mise dans " Achevée(s) " par Admin	f	52	57	2021-05-28 18:35:13	2021-05-28 18:35:13
+551	Tâche "cinquième"\n          du projet Premier test mise dans " Achevée(s) " par Admin	t	52	57	2021-05-28 18:35:13	2021-05-28 18:35:13
+660	Tâche nouvellement créee du nom de tâche test par Mgbi dans le projet mon_projet.	f	57	53	2021-05-31 19:27:05	2021-05-31 19:27:05
+662	Tâche "cerise sur le gâteau"\n          du projet mon_projet mise dans " En contrôle " par Mgbi2	f	56	52	2021-05-31 19:29:01	2021-05-31 19:29:01
+663	Tâche "cerise sur le gâteau"\n          du projet mon_projet mise dans " En contrôle " par Mgbi2	f	56	53	2021-05-31 19:29:01	2021-05-31 19:29:01
+665	Tâche "cerise sur le gâteau"\n          du projet mon_projet mise dans " En contrôle " par Mgbi2	t	56	57	2021-05-31 19:29:01	2021-05-31 19:29:01
+661	Tâche nouvellement créee du nom de tâche test par Mgbi dans le projet mon_projet.	t	57	41	2021-05-31 19:27:05	2021-05-31 19:27:05
+664	Tâche "cerise sur le gâteau"\n          du projet mon_projet mise dans " En contrôle " par Mgbi2	t	56	41	2021-05-31 19:29:01	2021-05-31 19:29:01
+666	Tâche "cerise sur le gâteau"\n          du projet mon_projet mise dans " En cours " par Mgbi2	f	56	52	2021-05-31 19:29:16	2021-05-31 19:29:16
+667	Tâche "cerise sur le gâteau"\n          du projet mon_projet mise dans " En cours " par Mgbi2	f	56	53	2021-05-31 19:29:16	2021-05-31 19:29:16
+644	Tâche "Vraie tâche"\n          du projet Premier test mise dans " A faire " par Admin	t	52	57	2021-05-28 18:36:50	2021-05-28 18:36:50
+641	Tâche "4eme"\n          du projet Premier test mise dans " A faire " par Admin	t	52	57	2021-05-28 18:36:48	2021-05-28 18:36:48
+669	Tâche "cerise sur le gâteau"\n          du projet mon_projet mise dans " En cours " par Mgbi2	t	56	57	2021-05-31 19:29:16	2021-05-31 19:29:16
+668	Tâche "cerise sur le gâteau"\n          du projet mon_projet mise dans " En cours " par Mgbi2	t	56	41	2021-05-31 19:29:16	2021-05-31 19:29:16
+673	Le projet "Premier test" a été mise à jour par Mgbi	f	57	52	2021-06-01 21:03:38	2021-06-01 21:03:38
+674	Le projet "Premier test" a été mise à jour par Mgbi	f	57	53	2021-06-01 21:03:38	2021-06-01 21:03:38
+676	Le projet "Premier test" a été mise à jour par Mgbi	f	57	52	2021-06-01 21:04:02	2021-06-01 21:04:02
+677	Le projet "Premier test" a été mise à jour par Mgbi	f	57	53	2021-06-01 21:04:02	2021-06-01 21:04:02
+679	Le projet "Premier test" a été mise à jour par Mgbi	f	57	52	2021-06-01 21:10:32	2021-06-01 21:10:32
+680	Le projet "Premier test" a été mise à jour par Mgbi	f	57	53	2021-06-01 21:10:32	2021-06-01 21:10:32
+682	Tâche "test_append"\n          du projet mon_projet mise dans " En attente " par Mgbi	f	57	52	2021-06-03 20:06:05	2021-06-03 20:06:05
+683	Tâche "test_append"\n          du projet mon_projet mise dans " En attente " par Mgbi	f	57	53	2021-06-03 20:06:05	2021-06-03 20:06:05
+685	Tâche "89"\n          du projet mon_projet mise dans " En cours " par Mgbi	f	57	55	2021-06-04 15:13:59	2021-06-04 15:13:59
+686	Tâche "89"\n          du projet mon_projet mise dans " En cours " par Mgbi	f	57	53	2021-06-04 15:13:59	2021-06-04 15:13:59
+688	Tâche "89"\n          du projet mon_projet mise dans " En cours " par Mgbi	f	57	52	2021-06-04 15:13:59	2021-06-04 15:13:59
+689	Tâche "EXEMPLE"\n          du projet Premier test mise dans " A faire " par Mgbi	f	57	55	2021-06-04 15:23:45	2021-06-04 15:23:45
+690	Tâche "EXEMPLE"\n          du projet Premier test mise dans " A faire " par Mgbi	f	57	53	2021-06-04 15:23:45	2021-06-04 15:23:45
+692	Tâche "EXEMPLE"\n          du projet Premier test mise dans " A faire " par Mgbi	f	57	52	2021-06-04 15:23:45	2021-06-04 15:23:45
+693	Mgbi vous a assigné à la tâche EXEMPLE.	f	57	54	2021-06-04 15:24:08	2021-06-04 15:24:08
+694	Tâche "date_insert"\n          du projet Premier test mise dans " En attente " par Mgbi	f	57	55	2021-06-04 15:37:09	2021-06-04 15:37:09
+695	Tâche "date_insert"\n          du projet Premier test mise dans " En attente " par Mgbi	f	57	53	2021-06-04 15:37:09	2021-06-04 15:37:09
+697	Tâche "date_insert"\n          du projet Premier test mise dans " En attente " par Mgbi	f	57	52	2021-06-04 15:37:09	2021-06-04 15:37:09
+698	Tâche "CHECK"\n          du projet Premier test mise dans " Achevée(s) " par Mgbi	f	57	55	2021-06-04 15:37:15	2021-06-04 15:37:15
+699	Tâche "CHECK"\n          du projet Premier test mise dans " Achevée(s) " par Mgbi	f	57	53	2021-06-04 15:37:15	2021-06-04 15:37:15
+701	Tâche "CHECK"\n          du projet Premier test mise dans " Achevée(s) " par Mgbi	f	57	52	2021-06-04 15:37:15	2021-06-04 15:37:15
+702	Tâche "Seconde tâche"\n          du projet Premier test mise dans " Achevée(s) " par Mgbi	f	57	55	2021-06-04 15:37:15	2021-06-04 15:37:15
+703	Tâche "Seconde tâche"\n          du projet Premier test mise dans " Achevée(s) " par Mgbi	f	57	53	2021-06-04 15:37:15	2021-06-04 15:37:15
+705	Tâche "Seconde tâche"\n          du projet Premier test mise dans " Achevée(s) " par Mgbi	f	57	52	2021-06-04 15:37:15	2021-06-04 15:37:15
+706	Mgbi vous a assigné à la tâche date_insert.	f	57	54	2021-06-04 15:43:53	2021-06-04 15:43:53
+707	Tâche nouvellement créee du nom de new_one par Mgbi dans le projet Premier test.	f	57	55	2021-06-05 10:54:41	2021-06-05 10:54:41
+708	Tâche nouvellement créee du nom de new_one par Mgbi dans le projet Premier test.	f	57	53	2021-06-05 10:54:41	2021-06-05 10:54:41
+710	Tâche nouvellement créee du nom de new_one par Mgbi dans le projet Premier test.	f	57	52	2021-06-05 10:54:41	2021-06-05 10:54:41
+712	Tâche "new_one"\n          du projet Premier test mise dans " En cours " par Mgbi	f	57	53	2021-06-05 10:54:57	2021-06-05 10:54:57
+714	Tâche "new_one"\n          du projet Premier test mise dans " En cours " par Mgbi	f	57	52	2021-06-05 10:54:57	2021-06-05 10:54:57
+717	Tâche "TACHE POUR MATTHIEU"\n          du projet mon_projet mise dans " A faire " par Mgbi1	f	54	53	2021-06-05 12:32:16	2021-06-05 12:32:16
+719	Tâche "TACHE POUR MATTHIEU"\n          du projet mon_projet mise dans " A faire " par Mgbi1	f	54	52	2021-06-05 12:32:16	2021-06-05 12:32:16
+721	La requête Requête 2 est en cours	t	57	33	2021-06-05 18:51:10	2021-06-05 18:51:10
+720	La requête Requête 2 a été mise en vu	t	57	33	2021-06-05 18:50:53	2021-06-05 18:50:53
+722	La requête Requête 1 est en cours	t	57	33	2021-06-05 18:51:28	2021-06-05 18:51:28
+723	La requête Requête flash a été mise en vu	t	57	33	2021-06-05 18:51:47	2021-06-05 18:51:47
+724	La requête Requête flash a été non vue	t	57	33	2021-06-05 18:55:16	2021-06-05 18:55:16
+725	La requête Requête 2 n'est pas en cours	t	57	33	2021-06-05 18:56:13	2021-06-05 18:56:13
+715	Tâche "TACHE POUR MATTHIEU"\n          du projet mon_projet mise dans " A faire " par Mgbi1	t	54	57	2021-06-05 12:32:16	2021-06-05 12:32:16
+704	Tâche "Seconde tâche"\n          du projet Premier test mise dans " Achevée(s) " par Mgbi	t	57	41	2021-06-04 15:37:15	2021-06-04 15:37:15
+672	Le projet "Premier test" a été mise à jour par Mgbi	t	57	41	2021-06-01 19:58:39	2021-06-01 19:58:39
+675	Le projet "Premier test" a été mise à jour par Mgbi	t	57	41	2021-06-01 21:03:38	2021-06-01 21:03:38
+678	Le projet "Premier test" a été mise à jour par Mgbi	t	57	41	2021-06-01 21:04:02	2021-06-01 21:04:02
+681	Le projet "Premier test" a été mise à jour par Mgbi	t	57	41	2021-06-01 21:10:32	2021-06-01 21:10:32
+684	Tâche "test_append"\n          du projet mon_projet mise dans " En attente " par Mgbi	t	57	41	2021-06-03 20:06:05	2021-06-03 20:06:05
+711	Tâche "new_one"\n          du projet Premier test mise dans " En cours " par Mgbi	t	57	55	2021-06-05 10:54:57	2021-06-05 10:54:57
+716	Tâche "TACHE POUR MATTHIEU"\n          du projet mon_projet mise dans " A faire " par Mgbi1	t	54	55	2021-06-05 12:32:16	2021-06-05 12:32:16
+728	La requête Requête 1 n'est pas en cours	t	57	33	2021-06-05 18:56:34	2021-06-05 18:56:34
+726	La requête Requête 2 a été non vue	t	57	33	2021-06-05 18:56:20	2021-06-05 18:56:20
+727	La requête Requête 1 a été non vue	t	57	33	2021-06-05 18:56:24	2021-06-05 18:56:24
+709	Tâche nouvellement créee du nom de new_one par Mgbi dans le projet Premier test.	t	57	41	2021-06-05 10:54:41	2021-06-05 10:54:41
+713	Tâche "new_one"\n          du projet Premier test mise dans " En cours " par Mgbi	t	57	41	2021-06-05 10:54:57	2021-06-05 10:54:57
+718	Tâche "TACHE POUR MATTHIEU"\n          du projet mon_projet mise dans " A faire " par Mgbi1	t	54	41	2021-06-05 12:32:16	2021-06-05 12:32:16
+583	Tâche "pubsub"\n          du projet Premier test mise dans " En contrôle " par Admin	t	52	41	2021-05-28 18:35:55	2021-05-28 18:35:55
+595	Tâche "pubsub"\n          du projet Premier test mise dans " En contrôle " par Admin	t	52	41	2021-05-28 18:36:12	2021-05-28 18:36:12
+604	Tâche "kanban"\n          du projet Premier test mise dans " En contrôle " par Admin	t	52	41	2021-05-28 18:36:15	2021-05-28 18:36:15
+610	Tâche "cinquième"\n          du projet Premier test mise dans " En contrôle " par Admin	t	52	41	2021-05-28 18:36:17	2021-05-28 18:36:17
+613	Tâche "4eme"\n          du projet Premier test mise dans " En contrôle " par Admin	t	52	41	2021-05-28 18:36:18	2021-05-28 18:36:18
+649	Tâche "tache notif"\n          du projet mon_projet mise dans " Achevée(s) " par Mgbi	t	57	41	2021-05-31 19:09:02	2021-05-31 19:09:02
+652	Tâche "children_length_test"\n          du projet mon_projet mise dans " A faire " par Mgbi	t	57	41	2021-05-31 19:19:44	2021-05-31 19:19:44
+655	Tâche "notifs_length"\n          du projet mon_projet mise dans " A faire " par Mgbi	t	57	41	2021-05-31 19:19:45	2021-05-31 19:19:45
+658	Tâche "notification_secondaire"\n          du projet mon_projet mise dans " Achevée(s) " par Mgbi	t	57	41	2021-05-31 19:25:26	2021-05-31 19:25:26
+568	Tâche "Vraie tâche"\n          du projet Premier test mise dans " En contrôle " par Admin	t	52	41	2021-05-28 18:35:38	2021-05-28 18:35:38
+631	Tâche "kanban"\n          du projet Premier test mise dans " En cours " par Admin	t	52	41	2021-05-28 18:36:33	2021-05-28 18:36:33
+586	Tâche "date_insert2"\n          du projet Premier test mise dans " En contrôle " par Admin	t	52	41	2021-05-28 18:35:56	2021-05-28 18:35:56
+601	Tâche "Vraie tâche"\n          du projet Premier test mise dans " En contrôle " par Admin	t	52	41	2021-05-28 18:36:14	2021-05-28 18:36:14
+622	Tâche "cinquième"\n          du projet Premier test mise dans " En cours " par Admin	t	52	41	2021-05-28 18:36:27	2021-05-28 18:36:27
+637	Tâche "kanban"\n          du projet Premier test mise dans " En attente " par Admin	t	52	41	2021-05-28 18:36:42	2021-05-28 18:36:42
+574	Tâche "Vraie tâche"\n          du projet Premier test mise dans " Achevée(s) " par Admin	t	52	41	2021-05-28 18:35:41	2021-05-28 18:35:41
+598	Tâche "date_insert2"\n          du projet Premier test mise dans " En contrôle " par Admin	t	52	41	2021-05-28 18:36:13	2021-05-28 18:36:13
+607	Tâche "une nouvelle"\n          du projet Premier test mise dans " En contrôle " par Admin	t	52	41	2021-05-28 18:36:16	2021-05-28 18:36:16
+616	Tâche "Seconde tâche"\n          du projet Premier test mise dans " En contrôle " par Admin	t	52	41	2021-05-28 18:36:18	2021-05-28 18:36:18
+619	Tâche "CHECK"\n          du projet Premier test mise dans " En contrôle " par Admin	t	52	41	2021-05-28 18:36:22	2021-05-28 18:36:22
+628	Tâche "Vraie tâche"\n          du projet Premier test mise dans " En cours " par Admin	t	52	41	2021-05-28 18:36:32	2021-05-28 18:36:32
+643	Tâche "4eme"\n          du projet Premier test mise dans " A faire " par Admin	t	52	41	2021-05-28 18:36:48	2021-05-28 18:36:48
+571	Tâche "kanban"\n          du projet Premier test mise dans " Achevée(s) " par Admin	t	52	41	2021-05-28 18:35:40	2021-05-28 18:35:40
+577	Tâche "date_insert2"\n          du projet Premier test mise dans " En attente " par Admin	t	52	41	2021-05-28 18:35:48	2021-05-28 18:35:48
+589	Tâche "pubsub"\n          du projet Premier test mise dans " Achevée(s) " par Admin	t	52	41	2021-05-28 18:36:01	2021-05-28 18:36:01
+592	Tâche "date_insert2"\n          du projet Premier test mise dans " Achevée(s) " par Admin	t	52	41	2021-05-28 18:36:04	2021-05-28 18:36:04
+625	Tâche "une nouvelle"\n          du projet Premier test mise dans " En cours " par Admin	t	52	41	2021-05-28 18:36:29	2021-05-28 18:36:29
+634	Tâche "date_insert2"\n          du projet Premier test mise dans " En attente " par Admin	t	52	41	2021-05-28 18:36:35	2021-05-28 18:36:35
+640	Tâche "4eme"\n          du projet Premier test mise dans " En attente " par Admin	t	52	41	2021-05-28 18:36:44	2021-05-28 18:36:44
+646	Tâche "Vraie tâche"\n          du projet Premier test mise dans " A faire " par Admin	t	52	41	2021-05-28 18:36:50	2021-05-28 18:36:50
+687	Tâche "89"\n          du projet mon_projet mise dans " En cours " par Mgbi	t	57	41	2021-06-04 15:13:59	2021-06-04 15:13:59
+691	Tâche "EXEMPLE"\n          du projet Premier test mise dans " A faire " par Mgbi	t	57	41	2021-06-04 15:23:45	2021-06-04 15:23:45
+696	Tâche "date_insert"\n          du projet Premier test mise dans " En attente " par Mgbi	t	57	41	2021-06-04 15:37:09	2021-06-04 15:37:09
+700	Tâche "CHECK"\n          du projet Premier test mise dans " Achevée(s) " par Mgbi	t	57	41	2021-06-04 15:37:15	2021-06-04 15:37:15
+544	Tâche "4eme"\n          du projet Premier test mise dans " Achevée(s) " par Admin	t	52	41	2021-05-28 18:34:54	2021-05-28 18:34:54
+373	Tâche "date_insert"\n          du projet Premier test mise dans " Achevée(s) " par Mgbi	t	57	41	2021-05-27 14:36:54	2021-05-27 14:36:54
+385	Tâche "kanban"\n          du projet Premier test mise dans " Achevée(s) " par Mgbi	t	57	41	2021-05-27 14:37:08	2021-05-27 14:37:08
+391	Tâche "EXEMPLE"\n          du projet Premier test mise dans " Achevée(s) " par Mgbi	t	57	41	2021-05-27 14:37:15	2021-05-27 14:37:15
+376	Tâche "Vraie tâche"\n          du projet Premier test mise dans " En contrôle " par Mgbi	t	57	41	2021-05-27 14:37:01	2021-05-27 14:37:01
+427	Tâche "date_insert"\n          du projet Premier test mise dans " En cours " par Mgbi	t	57	41	2021-05-27 14:39:53	2021-05-27 14:39:53
+472	Tâche "date_insert"\n          du projet Premier test mise dans " En cours " par Mgbi	t	57	41	2021-05-27 18:14:38	2021-05-27 18:14:38
+493	Tâche "ectoassoc"\n          du projet mon_projet mise dans " En cours " par Mgbi	t	57	41	2021-05-27 23:36:09	2021-05-27 23:36:09
+502	Tâche "primaire"\n          du projet mon_projet mise dans " En contrôle " par Mgbi	t	57	41	2021-05-28 18:20:04	2021-05-28 18:20:04
+526	Tâche "dodosy"\n          du projet mon_projet mise dans " Achevée(s) " par Mgbi	t	57	41	2021-05-28 18:33:37	2021-05-28 18:33:37
+487	Tâche "ectoassoc"\n          du projet mon_projet mise dans " En cours " par Mgbi	t	57	41	2021-05-27 23:34:43	2021-05-27 23:34:43
+505	Tâche "primaire"\n          du projet mon_projet mise dans " Achevée(s) " par Mgbi	t	57	41	2021-05-28 18:20:06	2021-05-28 18:20:06
+394	Tâche "4eme"\n          du projet Premier test mise dans " En contrôle " par Mgbi	t	57	41	2021-05-27 14:37:18	2021-05-27 14:37:18
+415	Tâche "Vraie tâche"\n          du projet Premier test mise dans " En attente " par Mgbi	t	57	41	2021-05-27 14:37:27	2021-05-27 14:37:27
+430	Tâche "date_insert"\n          du projet Premier test mise dans " Achevée(s) " par Mgbi	t	57	41	2021-05-27 14:43:54	2021-05-27 14:43:54
+454	Tâche "date_insert"\n          du projet Premier test mise dans " En cours " par Mgbi	t	57	41	2021-05-27 18:04:08	2021-05-27 18:04:08
+466	Tâche "EXEMPLE"\n          du projet Premier test mise dans " En contrôle " par Mgbi	t	57	41	2021-05-27 18:04:29	2021-05-27 18:04:29
+490	Tâche "ectoassoc"\n          du projet mon_projet mise dans " En contrôle " par Mgbi	t	57	41	2021-05-27 23:36:07	2021-05-27 23:36:07
+511	Tâche "dodosy"\n          du projet mon_projet mise dans " En contrôle " par Mgbi	t	57	41	2021-05-28 18:33:18	2021-05-28 18:33:18
+352	Tâche "CHECK"\n          du projet Premier test mise dans " Achevée(s) " par Mgbi	t	57	41	2021-05-27 14:36:46	2021-05-27 14:36:46
+364	Tâche "date_insert2"\n          du projet Premier test mise dans " Achevée(s) " par Mgbi	t	57	41	2021-05-27 14:36:51	2021-05-27 14:36:51
+460	Tâche "Seconde tâche"\n          du projet Premier test mise dans " Achevée(s) " par Mgbi	t	57	41	2021-05-27 18:04:22	2021-05-27 18:04:22
+478	Tâche "date_insert"\n          du projet Premier test mise dans " En cours " par Mgbi	t	57	41	2021-05-27 18:15:28	2021-05-27 18:15:28
+499	Tâche "primaire"\n          du projet mon_projet mise dans " Achevée(s) " par Mgbi	t	57	41	2021-05-27 23:38:11	2021-05-27 23:38:11
+514	Tâche "doudousy2"\n          du projet mon_projet mise dans " En contrôle " par Mgbi	t	57	41	2021-05-28 18:33:22	2021-05-28 18:33:22
+358	Tâche "pubsub"\n          du projet Premier test mise dans " Achevée(s) " par Mgbi	t	57	41	2021-05-27 14:36:49	2021-05-27 14:36:49
+379	Tâche "kanban"\n          du projet Premier test mise dans " En contrôle " par Mgbi	t	57	41	2021-05-27 14:37:02	2021-05-27 14:37:02
+436	Tâche "Seconde tâche"\n          du projet Premier test mise dans " Achevée(s) " par Mgbi	t	57	41	2021-05-27 16:59:29	2021-05-27 16:59:29
+469	Tâche "EXEMPLE"\n          du projet Premier test mise dans " Achevée(s) " par Mgbi	t	57	41	2021-05-27 18:04:31	2021-05-27 18:04:31
+481	Tâche "date_insert"\n          du projet Premier test mise dans " Achevée(s) " par Mgbi	t	57	41	2021-05-27 18:18:43	2021-05-27 18:18:43
+496	Tâche "primaire"\n          du projet mon_projet mise dans " En contrôle " par Mgbi	t	57	41	2021-05-27 23:38:08	2021-05-27 23:38:08
+361	Tâche "cinquième"\n          du projet Premier test mise dans " Achevée(s) " par Mgbi	t	57	41	2021-05-27 14:36:50	2021-05-27 14:36:50
+370	Tâche "Seconde tâche"\n          du projet Premier test mise dans " Achevée(s) " par Mgbi	t	57	41	2021-05-27 14:36:53	2021-05-27 14:36:53
+382	Tâche "EXEMPLE"\n          du projet Premier test mise dans " En contrôle " par Mgbi	t	57	41	2021-05-27 14:37:03	2021-05-27 14:37:03
+412	Tâche "kanban"\n          du projet Premier test mise dans " En attente " par Mgbi	t	57	41	2021-05-27 14:37:25	2021-05-27 14:37:25
+439	Tâche "Seconde tâche"\n          du projet Premier test mise dans " En contrôle " par Mgbi	t	57	41	2021-05-27 17:53:57	2021-05-27 17:53:57
+457	Tâche "EXEMPLE"\n          du projet Premier test mise dans " En contrôle " par Mgbi	t	57	41	2021-05-27 18:04:19	2021-05-27 18:04:19
+517	Tâche "work"\n          du projet mon_projet mise dans " En contrôle " par Mgbi	t	57	41	2021-05-28 18:33:26	2021-05-28 18:33:26
+523	Tâche "primaire"\n          du projet mon_projet mise dans " Achevée(s) " par Mgbi	t	57	41	2021-05-28 18:33:36	2021-05-28 18:33:36
+310	Tâche "cinquième tâche secondaire pour first"\n          du projet mon_projet mise dans " A faire " par Attributeur	t	53	41	2021-05-25 17:22:30	2021-05-25 17:22:30
+313	Tâche "first_task"\n          du projet mon_projet mise dans " Achevée(s) " par Mgbi	t	57	41	2021-05-26 20:16:28	2021-05-26 20:16:28
+316	Tâche "notification_secondaire"\n          du projet mon_projet mise dans " En contrôle " par Mgbi	t	57	41	2021-05-27 08:27:38	2021-05-27 08:27:38
+334	Tâche "CHECK"\n          du projet Premier test mise dans " En contrôle " par Mgbi	t	57	41	2021-05-27 14:34:15	2021-05-27 14:34:15
+346	Tâche "CHECK"\n          du projet Premier test mise dans " Achevée(s) " par Mgbi	t	57	41	2021-05-27 14:34:38	2021-05-27 14:34:38
+201	Tâche "cinquième tâche secondaire pour first"\n          du projet mon_projet mise dans " En attente " par Mgbi	t	57	41	2021-05-22 10:07:12	2021-05-22 10:07:12
+204	Tâche "cinquième tâche secondaire pour first"\n          du projet mon_projet mise dans " A faire " par Mgbi	t	57	41	2021-05-22 10:07:12	2021-05-22 10:07:12
+207	Tâche "cinquième tâche secondaire pour first"\n          du projet mon_projet mise dans " En attente " par Mgbi	t	57	41	2021-05-22 10:07:13	2021-05-22 10:07:13
+228	Tâche "cinquième tâche secondaire pour first"\n          du projet mon_projet mise dans " A faire " par Mgbi	t	57	41	2021-05-22 10:07:18	2021-05-22 10:07:18
+231	Tâche "cinquième tâche secondaire pour first"\n          du projet mon_projet mise dans " En attente " par Mgbi	t	57	41	2021-05-22 10:07:18	2021-05-22 10:07:18
+234	Tâche "children_length_test"\n          du projet mon_projet mise dans " En contrôle " par Mgbi	t	57	41	2021-05-22 16:50:00	2021-05-22 16:50:00
+237	Tâche "children_length_test"\n          du projet mon_projet mise dans " Achevée(s) " par Mgbi	t	57	41	2021-05-22 16:50:03	2021-05-22 16:50:03
+240	Tâche "primaire"\n          du projet mon_projet mise dans " En contrôle " par Mgbi	t	57	41	2021-05-22 16:50:10	2021-05-22 16:50:10
+243	Tâche "primaire"\n          du projet mon_projet mise dans " Achevée(s) " par Mgbi	t	57	41	2021-05-22 16:50:12	2021-05-22 16:50:12
+246	Tâche "test_append"\n          du projet mon_projet mise dans " En cours " par Mgbi	t	57	41	2021-05-22 19:29:05	2021-05-22 19:29:05
+249	Tâche "task_children"\n          du projet mon_projet mise dans " En cours " par Mgbi	t	57	41	2021-05-22 21:01:17	2021-05-22 21:01:17
+252	Tâche "89"\n          du projet mon_projet mise dans " En attente " par Mgbi	t	57	41	2021-05-22 21:01:17	2021-05-22 21:01:17
+255	Tâche "ectoassoc"\n          du projet mon_projet mise dans " En cours " par Mgbi	t	57	41	2021-05-22 21:01:19	2021-05-22 21:01:19
+261	Tâche "tacheee"\n          du projet mon_projet mise dans " En attente " par Mgbi	t	57	41	2021-05-22 21:01:24	2021-05-22 21:01:24
+264	Tâche "children_length_test"\n          du projet mon_projet mise dans " En attente " par Mgbi	t	57	41	2021-05-23 13:49:26	2021-05-23 13:49:26
+267	Tâche "tacheee"\n          du projet mon_projet mise dans " A faire " par Mgbi	t	57	41	2021-05-23 13:49:38	2021-05-23 13:49:38
+270	Tâche "cerise sur le gâteau"\n          du projet mon_projet mise dans " A faire " par Mgbi	t	57	41	2021-05-23 13:49:42	2021-05-23 13:49:42
+273	Tâche "TACHE POUR MATTHIEU"\n          du projet mon_projet mise dans " A faire " par Mgbi	t	57	41	2021-05-23 13:49:44	2021-05-23 13:49:44
+276	Tâche "first_task"\n          du projet mon_projet mise dans " En contrôle " par Mgbi	t	57	41	2021-05-23 13:49:48	2021-05-23 13:49:48
+282	Tâche nouvellement créee du nom de tache notif par Mgbi dans le projet mon_projet.	t	57	41	2021-05-23 14:19:32	2021-05-23 14:19:32
+285	Tâche "notifs_length"\n          du projet mon_projet mise dans " En attente " par Mgbi	t	57	41	2021-05-23 14:39:34	2021-05-23 14:39:34
+288	Tâche "notif2"\n          du projet mon_projet mise dans " En cours " par Mgbi	t	57	41	2021-05-23 14:39:35	2021-05-23 14:39:35
+291	Tâche "tache notif"\n          du projet mon_projet mise dans " En contrôle " par Mgbi	t	57	41	2021-05-23 14:39:36	2021-05-23 14:39:36
+294	Tâche "tâche secondaire pour first task"\n          du projet mon_projet mise dans " Achevée(s) " par Mgbi	t	57	41	2021-05-23 14:44:31	2021-05-23 14:44:31
+297	Tâche "cinquième tâche secondaire pour first"\n          du projet mon_projet mise dans " A faire " par Admin	t	52	41	2021-05-23 15:04:22	2021-05-23 15:04:22
+300	Tâche "cinquième tâche secondaire pour first"\n          du projet mon_projet mise dans " En attente " par Admin	t	52	41	2021-05-23 15:04:29	2021-05-23 15:04:29
+303	Tâche "assoc2nde"\n          du projet mon_projet mise dans " En attente " par Admin	t	52	41	2021-05-23 15:07:37	2021-05-23 15:07:37
+306	Tâche "assoc2nde"\n          du projet mon_projet mise dans " A faire " par Admin	t	52	41	2021-05-23 15:07:48	2021-05-23 15:07:48
+730	Tâche "4eme"\n          du projet Premier test mise dans " En attente " par Mgbi	f	57	53	2021-06-05 20:39:15	2021-06-05 20:39:15
+731	Tâche "4eme"\n          du projet Premier test mise dans " En attente " par Mgbi	f	57	41	2021-06-05 20:39:15	2021-06-05 20:39:15
+732	Tâche "4eme"\n          du projet Premier test mise dans " En attente " par Mgbi	f	57	52	2021-06-05 20:39:15	2021-06-05 20:39:15
+734	Tâche "date_insert2"\n          du projet Premier test mise dans " A faire " par Mgbi	f	57	53	2021-06-05 20:39:20	2021-06-05 20:39:20
+735	Tâche "date_insert2"\n          du projet Premier test mise dans " A faire " par Mgbi	f	57	41	2021-06-05 20:39:20	2021-06-05 20:39:20
+736	Tâche "date_insert2"\n          du projet Premier test mise dans " A faire " par Mgbi	f	57	52	2021-06-05 20:39:20	2021-06-05 20:39:20
+729	Tâche "4eme"\n          du projet Premier test mise dans " En attente " par Mgbi	t	57	55	2021-06-05 20:39:15	2021-06-05 20:39:15
+733	Tâche "date_insert2"\n          du projet Premier test mise dans " A faire " par Mgbi	t	57	55	2021-06-05 20:39:20	2021-06-05 20:39:20
+737	La requête Requête 1 a été vue	f	57	33	2021-06-07 14:41:08	2021-06-07 14:41:08
+738	La requête Requête 1 est en cours	f	57	33	2021-06-07 14:41:13	2021-06-07 14:41:13
+739	La requête Requête 1 n'est pas en cours	f	57	33	2021-06-07 14:41:16	2021-06-07 14:41:16
+620	Tâche "cinquième"\n          du projet Premier test mise dans " En cours " par Admin	t	52	57	2021-05-28 18:36:27	2021-05-28 18:36:27
+617	Tâche "CHECK"\n          du projet Premier test mise dans " En contrôle " par Admin	t	52	57	2021-05-28 18:36:22	2021-05-28 18:36:22
+626	Tâche "Vraie tâche"\n          du projet Premier test mise dans " En cours " par Admin	t	52	57	2021-05-28 18:36:32	2021-05-28 18:36:32
+743	Le client Eric de la société SOC a envoyé une requête intitulée "Notification?".	f	33	57	2021-06-07 20:43:47	2021-06-07 20:43:47
+744	Le client Eric de la société SOC a envoyé une requête intitulée "Notification?".	f	33	41	2021-06-07 20:43:47	2021-06-07 20:43:47
+745	Le client Eric de la société SOC a envoyé une requête intitulée "Notification?".	f	33	52	2021-06-07 20:43:47	2021-06-07 20:43:47
+746	Tâche "tâche test"\n          du projet mon_projet mise dans " Achevée(s) " par Mgbi	f	57	53	2021-06-08 07:58:03	2021-06-08 07:58:03
+747	Tâche "tâche test"\n          du projet mon_projet mise dans " Achevée(s) " par Mgbi	f	57	41	2021-06-08 07:58:03	2021-06-08 07:58:03
+748	Tâche "tâche test"\n          du projet mon_projet mise dans " Achevée(s) " par Mgbi	f	57	52	2021-06-08 07:58:03	2021-06-08 07:58:03
+749	Tâche "tâche test"\n          du projet mon_projet mise dans " En attente " par Mgbi	f	57	53	2021-06-08 07:58:35	2021-06-08 07:58:35
+750	Tâche "tâche test"\n          du projet mon_projet mise dans " En attente " par Mgbi	f	57	41	2021-06-08 07:58:35	2021-06-08 07:58:35
+751	Tâche "tâche test"\n          du projet mon_projet mise dans " En attente " par Mgbi	f	57	52	2021-06-08 07:58:35	2021-06-08 07:58:35
+752	Tâche "half_append"\n          du projet mon_projet mise dans " Achevée(s) " par Mgbi	f	57	53	2021-06-08 07:58:37	2021-06-08 07:58:37
+753	Tâche "half_append"\n          du projet mon_projet mise dans " Achevée(s) " par Mgbi	f	57	41	2021-06-08 07:58:37	2021-06-08 07:58:37
+754	Tâche "half_append"\n          du projet mon_projet mise dans " Achevée(s) " par Mgbi	f	57	52	2021-06-08 07:58:37	2021-06-08 07:58:37
+755	Tâche "half_append"\n          du projet mon_projet mise dans " En cours " par Mgbi	f	57	53	2021-06-08 07:58:40	2021-06-08 07:58:40
+756	Tâche "half_append"\n          du projet mon_projet mise dans " En cours " par Mgbi	f	57	41	2021-06-08 07:58:40	2021-06-08 07:58:40
+757	Tâche "half_append"\n          du projet mon_projet mise dans " En cours " par Mgbi	f	57	52	2021-06-08 07:58:40	2021-06-08 07:58:40
+758	Tâche "task_children"\n          du projet mon_projet mise dans " Achevée(s) " par Mgbi	f	57	53	2021-06-08 07:58:45	2021-06-08 07:58:45
+759	Tâche "task_children"\n          du projet mon_projet mise dans " Achevée(s) " par Mgbi	f	57	41	2021-06-08 07:58:45	2021-06-08 07:58:45
+760	Tâche "task_children"\n          du projet mon_projet mise dans " Achevée(s) " par Mgbi	f	57	52	2021-06-08 07:58:45	2021-06-08 07:58:45
+761	Tâche "second_task"\n          du projet mon_projet mise dans " Achevée(s) " par Mgbi	f	57	53	2021-06-08 07:58:48	2021-06-08 07:58:48
+762	Tâche "second_task"\n          du projet mon_projet mise dans " Achevée(s) " par Mgbi	f	57	41	2021-06-08 07:58:48	2021-06-08 07:58:48
+763	Tâche "second_task"\n          du projet mon_projet mise dans " Achevée(s) " par Mgbi	f	57	52	2021-06-08 07:58:48	2021-06-08 07:58:48
+764	Tâche "tâche test"\n          du projet mon_projet mise dans " Achevée(s) " par Mgbi	f	57	53	2021-06-08 07:58:57	2021-06-08 07:58:57
+765	Tâche "tâche test"\n          du projet mon_projet mise dans " Achevée(s) " par Mgbi	f	57	41	2021-06-08 07:58:57	2021-06-08 07:58:57
+766	Tâche "tâche test"\n          du projet mon_projet mise dans " Achevée(s) " par Mgbi	f	57	52	2021-06-08 07:58:57	2021-06-08 07:58:57
+767	Tâche "sans dt de fin"\n          du projet mon_projet mise dans " Achevée(s) " par Mgbi	f	57	53	2021-06-08 07:59:02	2021-06-08 07:59:02
+768	Tâche "sans dt de fin"\n          du projet mon_projet mise dans " Achevée(s) " par Mgbi	f	57	41	2021-06-08 07:59:02	2021-06-08 07:59:02
+769	Tâche "sans dt de fin"\n          du projet mon_projet mise dans " Achevée(s) " par Mgbi	f	57	52	2021-06-08 07:59:02	2021-06-08 07:59:02
+770	Tâche "ectoassoc"\n          du projet mon_projet mise dans " Achevée(s) " par Mgbi	f	57	53	2021-06-08 07:59:04	2021-06-08 07:59:04
+771	Tâche "ectoassoc"\n          du projet mon_projet mise dans " Achevée(s) " par Mgbi	f	57	41	2021-06-08 07:59:04	2021-06-08 07:59:04
+772	Tâche "ectoassoc"\n          du projet mon_projet mise dans " Achevée(s) " par Mgbi	f	57	52	2021-06-08 07:59:04	2021-06-08 07:59:04
+773	Le client Eric de la société SOC a envoyé une requête intitulée "Fond d'écran".	f	33	57	2021-06-08 08:04:07	2021-06-08 08:04:07
+774	Le client Eric de la société SOC a envoyé une requête intitulée "Fond d'écran".	f	33	41	2021-06-08 08:04:07	2021-06-08 08:04:07
+775	Le client Eric de la société SOC a envoyé une requête intitulée "Fond d'écran".	f	33	52	2021-06-08 08:04:07	2021-06-08 08:04:07
+776	La requête Fond d'écran est en cours	f	57	33	2021-06-08 08:04:26	2021-06-08 08:04:26
+777	La requête Fond d'écran n'est pas en cours	f	57	33	2021-06-08 08:04:27	2021-06-08 08:04:27
+781	La requête Fond d'écran a été non vue	f	57	33	2021-06-08 08:04:38	2021-06-08 08:04:38
+778	La requête Fond d'écran a été vue	f	57	33	2021-06-08 08:04:30	2021-06-08 08:04:30
+779	La requête Fond d'écran a été non vue	f	57	33	2021-06-08 08:04:32	2021-06-08 08:04:32
+780	La requête Fond d'écran a été vue	f	57	33	2021-06-08 08:04:37	2021-06-08 08:04:37
 \.
 
 
@@ -1693,8 +1848,8 @@ COPY public.priorities (id, title, inserted_at, updated_at) FROM stdin;
 --
 
 COPY public.projects (id, title, description, progression, date_start, date_end, estimated_duration, performed_duration, deadline, active_client_id, status_id, inserted_at, updated_at, board_id) FROM stdin;
-15	mon_projet	projet test pour afficher flash	21	2021-05-03	2021-05-03	24	0	2021-05-04	1	1	2021-05-03 09:59:21	2021-05-28 18:33:41	10
-14	Premier test	Kanbans test	19	2021-04-28	2021-04-30	48	0	2021-04-30	1	1	2021-04-28 13:17:31	2021-05-28 18:36:22	9
+14	Premier test	Kanbans test	9	2021-04-28	2021-04-30	48	0	2021-04-30	1	1	2021-04-28 13:17:31	2021-06-05 10:54:41	9
+15	mon_projet	projet test pour afficher flash	51	2021-05-03	2021-05-03	24	0	2021-05-04	1	1	2021-05-03 09:59:21	2021-06-08 07:59:04	10
 \.
 
 
@@ -1739,6 +1894,13 @@ COPY public.schema_migrations (version, inserted_at) FROM stdin;
 20210514105447	2021-05-14 10:56:17
 20210518110212	2021-05-18 11:04:23
 20210527155705	2021-05-27 16:12:41
+20210602180040	2021-06-02 18:03:01
+20210602183517	2021-06-02 18:35:57
+20210602190601	2021-06-02 19:06:19
+20210602213717	2021-06-02 21:37:34
+20210603161444	2021-06-03 16:17:57
+20210603162215	2021-06-03 16:24:08
+20210607111124	2021-06-07 11:16:10
 \.
 
 
@@ -1747,6 +1909,7 @@ COPY public.schema_migrations (version, inserted_at) FROM stdin;
 --
 
 COPY public.softwares (id, title, company_id, inserted_at, updated_at) FROM stdin;
+1	LOG+SOC	1	2021-06-02 21:41:47	2021-06-02 21:41:47
 \.
 
 
@@ -1786,40 +1949,42 @@ COPY public.statuses (id, title, inserted_at, updated_at) FROM stdin;
 --
 
 COPY public.tasks (id, title, progression, date_start, date_end, estimated_duration, performed_duration, deadline, parent_id, project_id, contributor_id, status_id, priority_id, inserted_at, updated_at, attributor_id, achieved_at) FROM stdin;
-29	half_append	0	2021-05-11	2021-05-12	6	0	2021-05-04	9	15	56	3	4	2021-05-11 12:42:06	2021-05-12 13:57:27	57	\N
 23	cinquième tâche secondaire pour first	0	2021-05-12	2021-05-13	5	0	2021-05-04	9	15	56	1	4	2021-05-11 12:12:04	2021-05-25 17:22:30	57	\N
-11	EXEMPLE	0	2021-05-07	\N	45	0	2021-05-08	\N	14	\N	5	2	2021-05-07 14:49:09	2021-05-27 21:04:31	57	\N
-8	CHECK	0	2021-05-01	\N	2	0	2021-05-08	\N	14	54	4	2	2021-05-01 13:10:32	2021-05-28 21:36:21	52	2021-05-28 21:34:51
+41	date_insert	0	2021-05-27	\N	6	0	2021-05-28	\N	14	54	2	2	2021-05-27 14:25:57	2021-06-04 18:43:53	57	2021-05-27 21:18:43
 5	cinquième	0	2021-04-30	\N	48	0	2021-05-01	\N	14	54	3	2	2021-04-29 08:37:56	2021-05-28 21:36:27	52	2021-05-28 21:35:13
 3	une nouvelle	0	2021-04-29	\N	2	0	2021-04-30	\N	14	54	3	1	2021-04-29 06:27:21	2021-05-28 21:36:29	52	2021-05-28 21:35:16
 30	assoc2nde	0	2021-05-12	2021-05-12	6	0	2021-05-11	16	15	56	1	1	2021-05-11 21:12:50	2021-05-25 03:27:25	57	\N
-42	date_insert2	0	2021-05-27	\N	6	0	2021-05-28	\N	14	\N	2	2	2021-05-27 17:28:06	2021-05-28 21:36:35	57	2021-05-28 21:36:04
-33	cerise sur le gâteau	0	2021-05-12	\N	8	0	2021-05-12	\N	15	56	2	2	2021-05-12 14:19:24	2021-05-28 21:34:26	57	\N
+39	notifs_length	0	2021-05-23	2021-05-24	5	0	2021-05-12	33	15	56	1	2	2021-05-23 14:17:54	2021-05-31 22:19:45	57	\N
+42	date_insert2	0	2021-05-27	\N	6	0	2021-05-28	\N	14	\N	1	2	2021-05-27 17:28:06	2021-06-05 23:39:20	57	2021-05-28 21:36:04
 7	kanban	0	2021-05-01	\N	3	0	2021-05-08	\N	14	54	2	1	2021-05-01 13:07:10	2021-05-28 21:36:42	52	2021-05-28 21:35:40
-14	sans dt de fin	0	2021-05-10	\N	25	0	2021-05-13	\N	15	\N	4	2	2021-05-10 15:26:00	2021-05-21 11:58:41	57	\N
-4	4eme	2	2021-05-01	\N	24	0	2021-04-30	\N	14	54	1	2	2021-04-29 08:37:15	2021-05-28 21:36:48	52	2021-05-28 21:34:54
+44	new_one	0	2021-06-06	\N	6	0	2021-06-07	\N	14	\N	3	2	2021-06-05 13:54:41	2021-06-05 13:54:57	57	\N
 1	Vraie tâche	0	2021-04-28	\N	48	0	2021-04-30	\N	14	54	1	3	2021-04-28 19:36:58	2021-05-28 21:36:50	52	2021-05-28 21:35:41
-37	notification_secondaire	0	2021-05-23	2021-05-24	2	0	2021-05-04	10	15	56	4	2	2021-05-23 14:13:06	2021-05-27 08:27:38	57	\N
+40	tache notif	0	2021-05-23	\N	6	0	2021-05-24	\N	15	\N	5	2	2021-05-23 14:19:32	2021-05-31 22:09:02	57	2021-05-31 22:09:02
+37	notification_secondaire	0	2021-05-23	2021-05-24	2	0	2021-05-04	10	15	56	5	2	2021-05-23 14:13:06	2021-05-31 22:25:26	57	2021-05-31 22:25:26
 12	tâche secondaire pour first task	0	2021-05-10	\N	10	0	2021-05-04	9	15	56	4	4	2021-05-10 11:04:55	2021-05-27 08:27:45	57	\N
-41	date_insert	0	2021-05-27	\N	6	0	2021-05-28	\N	14	\N	5	3	2021-05-27 14:25:57	2021-05-27 21:18:43	57	2021-05-27 21:18:43
+26	test_append	0	2021-05-21	2021-05-22	5	0	2021-05-04	9	15	56	2	4	2021-05-11 12:34:43	2021-06-04 18:13:56	57	\N
+24	children_length_test	0	2021-05-11	2021-05-12	5	0	2021-05-04	9	15	56	1	4	2021-05-11 12:22:08	2021-05-31 22:19:44	57	\N
+33	cerise sur le gâteau	0	2021-05-12	\N	8	0	2021-05-12	\N	15	56	3	2	2021-05-12 14:19:24	2021-05-31 22:29:16	57	\N
+32	89	0	2021-05-12	\N	6	0	2021-05-13	\N	15	\N	3	2	2021-05-12 13:59:05	2021-06-04 18:13:59	57	\N
+36	TACHE POUR MATTHIEU	0	2021-05-17	\N	24	0	2021-05-18	\N	15	54	1	2	2021-05-17 13:52:18	2021-06-05 15:32:16	57	\N
+11	EXEMPLE	0	2021-05-07	\N	45	0	2021-05-08	\N	14	54	1	2	2021-05-07 14:49:09	2021-06-04 18:24:08	57	\N
 19	work	0	2021-05-12	\N	5	0	2021-05-13	\N	15	\N	4	1	2021-05-11 10:08:44	2021-05-28 21:33:26	57	\N
-16	ectoassoc	0	2021-05-11	\N	5	0	2021-05-11	\N	15	56	3	1	2021-05-10 23:15:14	2021-05-28 02:39:33	57	2021-05-28 02:14:48
-9	first_task	0	2021-05-03	\N	24	0	2021-05-04	\N	15	56	4	4	2021-05-03 10:07:31	2021-05-28 21:33:31	57	\N
-26	test_append	0	2021-05-21	2021-05-22	5	0	2021-05-04	9	15	56	3	4	2021-05-11 12:34:43	2021-05-22 19:29:05	57	\N
+10	second_task	100	2021-05-03	\N	10	0	2021-05-04	\N	15	56	5	2	2021-05-03 10:18:08	2021-06-08 10:58:48	57	2021-06-08 10:58:48
+8	CHECK	0	2021-05-01	\N	2	0	2021-05-08	\N	14	54	5	2	2021-05-01 13:10:32	2021-06-04 18:37:14	52	2021-06-04 18:37:14
+2	Seconde tâche	0	2021-04-29	\N	24	0	2021-04-30	\N	14	54	5	1	2021-04-29 06:25:23	2021-06-04 18:37:15	52	2021-06-04 18:37:15
 31	primaire	0	2021-05-12	\N	6	0	2021-05-13	\N	15	\N	5	2	2021-05-12 11:02:47	2021-05-28 21:33:36	57	2021-05-28 21:33:36
-20	task_children	0	2021-05-12	\N	5	0	2021-05-13	\N	15	\N	3	2	2021-05-11 10:39:51	2021-05-22 21:01:17	57	\N
+43	tâche test	0	2021-05-31	\N	5	0	2021-06-01	\N	15	\N	5	2	2021-05-31 22:27:05	2021-06-08 10:58:57	57	2021-06-08 10:58:57
 34	dodosy	0	2021-05-15	\N	6	0	2021-05-16	\N	15	\N	5	3	2021-05-13 21:36:00	2021-05-28 21:33:37	57	2021-05-28 21:33:37
-39	notifs_length	0	2021-05-23	2021-05-24	5	0	2021-05-12	33	15	56	2	2	2021-05-23 14:17:54	2021-05-23 14:39:34	57	\N
-32	89	0	2021-05-12	\N	6	0	2021-05-13	\N	15	\N	2	2	2021-05-12 13:59:05	2021-05-22 21:01:17	57	\N
 35	doudousy2	0	2021-05-14	\N	6	0	2021-05-15	\N	15	\N	5	2	2021-05-13 21:42:44	2021-05-28 21:33:41	57	2021-05-28 21:33:41
-10	second_task	0	2021-05-03	\N	10	0	2021-05-04	\N	15	56	2	2	2021-05-03 10:18:08	2021-05-22 21:01:23	57	\N
 38	notif2	0	2021-05-23	2021-05-25	5	0	2021-05-12	33	15	56	3	2	2021-05-23 14:15:08	2021-05-23 14:39:35	57	\N
-36	TACHE POUR MATTHIEU	0	2021-05-17	\N	24	0	2021-05-18	\N	15	54	2	2	2021-05-17 13:52:18	2021-05-28 21:34:23	57	\N
-24	children_length_test	0	2021-05-11	2021-05-12	5	0	2021-05-04	9	15	56	2	4	2021-05-11 12:22:08	2021-05-23 13:49:26	57	\N
-18	tacheee	0	2021-05-20	\N	55	0	2021-05-22	\N	15	56	2	3	2021-05-10 23:26:33	2021-05-28 21:34:25	57	\N
+14	sans dt de fin	0	2021-05-10	\N	25	0	2021-05-13	\N	15	\N	5	2	2021-05-10 15:26:00	2021-06-08 10:59:02	57	2021-06-08 10:59:02
+18	tacheee	0	2021-05-20	\N	55	0	2021-05-22	\N	15	56	2	3	2021-05-10 23:26:33	2021-06-05 15:45:26	57	\N
+4	4eme	2	2021-05-01	\N	24	0	2021-04-30	\N	14	54	2	3	2021-04-29 08:37:15	2021-06-05 23:39:15	52	2021-05-28 21:34:54
 27	append%2==1	0	2021-05-11	2021-05-12	5	0	2021-05-04	9	15	56	4	4	2021-05-11 12:35:49	2021-05-17 13:55:19	57	\N
-40	tache notif	0	2021-05-23	\N	6	0	2021-05-24	\N	15	\N	4	2	2021-05-23 14:19:32	2021-05-23 14:39:36	57	\N
-2	Seconde tâche	0	2021-04-29	\N	24	0	2021-04-30	\N	14	54	4	1	2021-04-29 06:25:23	2021-05-28 21:36:18	52	\N
+29	half_append	0	2021-05-11	2021-05-12	6	0	2021-05-04	9	15	56	3	4	2021-05-11 12:42:06	2021-06-08 10:58:40	57	2021-06-08 10:58:37
+9	first_task	0	2021-05-03	\N	24	0	2021-05-04	\N	15	56	4	4	2021-05-03 10:07:31	2021-06-08 07:58:40	57	\N
+20	task_children	0	2021-05-12	\N	5	0	2021-05-13	\N	15	\N	5	2	2021-05-11 10:39:51	2021-06-08 10:58:45	57	2021-06-08 10:58:45
+16	ectoassoc	0	2021-05-11	\N	5	0	2021-05-11	\N	15	56	5	1	2021-05-10 23:15:14	2021-06-08 10:59:04	57	2021-06-08 10:59:04
 6	pubsub	0	2021-05-01	\N	50	0	2021-05-08	\N	14	54	4	3	2021-05-01 13:00:55	2021-05-28 21:36:12	52	2021-05-28 21:36:01
 \.
 
@@ -1829,16 +1994,16 @@ COPY public.tasks (id, title, progression, date_start, date_end, estimated_durat
 --
 
 COPY public.users (id, username, profile_picture, email, password, right_id, inserted_at, updated_at) FROM stdin;
-52	Admin	images/profiles/admin-profile.jpg	admin@myadmin	$2b$12$3yngeegsjEEifTOEZDSfAeOXnuyBOkCfjGUN.7GdIW1A57mD6tKqO	1	2021-04-13 08:28:09	2021-04-13 08:54:00
-57	Mgbi	images/profiles/default_profile_pic.png	admin@mgbi	$2b$12$0LWzPAdYxEQyl2BX3UL7tev4jk1Ty0jLKK7kFhHkiilAaT7ShOo3.	1	2021-05-01 21:28:30	2021-05-01 21:28:46
-54	Mgbi1	images/profiles/default_profile_pic.png	contributeur@mgbi	$2b$12$sxaYg4bRhFyE7RDn0gaXcOlDkEnhOoPFpB./8Ir.RDNKR85vsv6nK	3	2021-04-13 11:38:03	2021-04-13 11:38:19
-56	Mgbi2	images/profiles/default_profile_pic.png	contributeur2@mgbi	$2b$12$xjnYOEvFZyi6ky2vB8HGCO//zHlN8lqg56hBeGE/ezDgqB/z01Z8a	3	2021-05-01 18:12:11	2021-05-01 18:13:32
-53	Attributeur	images/profiles/default_profile_pic.png	mgbi	$2b$12$LHa8.ujlAJ4BbBd1b/M3XeNmsJ6SATtA9KDm3Wwa71IZBc.Jz2GV6	2	2021-04-13 11:30:16	2021-04-13 11:35:15
-55	Jesuisarchivé	images/profiles/default_profile_pic.png	archivé@mgbi	$2b$12$LHa8.ujlAJ4BbBd1b/M3XeNmsJ6SATtA9KDm3Wwa71IZBc.Jz2GV6	100	2021-04-13 11:46:26	2021-04-19 14:20:31
-41	Test	images/profiles/test-profile.jpg	test@test	$2b$12$LHa8.ujlAJ4BbBd1b/M3XeNmsJ6SATtA9KDm3Wwa71IZBc.Jz2GV6	1	2021-03-30 18:00:03	2021-03-30 18:01:54
-33	Eric	images/profiles/default_profile_pic.png	eric@soc	$2b$12$LHa8.ujlAJ4BbBd1b/M3XeNmsJ6SATtA9KDm3Wwa71IZBc.Jz2GV6	4	2021-03-26 06:37:02	2021-04-22 08:20:01
-58	Marc	images/profiles/default_profile_pic.png	marc@comp	$2b$12$LHa8.ujlAJ4BbBd1b/M3XeNmsJ6SATtA9KDm3Wwa71IZBc.Jz2GV6	4	2021-05-02 13:24:25	2021-05-02 13:24:38
-25	Profilnonattribué	images/profiles/Nora-profile.png	nonattribuée@mgbi	$2b$12$LHa8.ujlAJ4BbBd1b/M3XeNmsJ6SATtA9KDm3Wwa71IZBc.Jz2GV6	5	2021-03-25 11:09:44	2021-05-24 16:06:51
+57	Mgbi	images/profiles/Mgbi-profile.png	admin@mgbi	$2b$12$ppF6QKRLMia3lvzr1XY3C.fXB0Qv5WB4M8a.o6Pe96TI3Sxw1ETbC	1	2021-05-01 21:28:30	2021-06-08 07:37:42
+33	Eric	images/profiles/Eric-profile.png	eric@soc	$2b$12$aK2fjkTDZh6ULSz5GmZCh.vA0OOWhnSI0quNwDOavdCN831CNg7uq	4	2021-03-26 06:37:02	2021-06-08 07:45:45
+58	Marc	images/profiles/Marc-profile.png	marc@comp	$2b$12$LHa8.ujlAJ4BbBd1b/M3XeNmsJ6SATtA9KDm3Wwa71IZBc.Jz2GV6	4	2021-05-02 13:24:25	2021-06-04 15:06:15
+54	Mgbi1	images/profiles/Mgbi1-profile.png	contributeur@mgbi	$2b$12$sxaYg4bRhFyE7RDn0gaXcOlDkEnhOoPFpB./8Ir.RDNKR85vsv6nK	3	2021-04-13 11:38:03	2021-06-04 15:06:48
+56	Mgbi2	images/profiles/Mgbi2-profile.png	contributeur2@mgbi	$2b$12$xjnYOEvFZyi6ky2vB8HGCO//zHlN8lqg56hBeGE/ezDgqB/z01Z8a	3	2021-05-01 18:12:11	2021-06-04 15:07:05
+53	Attributeur	images/profiles/Attributeur-profile.png	mgbi	$2b$12$LHa8.ujlAJ4BbBd1b/M3XeNmsJ6SATtA9KDm3Wwa71IZBc.Jz2GV6	2	2021-04-13 11:30:16	2021-06-04 15:11:40
+41	Test	images/profiles/Test-profile.png	test@test	$2b$12$LHa8.ujlAJ4BbBd1b/M3XeNmsJ6SATtA9KDm3Wwa71IZBc.Jz2GV6	1	2021-03-30 18:00:03	2021-06-04 15:12:36
+52	Admin	images/profiles/Admin-profile.png	admin@myadmin	$2b$12$3yngeegsjEEifTOEZDSfAeOXnuyBOkCfjGUN.7GdIW1A57mD6tKqO	1	2021-04-13 08:28:09	2021-06-04 15:13:25
+55	Jesuisarchivé	images/profiles/Jesuisarchivé-profile.png	archivé@mgbi	$2b$12$LHa8.ujlAJ4BbBd1b/M3XeNmsJ6SATtA9KDm3Wwa71IZBc.Jz2GV6	100	2021-04-13 11:46:26	2021-06-05 21:00:52
+25	Profilnonattribué	images/profiles/Profilnonattribué-profile.png	nonattribuée@mgbi	$2b$12$LHa8.ujlAJ4BbBd1b/M3XeNmsJ6SATtA9KDm3Wwa71IZBc.Jz2GV6	5	2021-03-25 11:09:44	2021-06-05 21:01:06
 \.
 
 
@@ -1853,7 +2018,7 @@ SELECT pg_catalog.setval('public.active_clients_id_seq', 7, true);
 -- Name: assist_contracts_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.assist_contracts_id_seq', 1, false);
+SELECT pg_catalog.setval('public.assist_contracts_id_seq', 7, true);
 
 
 --
@@ -1867,49 +2032,49 @@ SELECT pg_catalog.setval('public.boards_id_seq', 10, true);
 -- Name: cards_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.cards_id_seq', 46, true);
+SELECT pg_catalog.setval('public.cards_id_seq', 48, true);
 
 
 --
 -- Name: clients_requests_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.clients_requests_id_seq', 1, false);
+SELECT pg_catalog.setval('public.clients_requests_id_seq', 26, true);
 
 
 --
 -- Name: comments_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.comments_id_seq', 63, true);
+SELECT pg_catalog.setval('public.comments_id_seq', 68, true);
 
 
 --
 -- Name: companies_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.companies_id_seq', 8, true);
+SELECT pg_catalog.setval('public.companies_id_seq', 9, true);
 
 
 --
 -- Name: editors_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.editors_id_seq', 1, false);
+SELECT pg_catalog.setval('public.editors_id_seq', 7, true);
 
 
 --
 -- Name: licenses_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.licenses_id_seq', 1, false);
+SELECT pg_catalog.setval('public.licenses_id_seq', 5, true);
 
 
 --
 -- Name: notifications_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.notifications_id_seq', 646, true);
+SELECT pg_catalog.setval('public.notifications_id_seq', 781, true);
 
 
 --
@@ -1937,7 +2102,7 @@ SELECT pg_catalog.setval('public.rights_id_seq', 30, true);
 -- Name: softwares_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.softwares_id_seq', 1, false);
+SELECT pg_catalog.setval('public.softwares_id_seq', 4, true);
 
 
 --
@@ -1958,7 +2123,7 @@ SELECT pg_catalog.setval('public.statuses_id_seq', 5, true);
 -- Name: tasks_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.tasks_id_seq', 42, true);
+SELECT pg_catalog.setval('public.tasks_id_seq', 44, true);
 
 
 --
@@ -2142,6 +2307,13 @@ CREATE INDEX assist_contracts_company_id_index ON public.assist_contracts USING 
 
 
 --
+-- Name: assist_contracts_title_index; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE UNIQUE INDEX assist_contracts_title_index ON public.assist_contracts USING btree (title);
+
+
+--
 -- Name: cards_position_index; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -2156,10 +2328,10 @@ CREATE INDEX clients_requests_active_client_id_index ON public.clients_requests 
 
 
 --
--- Name: clients_requests_company_id_index; Type: INDEX; Schema: public; Owner: postgres
+-- Name: clients_requests_title_index; Type: INDEX; Schema: public; Owner: postgres
 --
 
-CREATE INDEX clients_requests_company_id_index ON public.clients_requests USING btree (company_id);
+CREATE UNIQUE INDEX clients_requests_title_index ON public.clients_requests USING btree (title);
 
 
 --
@@ -2184,10 +2356,24 @@ CREATE INDEX editors_company_id_index ON public.editors USING btree (company_id)
 
 
 --
+-- Name: editors_title_index; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE UNIQUE INDEX editors_title_index ON public.editors USING btree (title);
+
+
+--
 -- Name: licenses_company_id_index; Type: INDEX; Schema: public; Owner: postgres
 --
 
 CREATE INDEX licenses_company_id_index ON public.licenses USING btree (company_id);
+
+
+--
+-- Name: licenses_title_index; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE UNIQUE INDEX licenses_title_index ON public.licenses USING btree (title);
 
 
 --
@@ -2230,6 +2416,13 @@ CREATE UNIQUE INDEX rights_title_index ON public.rights USING btree (title);
 --
 
 CREATE INDEX softwares_company_id_index ON public.softwares USING btree (company_id);
+
+
+--
+-- Name: softwares_title_index; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE UNIQUE INDEX softwares_title_index ON public.softwares USING btree (title);
 
 
 --
@@ -2341,14 +2534,6 @@ ALTER TABLE ONLY public.cards
 
 ALTER TABLE ONLY public.clients_requests
     ADD CONSTRAINT clients_requests_active_client_id_fkey FOREIGN KEY (active_client_id) REFERENCES public.active_clients(id);
-
-
---
--- Name: clients_requests clients_requests_company_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.clients_requests
-    ADD CONSTRAINT clients_requests_company_id_fkey FOREIGN KEY (company_id) REFERENCES public.companies(id);
 
 
 --
