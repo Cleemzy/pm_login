@@ -103,7 +103,7 @@ defmodule PmLogin.Login.User do
       true -> add_error(changeset, :not_user, "Identifiant inexistant")
     end
 
-      if user != nil and pwd != nil do
+      if user != nil and pwd != nil and (is_user?(user_name) or is_email?(user_name)) do
         str_pwd = to_string(pwd)
         checked = Bcrypt.verify_pass(str_pwd, user.password)
           case checked do

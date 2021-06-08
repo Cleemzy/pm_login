@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <%= csrf_meta_tag() %>
+    <title>MGBI/ Monitoring</title>
+    <link rel="stylesheet"  href="<%= Routes.static_path(@socket, "/css/app.css") %>"/>
+    <script defer type="text/javascript" src="<%= Routes.static_path(@socket, "/js/app.js") %>"></script>
+  </head>
+  <body>
+    <header class="site-header">
+
+      <div class="wrapper site-header__wrapper">
+
+        <img class="profile-pic-header" src="<%= Routes.static_path(@socket, "/#{PmLogin.Login.get_profile_picture(@curr_user_id) }") %>" width="50"/>
+        <%= link "Mgbi", to: Routes.user_path(@socket, :index), class: "brand" %>
+        <nav class="nav">
+          <a href="#"><i class="bi bi-list nav__toggle " id="hamburger"></i></a>
+          <ul class="nav__wrapper">
+            <li class="nav__item"><a href="<%= Routes.user_path(@socket, :index) %>"><span class="material-icons">home</span> Accueil</a></li>
+            <li class="nav__item"><a href="<%= Routes.user_path(@socket, :show, @curr_user_id) %>"><span class="material-icons">account_circle</span> Profil</a></li>
+          </ul>
+        </nav>
+      </div>
+
+
+    </header>
+
+
+    <main id="main" role="main" class="container" phx-click="cancel-notif">
+      <p class="alert alert-info basecontents" role="alert"
+        phx-click="lv:clear-flash"
+        phx-value-key="info"><%= live_flash(@flash, :info) %></p>
+
+      <p class="alert alert-danger" role="alert"
+        phx-click="lv:clear-flash"
+        phx-value-key="error"><%= live_flash(@flash, :error) %></p>
+      <%= @inner_content %>
+      <br/>
+      <br/>
+      <span>
+        <a href="<%= Routes.auth_path(@socket, :sign_out) %>" class="btn btn-outline-danger btn-lg"><i class="bi bi-box-arrow-left"></i> Déconnexion</a>
+      </span>
+    </main>
+  </body>
+  <footer id="foot" class="container-fluid">
+    <div id="footcont" class="container">
+      <p><span id="copyright__icon" class="material-icons">copyright</span>copyright Cleemzy<i class="bi bi-github"></i> / Project monitoring</p>
+    </div>
+
+  </footer>
+</html>

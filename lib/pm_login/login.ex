@@ -202,6 +202,12 @@ defmodule PmLogin.Login do
     user.right_id == 1
   end
 
+  def is_unattributed?(conn) do
+    user_id = get_curr_user_id(conn)
+    user = get_user!(user_id)
+    user.right_id == 5
+  end
+
   def is_attributor?(conn) do
     user_id = get_curr_user_id(conn)
     user = get_user!(user_id)
