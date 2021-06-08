@@ -34,6 +34,22 @@
     </div>
   </div>
 
+  <div class="meter">
+    <%
+    prog_color = cond do
+      @board.project.progression <= 20  -> "#e63946"
+      @board.project.progression > 20 and @board.project.progression <= 40 -> "#e76f51"
+      @board.project.progression > 40 and @board.project.progression <= 60 -> "#ffba08"
+      @board.project.progression > 60 and @board.project.progression <= 80 -> "#457b9d"
+      @board.project.progression >80 and @board.project.progression <= 100 -> "#2a9d8f"
+      true -> "black"
+    end
+    %>
+    <span class="prog_bar" style="width: <%= @board.project.progression %>%; background-color: <%= prog_color %>;">
+      <h2 class="progression__nb"><%= @board.project.progression %>%</h2>
+    </span>
+  </div>
+
   <section class="board" phx-hook="Board" style="">
     <%= for stage <- @board.stages do %>
       <div data-stage-id="<%= stage.id %>" class="stage basecontents__without__shadow__and__radius">
@@ -203,21 +219,7 @@
                      card: @card_with_comments)
   %>
 <% end %>
-<div class="meter">
-  <%
-  prog_color = cond do
-    @board.project.progression <= 20  -> "#e63946"
-    @board.project.progression > 20 and @board.project.progression <= 40 -> "#e76f51"
-    @board.project.progression > 40 and @board.project.progression <= 60 -> "#ffba08"
-    @board.project.progression > 60 and @board.project.progression <= 80 -> "#457b9d"
-    @board.project.progression >80 and @board.project.progression <= 100 -> "#2a9d8f"
-    true -> "black"
-  end
-  %>
-  <span class="prog_bar" style="width: <%= @board.project.progression %>%; background-color: <%= prog_color %>;">
-    <h2 class="progression__nb"><%= @board.project.progression %>%</h2>
-  </span>
-</div>
+
 
 <br/>
 <%= if @is_admin or @is_attributor do %>

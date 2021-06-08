@@ -388,7 +388,11 @@ def validate_start_deadline(changeset) do
 
   def substract_project_progression_when_creating_primary(%Project{} = p) do
     primary_len = count_primaries(p)
-    up_rate = (1/primary_len) * 100
+    up_rate = case primary_len do
+      0 -> 0
+      _ -> (1/primary_len) * 100
+    end
+
     prog = p.progression - trunc(up_rate)
     update_project_progression(p, %{"progression" => prog})
 

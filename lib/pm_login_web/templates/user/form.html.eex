@@ -23,6 +23,7 @@
   <%= label f, "Mot de passe" %>
   <%= password_input f, :password, class: "pass" %>
   <%= error_tag f, :req_pass_error %>
+  <%= error_tag f, :password %>
 
   <%= label f, "Confirmez le mot de passe" %>
   <%= password_input f, :password_confirmation, class: "pass" %>

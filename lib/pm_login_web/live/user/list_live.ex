@@ -6,16 +6,46 @@ defmodule PmLoginWeb.User.ListLive do
   alias PmLoginWeb.LiveComponent.ModalLive
   alias PmLogin.Login.Auth
   alias PmLogin.Services
+  alias PmLogin.Login.User
 
   def mount(_params, %{"curr_user_id" => curr_user_id}, socket) do
     Services.subscribe()
     Login.subscribe()
+    changeset = Login.change_user(%User{})
    {:ok,
       socket
-      |> assign(curr_user_id: curr_user_id, show_notif: false, notifs: Services.list_my_notifications_with_limit(curr_user_id, 4))
+      |> assign(changeset: changeset,form: false,curr_user_id: curr_user_id, show_notif: false, notifs: Services.list_my_notifications_with_limit(curr_user_id, 4))
       |> fetch,
       layout: {PmLoginWeb.LayoutView, "admin_layout_live.html"}
       }
+  end
+
+  def handle_event("save-user", %{"user" => params}, socket) do
+    case Login.create_user(params) do
+      {:ok, user} ->
+        Login.broadcast_user_creation({:ok, user})
+        {:noreply, socket |> assign(form: false)}
+
+      {:error, %Ecto.Changeset{} = changeset} ->
+        {:noreply, socket |> assign(changeset: changeset)}
+    end
+
+  end
+
+  def handle_info({Login, [:user, :created], _}, socket) do
+    {:noreply, socket |> assign(users: Login.list_asc_auth())}
+  end
+
+  def handle_event("show-form", _params, socket), do: {:noreply, socket|>assign(form: true)}
+  def handle_event("close-form", _params, socket), do: {:noreply, socket|>assign(form: false)}
+
+  def handle_event("cancel-form", %{"key" => key}, socket) do
+    case key do
+      "Escape" ->
+        {:noreply, socket |> assign(form: false)}
+        _ ->
+        {:noreply, socket}
+    end
   end
 
   def handle_event("switch-notif", %{}, socket) do

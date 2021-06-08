@@ -52,7 +52,7 @@
 
   </div>
 
-
+<h2 id="adm" style="float: right;"><a href="#" phx-click="show-form"><i class="bi bi-plus-circle"></i> Créer utilisateur</a></h2>
 
   <table id="tb-auth">
     <thead>
@@ -106,3 +106,39 @@
                      left_button_action: "cancel-arch")
   %>
 <% end %>
+
+<div phx-window-keydown="cancel-form" class="basecontents__without__radius request__form" style="visibility: <%= if @form, do: "visible", else: "hidden" %>; opacity: <%= if @form, do: "1", else: "0" %>;">
+  <div class="column">
+    <a class="form__close" title="Fermer" phx-click="close-form"><i class="bi bi-x"></i></a>
+    <h2><i class="bi bi-plus-circle"></i> Créer utilisateur</h2>
+    <div class="request__form__content">
+      <%= f = form_for @changeset, "#",[phx_submit: "save-user"] %>
+        <label for="username">Nom d'utilisateur</label>
+        <%= text_input f, :username %>
+        <%= error_tag f, :req_uname_error %>
+        <%= error_tag f, :username %>
+
+        <label for="email">Adresse éléctronique</label>
+        <%= text_input f, :email %>
+        <%= error_tag f, :email %>
+        <%= error_tag f, :req_email_error %>
+
+        <label for="email_confirmation">Confirmer adresse e-mail</label>
+        <%= text_input f, :email_confirmation %>
+        <%= error_tag f, :email_confirmation %>
+
+        <label for="password">Mot de passe</label>
+        <%= password_input f, :password %>
+        <%= error_tag f, :password %>
+        <%= error_tag f, :req_pass_error %>
+
+        <label for="password_confirmation">Confirmer mot de passe</label>
+        <%= password_input f, :password_confirmation %>
+        <%= error_tag f, :password_confirmation %>
+        <button type="submit" style="float: right;" class="bt__com__form"><i class="bi bi-plus-circle bt__com__form__ico"></i></button>
+      <form/>
+    </div>
+
+
+  </div>
+</div>
