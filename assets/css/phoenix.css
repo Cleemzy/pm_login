@@ -291,12 +291,13 @@ font-family: 'Axiforma', sans-serif;
 
 .submit {
 cursor: pointer;
-border-radius: 5em;
+/* border-radius: 5em; */
 color: #fff;
 background: linear-gradient(to right, gray, blue);
 border: 0;
 padding-left: 40px;
 padding-right: 40px;
+margin-top: 20px;
 margin-bottom: 20px !important;
 /* padding-bottom: 10px;
 padding-top: 10px; */

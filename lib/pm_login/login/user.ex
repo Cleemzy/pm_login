@@ -117,6 +117,38 @@ defmodule PmLogin.Login.User do
     end
 
 
+  def update_password_changeset(user, attrs) do
+    IO.inspect attrs
+    IO.inspect user.id
+    user
+    |> cast(attrs, [])
+    |> required_old_password(attrs)
+    |> validate_old_password(user, attrs)
+    |> required_new_password(attrs)
+    |> put_change(:password, Bcrypt.hash_pwd_salt(attrs["new_password"]))
+  end
+
+  def required_old_password(changeset, attrs) do
+    case attrs["old_password"] do
+      "" -> changeset |> add_error(:old_password, "Entrez votre ancien mot de passe.")
+      _ -> changeset
+    end
+  end
+
+  def validate_old_password(changeset, user, attrs) do
+      case Bcrypt.verify_pass(attrs["old_password"], user.password) do
+        false -> add_error(changeset, :old_password, "Ne correspond pas à l'ancien mot de passe")
+        _ -> changeset
+      end
+  end
+
+  def required_new_password(changeset, attrs) do
+    case attrs["new_password"] do
+      "" -> changeset |> add_error(:new_password, "Entrez nouveau mot de passe.")
+      _ -> changeset
+    end
+  end
+
 
   def profile_changeset(user, attrs) do
     user
@@ -156,7 +188,7 @@ defmodule PmLogin.Login.User do
     |> validate_required_email
     |> unique_constraint(:username, message: "Nom d'utilisateur déjà pris")
     |> validate_format(:email, ~r/@/, message: "Format d'email non valide, ajoutez '@' par exemple ")
-    |> unique_constraint(:email, message: "Adresse e-mail déjà utilisé")
+    |> unique_constraint(:email, message: "Adresse e-mail déjà utilisée")
     |> validate_confirmation(:email, message: "Ne correspond pas à l'adresse mail donnée")
     |> validate_confirmation(:password, message: "Les mots de passe ne correspondent pas")
     |> crypt_pass

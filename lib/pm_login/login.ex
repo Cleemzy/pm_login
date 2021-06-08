@@ -382,6 +382,12 @@ defmodule PmLogin.Login do
     |> Repo.update()
   end
 
+  def update_password(%User{} = user, attrs) do
+    user
+    |> User.update_password_changeset(attrs)
+    |> Repo.update()
+  end
+
   @doc """
   Deletes a user.
 

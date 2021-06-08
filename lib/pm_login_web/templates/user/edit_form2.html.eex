@@ -34,6 +34,8 @@
 </div>
 
   <br/>
+  <%= link "Modifier mot de passe",to: Routes.user_path(@socket, :edit_password, @user), class: "btn btn-outline-dark btn-lg ", id: "signin", style: "float: right;" %>
+  <br/>
   <%= submit "Appliquer modifications", class: "submit", id: "signin" %>
 
 <% end %>

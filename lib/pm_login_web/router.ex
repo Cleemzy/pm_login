@@ -51,9 +51,12 @@ COMMENTED ROUTES ARE NOT TO BE DELETED BUT JUST NOT USED AT THE TIME
     get "/my_requests", ClientsRequestController, :my_requests
 
     get "/users/:id/edit_profile", UserController, :edit_profile
+    get "/users/:id/edit_password", UserController, :edit_password
     get "/list_users", UserController, :list
     put "/profile/:id", UserController, :update_profile
     patch "/profile/:id", UserController, :update_profile
+    put "/profile_pass/:id", UserController, :update_password
+    patch "/profile_pass/:id", UserController, :update_password
     put "/user/:id", UserController, :archive
     patch "/user/:id", UserController, :archive
     put "/user/restore/:id", UserController, :restore

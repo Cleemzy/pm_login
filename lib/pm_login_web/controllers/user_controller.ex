@@ -97,6 +97,26 @@ defmodule PmLoginWeb.UserController do
     end
   end
 
+  def edit_password(conn, %{"id" => id}) do
+    if Login.is_connected?(conn) do
+      user = Login.get_curr_user(conn)
+      changeset = Login.change_user(user)
+      cond do
+          # Login.is_admin?(conn) -> render(conn, "edit_profile.html", user: user, changeset: changeset, layout: {PmLoginWeb.LayoutView, "admin_layout.html"})
+          Login.is_admin?(conn) -> LiveView.Controller.live_render(conn, PmLoginWeb.User.AdminEditPasswordLive, session: %{"user" => user,"changeset" => changeset,"curr_user_id" => get_session(conn, :curr_user_id)}, router: PmLoginWeb.Router)
+          Login.is_attributor?(conn) -> LiveView.Controller.live_render(conn, PmLoginWeb.User.AttributorEditPasswordLive, session: %{"user" => user,"changeset" => changeset,"curr_user_id" => get_session(conn, :curr_user_id)}, router: PmLoginWeb.Router)
+          Login.is_contributor?(conn) -> LiveView.Controller.live_render(conn, PmLoginWeb.User.ContributorEditPasswordLive, session: %{"user" => user,"changeset" => changeset,"curr_user_id" => get_session(conn, :curr_user_id)}, router: PmLoginWeb.Router)
+          Login.is_client?(conn) -> LiveView.Controller.live_render(conn, PmLoginWeb.User.ClientEditPasswordLive, session: %{"user" => user,"changeset" => changeset,"curr_user_id" => get_session(conn, :curr_user_id)}, router: PmLoginWeb.Router)
+          true -> render(conn, "edit_profile.html", user: user, changeset: changeset)
+      end
+
+    else
+      conn
+      |> put_flash(:error, "Connectez-vous d'abord!")
+      |> redirect(to: Routes.page_path(conn, :index))
+    end
+  end
+
   def edit_profile(conn, %{"id" => id}) do
     # current_id = get_session(conn, :curr_user_id)
     if Login.is_connected?(conn) do
@@ -155,6 +175,9 @@ defmodule PmLoginWeb.UserController do
   def update_profile(conn, %{"id" => id, "user" => user_params}) do
     user = Login.get_user!(id)
 
+    IO.puts "update_profile"
+    IO.inspect user_params
+
     case Login.update_profile(user, user_params) do
       {:ok, user} ->
         conn
@@ -162,9 +185,39 @@ defmodule PmLoginWeb.UserController do
         |> redirect(to: Routes.user_path(conn, :show, user))
 
       {:error, %Ecto.Changeset{} = changeset} ->
-        render(conn, "edit_profile.html", user: user, changeset: changeset)
+        # render(conn, "edit_profile.html", user: user, changeset: changeset)
+        cond do
+          Login.is_admin?(conn) -> LiveView.Controller.live_render(conn, PmLoginWeb.User.AdminEditprofileLive, session: %{"user" => user,"changeset" => changeset,"curr_user_id" => get_session(conn, :curr_user_id)}, router: PmLoginWeb.Router)
+          Login.is_attributor?(conn) -> LiveView.Controller.live_render(conn, PmLoginWeb.User.AttributorEditprofileLive, session: %{"user" => user,"changeset" => changeset,"curr_user_id" => get_session(conn, :curr_user_id)}, router: PmLoginWeb.Router)
+          Login.is_contributor?(conn) -> LiveView.Controller.live_render(conn, PmLoginWeb.User.ContributorEditprofileLive, session: %{"user" => user,"changeset" => changeset,"curr_user_id" => get_session(conn, :curr_user_id)}, router: PmLoginWeb.Router)
+          Login.is_client?(conn) -> LiveView.Controller.live_render(conn, PmLoginWeb.User.ClientEditprofileLive, session: %{"user" => user,"changeset" => changeset,"curr_user_id" => get_session(conn, :curr_user_id)}, router: PmLoginWeb.Router)
+          true -> render(conn, "edit_profile.html", user: user, changeset: changeset)
+        end
     end
   end
+
+  def update_password(conn, %{"id" => id, "user" => user_params}) do
+    user = Login.get_user!(id)
+
+    case Login.update_password(user, user_params) do
+      {:ok, user} ->
+        conn
+        |> put_flash(:info, "Mot de passe mis à jour.")
+        |> redirect(to: Routes.user_path(conn, :show, user))
+
+      {:error, %Ecto.Changeset{} = changeset} ->
+        # render(conn, "edit_profile.html", user: user, changeset: changeset)
+        cond do
+          Login.is_admin?(conn) -> LiveView.Controller.live_render(conn, PmLoginWeb.User.AdminEditPasswordLive, session: %{"user" => user,"changeset" => changeset,"curr_user_id" => get_session(conn, :curr_user_id)})
+          Login.is_attributor?(conn) -> LiveView.Controller.live_render(conn, PmLoginWeb.User.AttributorEditPasswordLive, session: %{"user" => user,"changeset" => changeset,"curr_user_id" => get_session(conn, :curr_user_id)})
+          Login.is_contributor?(conn) -> LiveView.Controller.live_render(conn, PmLoginWeb.User.ContributorEditPasswordLive, session: %{"user" => user,"changeset" => changeset,"curr_user_id" => get_session(conn, :curr_user_id)})
+          Login.is_client?(conn) -> LiveView.Controller.live_render(conn, PmLoginWeb.User.ClientEditPasswordLive, session: %{"user" => user,"changeset" => changeset,"curr_user_id" => get_session(conn, :curr_user_id)})
+          true -> render(conn, "edit_profile.html", user: user, changeset: changeset)
+        end
+    end
+  end
+
+
 
   def update(conn, %{"id" => id, "user" => user_params}) do
     user = Login.get_user!(id)
