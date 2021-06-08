@@ -1,3 +1,4 @@
+<% alias PmLogin.Utilities %>
 <h1><span class="material-icons mat__ico__big">content_paste</span>Contrats d'assistance</h1>
 
 <table id="tb-auth">
@@ -16,8 +17,8 @@
     <tr>
       <td><%= assist_contract.title %></td>
       <td><%= assist_contract.company.name %></td>
-      <td><%= assist_contract.date_start %></td>
-      <td><%= assist_contract.date_end %></td>
+      <td><%= Utilities.simple_date_format(assist_contract.date_start) %></td>
+      <td><%= Utilities.simple_date_format(assist_contract.date_end) %></td>
 
       <td>
 

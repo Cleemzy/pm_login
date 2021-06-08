@@ -17,6 +17,7 @@ defmodule PmLogin.Monitoring.Task do
     field :progression, :integer
     field :title, :string
     field :achieved_at, :naive_datetime
+    field :hidden, :boolean
     # field :parent_id, :id
     # field :parent_id, :id
     # field :project_id, :id
@@ -34,6 +35,11 @@ defmodule PmLogin.Monitoring.Task do
     belongs_to :project, Project
     # has_many :children, Task
     timestamps()
+  end
+
+  def hidden_changeset(task, attrs) do
+    task
+    |> cast(attrs, [:hidden])
   end
 
   @doc false

@@ -22,6 +22,8 @@
         <%= if @is_contributor do%>
           <a href="#" class="btn btn-lg btn-secondary" phx-click="show-secondary"><i class="bi bi-plus-circle"></i> Créer tâche secondaire</a>
         <% end %>
+          <a href="#" class="btn btn-lg btn-info" style="float: right;" phx-click="show_hidden_tasks">Afficher tâches cachées <i class="bi bi-plus-circle"></i></a>
+
       </div>
       <div class="column column-30">
         <div class="basecontents__without__radius">
@@ -67,9 +69,9 @@
           <%= for card <- stage.cards do %>
             <%= if @is_admin or @is_attributor or @curr_user_id == card.task.contributor_id do %>
           <%= if is_nil(card.task.parent_id) do %>
-          <div data-card-id="<%= card.id %>" class="card basecontents__without__radius">
+          <div data-card-id="<%= card.id %>" class="card basecontents__without__radius" style="display: <%= if card.task.hidden, do: "none !important" %>;">
           <% else %>
-          <div data-card-id="<%= card.id %>" class="card basecontents__without__radius secondary__kanban">
+          <div data-card-id="<%= card.id %>" class="card basecontents__without__radius secondary__kanban" style="display: <%= if card.task.hidden, do: "none !important" %>;">
           <% end %>
 
 
@@ -110,10 +112,10 @@
                     </div>
                  <% end %>
           </div>
-          <i class="bi bi-plus plus__icon" phx-click="show_plus_modal" phx-value-id="<%= card.id %>"></i>
-          <i class="bi bi-chat-left-dots comment__icon" phx-click="show_comments_modal" phx-value-id="<%= card.id %>"></i>
-          <i class="bi bi-pencil-square modif__icon" phx-click="show_modif_modal" phx-value-id="<%= card.id %>"></i>
-
+          <i title="Afficher" style="display: <%= if card.task.hidden, do: "none !important" %>;"class="bi bi-plus plus__icon" phx-click="show_plus_modal" phx-value-id="<%= card.id %>"></i>
+          <i title="Commenter" style="display: <%= if card.task.hidden, do: "none !important" %>;"class="bi bi-chat-left-dots comment__icon" phx-click="show_comments_modal" phx-value-id="<%= card.id %>"></i>
+          <i title="Modifier" style="display: <%= if card.task.hidden, do: "none !important" %>;"class="bi bi-pencil-square modif__icon" phx-click="show_modif_modal" phx-value-id="<%= card.id %>"></i>
+          <i title="Cacher" style="display: <%= if card.task.hidden, do: "none !important" %>;"class="bi bi-x delete__icon" phx-click="hide-card" phx-value-id="<%= card.task.id %>"></i>
 
             <% end %>
           <% end %>

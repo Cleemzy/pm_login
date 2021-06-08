@@ -1,3 +1,4 @@
+<% alias PmLogin.Utilities %>
 <h1><span class="material-icons mat__ico__big">content_paste</span> <%= @assist_contract.title %></h1>
 
 <div class="basecontents__without__radius project-show">
@@ -10,12 +11,12 @@
 
   <li>
     <strong>Date de début:</strong>
-    <%= @assist_contract.date_start %>
+    <%= Utilities.letters_date_format(@assist_contract.date_start) %>
   </li>
 
   <li>
     <strong>Date de fin:</strong>
-    <%= @assist_contract.date_end %>
+    <%= Utilities.letters_date_format(@assist_contract.date_end) %>
   </li>
 
 </ul>

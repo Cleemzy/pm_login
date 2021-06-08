@@ -15,6 +15,7 @@ defmodule PmLoginWeb.Project.BoardLive do
   def mount(_params,%{"curr_user_id" => curr_user_id ,"pro_id" => pro_id}, socket) do
     if connected?(socket), do: Kanban.subscribe()
     Monitoring.subscribe()
+    Monitoring.hidden_subscribe()
     Services.subscribe()
 
     layout = case Login.get_user!(curr_user_id).right_id do
@@ -46,6 +47,29 @@ defmodule PmLoginWeb.Project.BoardLive do
                     primaries: list_primaries, is_contributor: Monitoring.is_contributor?(curr_user_id),task_changeset: task_changeset, modif_changeset: modif_changeset, show_comments_modal: false,
                     show_notif: false, notifs: Services.list_my_notifications_with_limit(curr_user_id, 4), secondary_changeset: secondary_changeset, comment_changeset: Monitoring.change_comment(%Comment{})), layout: layout
                   }
+  end
+
+  def handle_event("hide-card", %{"id" => id}, socket) do
+    task = Monitoring.get_task!(id)
+    Monitoring.hide_task(task)
+
+    {:noreply, socket}
+  end
+
+  def handle_event("show_hidden_tasks", _params, socket) do
+    pro_id = socket.assigns.board.project.id
+    Monitoring.show_hidden_tasks(pro_id)
+    {:noreply, socket}
+  end
+
+  def handle_info({"hidden_subscription", [:task, :hidden], _}, socket) do
+    board_id = socket.assigns.board.id
+    {:noreply, socket |> assign(board: Kanban.get_board!(board_id))}
+  end
+
+  def handle_info({"hidden_subscription", [:tasks, :shown], _}, socket) do
+    board_id = socket.assigns.board.id
+    {:noreply, socket |> assign(board: Kanban.get_board!(board_id))}
   end
 
   def handle_event("switch-notif", %{}, socket) do

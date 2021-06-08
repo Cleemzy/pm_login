@@ -48,6 +48,7 @@
   background-color: rgb(228, 228, 228);
   border: 1px solid gray;
   margin-bottom: 30px;
+  border-radius: 10px;
 }
 
 .stage__name {
@@ -70,13 +71,25 @@
   top: 2px;
 }
 
+.delete__icon{
+  color: gray;
+  cursor: pointer;
+  font-size: 30px;
+  position: relative;
+  left: 139px;
+  top: -55px;
+}
+.delete__icon:hover{
+  color : lightgray;
+}
+
 .modif__icon{
   color: gray;
   cursor: pointer;
   font-size: 20px;
   position: relative;
   left: 168px;
-  top: -55px;
+  top: -85px;
 }
 .modif__icon:hover{
   color : lightgray;
@@ -88,7 +101,7 @@
   font-size: 20px;
   position: relative;
   left: 192px;
-  top: -85px;
+  top: -115px;
 }
 .comment__icon:hover{
   color : lightgray;
@@ -100,7 +113,7 @@
   font-size: 30px;
   position: relative;
   left: 220px;
-  top: -110px;
+  top: -140px;
 }
 .plus__icon:hover{
   color : lightgray;

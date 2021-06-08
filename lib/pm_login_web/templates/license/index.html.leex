@@ -1,3 +1,4 @@
+<% alias PmLogin.Utilities %>
 <h1><span class="material-icons mat__ico__big">description</span>Licences</h1>
 
 <table id="tb-auth">
@@ -16,8 +17,8 @@
     <tr>
       <td><%= license.title %></td>
       <td><%= license.company.name %></td>
-      <td><%= license.date_start %></td>
-      <td><%= license.date_end %></td>
+      <td><%= Utilities.simple_date_format(license.date_start) %></td>
+      <td><%= Utilities.simple_date_format(license.date_end) %></td>
 
       <td>
 

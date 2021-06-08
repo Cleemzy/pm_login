@@ -22,6 +22,14 @@ defmodule PmLogin.Monitoring do
     Phoenix.PubSub.broadcast(PmLogin.PubSub, @topic, {__MODULE__, event, result})
   end
 
+  def hidden_subscribe do
+    Phoenix.PubSub.subscribe(PmLogin.PubSub, "hidden_subscription")
+  end
+
+  defp broadcast_hidden_change(tuple, event) do
+    Phoenix.PubSub.broadcast(PmLogin.PubSub, "hidden_subscription", {"hidden_subscription", event, tuple})
+  end
+
   #DATE CALCULUS
 
   def avg_working_hours(%Task{} = t) do
@@ -676,6 +684,13 @@ def validate_start_deadline(changeset) do
     Repo.all(Task)
   end
 
+  def show_hidden_tasks(project_id) do
+    query = from t in Task,
+            where: t.hidden and t.project_id==^project_id
+    Repo.update_all(query, set: [hidden: false])
+    |> broadcast_hidden_change([:tasks, :shown])
+  end
+
   @doc """
   Gets a single task.
 
@@ -799,6 +814,13 @@ def validate_start_deadline(changeset) do
     task
     |> Task.update_changeset(attrs)
     |> Repo.update()
+  end
+
+  def hide_task(%Task{} = task) do
+    task
+    |> Task.hidden_changeset(%{"hidden" => true})
+    |> Repo.update()
+    |> broadcast_hidden_change([:task, :hidden])
   end
 
   def round_project_progression(id) do
