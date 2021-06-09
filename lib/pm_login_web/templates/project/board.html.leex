@@ -43,6 +43,11 @@
     </div>
   </div>
 
+  <div class="">
+    <a href="#" phx-click="show_alert_test">show alert</a>
+    <a href="#" phx-click="color_alert_test" style="color: red;">JS test</a>
+  </div>
+
   <div class="meter">
     <%
     prog_color = cond do
@@ -59,7 +64,7 @@
     </span>
   </div>
 
-  <section class="board" phx-hook="Board" style="">
+  <section id="the_board" class="board" phx-hook="Board" style="">
     <%= for stage <- @board.stages do %>
       <div data-stage-id="<%= stage.id %>" class="stage basecontents__without__shadow__and__radius">
         <div class="stage__header basecontents__without__radius">

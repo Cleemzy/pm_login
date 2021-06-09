@@ -37,7 +37,7 @@ defmodule PmLoginWeb.LiveComponent.CommentsModalLive do
   use Phoenix.LiveComponent
   import Phoenix.HTML.Form
   import PmLoginWeb.ErrorHelpers
-  
+
   @defaults %{
     left_button: "Cancel",
     left_button_action: nil,
@@ -59,7 +59,7 @@ defmodule PmLoginWeb.LiveComponent.CommentsModalLive do
     <% current_user = PmLogin.Login.get_user!(@curr_user_id) %>
     <div id="modal-<%= @id %>">
       <!-- Modal Background -->
-      <div class="modal-container"
+      <div id="comment_modal_container" class="modal-container"
           phx-hook="ScrollLock">
         <div class="modal-inner-container">
           <div class="modal-card-comments">

@@ -82,7 +82,7 @@
       <% put = true %>
       <div class="container">
         <p class="alert alert-info basecontents" role="alert"
-          phx-click="lv:clear-flash"
+          phx-click="lv:clear-flash" phx-hook="AnimateAlert" id="alert_anim"
           phx-value-key="info"><%= live_flash(@flash, :info) %></p>
 
         <p class="alert alert-danger basecontents" role="alert"

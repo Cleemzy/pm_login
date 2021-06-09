@@ -118,6 +118,15 @@ Hooks.ScrollLock = {
   }
 };
 
+Hooks.AnimateAlert = {
+  mounted(){
+    var alert = document.querySelector('#alert_anim');
+    this.handleEvent("AnimateAlert", ({}) =>
+      alert.style.backgroundColor = "red"
+    )
+  }
+};
+
 Hooks.MessageBody = {
   mounted(){
     var messageBody = document.querySelector('#messageBody');

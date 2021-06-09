@@ -20,7 +20,7 @@
           <a href="#"><i class="bi bi-list nav__toggle " id="hamburger"></i></a>
           <ul class="nav__wrapper">
             <li class="nav__item"><a href="<%= Routes.user_path(@socket, :index) %>"><span class="material-icons mat__ico">home</span> Accueil</a></li>
-            <li class="nav__item"><a href="<%= Routes.user_path(@socket, :show, @curr_user_id) %>"><span class="material-icons mat__ico">account_circle</span> Profil</a></li>
+            <li class="nav__item"><a href="<%= Routes.user_path(@socket, :show, @curr_user_id) %>"><span class="material-icons mat__ico">account_circle</span> <%= PmLogin.Login.get_user!(@curr_user_id).username %></a></li>
           </ul>
         </nav>
       </div>
