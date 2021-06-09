@@ -39,7 +39,7 @@ defmodule PmLoginWeb.Project.BoardLive do
     list_contributors = Enum.map(contributors, fn (%User{} = p)  -> {p.username, p.id} end)
 
     secondary_changeset = Monitoring.change_task(%Task{})
-    my_primary_tasks = Monitoring.list_primary_tasks(curr_user_id)
+    my_primary_tasks = Monitoring.list_primary_tasks(curr_user_id, pro_id)
     list_primaries = my_primary_tasks |> Enum.map(fn (%Task{} = p) -> {p.title, p.id} end)
 
     {:ok, socket |> assign(is_attributor: Monitoring.is_attributor?(curr_user_id),is_admin: Monitoring.is_admin?(curr_user_id), show_plus_modal: false,curr_user_id: curr_user_id, pro_id: pro_id, show_secondary: false,
@@ -191,6 +191,11 @@ defmodule PmLoginWeb.Project.BoardLive do
           Monitoring.add_progression_to_project(project)
         end
 
+        #ADDING MOTHER TASK TO ACHIEVED STAGE
+        if Monitoring.is_task_mother?(real_task) and Kanban.get_stage!(card.stage_id).status_id != 5 and real_task.status_id == 5 do
+          Monitoring.achieve_children_tasks(real_task, socket.assigns.curr_user_id)
+        end
+
         #REMOVING PRIMARY TASK FROM ACHIEVED STAGE
         if Monitoring.is_task_primary?(real_task) and Kanban.get_stage!(card.stage_id).status_id == 5 and real_task.status_id != 5 do
           project = socket.assigns.board.project
@@ -249,7 +254,7 @@ defmodule PmLoginWeb.Project.BoardLive do
 
     #for secondary task modal select form
     curr_user_id = socket.assigns.curr_user_id
-    my_primary_tasks = Monitoring.list_primary_tasks(curr_user_id)
+    my_primary_tasks = Monitoring.list_primary_tasks(curr_user_id, socket.assigns.board.project.id)
     list_primaries = my_primary_tasks |> Enum.map(fn (%Task{} = p) -> {p.title, p.id} end)
 
     {:noreply, assign(socket, board: Kanban.get_board!(board_id), primaries: list_primaries)}
@@ -260,7 +265,7 @@ defmodule PmLoginWeb.Project.BoardLive do
 
     #for secondary task modal select form
     curr_user_id = socket.assigns.curr_user_id
-    my_primary_tasks = Monitoring.list_primary_tasks(curr_user_id)
+    my_primary_tasks = Monitoring.list_primary_tasks(curr_user_id, socket.assigns.board.project.id)
     list_primaries = my_primary_tasks |> Enum.map(fn (%Task{} = p) -> {p.title, p.id} end)
 
     {:noreply, assign(socket, board: Kanban.get_board!(board_id), primaries: list_primaries)}

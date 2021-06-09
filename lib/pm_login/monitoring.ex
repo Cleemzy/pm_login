@@ -409,7 +409,33 @@ def validate_start_deadline(changeset) do
     update_project_progression(project, %{"progression" => round_project_progression(p.id)})
   end
 
+  def get_task_mother!(id) do
+    card_ch_query = from c in Card
+    children_query = from ch in Task,
+                    preload: [card: ^card_ch_query]
+    query = from t in Task,
+            where: t.id == ^id,
+            preload: [children: ^children_query]
+    Repo.one!(query)
+  end
 
+  def is_task_mother?(%Task{} = t) do
+    task = get_task_mother!(t.id)
+    length(task.children)>0
+  end
+
+  def achieve_children_tasks(%Task{} = t, curr_user_id) do
+    task = get_task_mother!(t.id)
+    for child <- task.children do
+
+      stage_id = get_achieved_stage_id_from_project_id!(child.project_id)
+      Kanban.put_childcard_to_achieve(child.card, %{"stage_id" => stage_id})
+      update_task(child, %{"status_id" => 5})
+
+    end
+    update_task(task, %{"progression" => 100})
+    Services.send_notifs_to_admins_and_attributors(curr_user_id, "La tâche #{task.title} a été achevée avec toutes ses tâches filles.")
+  end
 
   def is_task_primary?(%Task{} = t) do
     is_nil(t.parent_id)
@@ -465,6 +491,18 @@ def validate_start_deadline(changeset) do
             preload: [board: ^board_query]
     stage = Repo.one!(query).board.stages
     |> Enum.find(fn(%Stage{} = s) -> s.status_id==4 end)
+    stage.id
+  end
+
+  def get_achieved_stage_id_from_project_id!(id) do
+    stages_query = from sta in Stage
+    board_query = from b in Board,
+                  preload: [stages: ^stages_query]
+    query = from p in Project,
+            where: p.id == ^id,
+            preload: [board: ^board_query]
+    stage = Repo.one!(query).board.stages
+    |> Enum.find(fn(%Stage{} = s) -> s.status_id==5 end)
     stage.id
   end
 
@@ -639,9 +677,9 @@ def validate_start_deadline(changeset) do
       [%Task{}, ...]
 
   """
-  def list_primary_tasks(contributor_id) do
+  def list_primary_tasks(contributor_id, project_id) do
     query = from t in Task,
-            where: is_nil(t.parent_id) and t.contributor_id == ^contributor_id
+            where: is_nil(t.parent_id) and t.contributor_id == ^contributor_id and t.project_id == ^project_id
 
     Repo.all(query)
   end

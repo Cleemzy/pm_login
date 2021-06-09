@@ -30,7 +30,9 @@ defmodule PmLogin.Kanban do
       company_query = from comp in Company
       active_client_query = from ac in ActiveClient,
                             preload: [company: ^company_query,user: ^ac_user_query]
-      p_tasks_query = from tas in Task
+      p_t_children_query = from cdren in Task
+      p_tasks_query = from tas in Task,
+                      preload: [children: ^p_t_children_query]
       project_query = from pro in Project,
                       preload: [tasks: ^p_tasks_query, active_client: ^active_client_query]
 
@@ -155,6 +157,13 @@ defmodule PmLogin.Kanban do
 
 
   def put_mothercard_to_loading(card, attrs) do
+    card
+    |> Card.update_mother_changeset(attrs)
+    |> Repo.update()
+    |> notify_subscribers([:card, :updated])
+  end
+
+  def put_childcard_to_achieve(card, attrs) do
     card
     |> Card.update_mother_changeset(attrs)
     |> Repo.update()
