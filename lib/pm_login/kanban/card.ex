@@ -28,4 +28,10 @@ defmodule PmLogin.Kanban.Card do
     |> validate_required([:name, :stage_id, :position])
     |> Position.recompute_positions(:stage_id)
   end
+
+  def update_mother_changeset(card, attrs) do
+    card
+    |> cast(attrs, [:stage_id])
+    |> Position.insert_at_bottom(:stage_id)
+end
 end

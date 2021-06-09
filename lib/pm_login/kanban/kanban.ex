@@ -153,6 +153,14 @@ defmodule PmLogin.Kanban do
     |> notify_subscribers([:card, :updated])
   end
 
+
+  def put_mothercard_to_loading(card, attrs) do
+    card
+    |> Card.update_mother_changeset(attrs)
+    |> Repo.update()
+    |> notify_subscribers([:card, :updated])
+  end
+
   @topic "board"
 
   def subscribe do

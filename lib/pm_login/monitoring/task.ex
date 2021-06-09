@@ -27,6 +27,7 @@ defmodule PmLogin.Monitoring.Task do
     # field :attributor_id, :id
     has_many :children, PmLogin.Monitoring.Task, foreign_key: :parent_id, references: :id
     belongs_to :parent, PmLogin.Monitoring.Task
+    has_one :card, Card
     belongs_to :contributor, User
     belongs_to :priority, Priority
     belongs_to :attributor, User

@@ -11,7 +11,7 @@ defmodule PmLogin.Monitoring do
   alias PmLogin.Login
   alias PmLogin.Services
   alias PmLogin.Login.User
-
+  alias PmLogin.Kanban.{Board, Stage, Card}
 
   @topic inspect(__MODULE__)
   def subscribe do
@@ -456,6 +456,18 @@ def validate_start_deadline(changeset) do
     Repo.one!(project_query)
   end
 
+  def get_loading_stage_id_from_project_id!(id) do
+    stages_query = from sta in Stage
+    board_query = from b in Board,
+                  preload: [stages: ^stages_query]
+    query = from p in Project,
+            where: p.id == ^id,
+            preload: [board: ^board_query]
+    stage = Repo.one!(query).board.stages
+    |> Enum.find(fn(%Stage{} = s) -> s.status_id==4 end)
+    stage.id
+  end
+
   @doc """
   Creates a project.
 
@@ -708,10 +720,10 @@ def validate_start_deadline(changeset) do
   def get_task!(id), do: Repo.get!(Task, id)
 
   def get_task_with_children!(id) do
-
+    card_query = from c in Card
     query = from t in Task,
             where: t.id == ^id,
-            preload: [children: :children]
+            preload: [children: :children, card: ^card_query]
 
     Repo.one!(query)
   end
@@ -730,6 +742,18 @@ def validate_start_deadline(changeset) do
     moth = get_task_with_children!(t.id)
     update_mother_progression(moth, %{"progression" => round_mother_progression(t.id)})
 
+    IO.inspect moth.project_id
+    IO.inspect moth.card
+    # IO.inspect moth.card_id
+
+    IO.inspect moth.progression
+    
+    if moth.progression == 100 do
+      stage_id = get_loading_stage_id_from_project_id!(moth.project_id)
+      Kanban.put_mothercard_to_loading(moth.card, %{"stage_id" => stage_id})
+      update_task(moth, %{"status_id" => 4})
+    end
+
   end
 
   def substract_mother_task_progression_when_removing_child_from_achieved(%Task{} = child) do
@@ -741,7 +765,6 @@ def validate_start_deadline(changeset) do
     #round progression to 0 or 100 if all children are achieved or none
     moth = get_task_with_children!(t.id)
     update_mother_progression(moth, %{"progression" => round_mother_progression(t.id)})
-
   end
 
   def substract_mother_task_progression_when_creating_child(%Task{} = child) do
@@ -754,6 +777,7 @@ def validate_start_deadline(changeset) do
     #round progression to 0 or 100 if all children are achieved or none
     moth = get_task_with_children!(t.id)
     update_mother_progression(moth, %{"progression" => round_mother_progression(t.id)})
+
   end
 
 
