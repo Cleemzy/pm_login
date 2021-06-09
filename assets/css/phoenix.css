@@ -313,6 +313,7 @@ justify-content: center;
 
 .submit:hover{
  opacity: 0.8;
+ /* filter: blur(0.8px); */
  /* background: linear-gradient(to left, gray, blue); */
 }
 

@@ -22,14 +22,21 @@
         <%= if @is_contributor do%>
           <a href="#" class="btn btn-lg btn-secondary" phx-click="show-secondary"><i class="bi bi-plus-circle"></i> Créer tâche secondaire</a>
         <% end %>
-          <a href="#" class="btn btn-lg btn-info" style="float: right;" phx-click="show_hidden_tasks">Afficher tâches cachées <i class="bi bi-plus-circle"></i></a>
+          <a href="#" class="btn btn-lg btn-info hide__task__button" style="float: right;" phx-click="show_hidden_tasks">Afficher tâches cachées <i class="bi bi-plus-circle"></i></a>
 
       </div>
       <div class="column column-30">
         <div class="basecontents__without__radius">
           <div class="column">
-            <div class="row"><p>pour <h1 style="margin-left: 2%;"> <%= @board.project.active_client.company.name %></h1><img class="profile-pic-header" src="<%= Routes.static_path(@socket, "/#{@board.project.active_client.company.logo}") %>" width="50" style="margin-left: 10px;"/></p></div>
-            <p><%= @board.project.active_client.user.username %></p>
+            <div class="row">
+            <p>pour </p>
+            <div class="" style="margin: 0 auto; width: 200px;">
+                <h1 style="margin-left: 2%;"> <%= @board.project.active_client.company.name %><img class="profile-pic-header" src="<%= Routes.static_path(@socket, "/#{@board.project.active_client.company.logo}") %>" width="50" style="position: relative; top: 10px; margin-left: 10px;"/></h1>
+
+
+            </div>
+            </div>
+            <p><%= "(#{@board.project.active_client.user.username})" %></p>
           </div>
         </div>
       </div>

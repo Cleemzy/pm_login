@@ -28,6 +28,17 @@
   border: 1px solid transparent;
   border-radius: 4px;
   z-index: 999;
+  opacity: 1;
+  visibility: visible;
+  transition: visibility 0.2s, opacity 0.2s linear;
+
+  // hide alert
+    -moz-animation: cssAnimation 0.2s linear 3s forwards;
+     -webkit-animation: cssAnimation 0.2s linear 3s forwards;
+     -o-animation: cssAnimation 0.2s linear 3s forwards;
+     animation: cssAnimation 0.2s linear 3s forwards;
+     -webkit-animation-fill-mode: forwards;
+     animation-fill-mode: forwards;
 }
 
 @media (max-width: 650px){
@@ -36,6 +47,27 @@
     right: 20px;
   }
 }
+
+
+// #hideMe {
+//     -moz-animation: cssAnimation 0s ease-in 5s forwards;
+//     /* Firefox */
+//     -webkit-animation: cssAnimation 0s ease-in 5s forwards;
+//     /* Safari and Chrome */
+//     -o-animation: cssAnimation 0s ease-in 5s forwards;
+//     /* Opera */
+//     animation: cssAnimation 0s ease-in 5s forwards;
+//     -webkit-animation-fill-mode: forwards;
+//     animation-fill-mode: forwards;
+// }
+
+@-webkit-keyframes cssAnimation {
+    to {
+        opacity: 0;
+        visibility: hidden;
+    }
+}
+
 
 
 .alert-info {

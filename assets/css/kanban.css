@@ -11,6 +11,15 @@
   position: relative;
   left: -8%;
 }
+
+@media (max-width: 650px) {
+  .hide__task__button{
+    margin-top: 10px;
+    margin-bottom: 10px;
+    float: left !important;
+  }
+}
+
 .board {
   display: flex;
   flex-direction: row;
