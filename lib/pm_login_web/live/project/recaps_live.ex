@@ -2,13 +2,15 @@ defmodule PmLoginWeb.Project.RecapsLive do
   use Phoenix.LiveView
   alias PmLogin.Services
   alias PmLogin.Monitoring
+  alias PmLogin.MyContex
 
   def mount(_params, %{"curr_user_id" => curr_user_id}, socket) do
     Services.subscribe()
     Monitoring.subscribe()
+
     {:ok,
        socket
-       |> assign(todays: Monitoring.list_achieved_tasks_today, weeks: Monitoring.list_achieved_tasks_this_week, months: Monitoring.list_achieved_tasks_this_month)
+       |> assign(output_todays: MyContex.todays_dataset, output_month: MyContex.this_month_dataset, output_week: MyContex.this_week_dataset,todays: Monitoring.list_achieved_tasks_today, weeks: Monitoring.list_achieved_tasks_this_week, months: Monitoring.list_achieved_tasks_this_month)
        |> assign(curr_user_id: curr_user_id, show_notif: false, notifs: Services.list_my_notifications_with_limit(curr_user_id, 4)),
        layout: {PmLoginWeb.LayoutView, "board_layout_live.html"}
        }

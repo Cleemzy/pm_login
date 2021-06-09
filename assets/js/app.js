@@ -118,14 +118,14 @@ Hooks.ScrollLock = {
   }
 };
 
-Hooks.AnimateAlert = {
-  mounted(){
-    var alert = document.querySelector('#alert_anim');
-    this.handleEvent("AnimateAlert", ({}) =>
-      alert.style.backgroundColor = "red"
-    )
-  }
-};
+// Hooks.AnimateAlert = {
+//   mounted(){
+//     var alert = document.querySelector('#alert_anim');
+//     this.handleEvent("AnimateAlert", ({}) =>
+//       alert.style.opacity = 1
+//     )
+//   }
+// };
 
 Hooks.MessageBody = {
   mounted(){

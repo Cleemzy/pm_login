@@ -154,7 +154,7 @@ defmodule PmLogin.Monitoring.Task do
     cond do
       task.status_id != 5 and new_status == 5 ->
         IO.puts "achevée"
-        changeset |> put_change(:achieved_at, Services.current_date)
+        changeset |> put_change(:achieved_at, NaiveDateTime.local_now)
       true -> changeset
     end
 

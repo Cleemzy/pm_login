@@ -29,15 +29,15 @@
   border-radius: 4px;
   z-index: 999;
   opacity: 1;
-  visibility: visible;
+  // visibility: visible;
 
   // hide alert
-    -moz-animation: cssAnimation 0.2s linear 3s forwards;
-     -webkit-animation: cssAnimation 0.2s linear 3s forwards;
-     -o-animation: cssAnimation 0.2s linear 3s forwards;
-     animation: cssAnimation 0.2s linear 3s forwards;
-     -webkit-animation-fill-mode: forwards;
-     animation-fill-mode: forwards;
+    // -moz-animation: cssAnimation 0.2s linear 3s forwards;
+    //  -webkit-animation: cssAnimation 0.2s linear 3s forwards;
+    //  -o-animation: cssAnimation 0.2s linear 3s forwards;
+    //  animation: cssAnimation 0.2s linear 3s forwards;
+    //  -webkit-animation-fill-mode: forwards;
+    //  animation-fill-mode: forwards;
 }
 
 @media (max-width: 650px){
@@ -63,7 +63,7 @@
 @-webkit-keyframes cssAnimation {
     to {
         opacity: 0;
-        visibility: hidden;
+        // visibility: hidden;
     }
 }
 
