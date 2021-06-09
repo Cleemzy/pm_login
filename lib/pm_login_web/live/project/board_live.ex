@@ -176,7 +176,8 @@ defmodule PmLoginWeb.Project.BoardLive do
 
         #ADDING CHILD TASK TO ACHIEVED STAGE
         if Monitoring.is_a_child?(real_task) and Kanban.get_stage!(card.stage_id).status_id != 5 and real_task.status_id == 5 do
-          Monitoring.update_mother_task_progression(real_task)
+          curr_user_id = socket.assigns.curr_user_id
+          Monitoring.update_mother_task_progression(real_task, curr_user_id)
         end
 
         #REMOVING CHILD TASK FROM ACHIEVED STAGE

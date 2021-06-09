@@ -732,7 +732,7 @@ def validate_start_deadline(changeset) do
     !is_nil(t.parent_id)
   end
 
-  def update_mother_task_progression(%Task{} = child) do
+  def update_mother_task_progression(%Task{} = child, curr_user_id) do
     t = get_task_with_children!(child.parent_id)
     up_rate = (1/(length(t.children))) *100
     prog = t.progression + trunc(up_rate)
@@ -742,16 +742,18 @@ def validate_start_deadline(changeset) do
     moth = get_task_with_children!(t.id)
     update_mother_progression(moth, %{"progression" => round_mother_progression(t.id)})
 
+    rounded_moth = get_task_with_children!(t.id)
     IO.inspect moth.project_id
     IO.inspect moth.card
     # IO.inspect moth.card_id
 
     IO.inspect moth.progression
-    
-    if moth.progression == 100 do
+
+    if rounded_moth.progression == 100 do
       stage_id = get_loading_stage_id_from_project_id!(moth.project_id)
       Kanban.put_mothercard_to_loading(moth.card, %{"stage_id" => stage_id})
       update_task(moth, %{"status_id" => 4})
+      Services.send_notifs_to_admins_and_attributors(curr_user_id, "La tâche #{moth.title} a été placée automatiquement \"en cours\" car toutes ses tâches filles ont été achevées")
     end
 
   end
