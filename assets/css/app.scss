@@ -16,6 +16,7 @@
 @import "./mat-icons.css";
 @import "./recaps.css";
 @import "./requests.css";
+@import "./test.css";
 
 /* Alerts and form errors */
 .alert {
@@ -32,12 +33,16 @@
   // visibility: visible;
 
   // hide alert
-    // -moz-animation: cssAnimation 0.2s linear 3s forwards;
-    //  -webkit-animation: cssAnimation 0.2s linear 3s forwards;
-    //  -o-animation: cssAnimation 0.2s linear 3s forwards;
-    //  animation: cssAnimation 0.2s linear 3s forwards;
+    // -moz-animation: cssAnimation 0.2s linear 2s forwards;
+    //  -webkit-animation: cssAnimation 0.2s linear 2s forwards;
+    //  -o-animation: cssAnimation 0.2s linear 2s forwards;
+    //  animation: cssAnimation 0.2s linear 2s forwards;
     //  -webkit-animation-fill-mode: forwards;
     //  animation-fill-mode: forwards;
+}
+
+#alert_anim{
+  transition: opacity 0.2s linear;
 }
 
 @media (max-width: 650px){

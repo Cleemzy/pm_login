@@ -120,13 +120,13 @@ defmodule PmLoginWeb.Project.BoardLive do
                           show_comments_modal: s_comments_modal)}
   end
 
-  # def handle_event("show_alert_test", _params, socket) do
-  #   {:noreply, socket |> put_flash(:info, "oiii")}
-  # end
-  #
-  # def handle_event("color_alert_test", _params, socket) do
-  #   {:noreply, socket |> push_event("AnimateAlert", %{})}
-  # end
+  def handle_event("show_alert_test", _params, socket) do
+    {:noreply, socket |> put_flash(:info, "oiii")}
+  end
+
+  def handle_event("color_alert_test", _params, socket) do
+    {:noreply, socket |> put_flash(:info, "iooo")|> push_event("AnimateAlert", %{})}
+  end
 
   def handle_event("show-secondary", %{}, socket) do
     {:noreply, socket |> assign(show_secondary: true)}

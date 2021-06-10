@@ -14,6 +14,7 @@ import "../css/app.scss"
 //     import {Socket} from "phoenix"
 //     import socket from "./socket"
 //
+
 require('bootstrap-icons/font/bootstrap-icons.css');
 require('material-icons/iconfont/material-icons.css')
 import "phoenix_html"
@@ -118,14 +119,30 @@ Hooks.ScrollLock = {
   }
 };
 
-// Hooks.AnimateAlert = {
-//   mounted(){
-//     var alert = document.querySelector('#alert_anim');
-//     this.handleEvent("AnimateAlert", ({}) =>
-//       alert.style.opacity = 1
-//     )
-//   }
-// };
+Hooks.AnimateAlert = {
+  mounted(){
+    var div_tests = document.querySelectorAll(".test_js");
+    for (var i = 0; i < div_tests.length; i++) {
+      div_tests[i].style.backgroundColor = "green";
+      div_tests[i].style.width = 1000;
+    }
+
+    this.handleEvent("AnimateAlert", ({}) =>
+      this.reset_opacity()
+    )
+  },
+  updated() {
+    var div_tests = document.querySelectorAll(".test_js");
+    for (var i = 0; i < div_tests.length; i++) {
+      div_tests[i].style.backgroundColor = "green";
+    }
+  },
+  reset_opacity(){
+    var alert = document.querySelector("#alert_anim");
+    alert.style.opacity = 1;
+    window.setTimeout(function(){alert.style.opacity = 0;}, 2000);
+  }
+};
 
 Hooks.MessageBody = {
   mounted(){
@@ -164,6 +181,13 @@ navToggle.addEventListener("click", function () {
     this.setAttribute("aria-expanded", "true");
   }
 });
+
+// let alerts = document.querySelectorAll(".alert__test");
+// for (var index = 0 ; index < alerts.length; index++) {
+//         alerts[index].style.height = "50px";
+//     }
+
+
 
 // let navToggleProj = document.querySelector(".nav__toggle__proj");
 // let navWrapperProj = document.querySelector(".nav__wrapper__project");

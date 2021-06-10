@@ -71,4 +71,32 @@ defmodule PmLogin.MyContex do
     naive_to_datetime(naive)
   end
 
+#   plot_content = BarPlot.new(dataset, 100, 100, orientation)
+#   |> BarPlot.defaults()
+#   |> BarPlot.type(:stacked)
+#   |> BarPlot.padding(2)
+#   |> BarPlot.set_val_col_names(Enum.map(1..nseries, fn i -> "Value#{i}" end))
+#
+# plot = Plot.new(600, 350, plot_content)
+#   |> Plot.plot_options(%{legend_setting: :legend_right})
+#   |> Plot.titles("Title", nil)
+#   |> Plot.plot_options(%{show_y_axis: true})
+#
+# {:safe, Plot.to_svg(plot)}
+#
+# image
+#
+# And for the above
+#
+# dataset = Reaction.Chart.Dataset.new(data, ["Cat", "Task", "Start", "End"])
+# plot_content = GanttChart.new(dataset, 100, 100)
+#   |> GanttChart.defaults()
+#
+# plot = Plot.new(600, 400, plot_content)
+#   |> Plot.titles("Test Gantt", nil)
+#
+# {:safe, Plot.to_svg(plot)}
+
+
+
 end

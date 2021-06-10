@@ -19,7 +19,7 @@ defmodule PmLoginWeb.LiveComponent.ModifModalLive do
     ~L"""
     <div id="modal-<%= @id %>">
       <!-- Modal Background -->
-      <div class="modal-container"
+      <div id="modif_modal_container" class="modal-container"
           phx-hook="ScrollLock">
         <div class="modal-inner-container">
           <div class="modal-card-task">
