@@ -11,9 +11,20 @@
   </head>
   <body>
     <main role="main" class="container">
-      <p class="alert alert-info basecontents" role="alert"><%= get_flash(@conn, :info) %></p>
-      <p class="alert alert-danger" role="alert"><%= get_flash(@conn, :error) %></p>
+      <p id="log_alert" class="alert alert-info basecontents" role="alert" ><%= get_flash(@conn, :info) %></p>
+      <p id="log_danger" class="alert alert-danger" role="alert"><%= get_flash(@conn, :error) %></p>
       <%= @inner_content %>
     </main>
   </body>
+  <script type="text/javascript">
+    var alert = document.querySelector("#log_alert");
+    console.log(alert);
+    alert.style.opacity = 1
+    alert.onload = window.setTimeout(function(){alert.style.opacity = 0;}, 2000);
+
+    var alert_danger = document.querySelector("#log_danger");
+    console.log(alert_danger);
+    alert_danger.style.opacity = 1
+    alert_danger.onload = window.setTimeout(function(){alert_danger.style.opacity = 0;}, 2000);
+  </script>
 </html>

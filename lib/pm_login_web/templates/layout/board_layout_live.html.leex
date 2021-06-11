@@ -77,11 +77,11 @@
     </header>
 
 
-    <main id="main" role="main" class="boardcontainer" phx-click="cancel-notif">
+    <main id="main" role="main" class="boardcontainer" phx-click="cancel-notif" phx-hook="AnimateAlert">
       <% put = true %>
       <div class="container">
         <p class="alert alert-info basecontents" role="alert"
-          phx-click="lv:clear-flash" id="alert_anim" phx-hook="AnimateAlert"
+          phx-click="lv:clear-flash" id="alert_anim"
           phx-value-key="info"><%= live_flash(@flash, :info) %></p>
 
         <p class="alert alert-danger basecontents" role="alert"

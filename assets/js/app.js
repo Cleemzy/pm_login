@@ -119,30 +119,57 @@ Hooks.ScrollLock = {
   }
 };
 
-Hooks.AnimateAlert = {
+  Hooks.AnimateAlert = {
   mounted(){
-    var div_tests = document.querySelectorAll(".test_js");
-    for (var i = 0; i < div_tests.length; i++) {
-      div_tests[i].style.backgroundColor = "green";
-      div_tests[i].style.width = 1000;
-    }
+   this.handleEvent("AnimateAlert", ({}) =>
+     this.reset_opacity()
+   )
+ },
+ updated() {
 
-    this.handleEvent("AnimateAlert", ({}) =>
-      this.reset_opacity()
-    )
-  },
-  updated() {
-    var div_tests = document.querySelectorAll(".test_js");
-    for (var i = 0; i < div_tests.length; i++) {
-      div_tests[i].style.backgroundColor = "green";
-    }
-  },
-  reset_opacity(){
+ },
+ reset_opacity(){
+   var alert = document.querySelector("#alert_anim");
+   alert.style.opacity = 1;
+   window.setTimeout(function(){alert.style.opacity = 0;}, 2000);
+ },
+ anim_onload(){
+   var alerts = document.querySelectorAll(".alert");
+   console.log(alerts);
+
+   alerts.forEach(item => {
+     item.style.opacity = 1
+     item.onload = window.setTimeout(function(){item.style.opacity = 0;}, 2000);
+   })
+
+   ;
+
+ for (var i = 0; i < alerts.length; i++) {
+   alerts[i].style.opacity = 1
+   alerts[i].onload = window.setTimeout(function(){alerts[i].style.opacity = 0;}, 2000);
+ }
+
+    /*
     var alert = document.querySelector("#alert_anim");
+    console.log(alert)
     alert.style.opacity = 1;
-    window.setTimeout(function(){alert.style.opacity = 0;}, 2000);
-  }
-};
+    alert.onload = window.setTimeout(function(){alert.style.opacity = 0;}, 2000);
+
+    */
+
+    /*
+    var alert = document.querySelectorAll(".alert");
+    console.log(alert)
+    for (var i = 0; i < alert.length; i++) {
+    alert[i]
+    alert[i].style.opacity = 1;
+    alert[i].style.backgroundColor = "purple";
+
+    */
+
+     }
+
+ };
 
 Hooks.MessageBody = {
   mounted(){
@@ -182,6 +209,15 @@ navToggle.addEventListener("click", function () {
   }
 });
 
+// var alerts = document.querySelectorAll(".alert");
+// console.log(alerts);
+//
+// alerts.forEach(item => {
+//   item.style.opacity = 1
+//   item.onload = window.setTimeout(function(){item.style.opacity = 0;}, 2000);
+// });
+
+
 // let alerts = document.querySelectorAll(".alert__test");
 // for (var index = 0 ; index < alerts.length; index++) {
 //         alerts[index].style.height = "50px";
@@ -202,6 +238,14 @@ navToggle.addEventListener("click", function () {
 //     this.setAttribute("aria-expanded", "true");
 //   }
 // });
+
+var alerts = document.querySelectorAll(".alert");
+//     console.log(alerts);
+
+    alerts.forEach(item => {
+      item.style.opacity = 1
+      item.onload = window.setTimeout(function(){item.style.opacity = 0;}, 2000);
+    });
 
 let csrfToken = document.querySelector("meta[name='csrf-token']").getAttribute("content")
 //Working liveSocket

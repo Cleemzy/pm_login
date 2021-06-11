@@ -44,7 +44,7 @@ defmodule PmLoginWeb.Project.BoardLive do
 
     {:ok, socket |> assign(is_attributor: Monitoring.is_attributor?(curr_user_id),is_admin: Monitoring.is_admin?(curr_user_id), show_plus_modal: false,curr_user_id: curr_user_id, pro_id: pro_id, show_secondary: false,
                     contributors: list_contributors, priorities: list_priorities, board: Kanban.get_board!(project.board_id), show_task_modal: false, show_modif_modal: false,
-                    primaries: list_primaries, is_contributor: Monitoring.is_contributor?(curr_user_id),task_changeset: task_changeset, modif_changeset: modif_changeset, show_comments_modal: false,
+                    primaries: list_primaries, is_contributor: Monitoring.is_contributor?(curr_user_id),task_changeset: task_changeset, modif_changeset: modif_changeset, show_comments_modal: false, card_with_comments: nil,
                     show_notif: false, notifs: Services.list_my_notifications_with_limit(curr_user_id, 4), secondary_changeset: secondary_changeset, comment_changeset: Monitoring.change_comment(%Comment{})), layout: layout
                   }
   end
@@ -217,7 +217,7 @@ defmodule PmLoginWeb.Project.BoardLive do
           Services.send_notifs_to_admins_and_attributors(curr_user_id, "Tâche \"#{Monitoring.get_task_with_status!(real_task.id).title}\"
           du projet #{socket.assigns.board.project.title} mise dans \" #{Monitoring.get_task_with_status!(real_task.id).status.title} \" par #{Login.get_user!(curr_user_id).username}")
 
-          socket |> put_flash(:info, "Tâche \"#{Monitoring.get_task_with_status!(real_task.id).title}\" mise dans \" #{Monitoring.get_task_with_status!(real_task.id).status.title} \" ")
+          socket |> put_flash(:info, "Tâche \"#{Monitoring.get_task_with_status!(real_task.id).title}\" mise dans \" #{Monitoring.get_task_with_status!(real_task.id).status.title} \" ") |> push_event("AnimateAlert", %{})
         end
 
         {:noreply, post_socket |> assign(:board, this_board)}
@@ -385,7 +385,7 @@ defmodule PmLoginWeb.Project.BoardLive do
         #NOTIFY ATTRIBUTOR THAT A SECONDARY TASK HAS BEEN CREATED
         Services.send_notif_to_one(task.contributor_id, task.attributor_id, "Une tâche fille de votre tâche primaire #{Monitoring.get_task!(task.parent_id).title} du nom de #{task.title} a été créee par #{Login.get_user!(task.contributor_id).username} dans le projet #{this_board.project.title}")
         {:noreply, socket
-        |> put_flash(:info, "La tâche secondaire #{Monitoring.get_task!(task.id).title} a bien été créee")
+        |> put_flash(:info, "La tâche secondaire #{Monitoring.get_task!(task.id).title} a bien été créee") |> push_event("AnimateAlert", %{})
         |> assign(show_secondary: false)}
 
       {:error, %Ecto.Changeset{} = changeset} ->
@@ -409,7 +409,7 @@ defmodule PmLoginWeb.Project.BoardLive do
         curr_user_id = socket.assigns.curr_user_id
         Services.send_notifs_to_admins_and_attributors(curr_user_id,"Tâche nouvellement créee du nom de #{task.title} par #{Login.get_user!(curr_user_id).username} dans le projet #{this_project.title}.")
         {:noreply, socket
-        |> put_flash(:info, "La tâche #{Monitoring.get_task!(task.id).title} a bien été créee")
+        |> put_flash(:info, "La tâche #{Monitoring.get_task!(task.id).title} a bien été créee") |> push_event("AnimateAlert", %{})
         |> assign(show_task_modal: false)}
 
       {:error, %Ecto.Changeset{} = changeset} ->
@@ -440,7 +440,7 @@ defmodule PmLoginWeb.Project.BoardLive do
         if (is_nil task.contributor_id) and not (is_nil updated_task.contributor_id) do
           Services.send_notif_to_one(updated_task.attributor_id, updated_task.contributor_id, "#{Login.get_user!(updated_task.attributor_id).username} vous a assigné à la tâche #{updated_task.title}.")
         end
-        {:noreply, socket |> put_flash(:info, "Tâche #{updated_task.title} mise à jour") |> assign(show_modif_modal: false)}
+        {:noreply, socket |> put_flash(:info, "Tâche #{updated_task.title} mise à jour") |> assign(show_modif_modal: false) |> push_event("AnimateAlert", %{})} 
 
       {:error, %Ecto.Changeset{} = changeset} ->
         # IO.inspect changeset

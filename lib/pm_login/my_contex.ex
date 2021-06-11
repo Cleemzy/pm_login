@@ -97,6 +97,6 @@ defmodule PmLogin.MyContex do
 #
 # {:safe, Plot.to_svg(plot)}
 
-
+  
 
 end
