@@ -32,7 +32,7 @@ defmodule PmLoginWeb.Services.MyRequestsLive do
   end
 
   def handle_event("form-on", _params, socket) do
-    {:noreply, socket |> assign(display_form: true)}
+    {:noreply, socket |> assign(display_form: true) }
   end
 
   def handle_event("form-off", _params, socket) do

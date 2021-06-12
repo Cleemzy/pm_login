@@ -22,7 +22,7 @@
 
             <li class="nav__item">
               <div class="dropdown">
-                <a href="#" class="dropbtn"><span class="material-icons mat__ico">admin_panel_settings</span> Espace administrateur</a>
+                <a href="#" class="dropbtn"><span class="material-icons mat__ico" style="display: inline;">admin_panel_settings</span>Espace administrateur</a>
                 <div class="dropdown-content basecontents__without__radius">
                   <a href="<%= Routes.project_path(@socket, :index) %>" class="admin__links">Projets | <span class="material-icons mat__ico">insert_chart</span></a>
                   <a href="<%= Routes.company_path(@socket, :index) %>" class="admin__links">Sociétés | <span class="material-icons mat__ico">maps_home_work</span></a>
@@ -82,7 +82,7 @@
     <main id="main" role="main" class="container" phx-click="cancel-notif" phx-hook="AnimateAlert">
       <p class="alert alert-info basecontents" role="alert"
         phx-click="lv:clear-flash" id="alert_anim"
-        phx-value-key="info"><%= live_flash(@flash, :info) %></p>
+        phx-value-key="info"><%= live_flash(@flash, :info) %><%= if not is_nil(live_flash(@flash, :info)) do %><i class="bi bi-x alert__cross"></i><% end %></p>
 
       <p class="alert alert-danger" role="alert"
         phx-click="lv:clear-flash"

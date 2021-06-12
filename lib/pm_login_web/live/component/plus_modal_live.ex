@@ -18,217 +18,219 @@ defmodule PmLoginWeb.LiveComponent.PlusModalLive do
   @spec render(map()) :: Phoenix.LiveView.Rendered.t()
   def render(assigns) do
     ~L"""
-    <div id="modal-<%= @id %>">
-      <!-- Modal Background -->
-      <div id="plus_modal_container" class="modal-container"
-          phx-hook="ScrollLock">
-        <div class="modal-inner-container">
-          <div class="modal-card-task">
-            <div class="modal-inner-card">
-              <!-- Title -->
-              <%= if @title != nil do %>
-              <div class="modal-title" style="margin-bottom: 30px;">
-                <%= @title %>
-                <a href="#" style="position: relative; left: 40%;" title="Fermer" phx-click="left-button-click" phx-target="#modal-<%= @id %>"><i class="bi bi-x"></i></a>
-              </div>
-              <% end %>
+      <div id="modal-<%= @id %>">
+        <!-- Modal Background -->
+        <div id="plus_modal_container" class="modal-container" style="visibility: <%= if @show_plus_modal, do: "visible", else: "hidden" %>; opacity: <%= if @show_plus_modal, do: "1 !important", else: "0" %>;"
+            phx-hook="ScrollLock">
+            <%= if not is_nil(@card) do %>
+          <div class="modal-inner-container">
+            <div class="modal-card-task">
+              <div class="modal-inner-card">
+                <!-- Title -->
+                <%= if @title != nil do %>
+                <div class="modal-title" style="margin-bottom: 30px;">
+                  <%= @title %>
+                  <a href="#" style="position: relative; left: 40%;" title="Fermer" phx-click="left-button-click" phx-target="#modal-<%= @id %>"><i class="bi bi-x"></i></a>
+                </div>
+                <% end %>
 
-              <!-- Body -->
-              <%= if @body != nil do %>
-              <div class="modal-body">
-                <%= @body %>
-              </div>
-              <% end %>
+                <!-- Body -->
+                <%= if @body != nil do %>
+                <div class="modal-body">
+                  <%= @body %>
+                </div>
+                <% end %>
 
-              <!-- MY FORM -->
-              <div class="modal-body">
+                <!-- MY FORM -->
+                <div class="modal-body">
 
-                <!-- FIRST ROW -->
-                  <div class="row">
-
-                    <div class="column">
-                      <div class="row">
-                        <div class="column column-10">
-                          <label>Nom: </label>
-                          </div>
-                          <div class="column column-65">
-                          <%= @card.name %>
-                          </div>
-                      </div>
-                    </div>
-
-                    <div class="column">
+                  <!-- FIRST ROW -->
                     <div class="row">
-                      <div class="column column-40">
-                        <label>Attributeur:</label>
-                        </div>
-                        <div class="column column-25">
-                        <%= @card.task.attributor.username %>
-                        </div>
-                        <div class="column column-35" style="position: relative; top: -7px;">
-                          <img class="profile-pic-mini" src="<%= Routes.static_path(@socket, "/#{@card.task.attributor.profile_picture}") %>" width="50"/>
-                        </div>
-                    </div>
-                    </div>
 
-                  </div>
-                  <!-- END OF FIRST ROW -->
-
-                    <!-- CONTRIBUTOR ROW -->
-                      <%= if @card.task.contributor != nil do  %>
-
-                      <div class="row">
-
-                        <div class="column">
-
-                        </div>
-
-                        <div class="column">
+                      <div class="column">
                         <div class="row">
-                          <div class="column column-40">
-                            <label>Contributeur:</label>
+                          <div class="column column-10">
+                            <label>Nom: </label>
                             </div>
-                            <div class="column column-25">
-                            <%= @card.task.contributor.username %>
-                            </div>
-                            <div class="column column-35" style="position: relative; top: -7px; left: 3px;">
-                              <img class="profile-pic-mini" src="<%= Routes.static_path(@socket, "/#{@card.task.contributor.profile_picture}") %>" width="50"/>
+                            <div class="column column-65">
+                            <%= @card.name %>
                             </div>
                         </div>
-                        </div>
-
                       </div>
 
-                      <% end %>
-                      <!-- END OF CONTRIBUTOR ROW -->
-
-                    <!-- SECOND ROW -->
-                      <div class="row" style="margin-bottom: 10px;">
-
-                        <div class="column">
-                          <div class="row">
-                            <div class="column column-10">
-                              <label>Statut:</label>
-                              </div>
-                              <div class="column column-65">
-                              <%= @card.task.status.title %>
-                              </div>
+                      <div class="column">
+                      <div class="row">
+                        <div class="column column-40">
+                          <label>Attributeur:</label>
                           </div>
-                        </div>
-
-                        <div class="column">
-                          <div class="row">
-                            <div class="column column-10">
-                              <label>Priorité:</label>
-                              </div>
-                              <div class="column column-65">
-                              <%= @card.task.priority.title %>
-                              </div>
+                          <div class="column column-25">
+                          <%= @card.task.attributor.username %>
                           </div>
-                        </div>
-
+                          <div class="column column-35" style="position: relative; top: -7px;">
+                            <img class="profile-pic-mini" src="<%= Routes.static_path(@socket, "/#{@card.task.attributor.profile_picture}") %>" width="50"/>
+                          </div>
                       </div>
-                      <!-- END OF SECOND ROW -->
+                      </div>
 
-                        <!-- THIRD ROW -->
-                          <div class="row">
+                    </div>
+                    <!-- END OF FIRST ROW -->
 
-                            <div class="column">
-                                  <label>Date de début:</label>
-                                  <%= Utilities.letters_date_format(@card.task.date_start) %>
-                            </div>
+                      <!-- CONTRIBUTOR ROW -->
+                        <%= if @card.task.contributor != nil do  %>
 
-                            <div class="column">
-                                  <label>Date de fin:</label>
-                                  <%= if @card.task.date_end != nil do
-                                        Utilities.letters_date_format(@card.task.date_end)
-                                      else
-                                        "En attente"
-                                      end %>
-                            </div>
+                        <div class="row">
+
+                          <div class="column">
 
                           </div>
-                        <!-- END OF THIRD ROW -->
 
-                          <!-- FOURTH ROW -->
+                          <div class="column">
+                          <div class="row">
+                            <div class="column column-40">
+                              <label>Contributeur:</label>
+                              </div>
+                              <div class="column column-25">
+                              <%= @card.task.contributor.username %>
+                              </div>
+                              <div class="column column-35" style="position: relative; top: -7px; left: 3px;">
+                                <img class="profile-pic-mini" src="<%= Routes.static_path(@socket, "/#{@card.task.contributor.profile_picture}") %>" width="50"/>
+                              </div>
+                          </div>
+                          </div>
+
+                        </div>
+
+                        <% end %>
+                        <!-- END OF CONTRIBUTOR ROW -->
+
+                      <!-- SECOND ROW -->
+                        <div class="row" style="margin-bottom: 10px;">
+
+                          <div class="column">
+                            <div class="row">
+                              <div class="column column-10">
+                                <label>Statut:</label>
+                                </div>
+                                <div class="column column-65">
+                                <%= @card.task.status.title %>
+                                </div>
+                            </div>
+                          </div>
+
+                          <div class="column">
+                            <div class="row">
+                              <div class="column column-10">
+                                <label>Priorité:</label>
+                                </div>
+                                <div class="column column-65">
+                                <%= @card.task.priority.title %>
+                                </div>
+                            </div>
+                          </div>
+
+                        </div>
+                        <!-- END OF SECOND ROW -->
+
+                          <!-- THIRD ROW -->
                             <div class="row">
 
                               <div class="column">
-                                    <label>Durée estimée:</label>
-                                    <p><%= @card.task.estimated_duration %> heure(s)</p>
+                                    <label>Date de début:</label>
+                                    <%= Utilities.letters_date_format(@card.task.date_start) %>
                               </div>
 
                               <div class="column">
-                                    <label>Durée effectuée:</label>
-                                    <p><%= @card.task.performed_duration%> heure(s)</p>
+                                    <label>Date de fin:</label>
+                                    <%= if @card.task.date_end != nil do
+                                          Utilities.letters_date_format(@card.task.date_end)
+                                        else
+                                          "En attente"
+                                        end %>
                               </div>
 
                             </div>
-                          <!-- END OF FOURTH ROW -->
+                          <!-- END OF THIRD ROW -->
 
                             <!-- FOURTH ROW -->
                               <div class="row">
 
                                 <div class="column">
-                                      <label>Progression</label>
-                                      <p><%= @card.task.progression%> %</p>
+                                      <label>Durée estimée:</label>
+                                      <p><%= @card.task.estimated_duration %> heure(s)</p>
                                 </div>
 
                                 <div class="column">
-                                      <label>Date d'échéance:</label>
-                                      <p><%= Utilities.letters_date_format(@card.task.deadline)%></p>
+                                      <label>Durée effectuée:</label>
+                                      <p><%= @card.task.performed_duration%> heure(s)</p>
                                 </div>
 
                               </div>
                             <!-- END OF FOURTH ROW -->
 
-                            <!-- FIFTH ROW -->
-                            <div class="row">
-                            <label>Nombre approximatif d'heures par jour ouvrable
-                             pour l'intervenant pour terminer cette tâche avant la date d'échéance:
-                            </label>
-                            </div>
-                            <!--END OF FIFTH ROW -->
+                              <!-- FOURTH ROW -->
+                                <div class="row">
 
-                            <!-- SIXTH ROW -->
-                            <div class="row">
-                              <div class="column">
-                                <p><%= PmLogin.Monitoring.avg_working_hours(@card.task) %> heure(s)</p>
+                                  <div class="column">
+                                        <label>Progression</label>
+                                        <p><%= @card.task.progression%> %</p>
+                                  </div>
+
+                                  <div class="column">
+                                        <label>Date d'échéance:</label>
+                                        <p><%= Utilities.letters_date_format(@card.task.deadline)%></p>
+                                  </div>
+
+                                </div>
+                              <!-- END OF FOURTH ROW -->
+
+                              <!-- FIFTH ROW -->
+                              <div class="row">
+                              <label>Nombre approximatif d'heures par jour ouvrable
+                               pour l'intervenant pour terminer cette tâche avant la date d'échéance:
+                              </label>
                               </div>
-                            </div>
-                            <!-- END OF SIXTH ROW -->
+                              <!--END OF FIFTH ROW -->
 
-                  <!-- Buttons -->
+                              <!-- SIXTH ROW -->
+                              <div class="row">
+                                <div class="column">
+                                  <p><%= PmLogin.Monitoring.avg_working_hours(@card.task) %> heure(s)</p>
+                                </div>
+                              </div>
+                              <!-- END OF SIXTH ROW -->
 
-                    <button class="left-button"
-                            type="button"
-                            phx-click="left-button-click"
-                            phx-target="#modal-<%= @id %>">
-                      <div>
-                        <%= @left_button %>
-                      </div>
-                    </button>
+                    <!-- Buttons -->
 
-                    <div class="row">
-                    <div class="column column-50">
-                    </div>
+                      <button class="left-button"
+                              type="button"
+                              phx-click="left-button-click"
+                              phx-target="#modal-<%= @id %>">
+                        <div>
+                          <%= @left_button %>
+                        </div>
+                      </button>
+
+                      <div class="row">
                       <div class="column column-50">
-                        <i style="font-size: 10px;">Créee le <%= Utilities.simple_date_format_with_hours(@card.task.inserted_at) %></i>
                       </div>
+                        <div class="column column-50">
+                          <i style="font-size: 10px;">Créee le <%= Utilities.simple_date_format_with_hours(@card.task.inserted_at) %></i>
+                        </div>
+                      </div>
+
                     </div>
 
-                  </div>
 
+
+                </div>
 
 
               </div>
-
-
             </div>
           </div>
         </div>
       </div>
-    </div>
+    <% end %>
     """
   end
 

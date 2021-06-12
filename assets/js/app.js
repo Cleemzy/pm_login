@@ -97,30 +97,31 @@ Hooks.Board = {
   }
 };
 
-Hooks.ScrollLock = {
-  mounted() {
-    this.lockScroll()
-  },
-  destroyed() {
-    this.unlockScroll()
-  },
-  lockScroll() {
-    const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth
-    document.body.style.paddingRight = `${scrollbarWidth}px`
-    this.scrollPosition = window.pageYOffset || document.body.scrollTop
-    document.body.classList.add('fix-position')
-    document.body.style.top = `-${this.scrollPosition}px`
-  },
-  unlockScroll() {
-    document.body.style.paddingRight = null
-    document.body.classList.remove('fix-position')
-    document.documentElement.scrollTop = this.scrollPosition
-    document.body.style.top = null
-  }
-};
+// Hooks.ScrollLock = {
+//   mounted() {
+//     this.lockScroll()
+//   },
+//   destroyed() {
+//     this.unlockScroll()
+//   },
+//   lockScroll() {
+//     const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth
+//     document.body.style.paddingRight = `${scrollbarWidth}px`
+//     this.scrollPosition = window.pageYOffset || document.body.scrollTop
+//     document.body.classList.add('fix-position')
+//     document.body.style.top = `-${this.scrollPosition}px`
+//   },
+//   unlockScroll() {
+//     document.body.style.paddingRight = null
+//     document.body.classList.remove('fix-position')
+//     document.documentElement.scrollTop = this.scrollPosition
+//     document.body.style.top = null
+//   }
+// };
 
   Hooks.AnimateAlert = {
   mounted(){
+  console.log("tafiditra alert")
    this.handleEvent("AnimateAlert", ({}) =>
      this.reset_opacity()
    )
@@ -171,6 +172,30 @@ Hooks.ScrollLock = {
 
  };
 
+Hooks.blurHook = {
+  mounted(){
+    console.log("tafiditra blurHook")
+    this.handleEvent("blurBody", ({param1,param2}) =>
+      // console.log(param1)
+      this.blurBody()
+    )
+  },
+  blurBody(){
+    var body = document.body;
+    var request_form = document.querySelector("#the_request_form");
+    // console.log(request_form);
+
+    // console.log(body);
+    body.style.opacity = 0.5;
+
+    // var modal = document.querySelector(".modal-container");
+    // console.log(modal);
+    // modal.style.filter = "blur(1px)";
+    request_form.style.opacity = 1;
+
+  }
+}
+
 Hooks.MessageBody = {
   mounted(){
     var messageBody = document.querySelector('#messageBody');
@@ -191,6 +216,8 @@ Hooks.MessageBody = {
   //  )
   // }
 };
+
+
 //hook end
 // document.querySelector('#messageBody').scrollTop = messageBody.scrollHeight - messageBody.clientHeight
 

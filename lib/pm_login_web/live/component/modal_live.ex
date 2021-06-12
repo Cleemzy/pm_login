@@ -49,7 +49,7 @@ defmodule PmLoginWeb.LiveComponent.ModalLive do
     ~L"""
     <div id="modal-<%= @id %>">
       <!-- Modal Background -->
-      <div id="new_modal_container" class="modal-container"
+      <div id="new_modal_container" class="modal-container" style="visibility: <%= if @show_modal, do: "visible", else: "hidden" %>; opacity: <%= if @show_modal, do: "1 !important", else: "0" %>;"
           phx-hook="ScrollLock">
         <div class="modal-inner-container">
           <div class="modal-card">

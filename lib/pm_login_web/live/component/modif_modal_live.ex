@@ -19,8 +19,9 @@ defmodule PmLoginWeb.LiveComponent.ModifModalLive do
     ~L"""
     <div id="modal-<%= @id %>">
       <!-- Modal Background -->
-      <div id="modif_modal_container" class="modal-container"
+      <div id="modif_modal_container" class="modal-container" style="visibility: <%= if @show_modif_modal, do: "visible", else: "hidden" %>; opacity: <%= if @show_modif_modal, do: "1 !important", else: "0" %>;"
           phx-hook="ScrollLock">
+        <%= if not is_nil(@card) do %>
         <div class="modal-inner-container">
           <div class="modal-card-task">
             <div class="modal-inner-card">
@@ -202,6 +203,7 @@ defmodule PmLoginWeb.LiveComponent.ModifModalLive do
         </div>
       </div>
     </div>
+    <% end %>
     """
   end
 

@@ -93,26 +93,26 @@
     </tbody>
   </table>
 
-  <%= if @show_modal do %>
 <%= live_component(@socket,
                      ModalLive,
                      id: "confirm-arch",
                      title: "Archiver?",
-                     body: "Etes-vous sûr d'archiver l'utilisateur #{PmLogin.Login.get_username(@arch_id)}?",
+                     body: "Etes-vous sûr d'archiver l'utilisateur #{if not is_nil(@arch_id), do: PmLogin.Login.get_username(@arch_id)}?",
                      right_button: "OUI",
                      right_button_action: "arch",
                      right_button_param: @arch_id,
                      left_button: "ANNULER",
+                     show_modal: @show_modal,
                      left_button_action: "cancel-arch")
   %>
-<% end %>
 
-<div phx-window-keydown="cancel-form" class="basecontents__without__radius request__form" style="visibility: <%= if @form, do: "visible", else: "hidden" %>; opacity: <%= if @form, do: "1", else: "0" %>;">
-  <div class="column">
-    <a class="form__close" title="Fermer" phx-click="close-form"><i class="bi bi-x"></i></a>
-    <h2><i class="bi bi-plus-circle"></i> Créer utilisateur</h2>
-    <div class="request__form__content">
-      <%= f = form_for @changeset, "#",[phx_submit: "save-user"] %>
+<div class="request__form__container" style="visibility: <%= if @form, do: "visible", else: "hidden" %>; opacity: <%= if @form, do: "1", else: "0" %>;">
+  <div phx-window-keydown="cancel-form" class="basecontents__without__radius request__form">
+    <div class="column">
+      <a class="form__close" title="Fermer" phx-click="close-form"><i class="bi bi-x"></i></a>
+      <h2><i class="bi bi-plus-circle"></i> Créer utilisateur</h2>
+      <div class="request__form__content">
+        <%= f = form_for @changeset, "#",[phx_submit: "save-user"] %>
         <label for="username">Nom d'utilisateur</label>
         <%= text_input f, :username %>
         <%= error_tag f, :req_uname_error %>
@@ -136,9 +136,11 @@
         <%= password_input f, :password_confirmation %>
         <%= error_tag f, :password_confirmation %>
         <button type="submit" style="float: right;" class="bt__com__form"><i class="bi bi-plus-circle bt__com__form__ico"></i></button>
-      <form/>
+        <form/>
+      </div>
+
+
     </div>
-
-
   </div>
+
 </div>

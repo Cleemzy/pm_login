@@ -59,8 +59,9 @@ defmodule PmLoginWeb.LiveComponent.CommentsModalLive do
     <% current_user = PmLogin.Login.get_user!(@curr_user_id) %>
     <div id="modal-<%= @id %>">
       <!-- Modal Background -->
-      <div id="comment_modal_container" class="modal-container"
+      <div id="comment_modal_container" class="modal-container" style="visibility: <%= if @show_comments_modal, do: "visible", else: "hidden" %>; opacity: <%= if @show_comments_modal, do: "1 !important", else: "0" %>;"
           phx-hook="ScrollLock">
+        <%= if not is_nil(@card) do %>
         <div class="modal-inner-container">
           <div class="modal-card-comments">
             <div class="modal-inner-card">
@@ -182,7 +183,7 @@ defmodule PmLoginWeb.LiveComponent.CommentsModalLive do
         </div>
       </div>
     </div>
-
+    <% end %>
     """
   end
 

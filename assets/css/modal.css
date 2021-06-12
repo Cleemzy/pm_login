@@ -11,6 +11,8 @@
   z-index: 998;
   background-color: rgba(0, 0, 0, 0.7);
   /* background-color: red; */
+  transition: visibility 0.2s, opacity 0.2s linear;
+
 }
 
 /* .task__modal{

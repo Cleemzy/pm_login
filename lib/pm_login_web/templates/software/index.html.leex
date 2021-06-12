@@ -27,16 +27,15 @@
 <span><a href="<%= Routes.company_path(@socket, :services) %>" class="btn btn-lg btn-secondary"><i class="bi bi-arrow-bar-left"></i> Services</a></span>
 
 <% alias PmLoginWeb.LiveComponent.ModalLive %>
-<%= if @show_modal do %>
 <%= live_component(@socket,
                    ModalLive,
                    id: "confirm-del",
                    title: "Supprimer infos logiciel?",
-                   body: "Etes-vous sûr de supprimer l'info logiciel de: #{PmLogin.Services.get_software!(@service_id).title}?",
+                   body: "Etes-vous sûr de supprimer l'info logiciel de: #{if not is_nil(@service_id), do: PmLogin.Services.get_software!(@service_id).title}?",
                    right_button: "OUI",
                    right_button_action: "del",
                    right_button_param: @service_id,
                    left_button: "ANNULER",
+                   show_modal: @show_modal,
                    left_button_action: "cancel-del")
 %>
-<% end %>

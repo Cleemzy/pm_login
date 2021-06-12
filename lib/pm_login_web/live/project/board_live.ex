@@ -43,7 +43,7 @@ defmodule PmLoginWeb.Project.BoardLive do
     list_primaries = my_primary_tasks |> Enum.map(fn (%Task{} = p) -> {p.title, p.id} end)
 
     {:ok, socket |> assign(is_attributor: Monitoring.is_attributor?(curr_user_id),is_admin: Monitoring.is_admin?(curr_user_id), show_plus_modal: false,curr_user_id: curr_user_id, pro_id: pro_id, show_secondary: false,
-                    contributors: list_contributors, priorities: list_priorities, board: Kanban.get_board!(project.board_id), show_task_modal: false, show_modif_modal: false,
+                    contributors: list_contributors, priorities: list_priorities, board: Kanban.get_board!(project.board_id), show_task_modal: false, show_modif_modal: false, card: nil,
                     primaries: list_primaries, is_contributor: Monitoring.is_contributor?(curr_user_id),task_changeset: task_changeset, modif_changeset: modif_changeset, show_comments_modal: false, card_with_comments: nil,
                     show_notif: false, notifs: Services.list_my_notifications_with_limit(curr_user_id, 4), secondary_changeset: secondary_changeset, comment_changeset: Monitoring.change_comment(%Comment{})), layout: layout
                   }
@@ -304,7 +304,9 @@ defmodule PmLoginWeb.Project.BoardLive do
     {:noreply, assign(socket, :board, Kanban.get_board!(project.board_id))}
   end
 
-  def handle_event("show_task_modal", %{}, socket), do: {:noreply, socket |> assign(show_task_modal: true)}
+  def handle_event("show_task_modal", %{}, socket) do
+    {:noreply, socket |> assign(show_task_modal: true) |> push_event("blurBody", %{})}
+  end
 
   def handle_event("show_comments_modal", %{"id" => id}, socket) do
     # IO.puts id
@@ -440,7 +442,7 @@ defmodule PmLoginWeb.Project.BoardLive do
         if (is_nil task.contributor_id) and not (is_nil updated_task.contributor_id) do
           Services.send_notif_to_one(updated_task.attributor_id, updated_task.contributor_id, "#{Login.get_user!(updated_task.attributor_id).username} vous a assigné à la tâche #{updated_task.title}.")
         end
-        {:noreply, socket |> put_flash(:info, "Tâche #{updated_task.title} mise à jour") |> assign(show_modif_modal: false) |> push_event("AnimateAlert", %{})} 
+        {:noreply, socket |> put_flash(:info, "Tâche #{updated_task.title} mise à jour") |> assign(show_modif_modal: false) |> push_event("AnimateAlert", %{})}
 
       {:error, %Ecto.Changeset{} = changeset} ->
         # IO.inspect changeset

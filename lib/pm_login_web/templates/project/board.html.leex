@@ -16,7 +16,7 @@
           <p><u><b> Description:</b></u> <%= @board.project.description %></p>
         </div>
         <%= if @is_admin or @is_attributor do%>
-          <a href="#" class="btn btn-lg btn-primary" phx-click="show_task_modal"><i class="bi bi-plus-circle"></i> Nouvelle tâche</a>
+          <a id="show__task__modal__btn" href="#" class="btn btn-lg btn-primary" phx-click="show_task_modal"><i class="bi bi-plus-circle"></i> Nouvelle tâche</a>
         <% end %>
 
         <%= if @is_contributor do%>
@@ -53,6 +53,10 @@
   </div>
   <br>
   <div class="test_js"> -->
+
+  <!-- <div class="hooktest" phx-hook="hookTest">
+    oiii
+  </div> -->
 
   </div>
 
@@ -147,7 +151,7 @@
 
   <% alias PmLoginWeb.LiveComponent.{TaskModalLive,PlusModalLive,ModifModalLive,CommentsModalLive,SecondaryModalLive}%>
 
-  <%= if @show_task_modal do %>
+
   <%= live_component(@socket,
                   TaskModalLive,
                   id: "confirm-arch",
@@ -160,12 +164,13 @@
                   left_button_action: "cancel",
                   task_changeset: @task_changeset,
                   pro_id: @pro_id,
+                  show_task_modal: @show_task_modal,
                   curr_user_id: @curr_user_id)
   %>
-  <% end %>
 
 
-  <%= if @show_secondary do %>
+
+
   <%= live_component(@socket,
                   SecondaryModalLive,
                   id: "confirm-arch",
@@ -179,11 +184,12 @@
                   task_changeset: @secondary_changeset,
                   primaries: @primaries,
                   pro_id: @pro_id,
+                  show_secondary: @show_secondary,
                   curr_user_id: @curr_user_id)
   %>
-  <% end %>
 
-  <%= if @show_plus_modal do %>
+
+
   <%= live_component(@socket,
                   PlusModalLive,
                   id: "confirm-arch",
@@ -197,11 +203,12 @@
                   task_changeset: @task_changeset,
                   pro_id: @pro_id,
                   curr_user_id: @curr_user_id,
+                  show_plus_modal: @show_plus_modal,
                   card: @card)
   %>
-  <% end %>
 
-  <%= if @show_modif_modal do %>
+
+
   <%= live_component(@socket,
                   ModifModalLive,
                   id: "confirm-arch",
@@ -221,11 +228,11 @@
                   is_admin: @is_admin,
                   is_contributor: @is_contributor,
                   is_attributor: @is_attributor,
+                  show_modif_modal: @show_modif_modal,
                   card: @card)
   %>
-  <% end %>
 
-  <%= if @show_comments_modal do %>
+
 <%= live_component(@socket,
                      CommentsModalLive,
                      id: "confirm-arch",
@@ -238,9 +245,9 @@
                      left_button_action: "cancel-comments",
                      curr_user_id: @curr_user_id,
                      changeset: @comment_changeset,
+                     show_comments_modal: @show_comments_modal,
                      card: @card_with_comments)
   %>
-<% end %>
 
 
 <br/>
@@ -249,4 +256,3 @@
   <% else %>
   <span><a href="<%= Routes.contributor_path(@socket, :my_projects) %>" class="btn btn-lg btn-secondary"><i class="bi bi-arrow-bar-left"></i> Retour</a></span>
 <% end %>
-</div>
