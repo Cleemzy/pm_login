@@ -33,7 +33,7 @@ defmodule PmLoginWeb.Services.RequestsLive do
     notif_text = "La requête #{request.title} a été #{text_vu}"
     Services.send_notif_to_one(curr_user_id, request.active_client.user_id, notif_text)
 
-    {:noreply, socket |> put_flash(:info, notif_text)}
+    {:noreply, socket |> put_flash(:info, notif_text) |> push_event("AnimateAlert", %{})}
   end
 
   def handle_event("switch-ongoing", params, socket) do
@@ -52,7 +52,7 @@ defmodule PmLoginWeb.Services.RequestsLive do
     notif_text = "La requête #{request.title} #{text_encours}"
     Services.send_notif_to_one(curr_user_id, request.active_client.user_id, notif_text)
 
-    {:noreply, socket |> put_flash(:info, notif_text) }
+    {:noreply, socket |> put_flash(:info, notif_text) |> push_event("AnimateAlert", %{})}
   end
 
   def handle_event("switch-done", params, socket) do
@@ -71,7 +71,7 @@ defmodule PmLoginWeb.Services.RequestsLive do
 
     notif_text = "Requête #{request.title} #{text_accomplie}"
     Services.send_notif_to_one(curr_user_id, request.active_client.user_id, notif_text)
-    {:noreply, socket |> put_flash(:info, notif_text)}
+    {:noreply, socket |> put_flash(:info, notif_text) |> push_event("AnimateAlert", %{})}
   end
 
   def handle_info({"request_topic", [:request, :updated], _}, socket) do
@@ -142,6 +142,7 @@ defmodule PmLoginWeb.Services.RequestsLive do
   {:noreply,
     socket
     |> put_flash(:info, "L'éditeur' #{editor.title} a bien été supprimé!")
+    |> push_event("AnimateAlert", %{})
     |> assign(show_modal: false)
       }
   end

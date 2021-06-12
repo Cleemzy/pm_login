@@ -73,6 +73,7 @@ defmodule PmLoginWeb.Services.AssistContractLive do
   {:noreply,
     socket
     |> put_flash(:info, "Le contrat d'assistance #{contract.title} a bien été supprimé!")
+    |> push_event("AnimateAlert", %{})
     |> assign(show_modal: false)
       }
   end

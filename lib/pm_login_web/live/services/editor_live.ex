@@ -73,6 +73,7 @@ defmodule PmLoginWeb.Services.EditorLive do
   {:noreply,
     socket
     |> put_flash(:info, "L'éditeur' #{editor.title} a bien été supprimé!")
+    |> push_event("AnimateAlert", %{})
     |> assign(show_modal: false)
       }
   end

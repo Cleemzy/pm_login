@@ -150,7 +150,7 @@ defmodule PmLoginWeb.User.ListLive do
     Login.archive_user(user)
     # Log.delete_user(user)
 
-    {:noreply, put_flash(socket, :info, "L'utilisateur #{user.username} a bien été archivé")}
+    {:noreply, put_flash(socket, :info, "L'utilisateur #{user.username} a bien été archivé") |> push_event("AnimateAlert", %{})}
   end
 
   defp fetch(socket) do

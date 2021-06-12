@@ -12,7 +12,7 @@ defmodule PmLogin.MyContex do
     dataset = Contex.Dataset.new(data)
 
     list = Enum.map(todays, fn(task) -> [task.priority_id, task.title, date_to_datetime(task.date_start), naive_to_datetime(task.achieved_at)] end)
-
+    # list = [[]]
     list_dataset = Contex.Dataset.new(list)
     IO.inspect list_dataset
     # plot_content = Contex.GanttChart.new(dataset, mapping: %{category_col: :category_col, task_col: :task_col, start_col: :start_col, finish_col: :finish_col} )
@@ -97,6 +97,6 @@ defmodule PmLogin.MyContex do
 #
 # {:safe, Plot.to_svg(plot)}
 
-  
+
 
 end

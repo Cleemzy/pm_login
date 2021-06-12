@@ -73,6 +73,7 @@ defmodule PmLoginWeb.Services.LicenseLive do
   {:noreply,
     socket
     |> put_flash(:info, "La licence #{license.title} a bien été supprimé!")
+    |> push_event("AnimateAlert", %{})
     |> assign(show_modal: false)
       }
   end

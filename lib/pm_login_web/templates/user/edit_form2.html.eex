@@ -1,5 +1,4 @@
-<div class="container profile-data" style="padding-top: 10px;">
-
+<div class="container profile-data" style="padding-top: 10px; border-radius: 5px;">
 <!-- [as: :user_params, multipart: true] -->
 <%= form_for @changeset, @action, [multipart: true],fn f -> %>
   <%= if @changeset.action do %>

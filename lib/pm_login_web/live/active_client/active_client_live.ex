@@ -55,6 +55,7 @@ defmodule PmLogin.ActiveClient.ActiveClientLive do
   {:noreply,
     socket
     |> put_flash(:info, "Le client #{PmLogin.Login.get_user!(params["user_id"]).username} a bien été rendu actif et affilié à #{PmLogin.Services.get_company!(params["company_id"]).name}!")
+    |> push_event("AnimateAlert", %{})
     |> assign(show_modal: false)
       }
   end
