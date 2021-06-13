@@ -33,5 +33,7 @@ defmodule PmLogin.Kanban.Card do
     card
     |> cast(attrs, [:stage_id])
     |> Position.insert_at_bottom(:stage_id)
-end
+  end
+
+
 end

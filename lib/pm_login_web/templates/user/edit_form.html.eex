@@ -1,4 +1,4 @@
-<div class="container profile-data">
+<div class="container profile-data" style="padding-top: 10px; border-radius: 5px;">
 
 
 <%= form_for @changeset, @action, fn f -> %>

@@ -1,5 +1,13 @@
 <% alias PmLoginWeb.LiveComponent.ModalLive %>
-  <h1><span class="material-icons" style="font-size: 40px;">supervisor_account</span> Liste des utilisateurs</h1>
+
+<div class="row">
+  <div class="column column-60">
+    <h1><span class="material-icons" style="font-size: 40px;">supervisor_account</span> Liste des utilisateurs</h1>
+  </div>
+  <div class="column column-40">
+    <h3 id="adm" style="float: right;"><a href="#" phx-click="show-form"><i class="bi bi-plus-circle"></i> Créer utilisateur</a></h2>
+  </div>
+</div>
 
   <div class="row">
     <div class="column column-10">
@@ -52,12 +60,10 @@
 
   </div>
 
-<h2 id="adm" style="float: right;"><a href="#" phx-click="show-form"><i class="bi bi-plus-circle"></i> Créer utilisateur</a></h2>
-
-  <table id="tb-auth">
+  <table id="tb-auth" style="width: 105%;">
     <thead>
       <tr>
-        <th></th>
+        <th style="width: 10px;"></th>
         <th><span><span class="material-icons-round arr__sorted" phx-click="sorted_by_username"><%= if not @sorted_by_username do "keyboard_arrow_down" else "keyboard_arrow_right" end %></span></span> Nom d'utilisateur</th>
         <th><span><span class="material-icons-round arr__sorted" phx-click="sorted_by_email"><%= if not @sorted_by_email do "keyboard_arrow_down" else "keyboard_arrow_right" end %></span></span> Email</th>
         <th><span><span class="material-icons-round arr__sorted" phx-click="sorted_by_status"><%= if not @sorted_by_status do "keyboard_arrow_down" else "keyboard_arrow_right" end %></span></span> Statut</th>
@@ -69,7 +75,7 @@
       <%= for user <- @users do %>
       <tr>
 
-        <td style="width: 50px;">
+        <td style="width: 10px;">
             <img class="profile-pic-mini" src="<%= Routes.static_path(@socket, "/#{user.profile_picture}") %>" width="50"/>
         </td>
 

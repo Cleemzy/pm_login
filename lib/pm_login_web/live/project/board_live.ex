@@ -208,6 +208,22 @@ defmodule PmLoginWeb.Project.BoardLive do
           Monitoring.substract_progression_to_project(project)
         end
 
+        #REMOVING CHILD TASK FROM ACHIEVED STAGE
+        if Monitoring.is_a_child?(real_task) and Kanban.get_stage!(card.stage_id).status_id == 5 and real_task.status_id != 5 do
+          IO.puts "CHILD:"
+          IO.inspect real_task
+          IO.puts " AVEC PARENT:"
+          rt_with_parent = Monitoring.get_task_with_parent!(real_task.id)
+          IO.inspect rt_with_parent
+          if rt_with_parent.parent.status_id == 5 do
+            Monitoring.update_task(rt_with_parent.parent, %{"status_id" => real_task.status_id})
+            Kanban.remove_mother_card_from_achieve(rt_with_parent.parent.card, %{"stage_id" => rt_with_parent.card.stage_id})
+            project = socket.assigns.board.project
+            Monitoring.substract_progression_to_project(project)
+          end
+        end
+
+
         #IF TASK IS UPTADET ON THE SAME STAGE
         post_socket = if Kanban.get_stage!(card.stage_id).status_id == real_task.status_id do
 

@@ -757,6 +757,21 @@ def validate_start_deadline(changeset) do
   """
   def get_task!(id), do: Repo.get!(Task, id)
 
+  # def set_parent do
+  #
+  # end
+
+  def get_task_with_parent!(id) do
+    parent_card_query = from c in Card
+    parent_query = from p in Task,
+                    preload: [card: ^parent_card_query]
+    card_query = from ca in Card
+    query = from t in Task,
+            where: t.id == ^id,
+            preload: [parent: ^parent_query, card: ^card_query]
+    Repo.one!(query)
+  end
+
   def get_task_with_children!(id) do
     card_query = from c in Card
     query = from t in Task,
