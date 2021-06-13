@@ -22,8 +22,10 @@
         <%= if @is_contributor do%>
           <a href="#" class="btn btn-lg btn-secondary" phx-click="show-secondary"><i class="bi bi-plus-circle"></i> Créer tâche secondaire</a>
         <% end %>
-          <a href="#" class="btn btn-lg btn-info hide__task__button" style="float: right;" phx-click="show_hidden_tasks">Afficher tâches cachées <i class="bi bi-plus-circle"></i></a>
 
+        <%= if @is_admin or @is_attributor do %>
+          <a href="#" class="btn btn-lg btn-info hide__task__button" style="float: right;" phx-click="show_hidden_tasks">Restaurer tâches archivées <i class="bi bi-plus-circle"></i></a>
+        <% end %>
       </div>
       <div class="column column-30">
         <div class="basecontents__without__radius">
@@ -139,8 +141,9 @@
           <i title="Afficher" style="display: <%= if card.task.hidden, do: "none !important" %>;"class="bi bi-plus plus__icon" phx-click="show_plus_modal" phx-value-id="<%= card.id %>"></i>
           <i title="Commenter" style="display: <%= if card.task.hidden, do: "none !important" %>;"class="bi bi-chat-left-dots comment__icon" phx-click="show_comments_modal" phx-value-id="<%= card.id %>"></i>
           <i title="Modifier" style="display: <%= if card.task.hidden, do: "none !important" %>;"class="bi bi-pencil-square modif__icon" phx-click="show_modif_modal" phx-value-id="<%= card.id %>"></i>
-          <i title="Cacher" style="display: <%= if card.task.hidden, do: "none !important" %>;"class="bi bi-x delete__icon" phx-click="hide-card" phx-value-id="<%= card.task.id %>"></i>
-
+          <%= if @is_admin or @is_attributor do %>
+          <i title="Archiver" style="display: <%= if card.task.hidden, do: "none !important" %>;"class="bi bi-x delete__icon" phx-click="hide-card" phx-value-id="<%= card.task.id %>"></i>
+          <% end %>
             <% end %>
           <% end %>
         </ul>
