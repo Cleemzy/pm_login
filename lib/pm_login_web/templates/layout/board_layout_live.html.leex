@@ -7,8 +7,10 @@
     <%= csrf_meta_tag() %>
     <title>MGBI/ Monitoring</title>
     <link rel="stylesheet"  href="<%= Routes.static_path(@socket, "/css/app.css") %>"/>
+    <script defer type="text/javascript" src="<%= Routes.static_path(@socket, "/js/app.js") %>"></script>
   </head>
   <body id="layout-body">
+    <script>0</script>
     <header class="site-header">
 
       <div class="wrapper site-header__wrapper">
@@ -104,5 +106,5 @@
     </div>
 
   </footer>
-  <script defer type="text/javascript" src="<%= Routes.static_path(@socket, "/js/app.js") %>"></script>
+
 </html>

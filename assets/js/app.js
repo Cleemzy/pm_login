@@ -266,7 +266,12 @@ navToggle.addEventListener("click", function () {
 //   }
 // });
 
+// var body = document.body;
+// body.onload = function(){body.style.visibility = "visible";};
+
 var alerts = document.querySelectorAll(".alert");
+
+
 //     console.log(alerts);
 
     alerts.forEach(item => {

@@ -10,6 +10,8 @@
     <script defer type="text/javascript" src="<%= Routes.static_path(@conn, "/js/app.js") %>"></script>
   </head>
   <body class="login__body">
+    <script>0</script>
+
     <main role="main" class="container">
       <p id="log_alert" class="alert alert-info basecontents" role="alert" ><%= get_flash(@conn, :info) %></p>
       <p id="log_danger" class="alert alert-danger" role="alert"><%= get_flash(@conn, :error) %></p>
