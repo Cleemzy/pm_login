@@ -66,17 +66,52 @@ defmodule PmLogin.MyContex do
       _ ->
         data = Enum.sort_by(this_months, fn(task) -> task.priority_id end)
         |> Enum.map(fn(task) ->
-        [task.priority_id, task.title, date_to_naive(task.date_start), task.achieved_at]
+        ["#{PmLogin.Monitoring.get_priority!(task.priority_id).title}", task.title, date_to_naive(task.date_start), task.achieved_at]
       end)
-
 
       # IO.inspect data
         dataset = Contex.Dataset.new(data, ["Cat", "Task", "Start", "End"])
-        plot_content = Contex.GanttChart.new(dataset)
 
-        plot = Contex.Plot.new(900, 600, plot_content)
+        # IO.inspect dataset
+        colour_scale = dataset
+                        |> Contex.Dataset.unique_values("Cat")
+                        |> Contex.CategoryColourScale.new(["90ee90", "4361ee", "f8961e", "ff0000"])
+
+        # %Contex.CategoryColourScale{
+        #   colour_map: %{1 => "1f77b4", 2 => "ff7f0e", 3 => "2ca02c", 4 => "d62728"},
+        #   colour_palette: ["1f77b4", "ff7f0e", "2ca02c", "d62728", "9467bd", "8c564b",
+        #     "e377c2", "7f7f7f", "bcbd22", "17becf"],
+        #   default_colour: nil,
+        #   values: [1, 2, 3, 4]
+        # }
+
+
+        cs = %Contex.CategoryColourScale{
+          colour_map: %{1 => "1f77b4", 2 => "2ca02c", 3 => "ff7f0e", 4 => "d62728"},
+          colour_palette: ["1f77b4", "2ca02c", "ff7f0e", "d62728", "9467bd", "8c564b",
+            "e377c2", "7f7f7f", "bcbd22", "17becf"],
+          default_colour: nil,
+          values: [1, 2, 3, 4]
+        }
+
+        # IO.inspect colour_scale
+
+        plot_content = Contex.GanttChart.new(dataset, category_scale: colour_scale)
+
+
+        IO.inspect(plot_content)
+
+        # coloured_plot = struct!(plot_content, category_scale: cs)
+
+        cs_plot = struct(plot_content, category_scale: cs)
+        IO.puts "//////"
+        IO.inspect(Contex.CategoryColourScale.get_default_colour(cs))
+        # IO.inspect(coloured_plot)
+        IO.puts "//////"
+        plot = Contex.Plot.new(900, 600, cs_plot)
           |> Contex.Plot.titles("Diagramme de Gantt pour les tâches effectuées ce mois-ci", nil)
-
+          |> Contex.Plot.attributes(y_label: "Priorité")
+        # IO.inspect(plot)
           Contex.Plot.to_svg(plot)
         # OLD DATASET
         # data = Enum.map(this_months, fn(task) -> %{category_col: task.priority_id,

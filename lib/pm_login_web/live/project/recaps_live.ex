@@ -49,11 +49,13 @@ defmodule PmLoginWeb.Project.RecapsLive do
   end
 
   def handle_info({Monitoring, [:status, :updated], _}, socket) do
-    {:noreply, socket |> assign(todays: Monitoring.list_achieved_tasks_today, weeks: Monitoring.list_achieved_tasks_this_week, months: Monitoring.list_achieved_tasks_this_month)}
+    {:noreply, socket |> assign(todays: Monitoring.list_achieved_tasks_today, weeks: Monitoring.list_achieved_tasks_this_week, months: Monitoring.list_achieved_tasks_this_month,
+    output_todays: MyContex.todays_dataset, output_month: MyContex.this_month_dataset, output_week: MyContex.this_week_dataset)}
   end
 
   def handle_info({Monitoring, [:task, :updated], _}, socket) do
-    {:noreply, socket |> assign(todays: Monitoring.list_achieved_tasks_today, weeks: Monitoring.list_achieved_tasks_this_week, months: Monitoring.list_achieved_tasks_this_month)}
+    {:noreply, socket |> assign(todays: Monitoring.list_achieved_tasks_today, weeks: Monitoring.list_achieved_tasks_this_week, months: Monitoring.list_achieved_tasks_this_month,
+    output_todays: MyContex.todays_dataset, output_month: MyContex.this_month_dataset, output_week: MyContex.this_week_dataset)}
   end
 
   def render(assigns) do
