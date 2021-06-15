@@ -11,23 +11,36 @@ defmodule PmLogin.MyContex do
     case length(todays) do
       0 -> "Aucune tâche accomplie ce jour"
       _ ->
+        data = Enum.sort_by(todays, fn(task) -> task.priority_id end)
+        |> Enum.map(fn(task) ->
+          ["#{PmLogin.Monitoring.get_priority!(task.priority_id).title}", task.title, date_to_naive(task.date_start), task.achieved_at]
+        end)
+
+      # IO.inspect data
+        dataset = Contex.Dataset.new(data, ["Cat", "Task", "Start", "End"])
+
+        # IO.inspect dataset
+        colour_scale = dataset
+                        |> Contex.Dataset.unique_values("Cat")
+                        |> Contex.CategoryColourScale.new(["90ee90", "4361ee", "f8961e", "ff0000"])
+
+        cs = %Contex.CategoryColourScale{
+          colour_map: %{1 => "1f77b4", 2 => "2ca02c", 3 => "ff7f0e", 4 => "d62728"},
+          colour_palette: ["1f77b4", "2ca02c", "ff7f0e", "d62728", "9467bd", "8c564b",
+            "e377c2", "7f7f7f", "bcbd22", "17becf"],
+          default_colour: nil,
+          values: [1, 2, 3, 4]
+        }
 
 
-        data = Enum.map(todays, fn(task) -> %{category_col: task.priority_id,
-              task_col: task.title, start_col: date_to_datetime(task.date_start), finish_col: naive_to_datetime(task.achieved_at)} end)
-        dataset = Contex.Dataset.new(data)
+        plot_content = Contex.GanttChart.new(dataset, category_scale: colour_scale)
 
-        list = Enum.map(todays, fn(task) -> [task.priority_id, task.title, date_to_datetime(task.date_start), naive_to_datetime(task.achieved_at)] end)
-        # list = [[]]
-        list_dataset = Contex.Dataset.new(list)
-        # IO.inspect list_dataset
-        # plot_content = Contex.GanttChart.new(dataset, mapping: %{category_col: :category_col, task_col: :task_col, start_col: :start_col, finish_col: :finish_col} )
-        plot_content = Contex.GanttChart.new(list_dataset)
+        cs_plot = struct(plot_content, category_scale: cs)
+        IO.inspect(Contex.CategoryColourScale.get_default_colour(cs))
 
-
-        plot = Contex.Plot.new(900, 600, plot_content)
-          |> Contex.Plot.titles("Diagramme de Gantt pour les tâches effectuées aujourd'hui", nil)
-        output = Contex.Plot.to_svg(plot)
+        plot = Contex.Plot.new(600, 450, cs_plot)
+          |> Contex.Plot.attributes(y_label: "Priorité", x_label: "Dates de début et d'achèvement des tâches")
+          Contex.Plot.to_svg(plot)
     end
 
   end
@@ -38,21 +51,36 @@ defmodule PmLogin.MyContex do
     case length(this_weeks) do
       0 -> "Aucune tâche accomplie cette semaine"
       _ ->
-        data = Enum.map(this_weeks, fn(task) -> %{category_col: task.priority_id,
-        task_col: task.title, start_col: date_to_datetime(task.date_start), finish_col: naive_to_datetime(task.achieved_at)} end)
-        dataset = Contex.Dataset.new(data)
+        data = Enum.sort_by(this_weeks, fn(task) -> task.priority_id end)
+        |> Enum.map(fn(task) ->
+          ["#{PmLogin.Monitoring.get_priority!(task.priority_id).title}", task.title, date_to_naive(task.date_start), task.achieved_at]
+        end)
 
-        list = Enum.map(this_weeks, fn(task) -> [task.priority_id, task.title, date_to_datetime(task.date_start), naive_to_datetime(task.achieved_at)] end)
+      # IO.inspect data
+        dataset = Contex.Dataset.new(data, ["Cat", "Task", "Start", "End"])
 
-        list_dataset = Contex.Dataset.new(list)
-        # IO.inspect list_dataset
-        # plot_content = Contex.GanttChart.new(dataset, mapping: %{category_col: :category_col, task_col: :task_col, start_col: :start_col, finish_col: :finish_col} )
-        plot_content = Contex.GanttChart.new(list_dataset)
+        # IO.inspect dataset
+        colour_scale = dataset
+                        |> Contex.Dataset.unique_values("Cat")
+                        |> Contex.CategoryColourScale.new(["90ee90", "4361ee", "f8961e", "ff0000"])
+
+        cs = %Contex.CategoryColourScale{
+          colour_map: %{1 => "1f77b4", 2 => "2ca02c", 3 => "ff7f0e", 4 => "d62728"},
+          colour_palette: ["1f77b4", "2ca02c", "ff7f0e", "d62728", "9467bd", "8c564b",
+            "e377c2", "7f7f7f", "bcbd22", "17becf"],
+          default_colour: nil,
+          values: [1, 2, 3, 4]
+        }
 
 
-        plot = Contex.Plot.new(900, 600, plot_content)
-          |> Contex.Plot.titles("Diagramme de Gantt pour les tâches effectuées cette semaine", nil)
-        output = Contex.Plot.to_svg(plot)
+        plot_content = Contex.GanttChart.new(dataset, category_scale: colour_scale)
+
+        cs_plot = struct(plot_content, category_scale: cs)
+        IO.inspect(Contex.CategoryColourScale.get_default_colour(cs))
+
+        plot = Contex.Plot.new(600, 450, cs_plot)
+          |> Contex.Plot.attributes(y_label: "Priorité", x_label: "Dates de début et d'achèvement des tâches")
+          Contex.Plot.to_svg(plot)
     end
 
   end
@@ -66,8 +94,8 @@ defmodule PmLogin.MyContex do
       _ ->
         data = Enum.sort_by(this_months, fn(task) -> task.priority_id end)
         |> Enum.map(fn(task) ->
-        ["#{PmLogin.Monitoring.get_priority!(task.priority_id).title}", task.title, date_to_naive(task.date_start), task.achieved_at]
-      end)
+          ["#{PmLogin.Monitoring.get_priority!(task.priority_id).title}", task.title, date_to_naive(task.date_start), task.achieved_at]
+        end)
 
       # IO.inspect data
         dataset = Contex.Dataset.new(data, ["Cat", "Task", "Start", "End"])
@@ -108,9 +136,8 @@ defmodule PmLogin.MyContex do
         IO.inspect(Contex.CategoryColourScale.get_default_colour(cs))
         # IO.inspect(coloured_plot)
         IO.puts "//////"
-        plot = Contex.Plot.new(900, 600, cs_plot)
-          |> Contex.Plot.titles("Diagramme de Gantt pour les tâches effectuées ce mois-ci", nil)
-          |> Contex.Plot.attributes(y_label: "Priorité")
+        plot = Contex.Plot.new(600, 450, cs_plot)
+          |> Contex.Plot.attributes(y_label: "Priorité", x_label: "Dates de début et d'achèvement des tâches")
         # IO.inspect(plot)
           Contex.Plot.to_svg(plot)
         # OLD DATASET

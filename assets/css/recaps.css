@@ -6,6 +6,7 @@
 
 .desktop__header{
   display: block;
+  max-height: 50px;
 }
 
 @media (max-width: 638px){
@@ -16,10 +17,27 @@
 
 .mobile__header{
   display: none;
+  max-height: 50px;
 }
 
 @media (max-width: 638px){
   .mobile__header{
     display: block;
   }
+}
+
+.gantt__icon{
+  font-size: 25px;
+  margin-right: 20px;
+  transition: font-size 0.2s ease;
+}
+
+
+.gantt__icon:hover{
+  font-size: 30px;
+}
+
+.gantt__card{
+  width: 120%;
+  /* height: 120%; */
 }
