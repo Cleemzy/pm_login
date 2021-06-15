@@ -1,12 +1,17 @@
 .exc-tick {
     stroke: grey;
-    width: 200% !important;  
+    /* width: 200% !important;   */
 
   }
   
   .exc-tick text {
     fill: grey;
     stroke: none;
+    color: blue;
+}
+
+.exc-tick > text {
+  font-size: 9px !important;
 }
   
   .exc-grid {
@@ -29,8 +34,8 @@
     stroke: none;
   }
   .exc-subtitle {
-    fill: darkgrey;
-    font-size: 2.3rem;
+    fill: gray;
+    font-size: 12px;
     stroke: none;
   }
   
