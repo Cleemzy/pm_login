@@ -34,3 +34,6 @@ npm-debug.log
 /priv/static/*
 /priv/static/*/
 !/priv/static/uploads/
+
+/.elixir_ls/
+/.vscode/
