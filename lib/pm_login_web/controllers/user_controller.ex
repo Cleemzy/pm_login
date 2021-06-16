@@ -191,11 +191,11 @@ defmodule PmLoginWeb.UserController do
       {:error, %Ecto.Changeset{} = changeset} ->
         # render(conn, "edit_profile.html", user: user, changeset: changeset)
         cond do
-          Login.is_admin?(conn) -> LiveView.Controller.live_render(conn, PmLoginWeb.User.AdminEditprofileLive, session: %{"user" => user,"changeset" => changeset,"curr_user_id" => get_session(conn, :curr_user_id)}, router: PmLoginWeb.Router)
-          Login.is_attributor?(conn) -> LiveView.Controller.live_render(conn, PmLoginWeb.User.AttributorEditprofileLive, session: %{"user" => user,"changeset" => changeset,"curr_user_id" => get_session(conn, :curr_user_id)}, router: PmLoginWeb.Router)
-          Login.is_contributor?(conn) -> LiveView.Controller.live_render(conn, PmLoginWeb.User.ContributorEditprofileLive, session: %{"user" => user,"changeset" => changeset,"curr_user_id" => get_session(conn, :curr_user_id)}, router: PmLoginWeb.Router)
-          Login.is_client?(conn) -> LiveView.Controller.live_render(conn, PmLoginWeb.User.ClientEditprofileLive, session: %{"user" => user,"changeset" => changeset,"curr_user_id" => get_session(conn, :curr_user_id)}, router: PmLoginWeb.Router)
-          Login.is_unattributed?(conn) -> LiveView.Controller.live_render(conn, PmLoginWeb.User.UnattributedEditprofileLive, session: %{"user" => user,"changeset" => changeset,"curr_user_id" => get_session(conn, :curr_user_id)}, router: PmLoginWeb.Router)
+          Login.is_admin?(conn) -> LiveView.Controller.live_render(conn, PmLoginWeb.User.AdminEditprofileLive, session: %{"user" => user,"changeset" => changeset,"curr_user_id" => get_session(conn, :curr_user_id)})
+          Login.is_attributor?(conn) -> LiveView.Controller.live_render(conn, PmLoginWeb.User.AttributorEditprofileLive, session: %{"user" => user,"changeset" => changeset,"curr_user_id" => get_session(conn, :curr_user_id)})
+          Login.is_contributor?(conn) -> LiveView.Controller.live_render(conn, PmLoginWeb.User.ContributorEditprofileLive, session: %{"user" => user,"changeset" => changeset,"curr_user_id" => get_session(conn, :curr_user_id)})
+          Login.is_client?(conn) -> LiveView.Controller.live_render(conn, PmLoginWeb.User.ClientEditprofileLive, session: %{"user" => user,"changeset" => changeset,"curr_user_id" => get_session(conn, :curr_user_id)})
+          Login.is_unattributed?(conn) -> LiveView.Controller.live_render(conn, PmLoginWeb.User.UnattributedEditprofileLive, session: %{"user" => user,"changeset" => changeset,"curr_user_id" => get_session(conn, :curr_user_id)})
           true -> render(conn, "edit_profile.html", user: user, changeset: changeset)
         end
     end

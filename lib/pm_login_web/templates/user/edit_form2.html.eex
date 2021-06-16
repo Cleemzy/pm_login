@@ -6,7 +6,6 @@
       <p>Vérifiez vos informations ci-dessous</p>
     </div>
   <% end %>
-
 <div class="row">
   <div class="col-6 col60">
     <h1><%= @user.username %></h1>
