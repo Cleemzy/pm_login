@@ -14,9 +14,9 @@
 
 @media (max-width: 650px) {
   .hide__task__button{
-    margin-top: 10px;
+    /* margin-top: 10px;
     margin-bottom: 10px;
-    float: left !important;
+    float: left !important; */
   }
 }
 

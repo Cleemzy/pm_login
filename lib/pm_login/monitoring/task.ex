@@ -6,7 +6,7 @@ defmodule PmLogin.Monitoring.Task do
   alias PmLogin.Kanban.Card
   alias PmLogin.Login.User
   alias PmLogin.Services
-  alias PmLogin.Monitoring.{Status,Priorty,Comment,Project}
+  alias PmLogin.Monitoring.{Status,Priority,Comment,Project}
 
   schema "tasks" do
     field :date_end, :date

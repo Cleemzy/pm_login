@@ -362,6 +362,7 @@ justify-content: center;
   border-style: solid;
   border-radius: 60%;
   margin-left: 2%;
+  background-color: white;
   /* display: block; */
   /* margin: 0 auto; */
 }
