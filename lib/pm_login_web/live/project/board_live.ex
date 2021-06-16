@@ -11,6 +11,8 @@ defmodule PmLoginWeb.Project.BoardLive do
   alias PmLogin.Login.User
   alias PmLogin.Services
   alias PmLogin.Monitoring.Comment
+  alias PmLoginWeb.Router.Helpers, as: Routes
+
 
   def mount(_params,%{"curr_user_id" => curr_user_id ,"pro_id" => pro_id}, socket) do
     if connected?(socket), do: Kanban.subscribe()
@@ -45,7 +47,9 @@ defmodule PmLoginWeb.Project.BoardLive do
     {:ok, socket |> assign(is_attributor: Monitoring.is_attributor?(curr_user_id),is_admin: Monitoring.is_admin?(curr_user_id), show_plus_modal: false,curr_user_id: curr_user_id, pro_id: pro_id, show_secondary: false,
                     contributors: list_contributors, priorities: list_priorities, board: Kanban.get_board!(project.board_id), show_task_modal: false, show_modif_modal: false, card: nil,
                     primaries: list_primaries, is_contributor: Monitoring.is_contributor?(curr_user_id),task_changeset: task_changeset, modif_changeset: modif_changeset, show_comments_modal: false, card_with_comments: nil,
-                    show_notif: false, notifs: Services.list_my_notifications_with_limit(curr_user_id, 4), secondary_changeset: secondary_changeset, comment_changeset: Monitoring.change_comment(%Comment{})), layout: layout
+                    show_notif: false, notifs: Services.list_my_notifications_with_limit(curr_user_id, 4), secondary_changeset: secondary_changeset, comment_changeset: Monitoring.change_comment(%Comment{}))
+                    |> allow_upload(:file, accept: ~w(.png .jpeg .jpg .pdf .txt .odt .ods .odp .odg .csv .xml .xls .xlsx .xlsm .ppt .pptx .doc .docx), max_entries: 5),
+                     layout: layout
                   }
   end
 
@@ -59,6 +63,15 @@ defmodule PmLoginWeb.Project.BoardLive do
   def handle_event("show_hidden_tasks", _params, socket) do
     pro_id = socket.assigns.board.project.id
     Monitoring.show_hidden_tasks(pro_id)
+    {:noreply, socket}
+  end
+
+  def handle_event("cancel-entry", %{"ref" => ref}, socket) do
+    {:noreply, socket |> cancel_upload(:file, ref)}
+  end
+
+  def handle_event("change-comment", params, socket) do
+    # IO.inspect params
     {:noreply, socket}
   end
 
@@ -141,8 +154,29 @@ defmodule PmLoginWeb.Project.BoardLive do
     # IO.puts poster_id
     # IO.puts content
 
+    {entries, []} = uploaded_entries(socket, :file)
+    IO.inspect entries
+
     case Monitoring.post_comment(params) do
       {:ok, result} ->
+        consume_uploaded_entries(socket, :file, fn meta, entry ->
+          ext = Path.extname(entry.client_name)
+          file_name = Path.basename(entry.client_name, ext)
+          dest = Path.join("priv/static/uploads", "#{file_name}#{entry.uuid}#{ext}")
+          File.cp!(meta.path, dest)
+        end)
+
+        {entries, []} = uploaded_entries(socket, :file)
+
+          urls = for entry <- entries do
+            ext = Path.extname(entry.client_name)
+            file_name = Path.basename(entry.client_name, ext)
+            Routes.static_path(socket, "/uploads/#{file_name}#{entry.uuid}#{ext}")
+          end
+
+          Monitoring.update_comment_files(result, %{"file_urls" => urls})
+
+
         card_id = socket.assigns.card_with_comments.id
         nb_com = socket.assigns.com_nb
         {:ok, result} |> Monitoring.broadcast_com

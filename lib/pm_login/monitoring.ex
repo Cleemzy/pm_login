@@ -1072,6 +1072,12 @@ def validate_start_deadline(changeset) do
     |> Repo.update()
   end
 
+  def update_comment_files(%Comment{} = comment, attrs) do
+    comment
+    |> Comment.upload_changeset(attrs)
+    |> Repo.update()
+  end
+
   @doc """
   Deletes a comment.
 

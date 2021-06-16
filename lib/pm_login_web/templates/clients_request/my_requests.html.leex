@@ -19,10 +19,10 @@
 
       <div class="column" style="margin-bottom: 20px;">
         <%= for url <- request.file_urls do %>
-        <%= if Path.extname(url)==".jpg" do %>
-          <a href="<%= url %>" style="margin-bottom: 10px;" download><img src="<%= url %>" alt="" height="150"/></a>
+        <%= if Path.extname(url)==".jpg" or Path.extname(url)==".jpg" or Path.extname(url)==".jpeg" do %>
+          <a href="<%= url %>" style="margin-bottom: 10px;"><img src="<%= url %>" alt="" height="150"/></a>
           <% else %>
-          <a href="<%= url %>"><%= Path.basename(url) %></a>
+          <a href="<%= url %>" download><%= Path.basename(url) %></a>
           <br>
           <% end %>
         <% end %>
@@ -64,8 +64,11 @@
             <%= textarea f, :content, style: "max-width: 400px;" %>
             <%= error_tag f, :content %>
           </div>
-          <%=  live_file_input @uploads.file %>
-
+          <label class="btn btn-lg btn-primary file_input_btn">
+          <%=  live_file_input(@uploads.file, class: "file_inputs") %>
+          <i class="bi bi-upload"></i>
+          Charger fichiers
+          </label>
           <%= for {_ref, msg} <- @uploads.file.errors do %>
           <%= if Phoenix.Naming.humanize(msg)=="Too many files" do %>
           <p class="alert alert-danger"><%= "Nombre de fichiers max : 5." %></p>
@@ -77,7 +80,7 @@
           <div class="row">
             <div class="column">
 
-              <%= if Path.extname(entry.client_name)==".jpg" or Path.extname(entry.client_name)==".png" do %>
+              <%= if Path.extname(entry.client_name)==".jpg" or Path.extname(entry.client_name)==".png" or Path.extname(entry.client_name)==".jpeg" do %>
               <%= live_img_preview entry, height: 50 %>
               <% else %>
               <p class="file__name__upload"><%= entry.client_name %></p>

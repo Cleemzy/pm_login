@@ -140,3 +140,16 @@
   max-height: 50px;
   overflow-y: hidden;
 }
+
+/* GONNA UNCOMMENT THIS WHEN STYLING IS OVER */
+/* input[type="file"] {
+  display: none;
+} */
+
+.file_inputs{
+  display: none;
+}
+
+.file_input_btn:hover{
+  cursor: pointer;
+}

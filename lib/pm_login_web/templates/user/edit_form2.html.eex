@@ -27,7 +27,14 @@
     <%= label f, "Changer photo de profil:" %>
   </div>
   <div id="right-select" class="col-6 col40" style="margin-right: 5%;">
-   <%= file_input f, :photo, class: "form-control" %>
+
+  <label class="btn btn-lg btn-primary file_input_btn">
+  <%= file_input f, :photo, class: "file_inputs" %>
+  Photo de profil
+  <i class="bi bi-camera-fill"></i>
+  </label>
+
+
   </div>
 </div>
 

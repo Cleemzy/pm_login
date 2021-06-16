@@ -1,8 +1,12 @@
 .comments-section{
   overflow: scroll;
   height: 400px;
-  width: 500px;
+  width: 550px;
   /* white-space: nowrap; */
+}
+
+.new__inner__card{
+  padding-right: 0px !important;
 }
 
 .pp__comment{
@@ -73,6 +77,9 @@
   white-space: nowrap;
 }
 
+.form__wrapper>*{
+  display: inline-block;
+}
 .comment__back{
   font-size: 30px;
   color: gray;
@@ -83,9 +90,13 @@
 }
 
 .bt__com__form{
+  position: relative;
+  top: 5px;
   border: none;
   width: 10px;
   background-color: transparent !important;
+  /* margin-left: 10px; */
+
 }
 
 .bt__com__form:hover{
@@ -98,7 +109,7 @@
 
 .bt__com__form__ico{
   font-size: 25px;
-  color: blue;
+  color: darkblue;
 }
 
 .bt__com__form__ico:hover{
@@ -113,6 +124,41 @@
 
 .quit__link p {
   display: none;
+}
+
+#comment_content{
+  width: 425px;
+}
+
+.upload__ico__label{
+  margin-left: 20px;
+}
+.upload__com__icon{
+  font-size: 20px;
+  color:darkblue;
+}
+
+.upload__com__icon:hover{
+  cursor: pointer;
+  color: gray;
+}
+
+.file_preview_container{
+  width: 525px;
+  max-width: 525px;
+  overflow-x: auto;
+}
+
+.file_preview_container>*{
+  display: inline-block;
+}
+
+.comment__preview>*{
+  display: block;
+}
+
+.progress__comment{
+  width: 80px;
 }
 
 /* .quit__link:hover {

@@ -64,7 +64,7 @@ defmodule PmLoginWeb.LiveComponent.CommentsModalLive do
         <%= if not is_nil(@card) do %>
         <div class="modal-inner-container">
           <div class="modal-card-comments">
-            <div class="modal-inner-card">
+            <div class="modal-inner-card new__inner__card">
               <!-- Title -->
               <%= if @title != nil do %>
               <div class="row modal-title">
@@ -110,6 +110,16 @@ defmodule PmLoginWeb.LiveComponent.CommentsModalLive do
                       <div class="row">
                       <div class="comment__content">
                         <p class="textc__content_user"><%= comment.content %></p>
+                        <div class="column" style="margin-bottom: 20px;">
+                        <%= for url <- comment.file_urls do %>
+                        <%= if Path.extname(url)==".jpg" or Path.extname(url)==".png" or Path.extname(url)==".jpeg" do %>
+                          <a href="<%= url %>" style="margin-bottom: 10px;"><img src="<%= url %>" alt="" height="150"/></a>
+                          <% else %>
+                          <a href="<%= url %>" download><%= Path.basename(url) %></a>
+                          <br>
+                          <% end %>
+                        <% end %>
+                        </div>
                       </div>
                         <i class="bi bi-caret-left-fill"></i>
                       </div>
@@ -118,6 +128,17 @@ defmodule PmLoginWeb.LiveComponent.CommentsModalLive do
                         <i class="bi bi-caret-right-fill"></i>
                         <div class="comment__content">
                           <p class="textc__content"><%= comment.content %></p>
+                          <div class="column" style="margin-bottom: 20px;">
+                            <%= for url <- comment.file_urls do %>
+                            <%= if Path.extname(url)==".jpg" or Path.extname(url)==".png" or Path.extname(url)==".jpeg" do %>
+                              <a href="<%= url %>" style="margin-bottom: 10px;"><img src="<%= url %>" alt="" height="150"/></a>
+                              <% else %>
+                              <a href="<%= url %>" download><%= Path.basename(url) %></a>
+                              <br>
+                              <% end %>
+                            <% end %>
+                            </div>
+
                         </div>
                       </div>
                     <% end %>
@@ -161,14 +182,39 @@ defmodule PmLoginWeb.LiveComponent.CommentsModalLive do
 
                 <!-- Right Button -->
                 <div class="column column-90 col__com__footer">
-                  <%= f = form_for @changeset, "#",[phx_submit: "send-comment"]%>
+
+                    <div class="file_preview_container">
+                    <%= for entry <- @uploads.file.entries do %>
+                          <div class="comment__preview">
+                            <%= if Path.extname(entry.client_name)==".jpg" or Path.extname(entry.client_name)==".png" or Path.extname(entry.client_name)==".jpeg" do %>
+                            <%= live_img_preview entry, height: 50 %>
+                            <% else %>
+                            <p class="file__name__upload"><%= entry.client_name %></p>
+                            <% end %>
+                            <progress class="progress__comment" value="<%= entry.progress %>" max="100"></progress>
+                            <a href="#" phx-click="cancel-entry" phx-value-ref="<%= entry.ref %>">annuler</a>
+                          </div>
+
+                    <% end %>
+                    </div>
+
+                  <%= f = form_for @changeset, "#",[phx_submit: "send-comment", phx_change: "change-comment", multipart: true] %>
                     <div class="form__wrapper">
-                        <%= text_input f, :content %>
-                        <%= error_tag f, :content %>
+                        <%= text_input f, :content, size: "20" %>
                         <%= hidden_input f, :poster_id, value: @curr_user_id %>
                         <%= hidden_input f, :task_id, value: @card.task_id %>
+                        <label title="Joindre fichier" class="upload__ico__label">
+                        <%=  live_file_input(@uploads.file, class: "file_inputs") %>
+                        <i class="bi bi-upload upload__com__icon"></i>
+                        </label>
+                        <%= for {_ref, msg} <- @uploads.file.errors do %>
+                        <%= if Phoenix.Naming.humanize(msg)=="Too many files" do %>
+                        <p class="alert alert-danger"><%= "Nombre de fichiers max : 5." %></p>
+                        <% end %>
+                        <% end %>
                       <button type="submit" class="bt__com__form"><span class="material-icons bt__com__form__ico">send</span></button>
                     </div>
+                    <%= error_tag f, :content %>
                     <!-- <button type="submit" style="background-color: transparent;"><i class="bi bi-symmetry-horizontal" style="font-size: 200%;color: gray;"></i></button> -->
                   </form>
                 </div>
