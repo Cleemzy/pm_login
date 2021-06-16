@@ -159,7 +159,15 @@
 
 .progress__comment{
   width: 80px;
+  /* background-color: #90ee90;
+  background-color: #4361ee;
+  background-color: #f8961e;
+  background-color: #ff0000; */
+  
 }
+
+/* MY COLOUR PALETTE */
+/* "90ee90", "4361ee", "f8961e", "ff0000", */
 
 /* .quit__link:hover {
   display: block;
