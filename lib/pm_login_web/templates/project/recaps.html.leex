@@ -22,7 +22,7 @@
 <div class="row" style="margin-top: 20px;">
   <div class="column basecontents__without__radius recaps__chart">
     <div class="mobile__header basecontents__without__radius">
-      <h2>ce jour,<p class="recap__length"><%= length(@todays) %></p></h2>
+      <h2>ce jour,<p class="recap__length"><a href="#" phx-click="show_day"><i class="bi bi-bar-chart-steps gantt__icon"></i></a><%= length(@todays) %></p></h2>
     </div>
 
     <%= if length(@todays)!=0 do %>
@@ -64,7 +64,7 @@
 
   <div class="column basecontents__without__radius recaps__chart">
     <div class="mobile__header basecontents__without__radius">
-      <h2>cette semaine,<p class="recap__length"><%= length(@weeks) %></p></h2>
+      <h2>cette semaine,<p class="recap__length"><a href="#" phx-click="show_week"><i class="bi bi-bar-chart-steps gantt__icon"></i></a><%= length(@weeks) %></p></h2>
     </div>
     <%= if length(@weeks)!=0 do %>
 
@@ -104,7 +104,7 @@
 
   <div class="column basecontents__without__radius recaps__chart">
     <div class="mobile__header basecontents__without__radius">
-      <h2>ce mois,<p class="recap__length"><%= length(@months) %></p></h2>
+      <h2>ce mois,<p class="recap__length"><a href="#" phx-click="show_month"><i class="bi bi-bar-chart-steps gantt__icon"></i></a><%= length(@months) %></p></h2>
     </div>
     <%= if length(@months)!=0 do %>
 
