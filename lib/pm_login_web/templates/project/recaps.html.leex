@@ -147,7 +147,7 @@
 
 <div class="my__modal__container" style="visibility: <%= if @gantt_day, do: "visible", else: "hidden" %>; opacity: <%= if @gantt_day, do: "1 !important", else: "0" %>;">
   <div class="container my__modal__card gantt__card">
-  <a class="form__close" title="Fermer" phx-click="close_day"><i class="bi bi-x"></i></a>
+  <a class="x__close" title="Fermer" phx-click="close_day"><i class="bi bi-x"></i></a>
     <div class="row">
       <div class="column">
         <h3 style="text-align: center;">Diagramme de Gantt pour les tâches effectuées ce jour</h3>
@@ -159,7 +159,7 @@
 
 <div class="my__modal__container" style="visibility: <%= if @gantt_week, do: "visible", else: "hidden" %>; opacity: <%= if @gantt_week, do: "1 !important", else: "0" %>;">
   <div class="container my__modal__card gantt__card">
-  <a class="form__close" title="Fermer" phx-click="close_week"><i class="bi bi-x"></i></a>
+  <a class="x__close" title="Fermer" phx-click="close_week"><i class="bi bi-x"></i></a>
     <div class="row">
       <div class="column">
         <h3 style="text-align: center;">Diagramme de Gantt pour les tâches effectuées cette semaine</h3>

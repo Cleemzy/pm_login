@@ -154,7 +154,7 @@ defmodule PmLogin.Login.User do
     user
     |> cast(attrs, [:username, :email])
     |> unique_constraint(:username, message: "Nom d'utilisateur déjà pris")
-    |> validate_format(:email, ~r/@/, message: "Format d'email non valide, ajoutez '@' par exemple ")
+    |> validate_format(:email, ~r/^[\w.!#$%&’*+\-\/=?\^`{|}~]+@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*$/i, message: "Format d'email non valide")
     |> unique_constraint(:email, message: "Adresse email déjà pris")
     |> upload_profile_pic(attrs)
   end
@@ -187,7 +187,7 @@ defmodule PmLogin.Login.User do
     |> validate_required_password
     |> validate_required_email
     |> unique_constraint(:username, message: "Nom d'utilisateur déjà pris")
-    |> validate_format(:email, ~r/@/, message: "Format d'email non valide, ajoutez '@' par exemple ")
+    |> validate_format(:email, ~r/^[\w.!#$%&’*+\-\/=?\^`{|}~]+@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*$/i, message: "Format d'email non valide")
     |> unique_constraint(:email, message: "Adresse e-mail déjà utilisée")
     |> validate_confirmation(:email, message: "Ne correspond pas à l'adresse mail donnée")
     |> validate_confirmation(:password, message: "Les mots de passe ne correspondent pas")
