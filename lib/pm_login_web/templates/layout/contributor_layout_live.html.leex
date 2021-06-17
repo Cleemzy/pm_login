@@ -18,7 +18,7 @@
         <img class="profile-pic-header" src="<%= Routes.static_path(@socket, "/#{PmLogin.Login.get_profile_picture(@curr_user_id) }") %>" width="50"/>
         <%= link "Mgbi", to: Routes.user_path(@socket, :index), class: "brand" %>
         <nav class="nav">
-          <a href="#"><i class="bi bi-list nav__toggle " id="hamburger"></i></a>
+          <a href="#" class="menu-btn nav__toggle"><div class="menu-btn__burger"></div></a>
           <ul class="nav__wrapper">
             <li class="nav__item"><a href="<%= Routes.contributor_path(@socket, :my_projects) %>" class="nav__item__link"><span class="material-icons mat__ico">insert_chart</span><p>Mes projets</p> </a></li>
             <li class="nav__item"><a href="<%= Routes.user_path(@socket, :index) %>" class="nav__item__link"><span class="material-icons mat__ico">home</span><p>Accueil</p></a></li>

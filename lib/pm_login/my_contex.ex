@@ -119,7 +119,7 @@ defmodule PmLogin.MyContex do
         opts =
           [
             mapping:  %{category_col: "Cat", task_col: "Task", start_col: "Start", finish_col: "End"},
-            colour_palette: ["ff0000", "f8961e", "4361ee", "90ee90"]
+            colour_palette: ["ff0000", "f8961e", "4361ee", "008000"]
           ]
 
         # IO.inspect dataset
