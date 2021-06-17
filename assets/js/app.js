@@ -17,15 +17,17 @@ import "../css/app.scss"
 
 require('bootstrap-icons/font/bootstrap-icons.css');
 require('material-icons/iconfont/material-icons.css')
-import "phoenix_html"
+import 'alpinejs'
+import Alpine from 'alpinejs/builds/cdn'
 import {Socket} from "phoenix"
 import {LiveSocket} from "phoenix_live_view"
 import { Sortable, Plugins } from "@shopify/draggable";
-
 // ScrollComment
 let messageBody = document.querySelector('#messageBody');
 // messageBody.scrollTop = messageBody.scrollHeight - messageBody.clientHeight;
 
+window.Alpine = Alpine
+console.log(window.Alpine)
 // Define hooks
 const Hooks = {}
 
@@ -291,14 +293,30 @@ var alerts = document.querySelectorAll(".alert");
       item.onload = window.setTimeout(function(){item.style.opacity = 0;}, 2000);
     });
 
+  // var loadNotifs = document.querySelectorAll(".notif__load");    
+  //     loadNotifs.forEach(item => {
+  //       console.log(item);
+  //       item.addEventListener("click", function () {
+  //           item.classList.add("rotate__icon");
+  //       });
+  // });
+
+
 let csrfToken = document.querySelector("meta[name='csrf-token']").getAttribute("content")
 //Working liveSocket
 // let liveSocket = new LiveSocket("/live", Socket, {params: {_csrf_token: csrfToken}})
+
 let liveSocket = new LiveSocket("/live", Socket, {
   params: {
     _csrf_token: csrfToken
   },
+  dom: {
+    onBeforeElUpdated(from, to){
+      if(from.__x){ window.Alpine.clone(from.__x, to) }
+    }
+  },
   hooks: Hooks
 });
+
 
 liveSocket.connect()

@@ -40,6 +40,52 @@ module.exports = (env, options) => {
                }
            },
            {
+            test: /\.(esm.js|js|cjs.js)$/i,
+            include: path.resolve(__dirname, './node_modules/alpinejs/dist'),
+            use: {
+                loader: 'file-loader',
+            }
+        },{
+          test: /\.(esm.js|js|cjs.js)$/i,
+          include: path.resolve(__dirname, './node_modules/alpinejs/src/directives'),
+          use: {
+              loader: 'file-loader',
+          }
+      },
+
+      {
+        test: /\.(esm.js|js|cjs.js)$/i,
+        include: path.resolve(__dirname, './node_modules/alpinejs/src'),
+        use: {
+            loader: 'file-loader',
+        }
+    },
+
+    {
+      test: /\.(esm.js|js|cjs.js)$/i,
+      include: path.resolve(__dirname, './node_modules/alpinejs/src/magics'),
+      use: {
+          loader: 'file-loader',
+      }
+  },
+
+  {
+    test: /\.(esm.js|js|cjs.js)$/i,
+    include: path.resolve(__dirname, './node_modules/alpinejs/src/utils'),
+    use: {
+        loader: 'file-loader',
+    }
+},
+
+{
+  test: /\.(esm.js|js|cjs.js)$/i,
+  include: path.resolve(__dirname, './node_modules/alpinejs/builds'),
+  use: {
+      loader: 'file-loader',
+  }
+},
+      
+           {
               test: /\.(woff|woff2|eot|otf|css|scss|ttf|png|jpg|gif|svg)$/i,
               include: path.resolve(__dirname, './node_modules/material-icons/iconfont'),
               use: {
@@ -47,13 +93,14 @@ module.exports = (env, options) => {
               }
           },
 
-        {
-          test: /\.js$/,
-          exclude: /node_modules/,
-          use: {
-            loader: 'babel-loader'
-          }
-        },
+          {
+            test: /\.js$/,
+            exclude: /node_modules/,
+            use: {
+              loader: 'babel-loader'
+            }
+          }, 
+
         {
           test: /\.[s]?css$/,
           use: [

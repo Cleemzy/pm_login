@@ -18,7 +18,7 @@
         <img class="profile-pic-header" src="<%= Routes.static_path(@socket, "/#{PmLogin.Login.get_profile_picture(@curr_user_id) }") %>" width="50"/>
         <%= link "Mgbi", to: Routes.user_path(@socket, :index), class: "brand" %>
         <nav class="nav">
-          <a href="#" class="menu-btn nav__toggle"><div class="menu-btn__burger"></div></a>
+          <a  class="menu-btn nav__toggle"><div class="menu-btn__burger"></div></a>
           <ul class="nav__wrapper">
 
             <li class="nav__item">
