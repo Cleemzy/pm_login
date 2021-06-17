@@ -22,7 +22,7 @@
   background-color: white;
   min-width: 160px;
   width: 220px;
-  /* max-width: 100px; */
+  max-width: 220px;
   box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
   z-index: 1;
 }
@@ -104,7 +104,7 @@
   /* background-color: #f1f1f1; */
   /* height: 300px; */
   width: 220px;
-  /* max-width: 200px; */
+  max-width: 220px;
   max-height: 400px;
   background-color: white;
 
@@ -131,21 +131,24 @@
   background-color: lightgray;
 }
 
-/* .notif-link p{
+.notif-link p{
   overflow-wrap: break-word;
   word-wrap: break-word;
   font-size: 11px;
-} */
+}
+
+.notif_container{
+  width: 175px;
+}
 
 .notif-text{
-  white-space:normal;
+  word-wrap: break-word !important;
+  display: block;
   text-align: left;
   font-size: 11px;
-  margin-left: 5px;
-  word-wrap: break-word;
-  overflow-wrap: break-word;
-  /* background-color: black; */
+  white-space: normal;
 }
+
 
 .notif__load{
   font-size: 20px;
