@@ -46,3 +46,15 @@
   padding-left: 15px;
   padding-right: 10px;
 }
+
+.my_row>*{
+  display: inline-block;
+}
+
+.my_col{
+  margin-right: 20px;
+}
+.my_col>*{
+  display: inline-block;
+  margin: auto;
+}

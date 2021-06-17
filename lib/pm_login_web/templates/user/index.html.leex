@@ -9,13 +9,10 @@
   </div>
 </div>
 
-  <div class="row">
-    <div class="column column-10">
+  <div class="my_row">
+    <div class="my_col">
       <!-- <b style="position: relative; top: 8px;">Filtre :</b> -->
-      <span class="material-icons-round filter__icon">filter_list</span>
-    </div>
-
-    <div class="column column-20">
+      <span class="material-icons-round filter__icon filt__and__sort__ico">filter_list</span>
       <form phx-change="right_selected">
 
         <select id="right_filter" name="right_select">
@@ -29,12 +26,9 @@
       </form>
     </div>
 
-    <div class="column column-10">
+    <div class="my_col">
       <!-- <b style="position: relative; top: 8px;"></b> -->
-      <span class="material-icons-round sort__icon">sort_by_alpha</span>
-    </div>
-
-    <div class="column column-20">
+      <span class="material-icons-round sort__icon filt__and__sort__ico">sort_by_alpha</span>
       <form phx-change="sort_users">
 
         <select id="sort_auth" name="sort_select">
@@ -46,14 +40,11 @@
       </form>
     </div>
 
-    <div class="column column-10">
-      <span class="material-icons-round srch__icon">search</span>
-    </div>
-
-    <div class="column column-20">
+    <div class="my_col">
       <form phx-change="search-user">
           <input type="text" name="search-a" style="width: 150px;">
       </form>
+      <span class="material-icons-round filt__and__sort__ico">search</span>
     </div>
 
 

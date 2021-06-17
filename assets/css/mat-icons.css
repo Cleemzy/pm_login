@@ -12,3 +12,8 @@
 .mat__ico__big{
   font-size: 40px !important;
 }
+
+.filt__and__sort__ico{
+  position: relative;
+  top: 10px;
+}
