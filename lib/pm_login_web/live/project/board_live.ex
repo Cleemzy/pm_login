@@ -44,13 +44,38 @@ defmodule PmLoginWeb.Project.BoardLive do
     my_primary_tasks = Monitoring.list_primary_tasks(curr_user_id, pro_id)
     list_primaries = my_primary_tasks |> Enum.map(fn (%Task{} = p) -> {p.title, p.id} end)
 
+    board = Kanban.get_board!(project.board_id)
+
     {:ok, socket |> assign(is_attributor: Monitoring.is_attributor?(curr_user_id),is_admin: Monitoring.is_admin?(curr_user_id), show_plus_modal: false,curr_user_id: curr_user_id, pro_id: pro_id, show_secondary: false,
-                    contributors: list_contributors, priorities: list_priorities, board: Kanban.get_board!(project.board_id), show_task_modal: false, show_modif_modal: false, card: nil,
+                    contributors: list_contributors, priorities: list_priorities, board: board, show_task_modal: false, show_modif_modal: false, card: nil,
                     primaries: list_primaries, is_contributor: Monitoring.is_contributor?(curr_user_id),task_changeset: task_changeset, modif_changeset: modif_changeset, show_comments_modal: false, card_with_comments: nil,
-                    show_notif: false, notifs: Services.list_my_notifications_with_limit(curr_user_id, 4), secondary_changeset: secondary_changeset, comment_changeset: Monitoring.change_comment(%Comment{}))
+                    show_notif: false, notifs: Services.list_my_notifications_with_limit(curr_user_id, 4), secondary_changeset: secondary_changeset, comment_changeset: Monitoring.change_comment(%Comment{}),
+                    project_contributors: Monitoring.list_project_contributors(board), project_attributors: Monitoring.list_project_attributors(board))
                     |> allow_upload(:file, accept: ~w(.png .jpeg .jpg .pdf .txt .odt .ods .odp .odg .csv .xml .xls .xlsx .xlsm .ppt .pptx .doc .docx), max_entries: 5),
                      layout: layout
                   }
+  end
+
+  def handle_event("inspect_tasks", _params, socket) do
+    board = Kanban.get_board!(socket.assigns.board.id)
+    IO.inspect(Monitoring.list_project_contributors(board))
+    IO.inspect(board)
+    {:noreply, socket}
+  end
+
+  def handle_event("attributor_selected", params, socket) do
+    IO.inspect(params)
+    {:noreply, socket}
+  end
+
+  def handle_event("contributor_selected", params, socket) do
+    IO.inspect(params)
+    {:noreply, socket}
+  end
+
+  def handle_event("search_task", params, socket) do
+    IO.inspect(params)
+    {:noreply, socket}
   end
 
   def handle_event("hide-card", %{"id" => id}, socket) do

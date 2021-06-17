@@ -15,17 +15,78 @@
         <div class="row">
           <p><u><b> Description:</b></u> <%= @board.project.description %></p>
         </div>
-        <%= if @is_admin or @is_attributor do%>
-          <a id="show__task__modal__btn" href="#" class="btn btn-lg btn-primary" phx-click="show_task_modal"><i class="bi bi-plus-circle"></i> Nouvelle tâche</a>
-        <% end %>
 
-        <%= if @is_contributor do%>
-          <a href="#" class="btn btn-lg btn-secondary" phx-click="show-secondary"><i class="bi bi-plus-circle"></i> Créer tâche secondaire</a>
-        <% end %>
+        <div class="my_row">
+            <%= if @is_admin or @is_attributor do%>
+              <div class="my_col">
+                  <a id="show__task__modal__btn" href="#" class="btn btn-lg btn-primary" phx-click="show_task_modal"><i class="bi bi-plus-circle"></i> Nouvelle tâche</a>
+              </div>
+            <% end %>
 
-        <%= if @is_admin or @is_attributor do %>
-          <a href="#" class="btn btn-lg btn-info hide__task__button" style="float: right;" phx-click="show_hidden_tasks">Restaurer tâches archivées <i class="bi bi-plus-circle"></i></a>
-        <% end %>
+            <%= if @is_contributor do%>
+              <div class="my_col">
+                  <a href="#" class="btn btn-lg btn-secondary" phx-click="show-secondary"><i class="bi bi-plus-circle"></i> Créer tâche secondaire</a>
+              </div>
+            <% end %>
+
+            <%= if @is_admin or @is_attributor do %>
+              <div class="my_col">
+                <!-- <b style="position: relative; top: 8px;">Filtre :</b> -->
+                <span class="material-icons-round filter__icon filt__and__sort__ico">person</span>
+                <form phx-change="attributor_selected">
+
+                  <select id="task_filter" name="attributor_select">
+                  <option value="" selected disabled hidden>par attributeur</option>
+                  <option value="9000">Tout</option>
+                   <%= for attributor <- @project_attributors do %>
+                    <option value="<%= attributor.id %>"><%= attributor.username %></option>
+                  <% end %>
+                  </select>
+
+                </form>
+              </div>
+            <% end %>
+
+            <%= if @is_admin or @is_attributor do %>
+              <div class="my_col">
+                <!-- <b style="position: relative; top: 8px;">Filtre :</b> -->
+                <span class="material-icons-round filter__icon filt__and__sort__ico">supervisor_account</span>
+                <form phx-change="contributor_selected">
+
+                  <select id="task_filter" name="contributor_select">
+                  <option value="" selected disabled hidden>par contributeur</option>
+                  <option value="9000">Tout</option>
+                   <%= for contributor <- @project_contributors do %>
+                    <option value="<%= contributor.id %>"><%= contributor.username %></option>
+                  <% end %>
+                  </select>
+
+                </form>
+              </div>
+            <% end %>
+
+          <div class="my_col">
+            <form phx-change="search_task">
+                <input type="text" name="search-a" style="width: 150px;">
+            </form>
+            <span class="material-icons-round filt__and__sort__ico">search</span>
+          </div>
+
+            <%= if @is_admin or @is_attributor do %>
+              <div class="my_col">
+                  <a href="#" class="btn btn-lg btn-info" phx-click="show_hidden_tasks">Restaurer tâches archivées <i class="bi bi-plus-circle"></i></a>
+              </div>
+            <% end %>
+
+            <%# <div class="my_col">
+                <a href="#" class="btn btn-primary" phx-click="inspect_tasks">inspect tasks</a>
+            </div> %>
+        </div>
+
+
+
+
+
       </div>
       <div class="column column-30">
         <div class="basecontents__without__radius">

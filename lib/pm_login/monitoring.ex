@@ -1107,4 +1107,25 @@ def validate_start_deadline(changeset) do
     Comment.changeset(comment, attrs)
   end
 
+  def list_project_contributors(%Board{} = board) do
+    contributor_ids = board.project.tasks
+          |> Enum.filter(fn task -> (not is_nil(task.contributor_id)) end)
+          |> Enum.map(fn task -> task.contributor_id end)
+          |> Enum.uniq
+
+    for id <- contributor_ids do
+      Login.get_user!(id)
+    end
+  end
+
+  def list_project_attributors(%Board{} = board) do
+    attributors_ids = board.project.tasks
+          |> Enum.filter(fn task -> (not is_nil(task.attributor_id)) end)
+          |> Enum.map(fn task -> task.attributor_id end)
+          |> Enum.uniq
+
+    for id <- attributors_ids do
+      Login.get_user!(id)
+    end
+  end
 end
