@@ -17,17 +17,18 @@ import "../css/app.scss"
 
 require('bootstrap-icons/font/bootstrap-icons.css');
 require('material-icons/iconfont/material-icons.css')
-import 'alpinejs'
-import Alpine from 'alpinejs/builds/cdn'
+// import 'alpinejs'
+// import Alpine from 'alpinejs/builds/cdn'
 import {Socket} from "phoenix"
+import NProgress from "nprogress"
 import {LiveSocket} from "phoenix_live_view"
 import { Sortable, Plugins } from "@shopify/draggable";
 // ScrollComment
 let messageBody = document.querySelector('#messageBody');
 // messageBody.scrollTop = messageBody.scrollHeight - messageBody.clientHeight;
 
-window.Alpine = Alpine
-console.log(window.Alpine)
+// window.Alpine = Alpine
+// console.log(window.Alpine)
 // Define hooks
 const Hooks = {}
 
@@ -310,13 +311,14 @@ let liveSocket = new LiveSocket("/live", Socket, {
   params: {
     _csrf_token: csrfToken
   },
-  dom: {
-    onBeforeElUpdated(from, to){
-      if(from.__x){ window.Alpine.clone(from.__x, to) }
-    }
-  },
   hooks: Hooks
 });
 
+window.addEventListener("phx:page-loading-start", info => NProgress.start())
+window.addEventListener("phx:page-loading-stop", info => NProgress.done())
+
 
 liveSocket.connect()
+
+window.liveSocket = liveSocket
+
