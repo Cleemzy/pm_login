@@ -19,6 +19,8 @@ require('bootstrap-icons/font/bootstrap-icons.css');
 require('material-icons/iconfont/material-icons.css')
 // import 'alpinejs'
 // import Alpine from 'alpinejs/builds/cdn'
+
+
 import {Socket} from "phoenix"
 import NProgress from "nprogress"
 import {LiveSocket} from "phoenix_live_view"
@@ -311,12 +313,19 @@ let liveSocket = new LiveSocket("/live", Socket, {
   params: {
     _csrf_token: csrfToken
   },
-  hooks: Hooks
+  hooks: Hooks,
+  dom: {
+    onBeforeElUpdated(from, to){
+      if(from.__x){ window.Alpine.clone(from.__x, to) }
+    }
+  }
 });
 
 window.addEventListener("phx:page-loading-start", info => NProgress.start())
 window.addEventListener("phx:page-loading-stop", info => NProgress.done())
 
+   // "webpack": "^5.39.1",
+    // "webpack-cli": "^4.7.2"
 
 liveSocket.connect()
 
