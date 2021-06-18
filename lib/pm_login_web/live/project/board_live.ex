@@ -56,6 +56,22 @@ defmodule PmLoginWeb.Project.BoardLive do
                   }
   end
 
+  def cards_list_filtered(old_list, attrib_id) do
+    old_list |> Enum.filter(fn card -> card.task.attributor_id == attrib_id end)
+  end
+
+  def cards_list_contrib_filtered(old_list, contrib_id) do
+    old_list |> Enum.filter(fn card -> card.task.contributor_id == contrib_id end)
+  end
+
+  def cards_list_filtered_nocontributor(old_list) do
+    old_list |> Enum.filter(fn card -> is_nil(card.task.contributor_id) end)
+  end
+
+  def cards_list_searched(old_list, text) do
+    old_list |> Enum.filter(fn card -> Monitoring.filter_task_title(text, card.task.title) end)
+  end
+
   def handle_event("inspect_tasks", _params, socket) do
     board = Kanban.get_board!(socket.assigns.board.id)
     IO.inspect(Monitoring.list_project_contributors(board))
@@ -63,19 +79,68 @@ defmodule PmLoginWeb.Project.BoardLive do
     {:noreply, socket}
   end
 
-  def handle_event("attributor_selected", params, socket) do
-    IO.inspect(params)
-    {:noreply, socket}
+  def handle_event("attributor_selected", %{"attributor_select" => id}, socket) do
+    attrib_id = String.to_integer(id)
+
+    stages = case attrib_id do
+      9000 -> Kanban.get_board!(socket.assigns.board.id).stages
+      _ ->
+        Kanban.get_board!(socket.assigns.board.id).stages
+            |> Enum.map(fn (%Kanban.Stage{} = stage) ->
+              struct(stage, cards: cards_list_filtered(stage.cards, attrib_id))
+        end)
+
+    end
+
+
+    current_board = Kanban.get_board!(socket.assigns.board.id)
+    board = struct(current_board, stages: stages)
+
+    {:noreply, socket
+    |> assign(board: board)
+  }
   end
 
-  def handle_event("contributor_selected", params, socket) do
-    IO.inspect(params)
-    {:noreply, socket}
+  def handle_event("contributor_selected", %{"contributor_select" => id}, socket) do
+    contrib_id = String.to_integer(id)
+
+    stages = case contrib_id do
+      9000 -> Kanban.get_board!(socket.assigns.board.id).stages
+      -1 ->
+        Kanban.get_board!(socket.assigns.board.id).stages
+            |> Enum.map(fn (%Kanban.Stage{} = stage) ->
+              struct(stage, cards: cards_list_filtered_nocontributor(stage.cards))
+        end)
+      _ ->
+        Kanban.get_board!(socket.assigns.board.id).stages
+            |> Enum.map(fn (%Kanban.Stage{} = stage) ->
+              struct(stage, cards: cards_list_contrib_filtered(stage.cards, contrib_id))
+        end)
+
+    end
+
+    current_board = Kanban.get_board!(socket.assigns.board.id)
+    board = struct(current_board, stages: stages)
+
+    {:noreply, socket
+    |> assign(board: board)
+  }
   end
 
-  def handle_event("search_task", params, socket) do
-    IO.inspect(params)
-    {:noreply, socket}
+  def handle_event("search_task", %{"search-a" => text}, socket) do
+    IO.inspect(text)
+
+    stages =  Kanban.get_board!(socket.assigns.board.id).stages
+    |> Enum.map(fn (%Kanban.Stage{} = stage) ->
+      struct(stage, cards: cards_list_searched(stage.cards, text))
+    end)
+
+    current_board = Kanban.get_board!(socket.assigns.board.id)
+    board = struct(current_board, stages: stages)
+
+    {:noreply, socket
+    |> assign(board: board)
+  }
   end
 
   def handle_event("hide-card", %{"id" => id}, socket) do

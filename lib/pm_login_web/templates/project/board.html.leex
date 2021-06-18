@@ -59,6 +59,7 @@
                    <%= for contributor <- @project_contributors do %>
                     <option value="<%= contributor.id %>"><%= contributor.username %></option>
                   <% end %>
+                  <option value="-1">Sans contributeur</option>
                   </select>
 
                 </form>

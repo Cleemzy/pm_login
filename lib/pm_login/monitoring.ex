@@ -30,6 +30,9 @@ defmodule PmLogin.Monitoring do
     Phoenix.PubSub.broadcast(PmLogin.PubSub, "hidden_subscription", {"hidden_subscription", event, tuple})
   end
 
+  def filter_task_title(text, title) do
+    Regex.match?(~r/^#{text}/i, title)
+  end
   #DATE CALCULUS
 
   def avg_working_hours(%Task{} = t) do

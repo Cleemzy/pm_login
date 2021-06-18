@@ -49,6 +49,46 @@ defmodule PmLogin.Kanban do
     # |> Repo.one!()
   end
 
+  def get_board_by_attributor!(board_id, attributor_id) do
+    parent_query = from tsk in Task
+    contributor_query = from c in User
+    attributor_query = from u in User
+
+    task_query = from t in Task,
+                preload: [attributor: ^attributor_query, contributor: ^contributor_query, parent: ^parent_query, children: :children],
+                where: t.attributor_id == ^attributor_id
+
+    stage_query =
+      from s in Stage,
+        order_by: s.position,
+        preload: [
+          cards:
+            ^from(c in Card,
+              preload: [task: ^task_query],
+              order_by: :position
+            )
+        ]
+
+      ac_user_query = from ac_u in User
+      company_query = from comp in Company
+      active_client_query = from ac in ActiveClient,
+                            preload: [company: ^company_query,user: ^ac_user_query]
+      p_t_children_query = from cdren in Task
+      p_tasks_query = from tas in Task,
+                      preload: [children: ^p_t_children_query]
+      project_query = from pro in Project,
+                      preload: [tasks: ^p_tasks_query, active_client: ^active_client_query]
+
+
+      board_query =
+        from b in Board,
+          preload: [stages: ^stage_query, project: ^project_query],
+          where: b.id == ^board_id
+
+      Repo.one!(board_query)
+
+  end
+
   def create_board(attrs) do
     %Board{}
     |> Board.changeset(attrs)
