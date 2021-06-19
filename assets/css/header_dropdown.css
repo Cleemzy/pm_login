@@ -100,7 +100,7 @@
 }
 .dropdown-notif {
   /* display: none; */
-  overflow-y: scroll;
+  overflow-y: auto;
   position: absolute;
   padding-right: 15px;
   left: -150px;

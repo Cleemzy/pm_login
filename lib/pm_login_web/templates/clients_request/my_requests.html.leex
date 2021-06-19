@@ -33,18 +33,21 @@
       <i><%= request.active_client.user.email %></i><br/>
       <i>le <%= Utilities.letters_date_format_with_hours(request.date_post) %></i>
 
-      <div class="row">
-        <div class="column column-offset-25" style="float: right;">
-          <div class="row">
-            <label for="vu">Vue</label><br>
+      <div class="my_row" style="padding-left: 3em">
+          <div class="my_col request__checkbox__col">
+            <label for="vu">Vue</label>
             <input id="vu" type="checkbox" <%= if request.seen, do: "checked" %> disabled>
-            <label for="encours">En cours</label><br>
+          </div>
+          <div class="my_col">
+            <label for="encours">En cours</label>
             <input id="encours" type="checkbox" <%= if request.ongoing, do: "checked" %> disabled>
-            <label for="accomplie">Accomplie</label><br><br>
+          </div>
+          <div class="my_col">
+            <label for="accomplie">Accomplie</label>
             <input id="accomplie" type="checkbox" <%= if request.done, do: "checked" %> disabled>
           </div>
-        </div>
       </div>
+
   </div>
 <% end %>
 

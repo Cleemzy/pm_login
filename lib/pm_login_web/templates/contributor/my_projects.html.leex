@@ -5,7 +5,7 @@
 
     <%= for project <- @projects do %>
       <p><span class="material-icons-round arr__sorted">keyboard_arrow_right</span>
-      <u><%= link "#{project.title}", to: Routes.project_path(@socket, :board, project) %></u></p>
+      <%= link "#{project.title}", to: Routes.project_path(@socket, :board, project) %></p>
     <% end %>
 
 
