@@ -30,9 +30,9 @@ defmodule PmLoginWeb.User.AdminProfileLive do
   def handle_event("load-notifs", %{}, socket) do
     curr_user_id = socket.assigns.curr_user_id
     notifs_length = socket.assigns.notifs |> length
-    {:noreply, socket |> assign(notifs: Services.list_my_notifications_with_limit(curr_user_id, notifs_length+4))}
+    {:noreply, socket |> assign(notifs: Services.list_my_notifications_with_limit(curr_user_id, notifs_length+4)) |> push_event("SpinTest", %{})}
   end
-  
+
   def handle_event("cancel-notif", %{}, socket) do
     cancel = if socket.assigns.show_notif, do: false
     {:noreply, socket |> assign(show_notif: cancel)}

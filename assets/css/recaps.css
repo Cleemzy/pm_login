@@ -48,6 +48,22 @@
   transition: font-size 0.5s ease;
 }
 
+.x__close__copy{
+  font-size: 25px;
+  /* float: right; */
+  transition: font-size 0.5s ease;
+}
+
+.x__close__with__animation{
+  /* font-size: 25px;
+  float: right; */
+  transition: font-size 0.5s ease;
+  cursor: pointer;
+  -webkit-animation:spin 0.3s linear 0s;
+  -moz-animation:spin 0.3s linear 0s;
+  animation:spin 0.3s linear 0s;
+}
+
 .x__close:hover{
   /* font-size: 30px; */
   cursor: pointer;
@@ -55,6 +71,8 @@
   -moz-animation:spin 0.3s linear 0s;
   animation:spin 0.3s linear 0s;
 }
+
+
 
 
 @-moz-keyframes spin { 100% { -moz-transform: rotate(180deg); } }

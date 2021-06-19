@@ -151,12 +151,13 @@
   text-align: left;
   font-size: 11px;
   white-space: normal;
+  color: darkblue;
 }
 
 
 .notif__load{
   font-size: 20px;
-  color: blue;
+  color: darkblue;
 }
 
 .notif__load:hover{
@@ -168,6 +169,7 @@
   word-wrap: break-word;
   font-size: 11px;
   float: right;
+  color: darkblue;
 }
 
 .profile-pic-notif{

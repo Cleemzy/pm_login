@@ -50,7 +50,7 @@ defmodule PmLoginWeb.Project.BoardLive do
                     contributors: list_contributors, priorities: list_priorities, board: board, show_task_modal: false, show_modif_modal: false, card: nil,
                     primaries: list_primaries, is_contributor: Monitoring.is_contributor?(curr_user_id),task_changeset: task_changeset, modif_changeset: modif_changeset, show_comments_modal: false, card_with_comments: nil,
                     show_modal: false, arch_id: nil,show_notif: false, notifs: Services.list_my_notifications_with_limit(curr_user_id, 4), secondary_changeset: secondary_changeset, comment_changeset: Monitoring.change_comment(%Comment{}),
-                    show_hidden_modal: false, hidden_tasks: Monitoring.list_hidden_tasks(pro_id), project_contributors: Monitoring.list_project_contributors(board), project_attributors: Monitoring.list_project_attributors(board))
+                    no_selected_hidden: false, show_hidden_modal: false, hidden_tasks: Monitoring.list_hidden_tasks(pro_id), project_contributors: Monitoring.list_project_contributors(board), project_attributors: Monitoring.list_project_attributors(board))
                     |> allow_upload(:file, accept: ~w(.png .jpeg .jpg .pdf .txt .odt .ods .odp .odg .csv .xml .xls .xlsx .xlsm .ppt .pptx .doc .docx), max_entries: 5),
                      layout: layout
                   }
@@ -78,6 +78,10 @@ defmodule PmLoginWeb.Project.BoardLive do
   #   IO.inspect(board)
   #   {:noreply, socket}
   # end
+
+  def handle_event("spin_test", _params, socket) do
+    {:noreply, socket |> push_event("SpinTest", %{})}
+  end
 
   def handle_event("go_archive", %{"id" => id}, socket) do
     {:noreply, socket |> assign(show_modal: true, arch_id: id)}
@@ -168,7 +172,12 @@ defmodule PmLoginWeb.Project.BoardLive do
   def handle_event("restore_tasks", params, socket) do
     list_ids = params |> Map.drop(["_csrf_token"]) |> Map.values
     Monitoring.restore_archived_tasks(list_ids)
-    {:noreply, socket |> assign(show_hidden_modal: false) |>put_flash(:info, "Tâche(s) restaurée(s).") |> push_event("AnimateAlert", %{})}
+    case length(list_ids) do
+      0 ->
+          {:noreply, socket |> assign(no_selected_hidden: true)}
+      _ ->
+        {:noreply, socket |> assign(show_hidden_modal: false) |>put_flash(:info, "Tâche(s) restaurée(s).") |> push_event("AnimateAlert", %{})}
+    end
   end
 
   def handle_event("show_hidden_tasks", _params, socket) do
@@ -178,7 +187,7 @@ defmodule PmLoginWeb.Project.BoardLive do
   end
 
   def handle_event("close_hidden_modal", _params, socket) do
-    {:noreply, socket |> assign(show_hidden_modal: false)}
+    {:noreply, socket |> assign(show_hidden_modal: false, no_selected_hidden: false)}
   end
 
   def handle_event("cancel-entry", %{"ref" => ref}, socket) do
@@ -220,7 +229,7 @@ defmodule PmLoginWeb.Project.BoardLive do
   def handle_event("load-notifs", %{}, socket) do
     curr_user_id = socket.assigns.curr_user_id
     notifs_length = socket.assigns.notifs |> length
-    {:noreply, socket |> assign(notifs: Services.list_my_notifications_with_limit(curr_user_id, notifs_length+4))}
+    {:noreply, socket |> assign(notifs: Services.list_my_notifications_with_limit(curr_user_id, notifs_length+4)) |> push_event("SpinTest", %{})}
   end
 
   def handle_event("cancel-notif", %{}, socket) do
@@ -498,7 +507,8 @@ defmodule PmLoginWeb.Project.BoardLive do
     card_id = socket.assigns.card_with_comments.id
     nb_com = socket.assigns.com_nb + 5
     card = Kanban.get_card_for_comment_limit!(card_id,nb_com)
-    {:noreply, socket |> assign(com_nb: nb_com, card_with_comments: card)}
+    {:noreply, socket |> assign(com_nb: nb_com, card_with_comments: card) |> push_event("SpinComment", %{})
+    }
   end
 
   def handle_event("scroll-bot", %{}, socket) do

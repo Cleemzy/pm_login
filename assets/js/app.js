@@ -223,6 +223,43 @@ Hooks.MessageBody = {
   // }
 };
 
+Hooks.SpinTest = {
+  mounted(){
+    console.log("tafiditra hook")
+    this.handleEvent("SpinTest", ({}) =>
+      this.spin_icon()
+    )
+    this.handleEvent("SpinComment", ({}) =>
+      this.spin_comment_icon()
+    )
+ },
+    spin_icon(){
+      var spins = document.querySelectorAll('.x__close__copy');
+      // console.log(spin);
+      // spins.classList.add('rotate__icon');
+      // console.log(spin);
+      // window.setTimeout(function(){spins.classList.remove('rotate__icon');}, 500);
+
+      spins.forEach(item => {
+        item.classList.add('rotate__icon');
+      });
+
+      spins.forEach(item => {
+        window.setTimeout(function(){item.classList.remove('rotate__icon');}, 500);     
+      });
+
+    },
+    spin_comment_icon(){
+      var clock_comment = document.getElementById('clock_comment');
+      console.log(clock_comment);
+      clock_comment.classList.add('rotate__icon');
+      console.log(clock_comment);
+      window.setTimeout(function(){clock_comment.classList.remove('rotate__icon');}, 500); 
+      console.log(clock_comment);    
+    }
+
+};
+
 
 //hook end
 // document.querySelector('#messageBody').scrollTop = messageBody.scrollHeight - messageBody.clientHeight

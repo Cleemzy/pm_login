@@ -1,7 +1,7 @@
 defmodule PmLogin.ActiveClient.IndexLive do
   use Phoenix.LiveView
   alias PmLogin.Services
-  
+
   def mount(_params, %{"curr_user_id" => curr_user_id,"active_clients" => active_clients}, socket) do
     Services.subscribe()
 
@@ -30,7 +30,7 @@ defmodule PmLogin.ActiveClient.IndexLive do
   def handle_event("load-notifs", %{}, socket) do
     curr_user_id = socket.assigns.curr_user_id
     notifs_length = socket.assigns.notifs |> length
-    {:noreply, socket |> assign(notifs: Services.list_my_notifications_with_limit(curr_user_id, notifs_length+4))}
+    {:noreply, socket |> assign(notifs: Services.list_my_notifications_with_limit(curr_user_id, notifs_length+4)) |> push_event("SpinTest", %{})}
   end
 
   def handle_event("cancel-notif", %{}, socket) do

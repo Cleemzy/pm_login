@@ -377,8 +377,14 @@
           </div>
         <% end %>
         </div>
+         <%= if @no_selected_hidden do %>
+          <p class="invalid-feedback" style="text-align: center;">Sélectionner tâche à restaurer</p>
+          <% end %>
           <div class="my_row" style="text-align: center; margin-top: 10px;">
+          <%= if length(@hidden_tasks) != 0 do %>
               <button class="btn btn-lg btn-primary right-button" type="submit">Restaurer</button>
+          <% end %>
+
           </div>
           </form>
       </div>
