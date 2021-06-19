@@ -94,6 +94,9 @@ defmodule PmLoginWeb.Project.BoardLive do
   def handle_event("archive_task", %{"id" => id}, socket) do
     task = Monitoring.get_task!(id)
     Monitoring.hide_task(task)
+    curr_user_id = socket.assigns.curr_user_id
+    content = "Tâche #{task.title} archivée par #{Login.get_user!(curr_user_id).username}."
+    Services.send_notifs_to_admins_and_attributors(curr_user_id, content)
     {:noreply, socket |> assign(show_modal: false) |>put_flash(:info, "Tâche #{task.title} archivée.") |> push_event("AnimateAlert", %{})}
   end
 
