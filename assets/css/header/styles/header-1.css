@@ -169,3 +169,7 @@
       position: absolute;
       right: 1rem;
       top: 1rem; } }
+
+.header_link_text{  
+  /* box-shadow: 5px 1px 2px 1px rgba(104, 84, 84, 1); */
+}

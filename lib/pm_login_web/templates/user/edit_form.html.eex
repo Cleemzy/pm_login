@@ -32,7 +32,7 @@
         <%= label f, "Archivé(e)" %>
       </div>
       <div id="right-select" class="col-6 col40">
-        <%= link "Restaurer",to: Routes.user_path(@socket, :restore, @user),method: :put,class: "btn btn-outline-dark btn-lg ",id: "signin" %>
+        <%= link("Restaurer",to: Routes.user_path(@socket, :restore, @user),method: :put,class: "btn btn-outline-dark btn-lg ",id: "signin")%>
       </div>
       <% end %>
 </div>
@@ -43,6 +43,5 @@
   <% end %>
 
 <% end %>
-
 
 </div>

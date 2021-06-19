@@ -78,10 +78,6 @@
                   <a href="#" class="btn btn-lg btn-info" phx-click="show_hidden_tasks">Restaurer tâches archivées <i class="bi bi-plus-circle"></i></a>
               </div>
             <% end %>
-
-            <%# <div class="my_col">
-                <a href="#" class="btn btn-primary" phx-click="inspect_tasks">inspect tasks</a>
-            </div> %>
         </div>
 
 
@@ -107,8 +103,6 @@
     </div>
   </div>
 
-  <%# <button @click="console.log('oii')">alpine test</button> %>
-
 
   <!-- <div class="">
     <a class="alert__test" href="#" phx-click="show_alert_test" style="">show alert</a>
@@ -124,7 +118,6 @@
   <!-- <div class="hooktest" phx-hook="hookTest">
     oiii
   </div> -->
-
   </div>
 
   <div class="meter">
@@ -207,7 +200,7 @@
           <i title="Commenter" style="display: <%= if card.task.hidden, do: "none !important" %>;"class="bi bi-chat-left-dots comment__icon" phx-click="show_comments_modal" phx-value-id="<%= card.id %>"></i>
           <i title="Modifier" style="display: <%= if card.task.hidden, do: "none !important" %>;"class="bi bi-pencil-square modif__icon" phx-click="show_modif_modal" phx-value-id="<%= card.id %>"></i>
           <%= if @is_admin or @is_attributor do %>
-          <i title="Archiver" style="display: <%= if card.task.hidden, do: "none !important" %>;"class="bi bi-x delete__icon" phx-click="hide-card" phx-value-id="<%= card.task.id %>"></i>
+          <i title="Archiver" style="display: <%= if card.task.hidden, do: "none !important" %>;"class="bi bi-x delete__icon" phx-click="go_archive" phx-value-id="<%= card.task.id %>"></i>
           <% end %>
             <% end %>
           <% end %>
@@ -228,7 +221,7 @@
                   right_button: nil,
                   right_button_action: nil,
                   right_button_param: nil,
-                  left_button: "ANNULER",
+                  left_button: "annuler",
                   left_button_action: "cancel",
                   task_changeset: @task_changeset,
                   pro_id: @pro_id,
@@ -247,7 +240,7 @@
                   right_button: nil,
                   right_button_action: nil,
                   right_button_param: nil,
-                  left_button: "ANNULER",
+                  left_button: "Annuler",
                   left_button_action: "cancel-secondary",
                   task_changeset: @secondary_changeset,
                   primaries: @primaries,
@@ -266,7 +259,7 @@
                   right_button: nil,
                   right_button_action: nil,
                   right_button_param: nil,
-                  left_button: "RETOUR",
+                  left_button: "Retour",
                   left_button_action: "cancel-plus",
                   task_changeset: @task_changeset,
                   pro_id: @pro_id,
@@ -285,7 +278,7 @@
                   right_button: nil,
                   right_button_action: nil,
                   right_button_param: nil,
-                  left_button: "RETOUR",
+                  left_button: "Retour",
                   left_button_action: "cancel-modif",
                   task_changeset: @task_changeset,
                   pro_id: @pro_id,
@@ -306,10 +299,10 @@
                      id: "confirm-arch",
                      title: "Commentaires",
                      body: nil,
-                     right_button: "OUI",
+                     right_button: "Oui",
                      right_button_action: "arch",
                      right_button_param: "", #@arch_id
-                     left_button: "ANNULER",
+                     left_button: "Annuler",
                      left_button_action: "cancel-comments",
                      curr_user_id: @curr_user_id,
                      changeset: @comment_changeset,
@@ -319,9 +312,76 @@
   %>
 
 
+
+
 <br/>
 <%= if @is_admin or @is_attributor do %>
   <span><a href="<%= Routes.project_path(@socket, :index) %>" class="btn btn-lg btn-secondary"><i class="bi bi-arrow-bar-left"></i> Retour</a></span>
   <% else %>
   <span><a href="<%= Routes.contributor_path(@socket, :my_projects) %>" class="btn btn-lg btn-secondary"><i class="bi bi-arrow-bar-left"></i> Retour</a></span>
 <% end %>
+
+<div class="my__modal__container" style="visibility: <%= if @show_modal, do: "visible", else: "hidden" %>; opacity: <%= if @show_modal, do: "1 !important", else: "0" %>;">
+  <div class="container my__modal__card archive__modal__card">
+  <a class="x__close" title="Fermer" phx-click="close_modal"><i class="bi bi-x"></i></a>
+    <div class="row">
+      <div class="column">
+        <h3 style="text-align: center;">Archiver?</h3>
+        <p style="text-align: center;">Êtes-vous sûr(e) d'archiver la tâche <%= if not is_nil(@arch_id), do: PmLogin.Monitoring.get_task!(@arch_id).title %> ?</p>
+
+            <div class="modal-buttons" style="margin-bottom: 20px;">
+                <!-- Left Button -->
+                <a href="#" class="btn btn-lg left-button" type="button" phx-click="close_modal">
+                  <div>NON</div>
+                </a>
+                <!-- Right Button -->
+                <a href="#" class="btn btn-lg btn-primary right-button" type="button" phx-click="archive_task" phx-value-id="<%= @arch_id %>">
+                  <div>OUI</div>
+                </a>
+            </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="my__modal__container" style="visibility: <%= if @show_hidden_modal, do: "visible", else: "hidden" %>; opacity: <%= if @show_hidden_modal, do: "1 !important", else: "0" %>;">
+  <div class="container my__modal__card archive__modal__card" style="padding-bottom: 10px;">
+  <a class="x__close" title="Fermer" phx-click="close_hidden_modal"><i class="bi bi-x"></i></a>
+    <div class="row">
+      <div class="column" style="padding-bottom: -20px !important;">
+        <h3 style="text-align: center;"><i class="bi bi-archive-fill"></i> Tâches archivées</h3>
+        <div class="my_row">
+            <div class="my_col"><h4>Tâche</h4></div>
+            <div class="my_col" style="float:right;"><h4>Contributeur</h4></div>
+        </div>
+        <%= f = form_for nil, "#",[phx_submit: "restore_tasks", style: "margin-bottom: 0px;"]  %>
+        <div class="hidden__contents__container">
+        <%= for hidden_task <- @hidden_tasks do %>
+          <div class="simple_basecontents" style="margin-bottom: 10px;padding-bottom: 10px;">
+            <div class="my_row">
+                <div class="my_col">
+                    <b><%= hidden_task.title %></b>
+                </div>
+                <div class="my_col" style="float:right;">
+                    <b>
+                    <%= if not is_nil(hidden_task.contributor) do
+                      hidden_task.contributor.username
+                      else
+                      "-"
+                      end
+                    %>
+                    </b>
+                    <input name="task_<%= hidden_task.id %>" type="checkbox" phx-value-id="<%= hidden_task.id %>" value="<%= hidden_task.id %>">
+                </div>
+            </div>
+          </div>
+        <% end %>
+        </div>
+          <div class="my_row" style="text-align: center; margin-top: 10px;">
+              <button class="btn btn-lg btn-primary right-button" type="submit">Restaurer</button>
+          </div>
+          </form>
+      </div>
+    </div>
+  </div>
+</div>

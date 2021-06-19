@@ -74,7 +74,7 @@ defmodule PmLoginWeb.Services.SoftwareLive do
     socket
     |> put_flash(:info, "Info logiciel de #{software.title} supprimé!")
     |> push_event("AnimateAlert", %{})
-    |> assign(show_modal: false)
+    |> assign(service_id: nil,show_modal: false)
       }
   end
 

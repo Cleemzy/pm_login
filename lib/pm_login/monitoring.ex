@@ -36,7 +36,10 @@ defmodule PmLogin.Monitoring do
   #DATE CALCULUS
 
   def avg_working_hours(%Task{} = t) do
-      trunc(t.estimated_duration / working_days(t.date_start, t.deadline))
+    case working_days(t.date_start, t.deadline) do
+      0 -> 0
+      _ -> trunc(t.estimated_duration / working_days(t.date_start, t.deadline))
+    end
   end
 
   def working_days(d1,d2) do
@@ -742,6 +745,20 @@ def validate_start_deadline(changeset) do
             where: t.hidden and t.project_id==^project_id
     Repo.update_all(query, set: [hidden: false])
     |> broadcast_hidden_change([:tasks, :shown])
+  end
+
+  def restore_archived_tasks(list_ids) do
+    query = from t in Task,
+            where: t.id in ^list_ids
+    Repo.update_all(query, set: [hidden: false])
+    |> broadcast_hidden_change([:tasks, :shown])
+  end
+
+  def list_hidden_tasks(project_id) do
+    query = from t in Task,
+            where: t.hidden and t.project_id==^project_id,
+            preload: [contributor: ^from u in User]
+    Repo.all(query)
   end
 
   @doc """

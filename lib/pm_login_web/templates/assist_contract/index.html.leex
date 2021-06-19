@@ -42,10 +42,10 @@
                    id: "confirm-del",
                    title: "Supprimer contrat?",
                    body: "Etes-vous sûr de supprimer le contrat d'assistance #{if not is_nil(@contr_id), do: PmLogin.Services.get_assist_contract!(@contr_id).title}?",
-                   right_button: "OUI",
+                   right_button: "Oui",
                    right_button_action: "del",
                    right_button_param: @contr_id,
-                   left_button: "ANNULER",
+                   left_button: "Annuler",
                    show_modal: @show_modal,
                    left_button_action: "cancel-del")
 %>

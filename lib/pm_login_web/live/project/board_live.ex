@@ -49,8 +49,8 @@ defmodule PmLoginWeb.Project.BoardLive do
     {:ok, socket |> assign(is_attributor: Monitoring.is_attributor?(curr_user_id),is_admin: Monitoring.is_admin?(curr_user_id), show_plus_modal: false,curr_user_id: curr_user_id, pro_id: pro_id, show_secondary: false,
                     contributors: list_contributors, priorities: list_priorities, board: board, show_task_modal: false, show_modif_modal: false, card: nil,
                     primaries: list_primaries, is_contributor: Monitoring.is_contributor?(curr_user_id),task_changeset: task_changeset, modif_changeset: modif_changeset, show_comments_modal: false, card_with_comments: nil,
-                    show_notif: false, notifs: Services.list_my_notifications_with_limit(curr_user_id, 4), secondary_changeset: secondary_changeset, comment_changeset: Monitoring.change_comment(%Comment{}),
-                    project_contributors: Monitoring.list_project_contributors(board), project_attributors: Monitoring.list_project_attributors(board))
+                    show_modal: false, arch_id: nil,show_notif: false, notifs: Services.list_my_notifications_with_limit(curr_user_id, 4), secondary_changeset: secondary_changeset, comment_changeset: Monitoring.change_comment(%Comment{}),
+                    show_hidden_modal: false, hidden_tasks: Monitoring.list_hidden_tasks(pro_id), project_contributors: Monitoring.list_project_contributors(board), project_attributors: Monitoring.list_project_attributors(board))
                     |> allow_upload(:file, accept: ~w(.png .jpeg .jpg .pdf .txt .odt .ods .odp .odg .csv .xml .xls .xlsx .xlsm .ppt .pptx .doc .docx), max_entries: 5),
                      layout: layout
                   }
@@ -72,12 +72,27 @@ defmodule PmLoginWeb.Project.BoardLive do
     old_list |> Enum.filter(fn card -> Monitoring.filter_task_title(text, card.task.title) end)
   end
 
-  def handle_event("inspect_tasks", _params, socket) do
-    board = Kanban.get_board!(socket.assigns.board.id)
-    IO.inspect(Monitoring.list_project_contributors(board))
-    IO.inspect(board)
-    {:noreply, socket}
+  # def handle_event("inspect_tasks", _params, socket) do
+  #   board = Kanban.get_board!(socket.assigns.board.id)
+  #   IO.inspect(Monitoring.list_project_contributors(board))
+  #   IO.inspect(board)
+  #   {:noreply, socket}
+  # end
+
+  def handle_event("go_archive", %{"id" => id}, socket) do
+    {:noreply, socket |> assign(show_modal: true, arch_id: id)}
   end
+
+  def handle_event("close_modal", _params, socket) do
+    {:noreply, socket |> assign(show_modal: false)}
+  end
+
+  def handle_event("archive_task", %{"id" => id}, socket) do
+    task = Monitoring.get_task!(id)
+    Monitoring.hide_task(task)
+    {:noreply, socket |> assign(show_modal: false) |>put_flash(:info, "Tâche #{task.title} archivée.") |> push_event("AnimateAlert", %{})}
+  end
+
 
   def handle_event("attributor_selected", %{"attributor_select" => id}, socket) do
     attrib_id = String.to_integer(id)
@@ -150,10 +165,20 @@ defmodule PmLoginWeb.Project.BoardLive do
     {:noreply, socket}
   end
 
+  def handle_event("restore_tasks", params, socket) do
+    list_ids = params |> Map.drop(["_csrf_token"]) |> Map.values
+    Monitoring.restore_archived_tasks(list_ids)
+    {:noreply, socket |> assign(show_hidden_modal: false) |>put_flash(:info, "Tâche(s) restaurée(s).") |> push_event("AnimateAlert", %{})}
+  end
+
   def handle_event("show_hidden_tasks", _params, socket) do
-    pro_id = socket.assigns.board.project.id
-    Monitoring.show_hidden_tasks(pro_id)
-    {:noreply, socket}
+    # pro_id = socket.assigns.board.project.id
+    # Monitoring.show_hidden_tasks(pro_id)
+    {:noreply, socket |> assign(show_hidden_modal: true)}
+  end
+
+  def handle_event("close_hidden_modal", _params, socket) do
+    {:noreply, socket |> assign(show_hidden_modal: false)}
   end
 
   def handle_event("cancel-entry", %{"ref" => ref}, socket) do
@@ -167,12 +192,14 @@ defmodule PmLoginWeb.Project.BoardLive do
 
   def handle_info({"hidden_subscription", [:task, :hidden], _}, socket) do
     board_id = socket.assigns.board.id
-    {:noreply, socket |> assign(board: Kanban.get_board!(board_id))}
+    pro_id = socket.assigns.board.project.id
+    {:noreply, socket |> assign(board: Kanban.get_board!(board_id), hidden_tasks: Monitoring.list_hidden_tasks(pro_id))}
   end
 
   def handle_info({"hidden_subscription", [:tasks, :shown], _}, socket) do
     board_id = socket.assigns.board.id
-    {:noreply, socket |> assign(board: Kanban.get_board!(board_id))}
+    pro_id = socket.assigns.board.project.id
+    {:noreply, socket |> assign(board: Kanban.get_board!(board_id), hidden_tasks: Monitoring.list_hidden_tasks(pro_id))}
   end
 
   def handle_event("switch-notif", %{}, socket) do
@@ -208,19 +235,26 @@ defmodule PmLoginWeb.Project.BoardLive do
     show_plus_modal = socket.assigns.show_plus_modal
     show_modif_modal = socket.assigns.show_modif_modal
     show_comments_modal = socket.assigns.show_comments_modal
+    show_modal = socket.assigns.show_modal
+    show_hidden_modal = socket.assigns.show_hidden_modal
+
 
     s_task_modal = if (key == "Escape" and show_task_modal == true) ,do: false ,else: show_task_modal
     s_secondary = if (key == "Escape" and show_secondary == true) ,do: false ,else: show_secondary
     s_plus_modal = if (key == "Escape" and show_plus_modal == true) ,do: false ,else: show_plus_modal
     s_modif_modal = if (key == "Escape" and show_modif_modal == true) ,do: false ,else: show_modif_modal
     s_comments_modal = if (key == "Escape" and show_comments_modal == true) ,do: false ,else: show_comments_modal
+    s_modal = if (key == "Escape" and show_modal == true) ,do: false ,else: show_modal
+    s_hidden_modal = if (key == "Escape" and show_hidden_modal == true) ,do: false ,else: show_hidden_modal
 
     {:noreply, socket
                |> assign(show_task_modal: s_task_modal,
                           show_secondary: s_secondary,
                           show_plus_modal: s_plus_modal,
                           show_modif_modal: s_modif_modal,
-                          show_comments_modal: s_comments_modal)}
+                          show_comments_modal: s_comments_modal,
+                          show_modal: s_modal,
+                          show_hidden_modal: s_hidden_modal)}
   end
 
   def handle_event("show_alert_test", _params, socket) do

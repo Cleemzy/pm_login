@@ -60,6 +60,7 @@ COMMENTED ROUTES ARE NOT TO BE DELETED BUT JUST NOT USED AT THE TIME
     put "/user/:id", UserController, :archive
     patch "/user/:id", UserController, :archive
     put "/user/restore/:id", UserController, :restore
+    patch "/user/restore/:id", UserController, :restore
     get "/", PageController, :index
     post "/auth", AuthController, :auth
     post "/test_auth", AuthController, :test_auth

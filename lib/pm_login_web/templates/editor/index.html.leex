@@ -32,10 +32,10 @@
                    id: "confirm-del",
                    title: "Supprimer éditeur?",
                    body: "Etes-vous sûr de supprimer l'éditeur #{if not is_nil(@service_id), do: PmLogin.Services.get_editor!(@service_id).title}?",
-                   right_button: "OUI",
+                   right_button: "Oui",
                    right_button_action: "del",
                    right_button_param: @service_id,
-                   left_button: "ANNULER",
+                   left_button: "Annuler",
                    show_modal: @show_modal,
                    left_button_action: "cancel-del")
 %>

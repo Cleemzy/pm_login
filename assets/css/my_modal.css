@@ -23,3 +23,14 @@
     background-color: white;
     opacity: 0.9;
 }
+
+.archive__modal__card{
+    padding-bottom: -20px !important;
+    width: 500px;
+}
+
+.hidden__contents__container{
+    height: 250px;
+    max-height: 250px;
+    overflow-y: auto;
+}

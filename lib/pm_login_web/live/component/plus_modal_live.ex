@@ -201,7 +201,7 @@ defmodule PmLoginWeb.LiveComponent.PlusModalLive do
 
                     <!-- Buttons -->
 
-                      <button class="left-button"
+                      <button class="btn btn-lg left-button"
                               type="button"
                               phx-click="left-button-click"
                               phx-target="#modal-<%= @id %>">

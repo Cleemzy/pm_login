@@ -1,4 +1,4 @@
-defmodule PmLoginWeb.LiveComponent.ModalLive do
+defmodule PmLoginWeb.LiveComponent.ArchiveTaskModal do
   @moduledoc """
   This is a general modal component with title, body text, and two buttons.
 
@@ -71,7 +71,7 @@ defmodule PmLoginWeb.LiveComponent.ModalLive do
               <!-- Buttons -->
               <div class="modal-buttons">
                 <!-- Left Button -->
-                <button class="btn btn-lg btn-default left-button"
+                <button class="left-button"
                         type="button"
                         phx-click="left-button-click"
                         phx-target="#modal-<%= @id %>">
@@ -80,7 +80,7 @@ defmodule PmLoginWeb.LiveComponent.ModalLive do
                   </div>
                 </button>
                 <!-- Right Button -->
-                <button class="btn btn-lg btn-primary right-button"
+                <button class="right-button"
                         type="button"
                         phx-click="right-button-click"
                         phx-target="#modal-<%= @id %>">

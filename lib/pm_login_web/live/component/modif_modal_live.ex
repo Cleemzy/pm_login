@@ -178,7 +178,7 @@ defmodule PmLoginWeb.LiveComponent.ModifModalLive do
                   <!-- Buttons -->
                   <div class="modal-buttons">
                     <!-- Left Button -->
-                    <button class="left-button"
+                    <button class="btn btn-lg btn-default left-button"
                             type="button"
                             phx-click="left-button-click"
                             phx-target="#modal-<%= @id %>">
@@ -186,8 +186,8 @@ defmodule PmLoginWeb.LiveComponent.ModifModalLive do
                         <%= @left_button %>
                       </div>
                     </button>
-                      <div class="right-button">
-                      <%= submit "Valider" %>
+                      <div class="">
+                      <%= submit "Valider", class: "btn btn-lg btn-primary right-button" %>
                       </div>
                   </div>
 

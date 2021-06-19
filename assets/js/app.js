@@ -20,11 +20,12 @@ require('material-icons/iconfont/material-icons.css')
 // import 'alpinejs'
 // import Alpine from 'alpinejs/builds/cdn'
 
-
+import "phoenix_html"
 import {Socket} from "phoenix"
 import NProgress from "nprogress"
 import {LiveSocket} from "phoenix_live_view"
 import { Sortable, Plugins } from "@shopify/draggable";
+import Alpine from "alpinejs";
 // ScrollComment
 let messageBody = document.querySelector('#messageBody');
 // messageBody.scrollTop = messageBody.scrollHeight - messageBody.clientHeight;
@@ -313,13 +314,15 @@ let liveSocket = new LiveSocket("/live", Socket, {
   params: {
     _csrf_token: csrfToken
   },
-  hooks: Hooks,
-  dom: {
-    onBeforeElUpdated(from, to){
-      if(from.__x){ window.Alpine.clone(from.__x, to) }
-    }
-  }
+  hooks: Hooks
+  // dom: {
+  //   onBeforeElUpdated(from, to){
+  //     if(from.__x){ window.Alpine.clone(from.__x, to) }
+  //   }
+  // }
 });
+
+
 
 window.addEventListener("phx:page-loading-start", info => NProgress.start())
 window.addEventListener("phx:page-loading-stop", info => NProgress.done())

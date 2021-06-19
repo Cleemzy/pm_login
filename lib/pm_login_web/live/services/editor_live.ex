@@ -67,14 +67,15 @@ defmodule PmLoginWeb.Services.EditorLive do
       {ModalLive, :button_clicked, %{action: "del", param: service_id}},
       socket
     ) do
+      IO.puts "tafiditra"
       editor = Services.get_editor!(service_id)
       Services.delete_editor(editor)
       # PmLoginWeb.UserController.archive(socket, user.id)
   {:noreply,
     socket
+    |> assign(service_id: nil, show_modal: false)
     |> put_flash(:info, "L'éditeur' #{editor.title} a bien été supprimé!")
     |> push_event("AnimateAlert", %{})
-    |> assign(show_modal: false)
       }
   end
 
