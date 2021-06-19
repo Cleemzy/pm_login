@@ -2,3 +2,15 @@
   padding: 20px;
   margin-bottom: 20px;
 }
+
+.pro__company__card{
+  width: 200px;
+  /* transform: scale(0.5); */
+}
+
+.pro__company__card__title{
+  position: relative;
+  top: -10px;
+  margin-left: 2%; 
+  margin-bottom: 0;
+}

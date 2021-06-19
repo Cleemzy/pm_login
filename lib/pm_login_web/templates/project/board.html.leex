@@ -86,12 +86,12 @@
 
       </div>
       <div class="column column-30">
-        <div class="basecontents__without__radius">
-          <div class="column">
-            <div class="row">
-            <p>pour </p>
-            <div class="" style="margin: 0 auto; width: 200px;">
-                <h1 style="margin-left: 2%;"> <%= @board.project.active_client.company.name %><img class="profile-pic-header" src="<%= Routes.static_path(@socket, "/#{@board.project.active_client.company.logo}") %>" width="50" style="position: relative; top: 10px; margin-left: 10px;"/></h1>
+        <div class="basecontents__without__radius pro__company__card">
+          <div class="">
+            <div class="" style="width: 200px !important;">
+            <p style="margin-bottom: 0;">pour </p>
+            <div class="" style="margin: 0 auto;">
+                <h1 class="pro__company__card__title"> <%= @board.project.active_client.company.name %><img class="profile-pic-header" src="<%= Routes.static_path(@socket, "/#{@board.project.active_client.company.logo}") %>" width="50" style="position: relative; top: 10px; margin-left: 10px;"/></h1>
 
 
             </div>
