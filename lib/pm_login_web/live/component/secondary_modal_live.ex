@@ -79,17 +79,15 @@ defmodule PmLoginWeb.LiveComponent.SecondaryModalLive do
                   <!-- Buttons -->
                   <div class="modal-buttons">
                     <!-- Left Button -->
-                    <button class="left-button"
-                            type="button"
-                            phx-click="left-button-click"
-                            phx-target="#modal-<%= @id %>">
-                      <div>
-                        <%= @left_button %>
-                      </div>
-                    </button>
-                      <div class="right-button">
-                      <%= submit "Créer tâche" %>
-                      </div>
+                      <a href="#" class="btn btn-lg btn-default left-button"
+                      type="button"
+                      phx-click="left-button-click"
+                      phx-target="#modal-<%= @id %>">
+                <div>
+                  <%= @left_button %>
+                </div>
+              </a>
+                <%= submit "Créer tâche", class: "btn btn-lg btn-primary right-button button__modified" %>
                   </div>
 
 
