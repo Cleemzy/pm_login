@@ -234,22 +234,23 @@ Hooks.SpinTest = {
     )
  },
     spin_icon(){
-      var spins = document.querySelectorAll('.x__close__copy');
+      var spins = document.querySelectorAll('.notif__load');
       // console.log(spin);
       // spins.classList.add('rotate__icon');
       // console.log(spin);
       // window.setTimeout(function(){spins.classList.remove('rotate__icon');}, 500);
-
+      console.log('notif')
       spins.forEach(item => {
-        item.classList.add('rotate__icon');
+        item.classList.add('new__rotate__icon');
       });
 
       spins.forEach(item => {
-        window.setTimeout(function(){item.classList.remove('rotate__icon');}, 500);     
+        window.setTimeout(function(){item.classList.remove('new__rotate__icon');}, 500);     
       });
 
     },
     spin_comment_icon(){
+      console.log('comment')
       var clock_comment = document.getElementById('clock_comment');
       console.log(clock_comment);
       clock_comment.classList.add('rotate__icon');

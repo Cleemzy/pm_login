@@ -14,6 +14,14 @@ display: inline-block;
 animation:spinning 0.5s linear 0s;
 }
 
+.new__rotate__icon{
+display: inline-block;
+text-align: center;
+-webkit-animation:spinning 0.5s linear 0s;
+-moz-animation:spinning 0.5s linear 0s;
+animation:spinning 0.5s linear 0s;
+}
+
 .my_rotation{
 display: inline-block;
 -webkit-animation:spinning 0.5s linear 0s;
