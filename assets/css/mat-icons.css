@@ -1,6 +1,12 @@
 .mat__ico{
   position: relative;
   top: 5px;
+  transition: font-size 0.5s ease;
+}
+
+
+.material-icons{
+  transition: font-size 0.5s ease;
 }
 
 #copyright__icon{
@@ -17,3 +23,7 @@
   position: relative;
   top: 10px;
 }
+
+/* .mat__ico__growing:hover{
+  font-size: 30px;
+} */

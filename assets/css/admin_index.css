@@ -15,6 +15,10 @@
   border-bottom: 1px solid rgba(192, 192, 192, 1);
 }
 
+#adm:hover>span{
+  font-size: 30px;
+}
+
 #esp__adm__row{
   color: blue;
   display: flex;
@@ -57,4 +61,5 @@
 .esp__adm__col:hover{
   width: 200%;
   height: 170px;
+  background-color: lightsteelblue;
 }
