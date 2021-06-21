@@ -25,7 +25,7 @@
               <div class="dropdown">
                 <% unseens = PmLogin.Services.list_my_notifications(@curr_user_id)
                 |> Enum.count(fn(x) -> !(x.seen) end) %>
-                <a href="#" title="Notifications" phx-click="switch-notif"><span class="material-icons mat__ico">notifications</span><span class="notification-span" style="background-color: <%= if unseens == 0 do "transparent" end %> !important;"><b class="notification-nb" style="position: relative; left:<%= if unseens > 9 do "0px !important" end %>;"><%=
+                <a href="#" title="Notifications" phx-click="switch-notif"><span class="material-icons mat__ico header__ico">notifications</span><span class="notification-span" style="background-color: <%= if unseens == 0 do "transparent" end %> !important;"><b class="notification-nb" style="position: relative; left:<%= if unseens > 9 do "0px !important" end %>;"><%=
                   if unseens < 10 do
                     unseens
                   else

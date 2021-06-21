@@ -20,6 +20,8 @@
   font-weight: bold;
   font-size: 40px;
   margin: auto;
+  text-shadow: 2px 4px 3px rgba(0,0,0,0.3);
+
 }
 
 @media (max-width: 650px){
@@ -146,6 +148,8 @@
  .mobile__notif__ico{
   font-size: 20px;
   transition: font-size 0.5s ease;
+  text-shadow: 2px 4px 3px rgba(0,0,0,0.3);
+
  }
 
  .mobile__notif__ico:hover{
@@ -172,4 +176,14 @@
 
 .header_link_text{  
   /* box-shadow: 5px 1px 2px 1px rgba(104, 84, 84, 1); */
+}
+
+.nav__item__link>*{
+  text-shadow: 2px 2px 2px rgba(0,0,0,0.3);
+
+}
+
+.header__ico{
+  text-shadow: 2px 4px 3px rgba(0,0,0,0.3);
+
 }
