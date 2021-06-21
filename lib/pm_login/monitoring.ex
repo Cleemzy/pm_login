@@ -4,6 +4,7 @@ defmodule PmLogin.Monitoring do
   """
   import Ecto.Changeset
   import Ecto.Query, warn: false
+  import PmLogin.Utilities
   alias PmLogin.Repo
   alias PmLogin.Kanban
   alias PmLogin.Monitoring.Status
@@ -1148,4 +1149,38 @@ def validate_start_deadline(changeset) do
       Login.get_user!(id)
     end
   end
+
+  def list_my_unachieved_tasks(my_id) do
+    project_query = from p in Project
+    query = from t in Task,
+            preload: [project: ^project_query],
+            where: t.contributor_id == ^my_id and is_nil(t.achieved_at)
+
+    Repo.all(query)
+  end
+
+  def list_my_near_unachieved_tasks(my_id) do
+    today = NaiveDateTime.local_now |> NaiveDateTime.to_date
+    range = 0..7
+    tasks = list_my_unachieved_tasks(my_id)
+    tasks |> Enum.filter(fn task -> Date.diff(task.deadline, today) in range end)
+  end
+
+  def list_my_past_unachieved_tasks(my_id) do
+    today = NaiveDateTime.local_now |> NaiveDateTime.to_date
+    tasks = list_my_unachieved_tasks(my_id)
+    tasks |> Enum.filter(fn task -> Date.diff(task.deadline, today) < 0 end)
+  end
+
+  def warning_text(task) do
+    today = NaiveDateTime.local_now |> NaiveDateTime.to_date
+    cond do
+      Date.diff(task.deadline, today) == 7 -> "dans une semaine"
+      Date.diff(task.deadline, today) in 2..6 -> "dans #{Date.diff(task.deadline, today)} jours"
+      Date.diff(task.deadline, today) == 1 -> "demain"
+      Date.diff(task.deadline, today) == 0 -> "aujourd'hui"
+      true -> ""
+    end
+  end
+
 end

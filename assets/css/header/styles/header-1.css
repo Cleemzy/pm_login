@@ -20,7 +20,7 @@
   font-weight: bold;
   font-size: 40px;
   margin: auto;
-  text-shadow: 2px 4px 3px rgba(0,0,0,0.3);
+  text-shadow: 2px 2px 4px rgba(18, 20, 167, 0.3);
 
 }
 
@@ -148,7 +148,7 @@
  .mobile__notif__ico{
   font-size: 20px;
   transition: font-size 0.5s ease;
-  text-shadow: 2px 4px 3px rgba(0,0,0,0.3);
+  text-shadow: 2px 2px 4px rgba(18, 20, 167, 0.3);
 
  }
 
@@ -179,11 +179,11 @@
 }
 
 .nav__item__link>*{
-  text-shadow: 2px 2px 2px rgba(0,0,0,0.3);
+  text-shadow: 2px 2px 4px rgba(18, 20, 167, 0.3);
 
 }
 
 .header__ico{
-  text-shadow: 2px 4px 3px rgba(0,0,0,0.3);
+  text-shadow: 2px 2px 4px rgba(18, 20, 167, 0.3);
 
 }

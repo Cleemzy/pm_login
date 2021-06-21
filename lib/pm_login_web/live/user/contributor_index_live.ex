@@ -1,13 +1,15 @@
 defmodule PmLoginWeb.User.ContributorIndexLive do
   use Phoenix.LiveView
   alias PmLogin.Services
+  alias PmLogin.Monitoring
 
   def mount(_params, %{"curr_user_id"=>curr_user_id, "current_user" => current_user}, socket) do
     Services.subscribe()
 
     {:ok,
        socket
-       |> assign(curr_user_id: curr_user_id,current_user: current_user, show_notif: false, notifs: Services.list_my_notifications_with_limit(curr_user_id, 4)),
+       |> assign(curr_user_id: curr_user_id,current_user: current_user, show_notif: false, notifs: Services.list_my_notifications_with_limit(curr_user_id, 4),
+                 unachieved: Monitoring.list_my_near_unachieved_tasks(curr_user_id), past_unachieved: Monitoring.list_my_past_unachieved_tasks(curr_user_id)),
        layout: {PmLoginWeb.LayoutView, "contributor_layout_live.html"}
        }
   end

@@ -45,4 +45,19 @@ defmodule PmLogin.Utilities do
       )
   end
 
+  def naive_to_datetime(naive) do
+    {:ok, datetime} = DateTime.from_naive(naive, "Etc/UTC")
+    datetime
+  end
+
+  def date_to_naive(date) do
+    {:ok, naive} = {Date.to_erl(date),{0,0,0}} |> NaiveDateTime.from_erl
+    naive
+  end
+
+  def date_to_datetime(date) do
+    {:ok, naive} = {Date.to_erl(date),{0,0,0}} |> NaiveDateTime.from_erl
+    naive_to_datetime(naive)
+  end
+
 end
