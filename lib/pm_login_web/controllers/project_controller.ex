@@ -175,4 +175,24 @@ end
     |> put_flash(:info, "Projet supprimé.")
     |> redirect(to: Routes.project_path(conn, :index))
   end
+
+  def contributors(conn, _params) do
+
+    if Login.is_connected?(conn) do
+      cond do
+        Login.is_admin?(conn) ->
+          LiveView.Controller.live_render(conn, PmLoginWeb.Project.ContributorsLive, session: %{"curr_user_id" => get_session(conn, :curr_user_id)}, router: PmLoginWeb.Router)
+
+        true ->
+          conn
+            |> Login.not_admin_redirection
+      end
+    else
+      conn
+      |> Login.not_connected_redirection
+    end
+
+  end
+
+
 end

@@ -28,7 +28,6 @@ defmodule PmLoginWeb.Project.BoardLive do
     end
 
 
-
     project = Monitoring.get_project!(pro_id)
 
     task_changeset = Monitoring.change_task(%Task{})
