@@ -5,13 +5,18 @@ defmodule PmLoginWeb.User.ContributorIndexLive do
 
   def mount(_params, %{"curr_user_id"=>curr_user_id, "current_user" => current_user}, socket) do
     Services.subscribe()
-
+    Monitoring.subscribe()
     {:ok,
        socket
        |> assign(curr_user_id: curr_user_id,current_user: current_user, show_notif: false, notifs: Services.list_my_notifications_with_limit(curr_user_id, 4),
                  unachieved: Monitoring.list_my_near_unachieved_tasks(curr_user_id), past_unachieved: Monitoring.list_my_past_unachieved_tasks(curr_user_id)),
        layout: {PmLoginWeb.LayoutView, "contributor_layout_live.html"}
        }
+  end
+
+  def handle_info({PmLogin.Monitoring, _event, _content}, socket) do
+    curr_user_id = socket.assigns.curr_user_id
+    {:noreply, socket |> assign(unachieved: Monitoring.list_my_near_unachieved_tasks(curr_user_id), past_unachieved: Monitoring.list_my_past_unachieved_tasks(curr_user_id))}
   end
 
   def handle_event("switch-notif", %{}, socket) do

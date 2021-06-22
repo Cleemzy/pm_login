@@ -101,7 +101,8 @@ defmodule PmLoginWeb.Project.BoardLive do
   end
 
 
-  def handle_event("attributor_selected", %{"attributor_select" => id}, socket) do
+
+  def handle_event("attributor_selected", %{"_target" => ["attributor_select"], "attributor_select" => id}, socket) do
     attrib_id = String.to_integer(id)
 
     stages = case attrib_id do
@@ -123,7 +124,11 @@ defmodule PmLoginWeb.Project.BoardLive do
   }
   end
 
-  def handle_event("contributor_selected", %{"contributor_select" => id}, socket) do
+  def handle_event("attributor_selected", _params, socket) do
+    {:noreply, socket}
+  end
+
+  def handle_event("contributor_selected", %{"_target" => ["contributor_select"], "contributor_select" => id}, socket) do
     contrib_id = String.to_integer(id)
 
     stages = case contrib_id do
@@ -148,6 +153,11 @@ defmodule PmLoginWeb.Project.BoardLive do
     |> assign(board: board)
   }
   end
+
+  def handle_event("contributor_selected", %{"_target" => ["contributor_select"]}, socket) do
+    {:noreply, socket}
+  end
+
 
   def handle_event("search_task", %{"search-a" => text}, socket) do
     IO.inspect(text)
