@@ -8,7 +8,8 @@ defmodule PmLoginWeb.Project.ContributorsLive do
   def mount(_params, %{"curr_user_id" => curr_user_id}, socket) do
     Services.subscribe()
 
-    {:ok, socket |> assign(curr_user_id: curr_user_id, show_notif: false,notifs: Services.list_my_notifications_with_limit(curr_user_id, 4)),
+    {:ok, socket |> assign(curr_user_id: curr_user_id, show_notif: false,notifs: Services.list_my_notifications_with_limit(curr_user_id, 4),
+              contributors: Login.list_contributors),
             layout: {PmLoginWeb.LayoutView, "board_layout_live.html"}}
   end
 

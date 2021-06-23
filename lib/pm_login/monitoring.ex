@@ -1159,6 +1159,24 @@ def validate_start_deadline(changeset) do
     Repo.all(query)
   end
 
+  def list_my_achieved_tasks(my_id) do
+    query = from t in Task,
+            where: t.contributor_id == ^my_id and not is_nil(t.achieved_at)
+
+    Repo.all(query)
+  end
+
+  def my_achieved_length(my_id) do
+      list_my_achieved_tasks(my_id)
+      |> length
+  end
+
+  def my_unachieved_length(my_id) do
+    list_my_unachieved_tasks(my_id)
+    |> length
+  end
+
+
   def list_my_near_unachieved_tasks(my_id) do
     today = NaiveDateTime.local_now |> NaiveDateTime.to_date
     range = 0..7
