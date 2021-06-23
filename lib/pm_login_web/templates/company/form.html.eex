@@ -10,7 +10,11 @@
   <%= error_tag f, :name %>
 
   <%= label f, "Logo de la société" %>
-  <%= file_input f, :photo %>
+  <label class="btn btn-lg btn-info file_input_btn">
+  <%= file_input f, :photo, class: "file_inputs" %>
+    Logo
+    <i class="bi bi-camera-fill"></i>
+  </label>
   <div>
     <%= submit "Enregistrer",class: "btn btn-primary btn-lg" %>
   </div>

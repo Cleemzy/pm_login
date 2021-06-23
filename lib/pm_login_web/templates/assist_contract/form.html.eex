@@ -37,6 +37,6 @@
 
 
   <div>
-    <%= submit "Enregistrer" %>
+    <%= submit "Enregistrer", class: "btn btn-lg btn-primary right-button" %>
   </div>
 <% end %>

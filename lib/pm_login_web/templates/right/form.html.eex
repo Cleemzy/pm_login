@@ -10,6 +10,6 @@
   <%= error_tag f, :title %>
 
   <div>
-    <%= submit "Confirmer" %>
+    <%= submit "Confirmer", class: "btn btn-lg btn-primary right-button" %>
   </div>
 <% end %>
