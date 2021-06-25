@@ -1201,4 +1201,22 @@ def validate_start_deadline(changeset) do
     end
   end
 
+  def list_last_seven_days(my_id) do
+    achieved = list_my_achieved_tasks(my_id)
+    today = NaiveDateTime.local_now
+    |> NaiveDateTime.to_date
+    Enum.map(1..7, fn x -> Date.add(today, -x) end)
+    |> Enum.map(fn date ->
+        [date, Enum.count(achieved, fn task -> Date.compare(date, task.achieved_at) == :eq end)]
+    end)
+    |> Enum.map(fn [date, number] -> [simple_date_format(date), number]  end)
+    |> Enum.reverse
+  end
+
+
+  # def achieved_number_by_day(list) do
+
+  # end
+
+
 end

@@ -1,7 +1,7 @@
 defmodule PmLogin.MyContex do
-  import Ecto.Changeset
+  # import Ecto.Changeset
   import Ecto.Query, warn: false
-  alias PmLogin.Repo
+  # alias PmLogin.Repo
   alias PmLogin.Monitoring
 
   def todays_dataset do
@@ -216,6 +216,14 @@ defmodule PmLogin.MyContex do
 
   end
 
+  def last_seven_days(contributor_id) do
+    data = Monitoring.list_last_seven_days(contributor_id)
+    dataset = Contex.Dataset.new(data)
+    plot_content = Contex.BarChart.new(dataset)
+    plot = Contex.Plot.new(1000, 250, plot_content)
+    Contex.Plot.to_svg(plot)
+  end
+
   def naive_to_datetime(naive) do
     {:ok, datetime} = DateTime.from_naive(naive, "Etc/UTC")
     datetime
@@ -258,5 +266,6 @@ defmodule PmLogin.MyContex do
 # {:safe, Plot.to_svg(plot)}
 
 
+#CONBOARD
 
 end

@@ -4,7 +4,7 @@
 
     <%= for contributor <- @contributors do %>
     <div class="contrib__card__container">
-        <a href="#" class="basecontents__without__radius contrib__card">
+        <a href="<%= Routes.project_path(@socket, :show_contributor, contributor) %>" class="basecontents__without__radius contrib__card">
             <div class="contrib__head__container" style="height: 40%;">
                 <div class="contrib__pic__container" style="30%">
                     <img class="profile-pic-header" src="<%= Routes.static_path(@socket, "/#{PmLogin.Login.get_profile_picture(contributor.id) }") %>" width="50"/>

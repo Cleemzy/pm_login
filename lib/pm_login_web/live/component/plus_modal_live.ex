@@ -196,7 +196,6 @@ defmodule PmLoginWeb.LiveComponent.PlusModalLive do
                               <div class="row">
                                 <div class="column">
                                   <p><%= PmLogin.Monitoring.avg_working_hours(@card.task) %> heure(s)</p>
-                                  <p><%= @card.task.achieved_at %></p>
                                 </div>
                               </div>
 

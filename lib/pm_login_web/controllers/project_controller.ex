@@ -194,5 +194,23 @@ end
 
   end
 
+  def show_contributor(conn, %{"id" => id}) do
+
+    if Login.is_connected?(conn) do
+      cond do
+        Login.is_admin?(conn) ->
+          LiveView.Controller.live_render(conn, PmLoginWeb.Project.ShowContributorLive, session: %{"curr_user_id" => get_session(conn, :curr_user_id), "contributor_id" => id}, router: PmLoginWeb.Router)
+
+        true ->
+          conn
+            |> Login.not_admin_redirection
+      end
+    else
+      conn
+      |> Login.not_connected_redirection
+    end
+
+  end
+
 
 end
