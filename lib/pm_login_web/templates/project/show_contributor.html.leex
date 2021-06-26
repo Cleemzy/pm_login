@@ -14,18 +14,21 @@
         </div>
         <div class="basecontents__without__radius conboard__foot">
             <h1 class="conboard__foot__title">Tâches </h1>
-            <div class="task__section">
-                <div class="task__section__left basecontents__without__radius" style="background-color: red;">
-                <%= for x <- 1..90 do %>
-                    <div class="conboard__task">
-                        oi
-                    </div>
-
-                <% end %>
-                </div>
-                <div class="task__section__right basecontents__without__radius" style="background-color: red;">
-
-                </div>
+            <div class="task__section" style="">
+                <table>
+                    <tbody>
+                    <%= for item <- 1..2 do %>
+                    <tr style="background-color: orange;">
+                        <td>
+                            oi
+                        </td>
+                        <td>
+                            oi
+                        </td>
+                    </tr>
+                    <% end %>
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
