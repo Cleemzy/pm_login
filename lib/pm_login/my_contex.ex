@@ -19,6 +19,9 @@ defmodule PmLogin.MyContex do
     case length(todays) do
       0 -> "Aucune tâche accomplie ce jour"
         data = default_data
+        |> Enum.map(fn(task) ->
+          ["#{PmLogin.Monitoring.get_priority!(task.priority_id).title}", task.title, date_to_naive(task.date_start), task.achieved_at]
+        end)
         |> Enum.reverse
 
 
@@ -110,6 +113,9 @@ defmodule PmLogin.MyContex do
     case length(this_weeks) do
       0 -> "Aucune tâche accomplie cette semaine"
         data = default_data
+        |> Enum.map(fn(task) ->
+          ["#{PmLogin.Monitoring.get_priority!(task.priority_id).title}", task.title, date_to_naive(task.date_start), task.achieved_at]
+        end)
         |> Enum.reverse
 
 
@@ -202,6 +208,9 @@ defmodule PmLogin.MyContex do
     case length(this_months) do
       0 -> "Aucune tâche accomplie ce mois"
         data = default_data
+          |> Enum.map(fn(task) ->
+            ["#{PmLogin.Monitoring.get_priority!(task.priority_id).title}", task.title, date_to_naive(task.date_start), task.achieved_at]
+          end)
           |> Enum.reverse
 
 
@@ -357,7 +366,7 @@ defmodule PmLogin.MyContex do
     data = Monitoring.list_last_seven_days(contributor_id)
     dataset = Contex.Dataset.new(data)
     plot_content = Contex.BarChart.new(dataset)
-    plot = Contex.Plot.new(1000, 250, plot_content)
+    plot = Contex.Plot.new(1000, 370, plot_content)
     Contex.Plot.to_svg(plot)
   end
 
