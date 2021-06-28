@@ -13,6 +13,9 @@ defmodule PmLogin.Utilities do
     Calendar.strftime(naive_dt, "%d/%m/%Y, à %Hh %M")
   end
 
+  def simple_date_format_with_hours_onboard(naive_dt) do
+    Calendar.strftime(naive_dt, "%d/%m/%Y, %Hh %M")
+  end
   def letters_date_format_with_hours(naive_dt) do
 
     Calendar.strftime(naive_dt,"%A %d %B %Y, %Hh %M",

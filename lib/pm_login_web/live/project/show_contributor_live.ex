@@ -3,13 +3,14 @@ defmodule PmLoginWeb.Project.ShowContributorLive do
   alias PmLogin.Services
   alias PmLogin.MyContex
   alias PmLogin.Login
+  alias PmLogin.Monitoring
 
   def mount(_params, %{"curr_user_id"=>curr_user_id, "contributor_id" => contributor_id}, socket) do
     Services.subscribe()
 
     {:ok,
        socket
-       |> assign(contributor: Login.get_user!(contributor_id),seven_chart: MyContex.last_seven_days(contributor_id) ,contributor_id: contributor_id,curr_user_id: curr_user_id, show_notif: false, notifs: Services.list_my_notifications_with_limit(curr_user_id, 4)),
+       |> assign(contributor: Login.get_user!(contributor_id), tasks: Monitoring.my_onboard_achieved(contributor_id),seven_chart: MyContex.last_seven_days(contributor_id) ,contributor_id: contributor_id,curr_user_id: curr_user_id, show_notif: false, notifs: Services.list_my_notifications_with_limit(curr_user_id, 4)),
        layout: {PmLoginWeb.LayoutView, "board_layout_live.html"}
        }
   end

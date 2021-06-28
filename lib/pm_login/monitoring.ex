@@ -1166,6 +1166,50 @@ def validate_start_deadline(changeset) do
     Repo.all(query)
   end
 
+  def my_onboard_achieved(my_id) do
+    project_query = from p in Project
+    attributor_query = from u in User
+    query = from t in Task,
+            where: t.contributor_id == ^my_id and not is_nil(t.achieved_at) and is_nil(t.parent_id),
+            order_by: [desc: :achieved_at],
+            preload: [project: ^project_query, attributor: ^attributor_query]
+
+    Repo.all(query)
+  end
+
+
+  def duration_diff(%Task{} = t) do
+    cond do
+      t.performed_duration > t.estimated_duration -> "(+ #{t.performed_duration-t.estimated_duration} h)"
+      t.performed_duration == t.estimated_duration -> "(= #{t.performed_duration-t.estimated_duration} h)"
+      t.performed_duration < t.estimated_duration -> "(- #{t.estimated_duration - t.performed_duration} h)"
+    end
+  end
+
+  def duration_diff_color_class(%Task{} = t) do
+    cond do
+      t.performed_duration > t.estimated_duration -> "durr__diff__gt"
+      t.performed_duration == t.estimated_duration -> "durr__diff__eq"
+      t.performed_duration < t.estimated_duration -> "durr__diff__lt"
+    end
+  end
+
+  def date_diff(%Task{} = t) do
+    cond do
+      Date.diff(t.achieved_at, t.deadline) > 0 -> "#{Date.diff(t.achieved_at, t.deadline)} jours de retard"
+      Date.diff(t.achieved_at, t.deadline) == 0 -> "Achevée le jour même"
+      Date.diff(t.achieved_at, t.deadline) < 0 -> "#{Date.diff(t.deadline, t.achieved_at)} jours d'avance"
+    end
+  end
+
+  def date_diff_color_class(%Task{} = t) do
+    cond do
+      Date.diff(t.achieved_at, t.deadline) > 0 -> "dt_durr__diff__gt"
+      Date.diff(t.achieved_at, t.deadline) == 0 -> "dt_durr__diff__eq"
+      Date.diff(t.achieved_at, t.deadline) < 0 -> "dt_durr__diff__lt"
+    end
+  end
+
   def my_achieved_length(my_id) do
       list_my_achieved_tasks(my_id)
       |> length
