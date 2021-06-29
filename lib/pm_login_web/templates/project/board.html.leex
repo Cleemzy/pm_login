@@ -25,7 +25,7 @@
 
             <%= if @is_contributor do%>
               <div class="my_col">
-                  <a href="#" class="btn btn-lg btn-secondary" phx-click="show-secondary"><i class="bi bi-plus-circle"></i> Créer tâche secondaire</a>
+                  <a href="#" class="btn btn-lg btn-secondary" phx-click="show-secondary"><i class="bi bi-plus-circle"></i> Créer sous-tâche</a>
               </div>
             <% end %>
 
@@ -235,7 +235,7 @@
   <%= live_component(@socket,
                   SecondaryModalLive,
                   id: "confirm-arch",
-                  title: "Créer tâche secondaire",
+                  title: "Créer sous-tâche",
                   body: nil,
                   right_button: nil,
                   right_button_action: nil,
