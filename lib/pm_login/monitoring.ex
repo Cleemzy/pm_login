@@ -732,7 +732,7 @@ def validate_start_deadline(changeset) do
     project_query = from p in Project
     query = from t in Task,
             preload: [project: ^project_query, attributor: ^attributor_query, contributor: ^contributor_query],
-            where: not is_nil t.achieved_at
+            where: not is_nil(t.achieved_at) and is_nil(t.parent_id)
 
     Repo.all(query)
   end
@@ -1161,7 +1161,7 @@ def validate_start_deadline(changeset) do
 
   def list_my_achieved_tasks(my_id) do
     query = from t in Task,
-            where: t.contributor_id == ^my_id and not is_nil(t.achieved_at)
+            where: t.contributor_id == ^my_id and not is_nil(t.achieved_at) and is_nil(t.parent_id)
 
     Repo.all(query)
   end

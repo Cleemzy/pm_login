@@ -175,7 +175,7 @@
       top: 1rem; } }
 
 .header_link_text{  
-  font-weight: 600 !important;
+  /* font-weight: 600 !important; */
 
   /* box-shadow: 5px 1px 2px 1px rgba(104, 84, 84, 1); */
 }

@@ -32,33 +32,37 @@
                     <tbody>
                     <%= for task <- @tasks do %>
                     <tr>
-                        <td>
-                            <div class="card__onboard_recap basecontents__without__radius">
-                                <div class="" style="">
-                                    <div class=" column-10">
+                        <td class="estimated__div">
+
+                                <div class="card__onboard_recap basecontents__without__radius">
+                                    <div class="" style="">
+                                        <div class=" column-10">
 
 
-                                <%= case task.priority_id do %>
-                                    <% 1 -> %><div class="low__priority__point__conboard"></div>
-                                    <% 2 -> %><div class="avg__priority__point__conboard"></div>
-                                    <% 3 -> %><div class="high__priority__point__conboard"></div>
-                                    <% 4 -> %><div class="urg__priority__point__conboard"></div>
-                                    <% _ -> %><div class="priority__point__rec"></div>
-                                <% end %>
+                                    <%= case task.priority_id do %>
+                                        <% 1 -> %><div class="low__priority__point__conboard"></div>
+                                        <% 2 -> %><div class="avg__priority__point__conboard"></div>
+                                        <% 3 -> %><div class="high__priority__point__conboard"></div>
+                                        <% 4 -> %><div class="urg__priority__point__conboard"></div>
+                                        <% _ -> %><div class="priority__point__rec"></div>
+                                    <% end %>
+
+                                        </div>
+                                        <div class=" column-40 recap__cols">
+                                        <div>Tâche: <p class="onboard__text__descri"><%= task.title %></p></div>
+                                        <div>Projet: <p class="onboard__text__descri"><%= task.project.title %></p></div>
+                                        </div>
+                                        <div class=" column-50 recap__cols">
+                                        <div>Durée estimée: <p class="onboard__text__descri"><%= task.estimated_duration %> h</p></div>
+                                        <div>Date d'échéance: <p class="onboard__text__descri"><%= Utilities.simple_date_format(task.deadline) %></p></div>
+                                        <div>Attributeur: <p class="onboard__text__descri"><%= task.attributor.username %></p></div>
+                                        </div>
 
                                     </div>
-                                    <div class=" column-40 recap__cols">
-                                    <div>Tâche: <p class="onboard__text__descri"><%= task.title %></p></div>
-                                    <div>Projet: <p class="onboard__text__descri"><%= task.project.title %></p></div>
-                                    </div>
-                                    <div class=" column-50 recap__cols">
-                                    <div>Durée estimée: <p class="onboard__text__descri"><%= task.estimated_duration %> h</p></div>
-                                    <div>Date d'échéance: <p class="onboard__text__descri"><%= Utilities.simple_date_format(task.deadline) %></p></div>
-                                    <div>Attributeur: <p class="onboard__text__descri"><%= task.attributor.username %></p></div>
-                                    </div>
-
                                 </div>
-                            </div>
+                                <div class="arrow__change__div">
+                                    <span class="material-icons-round arrow__conboard__icon">double_arrow</span>
+                                </div>
                         </td>
                         <td>
                             <div class="card__onboard_recap basecontents__without__radius">

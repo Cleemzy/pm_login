@@ -58,13 +58,13 @@
 .conboard__head{
     display: flex;
     width: 100%;
-    height: 30%;
+    height: 20%;
 }
 
 .conboard__foot{
     display: inline-block;
     width: 100%;
-    height: 70%;
+    height: 80%;
     /* margin-bottom: 40px; */
 }
 
@@ -126,4 +126,23 @@
 
 .dt_durr__diff__lt{
     color: #008000;
+}
+
+.arrow__change__div{
+    position: relative;
+    display: inline-block;
+    height: 100px;
+    top: -125px;
+}
+
+.estimated__div{
+    /* display: inline; */
+}
+
+.estimated__div>*{
+    display: inline-block;
+}
+
+.arrow__conboard__icon{
+    font-size: 50px !important;
 }
