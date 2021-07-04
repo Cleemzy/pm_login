@@ -180,7 +180,7 @@ end
 
     if Login.is_connected?(conn) do
       cond do
-        Login.is_admin?(conn) ->
+        Login.is_admin?(conn) or Login.is_attributor?(conn) ->
           LiveView.Controller.live_render(conn, PmLoginWeb.Project.ContributorsLive, session: %{"curr_user_id" => get_session(conn, :curr_user_id)}, router: PmLoginWeb.Router)
 
         true ->
@@ -198,7 +198,7 @@ end
 
     if Login.is_connected?(conn) do
       cond do
-        Login.is_admin?(conn) ->
+        Login.is_admin?(conn) or Login.is_attributor?(conn) ->
           LiveView.Controller.live_render(conn, PmLoginWeb.Project.ShowContributorLive, session: %{"curr_user_id" => get_session(conn, :curr_user_id), "contributor_id" => id}, router: PmLoginWeb.Router)
 
         true ->
