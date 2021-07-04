@@ -4,7 +4,6 @@
 import "../css/app.scss"
 // import "require.js"
 
-
 // webpack automatically bundles all modules in your
 // entry points. Those entry points can be configured
 // in "webpack.config.js".
@@ -127,7 +126,7 @@ Hooks.Board = {
 
   Hooks.AnimateAlert = {
   mounted(){
-  console.log("tafiditra alert")
+  // console.log("tafiditra alert")
    this.handleEvent("AnimateAlert", ({}) =>
      this.reset_opacity()
    )
@@ -142,7 +141,7 @@ Hooks.Board = {
  },
  anim_onload(){
    var alerts = document.querySelectorAll(".alert");
-   console.log(alerts);
+  //  console.log(alerts);
 
    alerts.forEach(item => {
      item.style.opacity = 1
@@ -180,7 +179,7 @@ Hooks.Board = {
 
 Hooks.blurHook = {
   mounted(){
-    console.log("tafiditra blurHook")
+    // console.log("tafiditra blurHook")
     this.handleEvent("blurBody", ({param1,param2}) =>
       // console.log(param1)
       this.blurBody()
@@ -225,7 +224,7 @@ Hooks.MessageBody = {
 
 Hooks.SpinTest = {
   mounted(){
-    console.log("tafiditra hook")
+    // console.log("tafiditra hook")
     this.handleEvent("SpinTest", ({}) =>
       this.spin_icon()
     )
@@ -239,24 +238,24 @@ Hooks.SpinTest = {
       // spins.classList.add('rotate__icon');
       // console.log(spin);
       // window.setTimeout(function(){spins.classList.remove('rotate__icon');}, 500);
-      console.log('notif')
+      // console.log('notif')
       spins.forEach(item => {
         item.classList.add('new__rotate__icon');
       });
 
       spins.forEach(item => {
-        window.setTimeout(function(){item.classList.remove('new__rotate__icon');}, 500);     
+        window.setTimeout(function(){item.classList.remove('new__rotate__icon');}, 500);
       });
 
     },
     spin_comment_icon(){
-      console.log('comment')
+      // console.log('comment')
       var clock_comment = document.getElementById('clock_comment');
-      console.log(clock_comment);
+      // console.log(clock_comment);
       clock_comment.classList.add('rotate__icon');
-      console.log(clock_comment);
-      window.setTimeout(function(){clock_comment.classList.remove('rotate__icon');}, 500); 
-      console.log(clock_comment);    
+      // console.log(clock_comment);
+      window.setTimeout(function(){clock_comment.classList.remove('rotate__icon');}, 500);
+      // console.log(clock_comment);
     }
 
 };
@@ -335,7 +334,7 @@ var alerts = document.querySelectorAll(".alert");
       item.onload = window.setTimeout(function(){item.style.opacity = 0;}, 2000);
     });
 
-  // var loadNotifs = document.querySelectorAll(".notif__load");    
+  // var loadNotifs = document.querySelectorAll(".notif__load");
   //     loadNotifs.forEach(item => {
   //       console.log(item);
   //       item.addEventListener("click", function () {
@@ -371,4 +370,3 @@ window.addEventListener("phx:page-loading-stop", info => NProgress.done())
 liveSocket.connect()
 
 window.liveSocket = liveSocket
-
