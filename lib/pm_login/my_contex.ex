@@ -366,7 +366,7 @@ defmodule PmLogin.MyContex do
     data = Monitoring.list_last_seven_days(contributor_id)
     dataset = Contex.Dataset.new(data)
     plot_content = Contex.BarChart.new(dataset)
-    plot = Contex.Plot.new(1000, 370, plot_content)
+    plot = Contex.Plot.new(800, 370, plot_content)
     Contex.Plot.to_svg(plot)
   end
 
