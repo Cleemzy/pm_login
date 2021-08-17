@@ -24,14 +24,6 @@
       <%= error_tag f, :date_start_lt %>
     </div>
 
-    <div class="column">
-      <%= label f, "Date finale" %>
-      <%= date_input f, :date_end %>
-      <%= error_tag f, :date_end %>
-      <%= error_tag f, :date_end_lt %>
-      <%= error_tag f, :dt_end_lt_start %>
-    </div>
-
   </div>
 
 
