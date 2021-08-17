@@ -23,7 +23,7 @@
         <td><%= project.description %></td>
         <td><%= project.progression %> %</td>
         <td><%= Utilities.simple_date_format(project.date_start) %></td>
-        <td><%= Utilities.simple_date_format(project.date_end) %></td>
+        <td><%= if not is_nil(project.date_end) do Utilities.simple_date_format(project.date_end) else "-" end %></td>
         <td><%= project.estimated_duration %> h</td>
         <td><%= project.performed_duration %> h</td>
         <td><%= Utilities.simple_date_format(project.deadline) %></td>
