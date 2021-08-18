@@ -48,13 +48,6 @@ defmodule PmLoginWeb.LiveComponent.TaskModalLive do
                   <%= hidden_input f, :attributor_id, value: @curr_user_id %>
                   <div class="row">
                     <div class="column">
-                      <%= label f, "Date de début" %>
-                      <%= date_input f, :date_start %>
-                      <%= error_tag f, :date_start %>
-                      <%= error_tag f, :date_start_lt %>
-                    </div>
-
-                    <div class="column">
                       <%= label f, "Date d'échéance" %>
                       <%= date_input f, :deadline %>
                       <%= error_tag f, :deadline %>

@@ -48,18 +48,11 @@ defmodule PmLoginWeb.LiveComponent.SecondaryModalLive do
                   <%= hidden_input f, :contributor_id, value: @curr_user_id %>
                   <div class="row">
                     <div class="column">
-                      <%= label f, "Date de début" %>
-                      <%= date_input f, :date_start %>
-                      <%= error_tag f, :date_start %>
-                      <%= error_tag f, :date_start_lt %>
-                    </div>
-
-                    <div class="column">
-                      <%= label f, "Date finale" %>
-                      <%= date_input f, :date_end %>
-                      <%= error_tag f, :date_end %>
-                      <%= error_tag f, :date_end_lt %>
-                      <%= error_tag f, :dt_end_lt_start %>
+                      <%= label f, "Date d'échéance" %>
+                      <%= date_input f, :deadline %>
+                      <%= error_tag f, :deadline %>
+                      <%= error_tag f, :deadline_lt %>
+                      <%= error_tag f, :deadline_before_dtstart %>
                     </div>
                   </div>
                   <div class="row">

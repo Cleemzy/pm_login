@@ -77,14 +77,17 @@ defmodule PmLogin.Monitoring.Task do
     |> validate_required(:title, message: "Entrez tâche")
     |> unique_constraint(:title, message: "Tâche déjà existante")
     |> validate_required(:estimated_duration, message: "Entrez estimation")
-    |> validate_required(:date_start, message: "Entrez date de début")
-    |> validate_required(:date_end, message: "Entrez date de fin")
+    # |> validate_required(:date_start, message: "Entrez date de début")
+    # |> validate_required(:date_end, message: "Entrez date de fin")
     |> validate_required(:deadline, message: "Entrez date d'échéance")
     |> Monitoring.validate_start_end
+    |> Monitoring.validate_dates_without_dtend
+    |> Monitoring.validate_start_deadline
     |> Monitoring.validate_positive_estimated
     |> put_change(:progression, 0)
     |> put_change(:performed_duration, 0)
     |> put_change(:status_id, 1)
+    |> put_change(:date_start, Services.current_date |> NaiveDateTime.to_date)
     |> put_change(:inserted_at, Services.current_date)
   end
 
@@ -102,7 +105,7 @@ defmodule PmLogin.Monitoring.Task do
         |> validate_required(:title, message: "Entrez tâche")
         |> unique_constraint(:title, message: "Tâche déjà existante")
         |> validate_required(:estimated_duration, message: "Entrez estimation")
-        |> validate_required(:date_start, message: "Entrez date de début")
+        # |> validate_required(:date_start, message: "Entrez date de début")
         |> validate_required(:deadline, message: "Entrez date d'échéance")
         |> Monitoring.validate_dates_without_dtend
         |> Monitoring.validate_start_deadline
@@ -113,6 +116,7 @@ defmodule PmLogin.Monitoring.Task do
         |> put_change(:performed_duration, 0)
         |> put_change(:priority_id, 2)
         |> put_change(:status_id, 1)
+        |> put_change(:date_start, Services.current_date |> NaiveDateTime.to_date)
         |> put_change(:inserted_at, Services.current_date)
 
 

@@ -564,8 +564,8 @@ defmodule PmLoginWeb.Project.BoardLive do
 
     parent_task = Monitoring.get_task!(params["parent_id"])
     parent_params = %{"attributor_id" => parent_task.attributor_id,
-                    "priority_id" => parent_task.priority_id,
-                    "deadline" => parent_task.deadline}
+                    "priority_id" => parent_task.priority_id
+                    }
     IO.puts "parent params"
     IO.inspect parent_params
 
