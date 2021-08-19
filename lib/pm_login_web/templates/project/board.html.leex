@@ -78,6 +78,19 @@
                   <a href="#" class="btn btn-lg btn-info" phx-click="show_hidden_tasks">Restaurer tâches archivées <i class="bi bi-plus-circle"></i></a>
               </div>
             <% end %>
+
+            <%= if @is_admin or @is_attributor do %>
+            <div class="my_col">
+              <form phx-change="distinct_task">
+              <div class="row">
+                  <label for="primary">Tâches</label>
+                  <input type="radio" id="primary" name="task_view" value="task">
+                  <label for="secondary">Sous-tâches</label>
+                  <input type="radio" id="secondary" name="task_view" value="subtask">
+              </div>
+              </form>
+            </div>
+            <% end %>
         </div>
 
 

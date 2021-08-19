@@ -45,8 +45,15 @@ defmodule PmLoginWeb.Project.BoardLive do
 
     board = Kanban.get_board!(project.board_id)
 
+    primary_stages = board.stages
+    |> Enum.map(fn (%Kanban.Stage{} = stage) ->
+      struct(stage, cards: cards_list_primary_tasks(stage.cards))
+    end)
+
+    primary_board = struct(board, stages: primary_stages)
+
     {:ok, socket |> assign(is_attributor: Monitoring.is_attributor?(curr_user_id),is_admin: Monitoring.is_admin?(curr_user_id), show_plus_modal: false,curr_user_id: curr_user_id, pro_id: pro_id, show_secondary: false,
-                    contributors: list_contributors, priorities: list_priorities, board: board, show_task_modal: false, show_modif_modal: false, card: nil,
+                    contributors: list_contributors, priorities: list_priorities, board: primary_board, show_task_modal: false, show_modif_modal: false, card: nil,
                     primaries: list_primaries, is_contributor: Monitoring.is_contributor?(curr_user_id),task_changeset: task_changeset, modif_changeset: modif_changeset, show_comments_modal: false, card_with_comments: nil,
                     show_modal: false, arch_id: nil,show_notif: false, notifs: Services.list_my_notifications_with_limit(curr_user_id, 4), secondary_changeset: secondary_changeset, comment_changeset: Monitoring.change_comment(%Comment{}),
                     no_selected_hidden: false, show_hidden_modal: false, hidden_tasks: Monitoring.list_hidden_tasks(pro_id), project_contributors: Monitoring.list_project_contributors(board), project_attributors: Monitoring.list_project_attributors(board))
@@ -61,6 +68,14 @@ defmodule PmLoginWeb.Project.BoardLive do
 
   def cards_list_contrib_filtered(old_list, contrib_id) do
     old_list |> Enum.filter(fn card -> card.task.contributor_id == contrib_id end)
+  end
+
+  def cards_list_primary_tasks(old_list) do
+    old_list |> Enum.filter(fn card -> is_nil(card.task.parent_id) end)
+  end
+
+  def cards_list_secondary_tasks(old_list) do
+    old_list |> Enum.filter(fn card -> not is_nil(card.task.parent_id) end)
   end
 
   def cards_list_filtered_nocontributor(old_list) do
@@ -155,6 +170,31 @@ defmodule PmLoginWeb.Project.BoardLive do
 
   def handle_event("contributor_selected", %{"_target" => ["contributor_select"]}, socket) do
     {:noreply, socket}
+  end
+
+  def handle_event("distinct_task", %{"_target" => ["task_view"], "task_view" => radio_value}, socket) do
+    IO.inspect(radio_value)
+
+    stages = case radio_value do
+      "task" ->  Kanban.get_board!(socket.assigns.board.id).stages
+          |> Enum.map(fn (%Kanban.Stage{} = stage) ->
+            struct(stage, cards: cards_list_primary_tasks(stage.cards))
+      end)
+
+      "subtask" ->
+        Kanban.get_board!(socket.assigns.board.id).stages
+            |> Enum.map(fn (%Kanban.Stage{} = stage) ->
+              struct(stage, cards: cards_list_secondary_tasks(stage.cards))
+        end)
+      _ ->
+        Kanban.get_board!(socket.assigns.board.id).stages
+
+    end
+
+    current_board = Kanban.get_board!(socket.assigns.board.id)
+    board = struct(current_board, stages: stages)
+
+    {:noreply, socket |> assign(board: board)}
   end
 
 
