@@ -80,7 +80,7 @@ defmodule PmLoginWeb.LiveComponent.SecondaryModalLive do
                   <%= @left_button %>
                 </div>
               </a>
-                <%= submit "Créer tâche", class: "btn btn-lg btn-primary right-button button__modified" %>
+                <%= submit "Créer sous-tâche", class: "btn btn-lg btn-primary right-button button__modified" %>
                   </div>
 
 

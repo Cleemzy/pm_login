@@ -40,7 +40,7 @@ defmodule PmLoginWeb.Project.BoardLive do
     list_contributors = Enum.map(contributors, fn (%User{} = p)  -> {p.username, p.id} end)
 
     secondary_changeset = Monitoring.change_task(%Task{})
-    my_primary_tasks = Monitoring.list_primary_tasks(curr_user_id, pro_id)
+    my_primary_tasks = Monitoring.list_primary_tasks(pro_id)
     list_primaries = my_primary_tasks |> Enum.map(fn (%Task{} = p) -> {p.title, p.id} end)
 
     board = Kanban.get_board!(project.board_id)
@@ -455,7 +455,7 @@ defmodule PmLoginWeb.Project.BoardLive do
 
     #for secondary task modal select form
     curr_user_id = socket.assigns.curr_user_id
-    my_primary_tasks = Monitoring.list_primary_tasks(curr_user_id, socket.assigns.board.project.id)
+    my_primary_tasks = Monitoring.list_primary_tasks(socket.assigns.board.project.id)
     list_primaries = my_primary_tasks |> Enum.map(fn (%Task{} = p) -> {p.title, p.id} end)
 
     {:noreply, assign(socket, board: Kanban.get_board!(board_id), primaries: list_primaries)}
@@ -466,7 +466,7 @@ defmodule PmLoginWeb.Project.BoardLive do
 
     #for secondary task modal select form
     curr_user_id = socket.assigns.curr_user_id
-    my_primary_tasks = Monitoring.list_primary_tasks(curr_user_id, socket.assigns.board.project.id)
+    my_primary_tasks = Monitoring.list_primary_tasks(socket.assigns.board.project.id)
     list_primaries = my_primary_tasks |> Enum.map(fn (%Task{} = p) -> {p.title, p.id} end)
 
     {:noreply, assign(socket, board: Kanban.get_board!(board_id), primaries: list_primaries)}
@@ -496,7 +496,9 @@ defmodule PmLoginWeb.Project.BoardLive do
   def handle_info({Kanban, [_, :created], _}, socket) do
     proj_id = socket.assigns.pro_id
     project = Monitoring.get_project!(proj_id)
-    {:noreply, assign(socket, :board, Kanban.get_board!(project.board_id))}
+    my_primary_tasks = Monitoring.list_primary_tasks(proj_id)
+    list_primaries = my_primary_tasks |> Enum.map(fn (%Task{} = p) -> {p.title, p.id} end)
+    {:noreply, assign(socket, board: Kanban.get_board!(project.board_id), primaries: list_primaries)}
   end
 
   def handle_event("show_task_modal", %{}, socket) do
@@ -563,9 +565,20 @@ defmodule PmLoginWeb.Project.BoardLive do
     IO.inspect params
 
     parent_task = Monitoring.get_task!(params["parent_id"])
-    parent_params = %{"attributor_id" => parent_task.attributor_id,
-                    "priority_id" => parent_task.priority_id
-                    }
+    IO.inspect parent_task
+
+    parent_params = cond do
+      is_nil(parent_task.contributor_id) -> %{"attributor_id" => socket.assigns.curr_user_id,
+                                            "priority_id" => parent_task.priority_id
+                                            }
+
+      true -> %{"attributor_id" => socket.assigns.curr_user_id,
+      "contributor_id" => parent_task.contributor_id,
+      "priority_id" => parent_task.priority_id
+      }
+
+    end
+
     IO.puts "parent params"
     IO.inspect parent_params
 

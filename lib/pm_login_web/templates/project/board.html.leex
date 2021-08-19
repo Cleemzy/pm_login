@@ -23,7 +23,7 @@
               </div>
             <% end %>
 
-            <%= if @is_contributor do%>
+            <%= if @is_admin or @is_attributor do%>
               <div class="my_col">
                   <a href="#" class="btn btn-lg btn-secondary" phx-click="show-secondary"><i class="bi bi-plus-circle"></i> Créer sous-tâche</a>
               </div>

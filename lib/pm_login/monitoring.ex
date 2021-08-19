@@ -684,9 +684,9 @@ def validate_start_deadline(changeset) do
       [%Task{}, ...]
 
   """
-  def list_primary_tasks(contributor_id, project_id) do
+  def list_primary_tasks(project_id) do
     query = from t in Task,
-            where: is_nil(t.parent_id) and t.contributor_id == ^contributor_id and t.project_id == ^project_id
+            where: is_nil(t.parent_id) and t.project_id == ^project_id
 
     Repo.all(query)
   end

@@ -87,7 +87,7 @@ defmodule PmLoginWeb.LiveComponent.PlusModalLive do
                           <div class="column">
                           <div class="row">
                             <div class="column column-40">
-                              <label>Contributeur:</label>
+                              <label>Contributeur: </label>
                               </div>
                               <div class="column column-25">
                               <%= @card.task.contributor.username %>
