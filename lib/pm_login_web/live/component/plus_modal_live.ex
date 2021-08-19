@@ -156,12 +156,12 @@ defmodule PmLoginWeb.LiveComponent.PlusModalLive do
 
                                 <div class="column">
                                       <label>Durée estimée:</label>
-                                      <p><%= @card.task.estimated_duration %> heure(s)</p>
+                                      <p><%= @card.task.estimated_duration %> heure</p>
                                 </div>
 
                                 <div class="column">
                                       <label>Durée effectuée:</label>
-                                      <p><%= @card.task.performed_duration%> heure(s)</p>
+                                      <p><%= @card.task.performed_duration%> heure</p>
                                 </div>
 
                               </div>
@@ -195,7 +195,7 @@ defmodule PmLoginWeb.LiveComponent.PlusModalLive do
                               <!-- SIXTH ROW -->
                               <div class="row">
                                 <div class="column">
-                                  <p><%= PmLogin.Monitoring.avg_working_hours(@card.task) %> heure(s)</p>
+                                  <p><%= PmLogin.Monitoring.avg_working_hours(@card.task) %> heure</p>
                                 </div>
                               </div>
 

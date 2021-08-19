@@ -57,7 +57,7 @@ defmodule PmLoginWeb.LiveComponent.SecondaryModalLive do
                   </div>
                   <div class="row">
                     <div class="column">
-                      <%= label f, "Durée estimée (en heure(s))" %>
+                      <%= label f, "Durée estimée (en heure)" %>
                       <%= number_input f, :estimated_duration %>
                       <%= error_tag f, :estimated_duration %>
                       <%= error_tag f, :negative_estimated %>

@@ -80,7 +80,7 @@ defmodule PmLoginWeb.LiveComponent.ModifModalLive do
 
                         <div class="column">
 
-                              <%= label f, "Durée estimée (en heure(s)):" %>
+                              <%= label f, "Durée estimée (en heure):" %>
                               <%= if @is_admin or @is_attributor do %>
                                 <b><%= number_input f, :estimated_duration, style: "width: 70px", value: @card.task.estimated_duration %> h</b>
                                 <%= error_tag f, :negative_estimated %>
