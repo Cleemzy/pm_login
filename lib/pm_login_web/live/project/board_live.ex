@@ -172,6 +172,10 @@ defmodule PmLoginWeb.Project.BoardLive do
     {:noreply, socket}
   end
 
+  def handle_event("distinct_task", %{"_target" => ["task_view"]}, socket) do
+    {:noreply, socket}
+  end
+
   def handle_event("distinct_task", %{"_target" => ["task_view"], "task_view" => radio_value}, socket) do
     IO.inspect(radio_value)
 
