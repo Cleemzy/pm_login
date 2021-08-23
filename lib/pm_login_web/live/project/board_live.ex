@@ -52,7 +52,7 @@ defmodule PmLoginWeb.Project.BoardLive do
 
     primary_board = struct(board, stages: primary_stages)
 
-    {:ok, socket |> assign(is_attributor: Monitoring.is_attributor?(curr_user_id),is_admin: Monitoring.is_admin?(curr_user_id), show_plus_modal: false,curr_user_id: curr_user_id, pro_id: pro_id, show_secondary: false,
+    {:ok, socket |> assign(is_attributor: Monitoring.is_attributor?(curr_user_id),is_admin: Monitoring.is_admin?(curr_user_id), show_plus_modal: false,curr_user_id: curr_user_id, pro_id: pro_id, show_secondary: false, showing_primaries: true,
                     contributors: list_contributors, priorities: list_priorities, board: primary_board, show_task_modal: false, show_modif_modal: false, card: nil,
                     primaries: list_primaries, is_contributor: Monitoring.is_contributor?(curr_user_id),task_changeset: task_changeset, modif_changeset: modif_changeset, show_comments_modal: false, card_with_comments: nil,
                     show_modal: false, arch_id: nil,show_notif: false, notifs: Services.list_my_notifications_with_limit(curr_user_id, 4), secondary_changeset: secondary_changeset, comment_changeset: Monitoring.change_comment(%Comment{}),
@@ -133,8 +133,25 @@ defmodule PmLoginWeb.Project.BoardLive do
     current_board = Kanban.get_board!(socket.assigns.board.id)
     board = struct(current_board, stages: stages)
 
+    new_stages = case socket.assigns.showing_primaries do
+      true -> stages
+          |> Enum.map(fn (%Kanban.Stage{} = stage) ->
+            struct(stage, cards: cards_list_primary_tasks(stage.cards))
+      end)
+
+      _ ->
+        stages
+            |> Enum.map(fn (%Kanban.Stage{} = stage) ->
+              struct(stage, cards: cards_list_secondary_tasks(stage.cards))
+        end)
+
+    end
+
+    # current_board = Kanban.get_board!(socket.assigns.board.id)
+    new_board = struct(board, stages: new_stages)
+
     {:noreply, socket
-    |> assign(board: board)
+    |> assign(board: new_board)
   }
   end
 
@@ -163,8 +180,25 @@ defmodule PmLoginWeb.Project.BoardLive do
     current_board = Kanban.get_board!(socket.assigns.board.id)
     board = struct(current_board, stages: stages)
 
+    new_stages = case socket.assigns.showing_primaries do
+      true -> stages
+          |> Enum.map(fn (%Kanban.Stage{} = stage) ->
+            struct(stage, cards: cards_list_primary_tasks(stage.cards))
+      end)
+
+      _ ->
+        stages
+            |> Enum.map(fn (%Kanban.Stage{} = stage) ->
+              struct(stage, cards: cards_list_secondary_tasks(stage.cards))
+        end)
+
+    end
+
+    # current_board = Kanban.get_board!(socket.assigns.board.id)
+    new_board = struct(board, stages: new_stages)
+
     {:noreply, socket
-    |> assign(board: board)
+    |> assign(board: new_board)
   }
   end
 
@@ -195,7 +229,13 @@ defmodule PmLoginWeb.Project.BoardLive do
     current_board = Kanban.get_board!(socket.assigns.board.id)
     board = struct(current_board, stages: stages)
 
-    {:noreply, socket |> assign(board: board)}
+    showing_primaries = case radio_value do
+      "task" -> true
+      "subtask" -> false
+      _ -> false
+    end
+
+    {:noreply, socket |> assign(board: board, showing_primaries: showing_primaries)}
   end
 
   def handle_event("distinct_task", %{"_target" => ["task_view"]}, socket) do
@@ -214,8 +254,25 @@ defmodule PmLoginWeb.Project.BoardLive do
     current_board = Kanban.get_board!(socket.assigns.board.id)
     board = struct(current_board, stages: stages)
 
+    new_stages = case socket.assigns.showing_primaries do
+      true -> stages
+          |> Enum.map(fn (%Kanban.Stage{} = stage) ->
+            struct(stage, cards: cards_list_primary_tasks(stage.cards))
+      end)
+
+      _ ->
+        stages
+            |> Enum.map(fn (%Kanban.Stage{} = stage) ->
+              struct(stage, cards: cards_list_secondary_tasks(stage.cards))
+        end)
+
+    end
+
+    # current_board = Kanban.get_board!(socket.assigns.board.id)
+    new_board = struct(board, stages: new_stages)
+
     {:noreply, socket
-    |> assign(board: board)
+    |> assign(board: new_board)
   }
   end
 
@@ -259,13 +316,54 @@ defmodule PmLoginWeb.Project.BoardLive do
   def handle_info({"hidden_subscription", [:task, :hidden], _}, socket) do
     board_id = socket.assigns.board.id
     pro_id = socket.assigns.board.project.id
-    {:noreply, socket |> assign(board: Kanban.get_board!(board_id), hidden_tasks: Monitoring.list_hidden_tasks(pro_id))}
+
+    board = Kanban.get_board!(board_id)
+
+
+    new_stages = case socket.assigns.showing_primaries do
+      true -> board.stages
+          |> Enum.map(fn (%Kanban.Stage{} = stage) ->
+            struct(stage, cards: cards_list_primary_tasks(stage.cards))
+      end)
+
+      _ ->
+        board.stages
+            |> Enum.map(fn (%Kanban.Stage{} = stage) ->
+              struct(stage, cards: cards_list_secondary_tasks(stage.cards))
+        end)
+
+    end
+
+    # current_board = Kanban.get_board!(socket.assigns.board.id)
+    new_board = struct(board, stages: new_stages)
+
+    {:noreply, socket |> assign(board: new_board, hidden_tasks: Monitoring.list_hidden_tasks(pro_id))}
   end
 
   def handle_info({"hidden_subscription", [:tasks, :shown], _}, socket) do
     board_id = socket.assigns.board.id
     pro_id = socket.assigns.board.project.id
-    {:noreply, socket |> assign(board: Kanban.get_board!(board_id), hidden_tasks: Monitoring.list_hidden_tasks(pro_id))}
+
+    board = Kanban.get_board!(board_id)
+
+    new_stages = case socket.assigns.showing_primaries do
+      true -> board.stages
+          |> Enum.map(fn (%Kanban.Stage{} = stage) ->
+            struct(stage, cards: cards_list_primary_tasks(stage.cards))
+      end)
+
+      _ ->
+        board.stages
+            |> Enum.map(fn (%Kanban.Stage{} = stage) ->
+              struct(stage, cards: cards_list_secondary_tasks(stage.cards))
+        end)
+
+    end
+
+    # current_board = Kanban.get_board!(socket.assigns.board.id)
+    new_board = struct(board, stages: new_stages)
+
+    {:noreply, socket |> assign(board: new_board, hidden_tasks: Monitoring.list_hidden_tasks(pro_id))}
   end
 
   def handle_event("switch-notif", %{}, socket) do
@@ -460,7 +558,26 @@ defmodule PmLoginWeb.Project.BoardLive do
           socket |> put_flash(:info, "Tâche \"#{Monitoring.get_task_with_status!(real_task.id).title}\" mise dans \" #{Monitoring.get_task_with_status!(real_task.id).status.title} \" ") |> push_event("AnimateAlert", %{})
         end
 
-        {:noreply, post_socket |> assign(:board, this_board)}
+        board = this_board
+
+        new_stages = case socket.assigns.showing_primaries do
+          true -> board.stages
+              |> Enum.map(fn (%Kanban.Stage{} = stage) ->
+                struct(stage, cards: cards_list_primary_tasks(stage.cards))
+          end)
+
+          _ ->
+            board.stages
+                |> Enum.map(fn (%Kanban.Stage{} = stage) ->
+                  struct(stage, cards: cards_list_secondary_tasks(stage.cards))
+            end)
+
+        end
+
+        # current_board = Kanban.get_board!(socket.assigns.board.id)
+        new_board = struct(board, stages: new_stages)
+
+        {:noreply, post_socket |> assign(board: new_board)}
         # {:noreply, update(socket, :board, fn _ -> Kanban.get_board!() end)}
 
       {:error, changeset} ->
@@ -503,7 +620,26 @@ defmodule PmLoginWeb.Project.BoardLive do
     my_primary_tasks = Monitoring.list_primary_tasks(socket.assigns.board.project.id)
     list_primaries = my_primary_tasks |> Enum.map(fn (%Task{} = p) -> {p.title, p.id} end)
 
-    {:noreply, assign(socket, board: Kanban.get_board!(board_id), primaries: list_primaries)}
+    board = Kanban.get_board!(board_id)
+
+    new_stages = case socket.assigns.showing_primaries do
+      true -> board.stages
+          |> Enum.map(fn (%Kanban.Stage{} = stage) ->
+            struct(stage, cards: cards_list_primary_tasks(stage.cards))
+      end)
+
+      _ ->
+        board.stages
+            |> Enum.map(fn (%Kanban.Stage{} = stage) ->
+              struct(stage, cards: cards_list_secondary_tasks(stage.cards))
+        end)
+
+    end
+
+    # current_board = Kanban.get_board!(socket.assigns.board.id)
+    new_board = struct(board, stages: new_stages)
+
+    {:noreply, assign(socket, board: new_board, primaries: list_primaries)}
   end
 
   def handle_info({Monitoring, [:status, :updated], _}, socket) do
@@ -514,28 +650,127 @@ defmodule PmLoginWeb.Project.BoardLive do
     my_primary_tasks = Monitoring.list_primary_tasks(socket.assigns.board.project.id)
     list_primaries = my_primary_tasks |> Enum.map(fn (%Task{} = p) -> {p.title, p.id} end)
 
-    {:noreply, assign(socket, board: Kanban.get_board!(board_id), primaries: list_primaries)}
+    board = Kanban.get_board!(board_id)
+
+    new_stages = case socket.assigns.showing_primaries do
+      true -> board.stages
+          |> Enum.map(fn (%Kanban.Stage{} = stage) ->
+            struct(stage, cards: cards_list_primary_tasks(stage.cards))
+      end)
+
+      _ ->
+        board.stages
+            |> Enum.map(fn (%Kanban.Stage{} = stage) ->
+              struct(stage, cards: cards_list_secondary_tasks(stage.cards))
+        end)
+
+    end
+
+    # current_board = Kanban.get_board!(socket.assigns.board.id)
+    new_board = struct(board, stages: new_stages)
+
+    {:noreply, assign(socket, board: new_board, primaries: list_primaries)}
   end
 
   def handle_info({Monitoring, [:project, :updated], _}, socket) do
     board_id = socket.assigns.board.id
-    {:noreply, assign(socket, board: Kanban.get_board!(board_id))}
+
+    board = Kanban.get_board!(board_id)
+
+    new_stages = case socket.assigns.showing_primaries do
+      true -> board.stages
+          |> Enum.map(fn (%Kanban.Stage{} = stage) ->
+            struct(stage, cards: cards_list_primary_tasks(stage.cards))
+      end)
+
+      _ ->
+        board.stages
+            |> Enum.map(fn (%Kanban.Stage{} = stage) ->
+              struct(stage, cards: cards_list_secondary_tasks(stage.cards))
+        end)
+
+    end
+
+    # current_board = Kanban.get_board!(socket.assigns.board.id)
+    new_board = struct(board, stages: new_stages)
+
+    {:noreply, assign(socket, board: new_board)}
   end
 
   def handle_info({Monitoring, [:mother, :updated], _}, socket) do
     board_id = socket.assigns.board.id
-    {:noreply, assign(socket, board: Kanban.get_board!(board_id))}
+
+    board = Kanban.get_board!(board_id)
+
+    new_stages = case socket.assigns.showing_primaries do
+      true -> board.stages
+          |> Enum.map(fn (%Kanban.Stage{} = stage) ->
+            struct(stage, cards: cards_list_primary_tasks(stage.cards))
+      end)
+
+      _ ->
+        board.stages
+            |> Enum.map(fn (%Kanban.Stage{} = stage) ->
+              struct(stage, cards: cards_list_secondary_tasks(stage.cards))
+        end)
+
+    end
+
+    # current_board = Kanban.get_board!(socket.assigns.board.id)
+    new_board = struct(board, stages: new_stages)
+
+    {:noreply, assign(socket, board: new_board)}
   end
 
   def handle_info({Monitoring, [:task, :created], _}, socket) do
     board_id = socket.assigns.board.id
-    {:noreply, assign(socket, board: Kanban.get_board!(board_id))}
+
+    board = Kanban.get_board!(board_id)
+
+    new_stages = case socket.assigns.showing_primaries do
+      true -> board.stages
+          |> Enum.map(fn (%Kanban.Stage{} = stage) ->
+            struct(stage, cards: cards_list_primary_tasks(stage.cards))
+      end)
+
+      _ ->
+        board.stages
+            |> Enum.map(fn (%Kanban.Stage{} = stage) ->
+              struct(stage, cards: cards_list_secondary_tasks(stage.cards))
+        end)
+
+    end
+
+    # current_board = Kanban.get_board!(socket.assigns.board.id)
+    new_board = struct(board, stages: new_stages)
+
+    {:noreply, assign(socket, board: new_board)}
   end
 
   def handle_info({Kanban, [_, :updated], _}, socket) do
     proj_id = socket.assigns.pro_id
     project = Monitoring.get_project!(proj_id)
-    {:noreply, assign(socket, :board, Kanban.get_board!(project.board_id))}
+
+    board = Kanban.get_board!(project.board_id)
+
+    new_stages = case socket.assigns.showing_primaries do
+      true -> board.stages
+          |> Enum.map(fn (%Kanban.Stage{} = stage) ->
+            struct(stage, cards: cards_list_primary_tasks(stage.cards))
+      end)
+
+      _ ->
+        board.stages
+            |> Enum.map(fn (%Kanban.Stage{} = stage) ->
+              struct(stage, cards: cards_list_secondary_tasks(stage.cards))
+        end)
+
+    end
+
+    # current_board = Kanban.get_board!(socket.assigns.board.id)
+    new_board = struct(board, stages: new_stages)
+
+    {:noreply, assign(socket, board: new_board)}
   end
 
   def handle_info({Kanban, [_, :created], _}, socket) do
@@ -543,7 +778,27 @@ defmodule PmLoginWeb.Project.BoardLive do
     project = Monitoring.get_project!(proj_id)
     my_primary_tasks = Monitoring.list_primary_tasks(proj_id)
     list_primaries = my_primary_tasks |> Enum.map(fn (%Task{} = p) -> {p.title, p.id} end)
-    {:noreply, assign(socket, board: Kanban.get_board!(project.board_id), primaries: list_primaries)}
+
+    board = Kanban.get_board!(project.board_id)
+
+    new_stages = case socket.assigns.showing_primaries do
+      true -> board.stages
+          |> Enum.map(fn (%Kanban.Stage{} = stage) ->
+            struct(stage, cards: cards_list_primary_tasks(stage.cards))
+      end)
+
+      _ ->
+        board.stages
+            |> Enum.map(fn (%Kanban.Stage{} = stage) ->
+              struct(stage, cards: cards_list_secondary_tasks(stage.cards))
+        end)
+
+    end
+
+    # current_board = Kanban.get_board!(socket.assigns.board.id)
+    new_board = struct(board, stages: new_stages)
+
+    {:noreply, assign(socket, board: new_board, primaries: list_primaries)}
   end
 
   def handle_event("show_task_modal", %{}, socket) do
