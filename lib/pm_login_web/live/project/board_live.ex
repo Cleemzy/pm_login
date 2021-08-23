@@ -172,9 +172,6 @@ defmodule PmLoginWeb.Project.BoardLive do
     {:noreply, socket}
   end
 
-  def handle_event("distinct_task", %{"_target" => ["task_view"]}, socket) do
-    {:noreply, socket}
-  end
 
   def handle_event("distinct_task", %{"_target" => ["task_view"], "task_view" => radio_value}, socket) do
     IO.inspect(radio_value)
@@ -199,6 +196,10 @@ defmodule PmLoginWeb.Project.BoardLive do
     board = struct(current_board, stages: stages)
 
     {:noreply, socket |> assign(board: board)}
+  end
+
+  def handle_event("distinct_task", %{"_target" => ["task_view"]}, socket) do
+    {:noreply, socket}
   end
 
 
@@ -612,9 +613,14 @@ defmodule PmLoginWeb.Project.BoardLive do
     IO.inspect parent_task
 
     parent_params = cond do
-      is_nil(parent_task.contributor_id) -> %{"attributor_id" => socket.assigns.curr_user_id,
+      is_nil(parent_task.contributor_id) and is_nil(params["contributor_id"]) -> %{"attributor_id" => socket.assigns.curr_user_id,
                                             "priority_id" => parent_task.priority_id
                                             }
+
+      not is_nil(params["contributor_id"]) -> %{"attributor_id" => socket.assigns.curr_user_id,
+      "contributor_id" => params["contributor_id"],
+      "priority_id" => parent_task.priority_id
+      }
 
       true -> %{"attributor_id" => socket.assigns.curr_user_id,
       "contributor_id" => parent_task.contributor_id,
@@ -638,7 +644,9 @@ defmodule PmLoginWeb.Project.BoardLive do
         [head | _] = this_board.stages
         Kanban.create_card(%{name: task.title, stage_id: head.id ,task_id: task.id})
         #NOTIFY ATTRIBUTOR THAT A SECONDARY TASK HAS BEEN CREATED
-        Services.send_notif_to_one(task.contributor_id, task.attributor_id, "Une tâche fille de votre tâche primaire #{Monitoring.get_task!(task.parent_id).title} du nom de #{task.title} a été créee par #{Login.get_user!(task.contributor_id).username} dans le projet #{this_board.project.title}")
+        if not is_nil(task.contributor_id) do
+          Services.send_notif_to_one(task.attributor_id, task.contributor_id, "Vous avez été assigné à la sous-tâche #{task.title} du projet #{Monitoring.get_project!(task.project_id).title}")
+        end
         {:noreply, socket
         |> put_flash(:info, "La tâche secondaire #{Monitoring.get_task!(task.id).title} a bien été créee") |> push_event("AnimateAlert", %{})
         |> assign(show_secondary: false)}

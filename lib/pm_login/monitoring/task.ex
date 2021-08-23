@@ -101,7 +101,7 @@ defmodule PmLogin.Monitoring.Task do
     # case Kanban.create_card(%{name: title, stage_id: stage.id}) do
     #   {:ok, card} ->
         task
-        |> cast(attrs, [:title, :attributor_id, :project_id, :date_start, :estimated_duration, :deadline])
+        |> cast(attrs, [:title, :attributor_id, :contributor_id, :project_id, :date_start, :estimated_duration, :deadline])
         |> validate_required(:title, message: "Entrez tâche")
         |> unique_constraint(:title, message: "Tâche déjà existante")
         |> validate_required(:estimated_duration, message: "Entrez estimation")

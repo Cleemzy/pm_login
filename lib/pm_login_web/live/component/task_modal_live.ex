@@ -47,12 +47,19 @@ defmodule PmLoginWeb.LiveComponent.TaskModalLive do
                   <%= hidden_input f, :project_id, value: @pro_id %>
                   <%= hidden_input f, :attributor_id, value: @curr_user_id %>
                   <div class="row">
+
                     <div class="column">
                       <%= label f, "Date d'échéance" %>
                       <%= date_input f, :deadline %>
                       <%= error_tag f, :deadline %>
                       <%= error_tag f, :deadline_lt %>
                       <%= error_tag f, :deadline_before_dtstart %>
+                    </div>
+
+                    <div class="column">
+                        <%= label f, "Assigner intervenant" %>
+                        <%= select f, :contributor_id, @contributors, prompt: "Contributeurs:" %>
+                        <%= error_tag f, :contributor_id %>
                     </div>
 
                   </div>

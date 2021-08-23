@@ -45,7 +45,6 @@ defmodule PmLoginWeb.LiveComponent.SecondaryModalLive do
                   <%= text_input f, :title %>
                   <%= error_tag f, :title %>
                   <%= hidden_input f, :project_id, value: @pro_id %>
-                  <%= hidden_input f, :contributor_id, value: @curr_user_id %>
                   <div class="row">
                     <div class="column">
                       <%= label f, "Date d'échéance" %>
@@ -54,6 +53,13 @@ defmodule PmLoginWeb.LiveComponent.SecondaryModalLive do
                       <%= error_tag f, :deadline_lt %>
                       <%= error_tag f, :deadline_before_dtstart %>
                     </div>
+
+                    <div class="column">
+                      <%= label f, "Assigner intervenant" %>
+                      <%= select f, :contributor_id, @contributors, prompt: "Contributeurs:" %>
+                      <%= error_tag f, :contributor_id %>
+                  </div>
+
                   </div>
                   <div class="row">
                     <div class="column">
