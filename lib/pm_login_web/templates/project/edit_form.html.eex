@@ -59,7 +59,6 @@
       <%= error_tag f, :active_client_id %>
     </div>
   </div>
-edit form
   <div>
     <%= submit "Valider projet",class: "btn btn-lg btn-primary" %>
   </div>
