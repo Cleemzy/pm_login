@@ -36,6 +36,10 @@ defmodule PmLoginWeb.User.ListLive do
     {:noreply, socket |> assign(users: Login.list_asc_auth())}
   end
 
+  def handle_info({Services, [:active_client, :created], _}, socket) do
+    {:noreply, socket |> assign(users: Login.list_asc_auth())}
+  end
+
   def handle_event("show-form", _params, socket), do: {:noreply, socket|>assign(form: true)}
   def handle_event("close-form", _params, socket), do: {:noreply, socket|>assign(form: false)}
 

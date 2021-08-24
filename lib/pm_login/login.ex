@@ -357,6 +357,12 @@ defmodule PmLogin.Login do
     |> Repo.insert()
   end
 
+  def create_user_from_project(attrs \\ %{}) do
+    %User{}
+    |> User.from_project_changeset(attrs)
+    |> Repo.insert()
+  end
+
   def broadcast_user_creation(tuple) do
     broadcast_change(tuple, [:user, :created])
   end
