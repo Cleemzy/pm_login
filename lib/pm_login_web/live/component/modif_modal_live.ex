@@ -141,7 +141,7 @@ defmodule PmLoginWeb.LiveComponent.ModifModalLive do
                   <div class="row">
                     <div class="column">
                       <%= label f, "Date de début" %>
-                      <%= if ((@is_admin or @is_attributor) and is_nil(@card.task.parent_id)) or (@is_contributor and !is_nil(@card.task.parent_id)) do %>
+                      <%= if (@is_admin or @is_attributor)do %>
                         <%= date_input f, :date_start, value: @card.task.date_start %>
                       <% else %>
                         <p><%= Utilities.letters_date_format(@card.task.date_start) %></p>
@@ -167,12 +167,24 @@ defmodule PmLoginWeb.LiveComponent.ModifModalLive do
 
                   <!-- FIFTH ROW -->
                     <div class="row" style="text-align:center;">
-                    <%= label f, "Progression: ", style: "margin-top: 5px;" %>
-                    <b><%= number_input f, :progression, value: @card.task.progression, style: "width: 70px; margin-left: 20px;" %> %</b>
-                    <%= error_tag f, :invalid_progression %>
-                    <%= error_tag f, :progression_not_int %>
+                      <div class="column">
+                        <%= label f, "Progression: ", style: "margin-top: 5px;" %>
+                        <b><%= number_input f, :progression, value: @card.task.progression, style: "width: 70px; margin-left: 20px;" %> %</b>
+                        <%= error_tag f, :invalid_progression %>
+                        <%= error_tag f, :progression_not_int %>
+                      </div>
 
+                      <div class="column">
+                      <%= if (@is_admin or @is_attributor) do %>
+                        <%= label f, "Date d'échéance" %>
+                        <%= date_input f, :deadline, value: @card.task.deadline %>
+                        <%= error_tag f, :deadline %>
+                        <%= error_tag f, :deadline_lt %>
+                        <%= error_tag f, :deadline_before_dtstart %>
+                      <% end %>
                      </div>
+
+                    </div>
                   <!-- -->
 
                   <!-- Buttons -->
