@@ -108,13 +108,24 @@ defmodule PmLoginWeb.Project.BoardLive do
   def handle_event("archive_task", %{"id" => id}, socket) do
     task = Monitoring.get_task!(id)
     Monitoring.hide_task(task)
+
+    cond do
+      Monitoring.is_task_mother?(task) ->
+                                          # IO.puts "madafaka"
+                                          task_with_children = Monitoring.get_task_mother!(task.id)
+                                          # IO.puts length(task_with_children.children)
+                                          # IO.inspect(task_with_children.children)
+                                          for child <- task_with_children.children do
+                                            Monitoring.hide_task(child)
+                                          end
+      true -> IO.puts "not mdfk"
+    end
+
     curr_user_id = socket.assigns.curr_user_id
     content = "Tâche #{task.title} archivée par #{Login.get_user!(curr_user_id).username}."
     Services.send_notifs_to_admins_and_attributors(curr_user_id, content)
     {:noreply, socket |> assign(show_modal: false) |>put_flash(:info, "Tâche #{task.title} archivée.") |> push_event("AnimateAlert", %{})}
   end
-
-
 
   def handle_event("attributor_selected", %{"_target" => ["attributor_select"], "attributor_select" => id}, socket) do
     attrib_id = String.to_integer(id)
