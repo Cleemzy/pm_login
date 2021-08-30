@@ -45,6 +45,8 @@ defmodule PmLoginWeb.Project.BoardLive do
 
     board = Kanban.get_board!(project.board_id)
 
+    IO.inspect board.stages
+
     primary_stages = board.stages
     |> Enum.map(fn (%Kanban.Stage{} = stage) ->
       struct(stage, cards: cards_list_primary_tasks(stage.cards))

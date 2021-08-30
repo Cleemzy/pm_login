@@ -269,7 +269,9 @@ def validate_start_deadline(changeset) do
 
   """
   def list_statuses do
-    Repo.all(Status)
+    query = from s in Status,
+            order_by: [asc: :id]
+    Repo.all(query)
   end
 
   @doc """
