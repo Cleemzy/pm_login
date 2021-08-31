@@ -446,6 +446,13 @@ def validate_start_deadline(changeset) do
     Services.send_notifs_to_admins_and_attributors(curr_user_id, "La tâche #{task.title} a été achevée avec toutes ses tâches filles.")
   end
 
+  def put_task_to_achieve(%Task{} = t, curr_user_id) do
+    # case  do
+    #    ->
+
+    # end
+  end
+
   def is_task_primary?(%Task{} = t) do
     is_nil(t.parent_id)
   end
@@ -779,6 +786,14 @@ def validate_start_deadline(changeset) do
 
   """
   def get_task!(id), do: Repo.get!(Task, id)
+
+  def get_task_with_card!(id) do
+    card_query = from c in Card
+    query = from t in Task,
+            where: t.id == ^id,
+            preload: [card: ^card_query]
+    Repo.one!(query)
+  end
 
   # def set_parent do
   #

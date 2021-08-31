@@ -75,6 +75,15 @@ defmodule PmLoginWeb.LiveComponent.SecondaryModalLive do
                     </div>
                   </div>
 
+
+                  <div class="row">
+                    <div class="column">
+                        <%= label f, "Sans contrôle" %>
+                        <%= checkbox f, :without_control %>
+                    </div>
+                  </div>
+
+
                   <!-- Buttons -->
                   <div class="modal-buttons">
                     <!-- Left Button -->

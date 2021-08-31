@@ -18,6 +18,7 @@ defmodule PmLogin.Monitoring.Task do
     field :title, :string
     field :achieved_at, :naive_datetime
     field :hidden, :boolean
+    field :without_control, :boolean
     # field :parent_id, :id
     # field :parent_id, :id
     # field :project_id, :id
@@ -71,8 +72,9 @@ defmodule PmLogin.Monitoring.Task do
   end
 
   def secondary_changeset(task, attrs) do
+    IO.inspect attrs
     task
-    |> cast(attrs, [:parent_id, :title, :priority_id, :contributor_id,:attributor_id, :project_id,:date_start, :date_end, :estimated_duration, :deadline])
+    |> cast(attrs, [:parent_id, :without_control, :title, :priority_id, :contributor_id,:attributor_id, :project_id,:date_start, :date_end, :estimated_duration, :deadline])
     |> validate_required(:parent_id ,message: "Entrez une tâche parente")
     |> validate_required(:attributor_id,message: "La tâche n'a pas d'Attributeur")
     |> validate_required(:title, message: "Entrez tâche")
@@ -101,8 +103,9 @@ defmodule PmLogin.Monitoring.Task do
     #
     # case Kanban.create_card(%{name: title, stage_id: stage.id}) do
     #   {:ok, card} ->
+      IO.inspect(attrs)
         task
-        |> cast(attrs, [:title, :attributor_id, :contributor_id, :project_id, :date_start, :estimated_duration, :deadline])
+        |> cast(attrs, [:title, :without_control,:attributor_id, :contributor_id, :project_id, :date_start, :estimated_duration, :deadline])
         |> validate_required(:title, message: "Entrez tâche")
         |> unique_constraint(:title, message: "Tâche déjà existante")
         |> validate_required(:estimated_duration, message: "Entrez estimation")

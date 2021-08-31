@@ -95,6 +95,15 @@ defmodule PmLoginWeb.Project.BoardLive do
   #   {:noreply, socket}
   # end
 
+  def handle_event("achieve", params, socket) do
+    IO.puts "achevement"
+    IO.inspect params
+    task = Monitoring.get_task_with_card!(params["id"])
+    IO.inspect task
+    # IO.inspect socket.assigns.board.stages
+    {:noreply, socket}
+  end
+
   def handle_event("spin_test", _params, socket) do
     {:noreply, socket |> push_event("SpinTest", %{})}
   end
@@ -499,6 +508,7 @@ defmodule PmLoginWeb.Project.BoardLive do
     # IO.inspect updated_stage
     # IO.puts "before"
     # IO.inspect card
+    IO.inspect card_attrs
     case Kanban.update_card(card, card_attrs) do
       {:ok, _updated_card} ->
         updated_task = card.task_id |> Monitoring.get_task!
@@ -559,7 +569,7 @@ defmodule PmLoginWeb.Project.BoardLive do
         end
 
 
-        #IF TASK IS UPTADET ON THE SAME STAGE
+        #IF TASK IS UPDATED ON THE SAME STAGE
         post_socket = if Kanban.get_stage!(card.stage_id).status_id == real_task.status_id do
 
           socket
