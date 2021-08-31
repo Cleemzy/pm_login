@@ -6,6 +6,8 @@ defmodule PmLogin.Monitoring.Project do
   alias PmLogin.Kanban
   alias PmLogin.Services.ActiveClient
   alias PmLogin.Kanban.Board
+  alias PmLogin.Services
+
   schema "projects" do
     field :date_end, :date
     field :date_start, :date
@@ -61,7 +63,7 @@ defmodule PmLogin.Monitoring.Project do
         |> validate_required(:estimated_duration, message: "Entrez la durée estimée du projet")
         |> validate_required(:title, message: "Veuillez entrer le nom de votre projet")
         |> validate_required(:description, message: "Aucune description donnée")
-        |> validate_required(:date_start, message: "Entrez une date de début")
+        # |> validate_required(:date_start, message: "Entrez une date de début")
         # |> validate_required(:date_end, message: "Entrez une date de fin")
         |> validate_required(:estimated_duration, message: "Entrez une estimation en heure")
         |> validate_required(:deadline, message: "Entrez la date d'échéance")
@@ -73,6 +75,8 @@ defmodule PmLogin.Monitoring.Project do
         |> put_change(:board_id, board.id)
         |> put_change(:performed_duration, 0)
         |> put_change(:status_id, 1)
+        |> put_change(:date_start, Services.current_date |> NaiveDateTime.to_date)
+
 
 
       {:error, %Ecto.Changeset{} = _changeset} ->
@@ -83,7 +87,7 @@ defmodule PmLogin.Monitoring.Project do
         |> validate_required(:estimated_duration, message: "Entrez la durée estimée du projet")
         |> validate_required(:title, message: "Veuillez entrer le nom de votre projet")
         |> validate_required(:description, message: "Aucune description donnée")
-        |> validate_required(:date_start, message: "Entrez une date de début")
+        # |> validate_required(:date_start, message: "Entrez une date de début")
         |> validate_required(:date_end, message: "Entrez une date de fin")
         |> validate_required(:estimated_duration, message: "Entrez une estimation en heure")
         |> validate_required(:deadline, message: "Entrez la date d'échéance")

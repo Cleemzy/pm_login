@@ -69,6 +69,10 @@ defmodule PmLoginWeb.Project.NewLive do
     end
   end
 
+  def handle_event("cancel-form", _params, socket) do
+        {:noreply, socket}
+  end
+
   def handle_event("save-user", params, socket) do
     IO.inspect(params["user"])
 
