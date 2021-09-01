@@ -447,10 +447,29 @@ def validate_start_deadline(changeset) do
   end
 
   def put_task_to_achieve(%Task{} = t, curr_user_id) do
-    # case  do
-    #    ->
+    stage_id = get_achieved_stage_id_from_project_id!(t.project_id)
 
-    # end
+    task = get_task_with_card!(t.id)
+
+    project = get_project_with_tasks!(t.project_id)
+
+    Kanban.put_card_to_achieve(task.card, %{"stage_id" => stage_id})
+    update_task(task, %{"status_id" => 5})
+
+    if is_a_child?(task) do
+      update_mother_task_progression(task, curr_user_id)
+    end
+
+    if is_task_primary?(task) do
+      add_progression_to_project(project)
+    end
+
+    if is_task_mother?(task) do
+      achieve_children_tasks(task, curr_user_id)
+    end
+
+
+    Services.send_notifs_to_admins_and_attributors(curr_user_id, "La tâche #{task.title} a été achevée.")
   end
 
   def is_task_primary?(%Task{} = t) do
@@ -834,11 +853,11 @@ def validate_start_deadline(changeset) do
     update_mother_progression(moth, %{"progression" => round_mother_progression(t.id)})
 
     rounded_moth = get_task_with_children!(t.id)
-    IO.inspect moth.project_id
-    IO.inspect moth.card
+    # IO.inspect moth.project_id
+    # IO.inspect moth.card
     # IO.inspect moth.card_id
 
-    IO.inspect moth.progression
+    # IO.inspect moth.progression
 
     if rounded_moth.progression == 100 do
       stage_id = get_loading_stage_id_from_project_id!(moth.project_id)

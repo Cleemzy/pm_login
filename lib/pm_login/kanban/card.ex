@@ -35,5 +35,11 @@ defmodule PmLogin.Kanban.Card do
     |> Position.insert_at_bottom(:stage_id)
   end
 
+  def update_stage_changeset(card, attrs) do
+    card
+    |> cast(attrs, [:stage_id])
+    |> Position.insert_at_bottom(:stage_id)
+  end
+
 
 end

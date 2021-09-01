@@ -45,7 +45,7 @@ defmodule PmLoginWeb.Project.BoardLive do
 
     board = Kanban.get_board!(project.board_id)
 
-    IO.inspect board.stages
+    # IO.inspect board.stages
 
     primary_stages = board.stages
     |> Enum.map(fn (%Kanban.Stage{} = stage) ->
@@ -96,12 +96,14 @@ defmodule PmLoginWeb.Project.BoardLive do
   # end
 
   def handle_event("achieve", params, socket) do
-    IO.puts "achevement"
-    IO.inspect params
+    # IO.puts "achevement"
+    # IO.inspect params
     task = Monitoring.get_task_with_card!(params["id"])
-    IO.inspect task
+    # IO.inspect task
+
+    Monitoring.put_task_to_achieve(task, socket.assigns.curr_user_id)
     # IO.inspect socket.assigns.board.stages
-    {:noreply, socket}
+    {:noreply, socket |> assign(show_modif_modal: false)}
   end
 
   def handle_event("spin_test", _params, socket) do
@@ -230,7 +232,7 @@ defmodule PmLoginWeb.Project.BoardLive do
 
 
   def handle_event("distinct_task", %{"_target" => ["task_view"], "task_view" => radio_value}, socket) do
-    IO.inspect(radio_value)
+    # IO.inspect(radio_value)
 
     stages = case radio_value do
       "task" ->  Kanban.get_board!(socket.assigns.board.id).stages
@@ -266,7 +268,7 @@ defmodule PmLoginWeb.Project.BoardLive do
 
 
   def handle_event("search_task", %{"search-a" => text}, socket) do
-    IO.inspect(text)
+    # IO.inspect(text)
 
     stages =  Kanban.get_board!(socket.assigns.board.id).stages
     |> Enum.map(fn (%Kanban.Stage{} = stage) ->
@@ -465,7 +467,7 @@ defmodule PmLoginWeb.Project.BoardLive do
     # IO.puts content
 
     {entries, []} = uploaded_entries(socket, :file)
-    IO.inspect entries
+    # IO.inspect entries
 
     case Monitoring.post_comment(params) do
       {:ok, result} ->
@@ -508,22 +510,22 @@ defmodule PmLoginWeb.Project.BoardLive do
     # IO.inspect updated_stage
     # IO.puts "before"
     # IO.inspect card
-    IO.inspect card_attrs
+    # IO.inspect card_attrs
     case Kanban.update_card(card, card_attrs) do
       {:ok, _updated_card} ->
         updated_task = card.task_id |> Monitoring.get_task!
         updated_stage = card_attrs["stage_id"] |> Kanban.get_stage!
         task_attrs = %{"status_id" => updated_stage.status_id}
-        IO.inspect Monitoring.update_task_status(updated_task, task_attrs)
+        # IO.inspect Monitoring.update_task_status(updated_task, task_attrs)
         {:ok, real_task} = Monitoring.update_task_status(updated_task, task_attrs)
         {:ok, real_task} |> Monitoring.broadcast_status_change
         # IO.inspect real_task
         # IO.inspect Monitoring.get_task!(real_task.id)
         this_board = socket.assigns.board
 
-        IO.puts "after"
-        IO.inspect card
-        IO.inspect Kanban.get_stage!(card.stage_id)
+        # IO.puts "after"
+        # IO.inspect card
+        # IO.inspect Kanban.get_stage!(card.stage_id)
 
         #ADDING CHILD TASK TO ACHIEVED STAGE
         if Monitoring.is_a_child?(real_task) and Kanban.get_stage!(card.stage_id).status_id != 5 and real_task.status_id == 5 do
@@ -555,11 +557,11 @@ defmodule PmLoginWeb.Project.BoardLive do
 
         #REMOVING CHILD TASK FROM ACHIEVED STAGE
         if Monitoring.is_a_child?(real_task) and Kanban.get_stage!(card.stage_id).status_id == 5 and real_task.status_id != 5 do
-          IO.puts "CHILD:"
-          IO.inspect real_task
-          IO.puts " AVEC PARENT:"
+          # IO.puts "CHILD:"
+          # IO.inspect real_task
+          # IO.puts " AVEC PARENT:"
           rt_with_parent = Monitoring.get_task_with_parent!(real_task.id)
-          IO.inspect rt_with_parent
+          # IO.inspect rt_with_parent
           if rt_with_parent.parent.status_id == 5 do
             Monitoring.update_task(rt_with_parent.parent, %{"status_id" => real_task.status_id})
             Kanban.remove_mother_card_from_achieve(rt_with_parent.parent.card, %{"stage_id" => rt_with_parent.card.stage_id})
@@ -885,10 +887,10 @@ defmodule PmLoginWeb.Project.BoardLive do
 
   def handle_event("submit_secondary", %{"task" => params}, socket) do
     IO.puts "input"
-    IO.inspect params
+    # IO.inspect params
 
     parent_task = Monitoring.get_task!(params["parent_id"])
-    IO.inspect parent_task
+    # IO.inspect parent_task
 
     parent_params = cond do
       is_nil(parent_task.contributor_id) and is_nil(params["contributor_id"]) -> %{"attributor_id" => socket.assigns.curr_user_id,
@@ -907,12 +909,12 @@ defmodule PmLoginWeb.Project.BoardLive do
 
     end
 
-    IO.puts "parent params"
-    IO.inspect parent_params
+    # IO.puts "parent params"
+    # IO.inspect parent_params
 
-    IO.puts "output"
+    # IO.puts "output"
     op_params = params |> Map.merge(parent_params)
-    IO.inspect op_params
+    # IO.inspect op_params
 
 
     case Monitoring.create_secondary_task(op_params) do
@@ -960,7 +962,7 @@ defmodule PmLoginWeb.Project.BoardLive do
 
   def handle_event("update_task", %{"task" => params}, socket) do
     #progression to int
-    IO.puts "OIIIIIIIIII"
+    # IO.puts "OIIIIIIIIII"
     # IO.inspect params
     int_progression = params["progression"] |> Float.parse |> elem(0) |> trunc
     attrs = %{params | "progression" => int_progression}

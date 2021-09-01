@@ -210,6 +210,13 @@ defmodule PmLogin.Kanban do
     |> notify_subscribers([:card, :updated])
   end
 
+  def put_card_to_achieve(card, attrs) do
+    card
+    |> Card.update_stage_changeset(attrs)
+    |> Repo.update()
+    |> notify_subscribers([:card, :updated])
+  end
+
   def remove_mother_card_from_achieve(card, attrs) do
     card
     |> Card.update_mother_changeset(attrs)
