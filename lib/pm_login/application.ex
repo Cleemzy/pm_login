@@ -16,9 +16,10 @@ defmodule PmLogin.Application do
       # Start the PubSub system
       {Phoenix.PubSub, name: PmLogin.PubSub},
       # Start the Endpoint (http/https)
-      PmLoginWeb.Endpoint
+      PmLoginWeb.Endpoint,
       # Start a worker by calling: PmLogin.Worker.start_link(arg)
       # {PmLogin.Worker, arg}
+      PmLogin.DynamicSuper
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
