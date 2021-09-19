@@ -103,7 +103,8 @@ defmodule PmLogin.Monitoring.Task do
     #
     # case Kanban.create_card(%{name: title, stage_id: stage.id}) do
     #   {:ok, card} ->
-      IO.inspect(attrs)
+      # IO.puts("tafiditra create task")
+      # IO.inspect(attrs)
         task
         |> cast(attrs, [:title, :without_control,:attributor_id, :contributor_id, :project_id, :date_start, :estimated_duration, :deadline])
         |> validate_required(:title, message: "Entrez tâche")

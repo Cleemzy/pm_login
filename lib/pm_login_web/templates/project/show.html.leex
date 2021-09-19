@@ -25,7 +25,8 @@
 
   <li>
     <strong>Fin du projet</strong>
-    <%= Utilities.letters_date_format(@project.date_end) %>
+    <%= if not is_nil(@project.date_end) do Utilities.letters_date_format(@project.date_end) else "-" end %>
+
   </li>
 
   <li>

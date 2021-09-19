@@ -951,6 +951,11 @@ defmodule PmLoginWeb.Project.BoardLive do
         #SEND NEW TASK NOTIFICATION TO ADMINS AND ATTRIBUTORS
         curr_user_id = socket.assigns.curr_user_id
         Services.send_notifs_to_admins_and_attributors(curr_user_id,"Tâche nouvellement créee du nom de #{task.title} par #{Login.get_user!(curr_user_id).username} dans le projet #{this_project.title}.")
+
+        if not is_nil(task.contributor_id) do
+          Services.send_notif_to_one(curr_user_id, task.contributor_id,"#{Login.get_user!(task.attributor_id).username} vous a assigné à la tâche #{task.title} dans le projet #{this_project.title}.")
+        end
+
         {:noreply, socket
         |> put_flash(:info, "La tâche #{Monitoring.get_task!(task.id).title} a bien été créee") |> push_event("AnimateAlert", %{})
         |> assign(show_task_modal: false)}
