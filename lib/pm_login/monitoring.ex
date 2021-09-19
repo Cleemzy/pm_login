@@ -367,14 +367,17 @@ def validate_start_deadline(changeset) do
 
   """
   def list_projects do
-    Repo.all(Project)
+    query = from p in Project,
+            order_by: [desc: :inserted_at]
+    Repo.all(query)
   end
 
   def list_projects_by_contributor(con_id) do
     tasks_query = from t in Task,
                   where: t.contributor_id == ^con_id
     query = from p in Project,
-            preload: [tasks: ^tasks_query]
+            preload: [tasks: ^tasks_query],
+            order_by: [desc: :inserted_at]
     Repo.all(query)
     |> Enum.filter(fn %PmLogin.Monitoring.Project{} = project ->
                                           project.tasks != [] end)
