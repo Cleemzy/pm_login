@@ -1,4 +1,4 @@
-defmodule PmLogin.DynamicSuper do
+defmodule PmLogin.SpawnerSupervisor do
   use DynamicSupervisor
 
   def start_link(init_arg) do
@@ -7,7 +7,7 @@ defmodule PmLogin.DynamicSuper do
 
   @impl true
   def init(_init_arg) do
-    IO.puts "init dynnsup"
+    IO.puts "init spawner super"
     DynamicSupervisor.init(strategy: :one_for_one)
   end
 

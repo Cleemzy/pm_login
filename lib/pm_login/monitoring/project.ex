@@ -43,7 +43,7 @@ defmodule PmLogin.Monitoring.Project do
     |> validate_required(:title, message: "Veuillez entrer le nom de votre projet")
     |> validate_required(:description, message: "Aucune description donnée")
     |> validate_required(:date_start, message: "Entrez une date de début")
-    |> validate_required(:date_end, message: "Entrez une date de fin")
+    # |> validate_required(:date_end, message: "Entrez une date de fin")
     |> validate_required(:estimated_duration, message: "Entrez une estimation en heure")
     |> validate_required(:deadline, message: "Entrez la date d'échéance")
   end

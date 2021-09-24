@@ -1,4 +1,4 @@
-defmodule PmLogin.GenTest do
+defmodule PmLogin.TaskSpawner do
   use GenServer
 
   def start_link(opts) do

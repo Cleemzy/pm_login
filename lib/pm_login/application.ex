@@ -19,7 +19,7 @@ defmodule PmLogin.Application do
       PmLoginWeb.Endpoint,
       # Start a worker by calling: PmLogin.Worker.start_link(arg)
       # {PmLogin.Worker, arg}
-      PmLogin.DynamicSuper
+      PmLogin.SpawnerSupervisor
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
