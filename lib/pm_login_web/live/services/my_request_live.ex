@@ -13,7 +13,7 @@ defmodule PmLoginWeb.Services.MyRequestsLive do
        socket
        |> assign(display_form: false,changeset:  Services.change_clients_request(%ClientsRequest{}),show_modal: false, service_id: nil,curr_user_id: curr_user_id,show_notif: false, notifs: Services.list_my_notifications_with_limit(curr_user_id, 4),
        requests: Services.list_my_requests(curr_user_id))
-       |> allow_upload(:file, accept: ~w(.png .jpeg .jpg .pdf .txt .odt .ods .odp .odg .csv .xml .xls .xlsx .xlsm .ppt .pptx .doc .docx), max_entries: 5),
+       |> allow_upload(:file, accept: ~w(.png .jpeg .jpg .pdf .txt .odt .ods .odp .csv .xml .xls .xlsx .ppt .pptx .doc .docx), max_entries: 5),
        layout: {PmLoginWeb.LayoutView, "active_client_layout_live.html"}
        }
   end
