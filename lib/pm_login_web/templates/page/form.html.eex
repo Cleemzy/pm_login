@@ -7,7 +7,7 @@
 
   <div class="row login__input">
     <span class="material-icons-round" style="font-size: 35px;color: gray;">account_box</span>
-    <%= text_input f, :username, class: "un", id: "iu", align: "center", placeholder: "Identifiant/Adresse éléctronique", value: "Mgbi" %>
+    <%= text_input f, :username, class: "un", id: "iu", align: "center", placeholder: "Identifiant/Adresse éléctronique" %>
   </div>
   <%= error_tag f, :req_uname_error %>
 
