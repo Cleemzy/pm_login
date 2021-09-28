@@ -7,8 +7,7 @@ defmodule PmLogin.TaskSpawner do
   end
 
   def init(state) do
-    # IO.inspect(state)
-    # IO.puts("salama ty gen ty")
+    IO.inspect(state)
     {:ok, state}
   end
 
