@@ -13,6 +13,11 @@ defmodule PmLogin.SpawnerLauncher do
 
     #GET PID STATE
     #:sys.get_state(pid)
+
+
+    for i <- 1..10 do
+      DynamicSupervisor.start_child(PmLogin.SpawnerSupervisor, %{id: PmLogin.TaskSpawner, start: {PmLogin.TaskSpawner, :start_link, [%{key: i}]} })
+    end
     {:ok, state}
   end
 
