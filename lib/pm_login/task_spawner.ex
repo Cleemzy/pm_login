@@ -1,5 +1,6 @@
 defmodule PmLogin.TaskSpawner do
   use GenServer
+  alias PmLogin.Utilities
 
   def start_link(opts) do
     # IO.inspect opts
@@ -24,7 +25,7 @@ defmodule PmLogin.TaskSpawner do
   end
 
   defp recurrent_work(state) do
-    IO.puts("working.. " <> Map.get(state, :name))
+    IO.inspect state
   end
 
 end

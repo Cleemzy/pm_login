@@ -1,5 +1,6 @@
 defmodule PmLogin.SpawnerLauncher do
   use GenServer
+  alias PmLogin.Monitoring
 
   def start_link(opts) do
     GenServer.start_link(__MODULE__, opts)
@@ -18,6 +19,13 @@ defmodule PmLogin.SpawnerLauncher do
     # for i <- 1..10 do
     #   DynamicSupervisor.start_child(PmLogin.SpawnerSupervisor, %{id: PmLogin.TaskSpawner, start: {PmLogin.TaskSpawner, :start_link, [%{name: "#{i}"}]} })
     # end
+
+    tasks = Monitoring.list_planified
+
+    for task <- tasks do
+      DynamicSupervisor.start_child(PmLogin.SpawnerSupervisor, %{id: PmLogin.TaskSpawner, start: {PmLogin.TaskSpawner, :start_link, [%{task: task.description, dt_start: task.dt_start, period: task.period}]} })
+    end
+
     {:ok, state}
   end
 

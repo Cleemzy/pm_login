@@ -937,6 +937,21 @@ def validate_start_deadline(changeset) do
     |> Repo.insert()
   end
 
+
+  #REAL TASK CREATION WITH CARD
+
+  def spawn_task(params) do
+    {:ok, task} = create_real_task(params)
+
+  end
+
+  def create_real_task(attrs \\ %{}) do
+    %Task{}
+    |> Task.real_creation_changeset(attrs)
+    |> Repo.insert()
+  end
+  #
+
   def create_task_with_card(attrs \\ %{}) do
     %Task{}
     |> Task.create_changeset(attrs)
