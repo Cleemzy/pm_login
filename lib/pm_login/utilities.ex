@@ -63,4 +63,45 @@ defmodule PmLogin.Utilities do
     naive_to_datetime(naive)
   end
 
+  # def seconds_between_dates(dt1, dt2) do
+
+  # end
+  def days_to_seconds(days) do
+    days * 86400
+  end
+
+  #PERIODIC TEST
+  def next_end(start_date, days_period) do
+
+    # IO.puts("Start date: #{start_date} | Period: #{days_period}")
+    curr_next_end = NaiveDateTime.add(start_date, days_to_seconds(days_period))
+
+    now = NaiveDateTime.local_now()
+
+    # IO.puts("End : #{curr_next_end}")
+
+    cond do
+
+      NaiveDateTime.compare(now, start_date) == :lt or NaiveDateTime.compare(now, start_date) == :eq -> start_date
+      NaiveDateTime.compare(now, start_date) == :gt and (NaiveDateTime.compare(now, curr_next_end) == :lt or NaiveDateTime.compare(now, curr_next_end) == :eq) -> curr_next_end
+      NaiveDateTime.compare(now, curr_next_end) == :gt -> next_end(curr_next_end, days_period)
+
+    end
+
+  end
+
+  def test_next_end(start_date, period, val) do
+    curr_next_end = start_date + period
+    IO.puts("Start date: #{start_date} | Period: #{period}")
+    IO.puts("End : #{curr_next_end}")
+
+    cond do
+      start_date < val and val <= curr_next_end ->
+        curr_next_end
+
+      curr_next_end < val ->
+        test_next_end(curr_next_end, period, val)
+    end
+  end
+
 end

@@ -24,7 +24,7 @@ defmodule PmLogin.TaskSpawner do
   end
 
   defp recurrent_work(state) do
-    IO.puts("working.. "<>Map.get(state, :name))
+    IO.puts("working.. " <> Map.get(state, :name))
   end
 
 end
