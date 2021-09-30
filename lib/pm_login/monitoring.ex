@@ -7,8 +7,7 @@ defmodule PmLogin.Monitoring do
   import PmLogin.Utilities
   alias PmLogin.Repo
   alias PmLogin.Kanban
-  alias PmLogin.Monitoring.Status
-  alias PmLogin.Monitoring.Task
+  alias PmLogin.Monitoring.{Status, Task, Planified}
   alias PmLogin.Login
   alias PmLogin.Services
   alias PmLogin.Login.User
@@ -353,6 +352,19 @@ def validate_start_deadline(changeset) do
   """
   def change_status(%Status{} = status, attrs \\ %{}) do
     Status.changeset(status, attrs)
+  end
+
+  #PLANIFIED
+  def list_planified() do
+    query = from p in Planified,
+        order_by: [desc: :inserted_at]
+    Repo.all(query)
+  end
+
+  def create_planified(attrs \\ %{}) do
+    %Planified{}
+    |> Planified.create_changeset(attrs)
+    |> Repo.insert()
   end
 
   alias PmLogin.Monitoring.Project
