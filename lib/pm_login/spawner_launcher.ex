@@ -23,7 +23,7 @@ defmodule PmLogin.SpawnerLauncher do
     tasks = Monitoring.list_planified
 
     for task <- tasks do
-      DynamicSupervisor.start_child(PmLogin.SpawnerSupervisor, %{id: PmLogin.TaskSpawner, start: {PmLogin.TaskSpawner, :start_link, [%{task: task.description, dt_start: task.dt_start, period: task.period}]} })
+      DynamicSupervisor.start_child(PmLogin.SpawnerSupervisor, %{id: PmLogin.TaskSpawner, start: {PmLogin.TaskSpawner, :start_link, [%{task: task}]} })
     end
 
     {:ok, state}
