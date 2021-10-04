@@ -6,7 +6,7 @@ defmodule PmLoginWeb.Project.BoardLive do
   alias PmLoginWeb.ProjectView
   alias PmLogin.Monitoring
   alias PmLogin.Kanban
-  alias PmLogin.Monitoring.{Task, Priority}
+  alias PmLogin.Monitoring.{Task, Priority, Planified}
   alias PmLogin.Login
   alias PmLogin.Login.User
   alias PmLogin.Services
@@ -54,8 +54,10 @@ defmodule PmLoginWeb.Project.BoardLive do
 
     primary_board = struct(board, stages: primary_stages)
 
+    planified_changeset = Monitoring.change_planified(%Planified{})
+
     {:ok, socket |> assign(is_attributor: Monitoring.is_attributor?(curr_user_id),is_admin: Monitoring.is_admin?(curr_user_id), show_plus_modal: false,curr_user_id: curr_user_id, pro_id: pro_id, show_secondary: false, showing_primaries: true,
-                    contributors: list_contributors, priorities: list_priorities, board: primary_board, show_task_modal: false, show_modif_modal: false, card: nil,
+                    contributors: list_contributors, priorities: list_priorities, board: primary_board, show_task_modal: false, show_modif_modal: false, card: nil, show_planified: false, planified_changeset: planified_changeset,
                     primaries: list_primaries, is_contributor: Monitoring.is_contributor?(curr_user_id),task_changeset: task_changeset, modif_changeset: modif_changeset, show_comments_modal: false, card_with_comments: nil,
                     show_modal: false, arch_id: nil,show_notif: false, notifs: Services.list_my_notifications_with_limit(curr_user_id, 4), secondary_changeset: secondary_changeset, comment_changeset: Monitoring.change_comment(%Comment{}),
                     no_selected_hidden: false, show_hidden_modal: false, hidden_tasks: Monitoring.list_hidden_tasks(pro_id), project_contributors: Monitoring.list_project_contributors(board), project_attributors: Monitoring.list_project_attributors(board))
@@ -324,6 +326,19 @@ defmodule PmLoginWeb.Project.BoardLive do
     {:noreply, socket |> assign(show_hidden_modal: true)}
   end
 
+  def handle_event("submit_planified", %{"planified" => params}, socket) do
+    IO.inspect params
+    {:noreply, socket}
+  end
+
+  def handle_event("show_planified", _params, socket) do
+    {:noreply, socket |> assign(show_planified: true)}
+  end
+
+  def handle_event("close_planified_modal", _params, socket) do
+    {:noreply, socket |> assign(show_planified: false)}
+  end
+
   def handle_event("close_hidden_modal", _params, socket) do
     {:noreply, socket |> assign(show_hidden_modal: false, no_selected_hidden: false)}
   end
@@ -425,6 +440,7 @@ defmodule PmLoginWeb.Project.BoardLive do
     show_comments_modal = socket.assigns.show_comments_modal
     show_modal = socket.assigns.show_modal
     show_hidden_modal = socket.assigns.show_hidden_modal
+    show_planified = socket.assigns.show_planified
 
 
     s_task_modal = if (key == "Escape" and show_task_modal == true) ,do: false ,else: show_task_modal
@@ -434,6 +450,7 @@ defmodule PmLoginWeb.Project.BoardLive do
     s_comments_modal = if (key == "Escape" and show_comments_modal == true) ,do: false ,else: show_comments_modal
     s_modal = if (key == "Escape" and show_modal == true) ,do: false ,else: show_modal
     s_hidden_modal = if (key == "Escape" and show_hidden_modal == true) ,do: false ,else: show_hidden_modal
+    s_planified = if (key == "Escape" and show_planified == true) ,do: false ,else: show_planified
 
     {:noreply, socket
                |> assign(show_task_modal: s_task_modal,
@@ -442,7 +459,8 @@ defmodule PmLoginWeb.Project.BoardLive do
                           show_modif_modal: s_modif_modal,
                           show_comments_modal: s_comments_modal,
                           show_modal: s_modal,
-                          show_hidden_modal: s_hidden_modal)}
+                          show_hidden_modal: s_hidden_modal,
+                          show_planified: s_planified)}
   end
 
   def handle_event("show_alert_test", _params, socket) do

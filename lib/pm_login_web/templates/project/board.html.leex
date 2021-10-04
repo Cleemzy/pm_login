@@ -15,7 +15,7 @@
         <div class="row">
           <p><u><b> Description:</b></u> <%= @board.project.description %></p>
         </div>
-
+        <%= @show_planified %>
         <div class="my_row">
             <%= if @is_admin or @is_attributor do%>
               <div class="my_col">
@@ -99,6 +99,7 @@
 
       </div>
       <div class="column column-30">
+
         <div class="basecontents__without__radius pro__company__card">
           <div class="">
             <div class="" style="width: 200px !important;">
@@ -112,6 +113,11 @@
             <p><%= "(#{@board.project.active_client.user.username})" %></p>
           </div>
         </div>
+
+        <div>
+            <a id="show__task__modal__btn" href="#" phx-click="show_planified" class="btn btn-lg btn-success"><span class="material-icons">add_task</span> Planifier tâche</a>
+        </div>
+
       </div>
     </div>
   </div>
@@ -405,4 +411,38 @@
       </div>
     </div>
   </div>
+</div>
+
+<div class="my__modal__container" style="visibility: <%= if @show_planified, do: "visible", else: "hidden" %>; opacity: <%= if @show_planified, do: "1 !important", else: "0" %>;">
+
+  <div class="container my__modal__card archive__modal__card">
+  <a class="x__close" title="Fermer" phx-click="close_planified_modal"><i class="bi bi-x"></i></a>
+      <div class="row">
+        <div class="column" style="padding-bottom: -20px !important;">
+          <h3 style="text-align: center;"> <span class="material-icons">add_task</span> Planifier tâches</h3>
+        </div>
+      </div>
+
+       <div class="row">
+       <div class="column">
+        <%= f = form_for @planified_changeset, "#",[phx_submit: "submit_planified"]  %>
+          <%= label f, :description, "Description de la tâche à planifier" %>
+          <%= text_input f, :description %>
+          <%= error_tag f, :description %>
+
+          <%= label f, :dt_start, "Date de début" %>
+          <%= datetime_select f, :dt_start %>
+          <%= error_tag f, :dt_start %>
+
+          <%= label f, :period, "à chaque période" %>
+          <%= number_input f, :period %>
+          <%= error_tag f, :period %>
+          <button class="btn btn-lg btn-primary right-button" type="submit">Planifier</button>
+        </form>
+       </div>
+
+      </div>
+
+  </div>
+
 </div>

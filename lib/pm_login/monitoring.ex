@@ -355,6 +355,11 @@ def validate_start_deadline(changeset) do
   end
 
   #PLANIFIED
+
+  def change_planified(%Planified{} = planified, attrs \\ %{}) do
+    Planified.changeset(planified, attrs)
+  end
+
   def list_planified() do
     query = from p in Planified,
         order_by: [desc: :inserted_at]

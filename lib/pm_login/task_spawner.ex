@@ -25,7 +25,7 @@ defmodule PmLogin.TaskSpawner do
   end
 
   defp recurrent_work(state) do
-    IO.inspect state
+    # IO.inspect state
   end
 
 end
