@@ -431,13 +431,13 @@
           <%= error_tag f, :description %>
 
           <%= label f, :dt_start, "Date de début" %>
-          <%= datetime_select f, :dt_start %>
+          <%= Utilities.my_datetime_select f, :dt_start %>
           <%= error_tag f, :dt_start %>
 
-          <%= label f, :period, "à chaque période" %>
+          <%= label f, :period, "pour période" %>
           <%= number_input f, :period %>
           <%= error_tag f, :period %>
-          <button class="btn btn-lg btn-primary right-button" type="submit">Planifier</button>
+          <button class="btn btn-lg btn-primary right-button" style="float: right;" type="submit"><i class="bi bi-clock-fill"></i> Planifier</button>
         </form>
        </div>
 

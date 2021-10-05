@@ -1,4 +1,6 @@
 defmodule PmLogin.Utilities do
+  use Phoenix.HTML
+  import PmLoginWeb.Gettext
 
   def test do
     now = NaiveDateTime.local_now
@@ -30,6 +32,44 @@ defmodule PmLogin.Utilities do
          |> elem(month - 1)
        end
       )
+  end
+
+  def my_datetime_select(form, field, opts \\ []) do
+
+    now = NaiveDateTime.local_now()
+
+    builder = fn b ->
+      ~e"""
+      <%= b.(:day, []) %><%= b.(:month, []) %><%= b.(:year, []) %>
+      <%= b.(:hour, []) %> h : <%= b.(:minute, []) %> min
+      """
+    end
+
+    day = [selected: now.day]
+
+    month = [
+      options: [
+        {gettext("Janvier"), "1"},
+        {gettext("Février"), "2"},
+        {gettext("Mars"), "3"},
+        {gettext("Avril"), "4"},
+        {gettext("Mai"), "5"},
+        {gettext("Juin"), "6"},
+        {gettext("Juillet"), "7"},
+        {gettext("Août"), "8"},
+        {gettext("Septembre"), "9"},
+        {gettext("Octobre"), "10"},
+        {gettext("Novembre"), "11"},
+        {gettext("Décembre"), "12"},
+      ],
+      selected: now.month
+    ]
+
+    year = [options: (now.year)..(now.year+10)]
+
+    hour = [selected: now.hour]
+
+    datetime_select(form, field, [builder: builder] ++ [month: month] ++ [year: year] ++ [day: day] ++ [hour: hour] ++ opts)
   end
 
   def letters_date_format(naive_dt) do
