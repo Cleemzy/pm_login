@@ -479,6 +479,11 @@ defmodule PmLoginWeb.Project.BoardLive do
     {:noreply, assign(socket, show_secondary: false, secondary_changeset: Monitoring.change_task(%Task{}))}
   end
 
+  def handle_event("change_planified", params, socket) do
+    IO.inspect params["planified"]
+    {:noreply, socket}
+  end
+
   def handle_event("send-comment", %{"comment" => params}, socket) do
     # IO.puts task_id
     # IO.puts poster_id

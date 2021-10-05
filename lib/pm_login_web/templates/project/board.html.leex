@@ -425,7 +425,7 @@
 
        <div class="row">
        <div class="column">
-        <%= f = form_for @planified_changeset, "#",[phx_submit: "submit_planified"]  %>
+        <%= f = form_for @planified_changeset, "#",[phx_submit: "submit_planified", phx_change: "change_planified"]  %>
           <%= label f, :description, "Description de la tâche à planifier" %>
           <%= text_input f, :description %>
           <%= error_tag f, :description %>
@@ -434,9 +434,13 @@
           <%= Utilities.my_datetime_select f, :dt_start %>
           <%= error_tag f, :dt_start %>
 
-          <%= label f, :period, "pour période" %>
-          <%= number_input f, :period %>
-          <%= error_tag f, :period %>
+          <%= label f, :period, "Période" %>
+
+          <div class="row" style="margin-bottom: 20px;">
+            <div class="column"><%= radio_button f, :period_type, "day" %><a class="btn btn-lg btn-outline-dark period__link">PAR JOUR</a></div>
+            <div class="column"><%= radio_button f, :period_type, "week" %><a class="btn btn-lg btn-outline-dark period__link">PAR SEMAINE</a></div>
+            <div class="column"><%= radio_button f, :period_type, "month" %><a class="btn btn-lg btn-outline-dark period__link">PAR MOIS</a></div>
+          </div>
           <button class="btn btn-lg btn-primary right-button" style="float: right;" type="submit"><i class="bi bi-clock-fill"></i> Planifier</button>
         </form>
        </div>
