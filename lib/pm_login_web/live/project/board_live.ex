@@ -327,6 +327,7 @@ defmodule PmLoginWeb.Project.BoardLive do
   end
 
   def handle_event("submit_planified", params, socket) do
+    IO.inspect(params)
     planified_params = params["planified"]
 
     # IO.inspect(planified_params)
@@ -356,7 +357,10 @@ defmodule PmLoginWeb.Project.BoardLive do
 
     date_map = planified_params["dt_start"]
 
-    IO.inspect(date_map)
+    # IO.inspect(date_map)
+
+    #DESCRIPTION
+    description = planified_params["description"]
 
     #DT_START
     {:ok, debut_date} = NaiveDateTime.new(String.to_integer(date_map["year"]),
@@ -369,9 +373,41 @@ defmodule PmLoginWeb.Project.BoardLive do
     #PERIOD
     period = multiplier * period_nb
 
-    IO.inspect(debut_date)
+    #ATTRIBUTOR_ID
+    attributor_id = planified_params["attributor_id"] |> String.to_integer
 
-    IO.puts("#{multiplier*period_nb}")
+    #CONTRIBUTOR_ID
+    contributor_id = case planified_params["contributor_id"] do
+      "" -> nil
+      _ -> String.to_integer(planified_params["contributor_id"])
+    end
+
+    #PROJECT_ID
+    project_id = String.to_integer(planified_params["project_id"])
+
+    #ESTIMATED_DURATION
+    estimated_duration = case planified_params["estimated_duration"] do
+      "" -> 0
+      _ -> String.to_integer(planified_params["estimated_duration"])
+    end
+
+    #WITHOUT_CONTROL
+    without_control = case planified_params["without_control"] do
+      "true" -> true
+        _ -> false
+    end
+
+    IO.puts("DT_START= #{debut_date}")
+    IO.puts("PERIOD= #{period}")
+    IO.puts("DESCRIPTION= #{description}")
+    IO.puts("ATTRIBUTOR_ID= #{attributor_id}")
+    IO.puts("CONTRIBUTOR_ID= #{contributor_id}")
+    IO.puts("PROJECT_ID= #{project_id}")
+    IO.puts("ESTIMATED_DURATION= #{estimated_duration}")
+    IO.puts("WITHOUT_CONTROL= #{without_control}")
+
+
+    # IO.puts("#{multiplier*period_nb}")
 
     # IO.puts("#{multiplier}")
     {:noreply, socket}

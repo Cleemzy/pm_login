@@ -428,6 +428,8 @@
        <div class="row">
        <div class="column">
         <%= f = form_for @planified_changeset, "#",[phx_submit: "submit_planified", phx_change: "change_planified"]  %>
+          <%= hidden_input f, :attributor_id, value: @curr_user_id %>
+          <%= hidden_input f, :project_id, value: @board.project.id %>
           <%= label f, :description, "Description de la tâche à planifier" %>
           <%= text_input f, :description %>
           <%= error_tag f, :description %>
@@ -435,6 +437,21 @@
           <%= label f, :dt_start, "Date de début" %>
           <%= Utilities.my_datetime_select f, :dt_start %>
           <%= error_tag f, :dt_start %>
+
+          <div class="row">
+            <div class="column">
+              <%= label f, "Assigner intervenant : ", style: "font-size: 80%;" %>
+              <%= select f, :contributor_id, @contributors, prompt: "Contributeurs:"%>
+            </div>
+            <div class="column">
+              <%= label f, "Durée estimée : ", style: "font-size: 80%;" %>
+              <%= number_input f, :estimated_duration %>
+            </div>
+             <div class="column">
+                <%= label f, "Sans contrôle", style: "font-size: 80%;" %>
+                <%= checkbox f, :without_control %>
+            </div>
+          </div>
 
           <%= label f, :period, "Période" %>
 
