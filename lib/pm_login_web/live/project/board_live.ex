@@ -59,7 +59,7 @@ defmodule PmLoginWeb.Project.BoardLive do
     {:ok, socket |> assign(is_attributor: Monitoring.is_attributor?(curr_user_id),is_admin: Monitoring.is_admin?(curr_user_id), show_plus_modal: false,curr_user_id: curr_user_id, pro_id: pro_id, show_secondary: false, showing_primaries: true,
                     contributors: list_contributors, priorities: list_priorities, board: primary_board, show_task_modal: false, show_modif_modal: false, card: nil, show_planified: false, planified_changeset: planified_changeset,
                     primaries: list_primaries, is_contributor: Monitoring.is_contributor?(curr_user_id),task_changeset: task_changeset, modif_changeset: modif_changeset, show_comments_modal: false, card_with_comments: nil,
-                    show_modal: false, arch_id: nil,show_notif: false, notifs: Services.list_my_notifications_with_limit(curr_user_id, 4), secondary_changeset: secondary_changeset, comment_changeset: Monitoring.change_comment(%Comment{}),
+                    show_modal: false, arch_id: nil,show_notif: false, notifs: Services.list_my_notifications_with_limit(curr_user_id, 4), secondary_changeset: secondary_changeset, comment_changeset: Monitoring.change_comment(%Comment{}), day_period: false, week_period: false, month_period: false,
                     no_selected_hidden: false, show_hidden_modal: false, hidden_tasks: Monitoring.list_hidden_tasks(pro_id), project_contributors: Monitoring.list_project_contributors(board), project_attributors: Monitoring.list_project_attributors(board))
                     |> allow_upload(:file, accept: ~w(.png .jpeg .jpg .pdf .txt .odt .ods .odp .odg .csv .xml .xls .xlsx .xlsm .ppt .pptx .doc .docx), max_entries: 5),
                      layout: layout
@@ -326,8 +326,54 @@ defmodule PmLoginWeb.Project.BoardLive do
     {:noreply, socket |> assign(show_hidden_modal: true)}
   end
 
-  def handle_event("submit_planified", %{"planified" => params}, socket) do
-    IO.inspect params
+  def handle_event("submit_planified", params, socket) do
+    planified_params = params["planified"]
+
+    # IO.inspect(planified_params)
+
+    period_type = cond do
+      socket.assigns.day_period -> "day"
+      socket.assigns.week_period -> "week"
+      socket.assigns.month_period -> "month"
+      true -> "nope"
+    end
+
+    # IO.puts("#{period_type}")
+
+    multiplier = case period_type do
+      "day" -> 1
+      "week" -> 7
+      "month" -> 30
+      _ -> 0
+    end
+
+    period_nb = case planified_params["period"] do
+
+      "" -> 0
+      _ -> String.to_integer(planified_params["period"])
+
+    end
+
+    date_map = planified_params["dt_start"]
+
+    IO.inspect(date_map)
+
+    #DT_START
+    {:ok, debut_date} = NaiveDateTime.new(String.to_integer(date_map["year"]),
+    String.to_integer(date_map["month"]),
+    String.to_integer(date_map["day"]),
+    String.to_integer(date_map["hour"]),
+    String.to_integer(date_map["minute"]),
+    0)
+
+    #PERIOD
+    period = multiplier * period_nb
+
+    IO.inspect(debut_date)
+
+    IO.puts("#{multiplier*period_nb}")
+
+    # IO.puts("#{multiplier}")
     {:noreply, socket}
   end
 
@@ -480,8 +526,14 @@ defmodule PmLoginWeb.Project.BoardLive do
   end
 
   def handle_event("change_planified", params, socket) do
-    IO.inspect params["planified"]
-    {:noreply, socket}
+    # IO.inspect params
+    period_type = params["planified"]["period_type"]
+    case period_type do
+      "day" ->  {:noreply, socket |> assign(day_period: true, week_period: false, month_period: false)}
+      "week" -> {:noreply, socket |> assign(day_period: false, week_period: true, month_period: false)}
+      "month" -> {:noreply, socket |> assign(day_period: false, week_period: false, month_period: true)}
+        _ -> {:noreply, socket}
+    end
   end
 
   def handle_event("send-comment", %{"comment" => params}, socket) do
@@ -962,6 +1014,8 @@ defmodule PmLoginWeb.Project.BoardLive do
 
   def handle_event("save", %{"task" => params}, socket) do
     # IO.inspect params
+    # IO.inspect params["estimated_duration"]
+    # IO.puts("#{is_integer(params["estimated_duration"])}")
     case Monitoring.create_task_with_card(params) do
       {:ok, task} ->
         this_board = socket.assigns.board

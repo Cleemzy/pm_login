@@ -84,9 +84,9 @@
               <form phx-change="distinct_task">
               <div class="row">
                   <label for="primary">Tâches</label>
-                  <input type="radio" id="primary" name="task_view" value="task">
+                  <input type="radio" id="primary" name="task_view" value="task" <%= if @showing_primaries,do: "checked" %> >
                   <label for="secondary">Sous-tâches</label>
-                  <input type="radio" id="secondary" name="task_view" value="subtask">
+                  <input type="radio" id="secondary" name="task_view" value="subtask" <%= if not @showing_primaries,do: "checked" %>>
               </div>
               </form>
             </div>
@@ -114,9 +114,11 @@
           </div>
         </div>
 
-        <div>
-            <a id="show__task__modal__btn" href="#" phx-click="show_planified" class="btn btn-lg btn-success"><span class="material-icons">add_task</span> Planifier tâche</a>
-        </div>
+        <%= if @is_admin or @is_attributor do %>
+          <div>
+              <a id="show__task__modal__btn" href="#" phx-click="show_planified" class="btn btn-lg btn-success"><span class="material-icons">add_task</span> Planifier tâche</a>
+          </div>
+        <% end %>
 
       </div>
     </div>
@@ -437,10 +439,28 @@
           <%= label f, :period, "Période" %>
 
           <div class="row" style="margin-bottom: 20px;">
-            <div class="column"><%= radio_button f, :period_type, "day" %><a class="btn btn-lg btn-outline-dark period__link">PAR JOUR</a></div>
-            <div class="column"><%= radio_button f, :period_type, "week" %><a class="btn btn-lg btn-outline-dark period__link">PAR SEMAINE</a></div>
-            <div class="column"><%= radio_button f, :period_type, "month" %><a class="btn btn-lg btn-outline-dark period__link">PAR MOIS</a></div>
+            <div class="column"><%= radio_button f, :period_type, "day", id: "day",checked: (if @day_period , do: true, else: false) %><label for="day" class="btn btn-lg btn-outline-dark period__link">PAR JOUR</label></div>
+            <div class="column"><%= radio_button f, :period_type, "week", id: "week", checked: (if @week_period , do: true, else: false) %><label for="week" class="btn btn-lg btn-outline-dark period__link">PAR SEMAINE</label></div>
+            <div class="column"><%= radio_button f, :period_type, "month", id: "month",checked: (if @month_period , do: true, else: false) %><label for="month" class="btn btn-lg btn-outline-dark period__link">PAR MOIS</label></div>
           </div>
+
+          <div class="row" style="margin-bottom: 20px;">
+              <div class="column" style="text-align: center;">
+              <%= cond do %>
+                <% @day_period -> %>
+                <%= number_input f, :period, style: "width: 50%;" %>
+                 jours
+                <% @week_period -> %>
+                <%= number_input f, :period, style: "width: 50%;" %>
+                 semaines
+                <% @month_period -> %>
+                <%= number_input f, :period, style: "width: 50%;" %>
+                 mois
+                <% true -> %>
+                <%= number_input f, :period, style: "width: 50%; display: none;" %>
+              <% end %>
+              </div>
+         </div>
           <button class="btn btn-lg btn-primary right-button" style="float: right;" type="submit"><i class="bi bi-clock-fill"></i> Planifier</button>
         </form>
        </div>
