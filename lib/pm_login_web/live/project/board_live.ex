@@ -327,7 +327,7 @@ defmodule PmLoginWeb.Project.BoardLive do
   end
 
   def handle_event("submit_planified", params, socket) do
-    IO.inspect(params)
+    # IO.inspect(params)
     planified_params = params["planified"]
 
     # IO.inspect(planified_params)
@@ -397,6 +397,7 @@ defmodule PmLoginWeb.Project.BoardLive do
         _ -> false
     end
 
+    #PRINTING RESULT
     IO.puts("DT_START= #{debut_date}")
     IO.puts("PERIOD= #{period}")
     IO.puts("DESCRIPTION= #{description}")
@@ -406,11 +407,29 @@ defmodule PmLoginWeb.Project.BoardLive do
     IO.puts("ESTIMATED_DURATION= #{estimated_duration}")
     IO.puts("WITHOUT_CONTROL= #{without_control}")
 
+    new_map = %{"description" => description,
+                "dt_start" => debut_date,
+                "period" => period,
+                "attributor_id" => attributor_id,
+                "contributor_id" => contributor_id,
+                "project_id" => project_id,
+                "estimated_duration" => estimated_duration,
+                "without_control" => without_control }
+
+    # IO.inspect(new_map)
 
     # IO.puts("#{multiplier*period_nb}")
 
     # IO.puts("#{multiplier}")
-    {:noreply, socket}
+
+    case Monitoring.create_planified(new_map) do
+      {:ok, result} ->
+        DynamicSupervisor.start_child(PmLogin.SpawnerSupervisor, %{id: PmLogin.TaskSpawner, start: {PmLogin.TaskSpawner, :start_link, [%{planified: result}]} })
+        {:noreply, socket |> assign(planified_changeset: Monitoring.change_planified(%Planified{}), show_planified: false)}
+      {:error, %Ecto.Changeset{} = changeset} ->
+        {:noreply, socket |> assign(planified_changeset: changeset)}
+    end
+
   end
 
   def handle_event("show_planified", _params, socket) do

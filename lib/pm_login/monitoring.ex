@@ -945,8 +945,53 @@ def validate_start_deadline(changeset) do
 
   #REAL TASK CREATION WITH CARD
 
-  def spawn_task(params) do
+  def cards_list_primary_tasks(old_list) do
+    old_list |> Enum.filter(fn card -> is_nil(card.task.parent_id) end)
+  end
+
+  def spawn_task(%Planified{} = planified) do
+
+    planified_map = Map.from_struct(planified)
+    now = NaiveDateTime.local_now()
+    planned_deadline = NaiveDateTime.add(now, 3600 * planified_map[:estimated_duration])
+                        |> NaiveDateTime.to_date()
+
+    params = %{
+      title: planified_map[:description],
+      without_control: planified_map[:without_control],
+      attributor_id: planified_map[:attributor_id],
+      contributor_id: planified_map[:contributor_id],
+      project_id: planified_map[:project_id],
+      date_start: now |> NaiveDateTime.to_date(),
+      estimated_duration: planified_map[:estimated_duration],
+      deadline: planned_deadline
+    }
+
+    IO.inspect params
+
     {:ok, task} = create_real_task(params)
+
+    current_project = get_project!(planified_map[:project_id])
+    board = Kanban.get_board!(current_project.board_id)
+
+    primary_stages = board.stages
+    |> Enum.map(fn (%Kanban.Stage{} = stage) ->
+      struct(stage, cards: cards_list_primary_tasks(stage.cards))
+    end)
+
+    primary_board = struct(board, stages: primary_stages)
+
+    this_project = primary_board.project
+    substract_project_progression_when_creating_primary(this_project)
+
+    [head | _] = primary_board.stages
+    Kanban.create_card(%{name: task.title, stage_id: head.id ,task_id: task.id})
+
+    Services.send_notifs_to_admins_and_attributors(planified_map[:attributor_id], "Tâche nouvellement créee du nom de #{task.title} par #{Login.get_user!(planified_map[:attributor_id]).username} dans le projet #{this_project.title}.")
+
+    if not is_nil(planified_map[:contributor_id]) do
+      Services.send_notif_to_one(planified_map[:attributor_id], planified_map[:contributor_id],"#{Login.get_user!(planified_map[:attributor_id]).username} vous a assigné à la tâche #{task.title} dans le projet #{this_project.title}.")
+    end
 
   end
 

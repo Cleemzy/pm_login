@@ -453,6 +453,8 @@
             </div>
           </div>
 
+          <%= error_tag f, :estimated_duration %>
+
           <%= label f, :period, "Période" %>
 
           <div class="row" style="margin-bottom: 20px;">
@@ -460,6 +462,8 @@
             <div class="column"><%= radio_button f, :period_type, "week", id: "week", checked: (if @week_period , do: true, else: false) %><label for="week" class="btn btn-lg btn-outline-dark period__link">PAR SEMAINE</label></div>
             <div class="column"><%= radio_button f, :period_type, "month", id: "month",checked: (if @month_period , do: true, else: false) %><label for="month" class="btn btn-lg btn-outline-dark period__link">PAR MOIS</label></div>
           </div>
+
+          <%= error_tag f, :period %>
 
           <div class="row" style="margin-bottom: 20px;">
               <div class="column" style="text-align: center;">

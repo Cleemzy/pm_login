@@ -7,7 +7,7 @@ defmodule PmLogin.SpawnerSupervisor do
 
   @impl true
   def init(_init_arg) do
-    IO.puts "init spawner super"
+    # IO.puts "init spawner super"
     DynamicSupervisor.init(strategy: :one_for_one)
   end
 

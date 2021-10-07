@@ -131,6 +131,7 @@ defmodule PmLogin.Utilities do
   end
 
   def test_next_end(start_date, period, val) do
+
     curr_next_end = start_date + period
     IO.puts("Start date: #{start_date} | Period: #{period}")
     IO.puts("End : #{curr_next_end}")
@@ -142,6 +143,7 @@ defmodule PmLogin.Utilities do
       curr_next_end < val ->
         test_next_end(curr_next_end, period, val)
     end
+
   end
 
 end
