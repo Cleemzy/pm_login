@@ -10,10 +10,48 @@ defmodule PmLogin.TaskSpawner do
 
   def init(state) do
     # schedule_work(state)
-
-    spawning(state)
-
+    # spawning(state)
+    schedule_spawn(state)
     {:ok, state}
+  end
+
+
+  defp schedule_spawn(state) do
+
+    dt_start = state[:planified].dt_start
+    period = state[:planified].period
+
+    IO.inspect dt_start
+
+    diff = NaiveDateTime.diff(dt_start, NaiveDateTime.local_now())
+    IO.inspect(diff)
+
+    next_end = cond do
+      diff > 0 ->
+        dt_start
+
+      true ->
+        Utilities.next_end(dt_start, period)
+    end
+
+    IO.inspect(next_end)
+
+    until_next_end = NaiveDateTime.diff(next_end, NaiveDateTime.local_now())
+    IO.inspect(until_next_end)
+    Process.send_after(self(), :spawn_work,  until_next_end * 1000)
+
+  end
+
+
+
+  def handle_info(:spawn_work, state) do
+    do_spawn(state)
+    schedule_spawn(state)
+    {:noreply, state}
+  end
+
+  defp do_spawn(state) do
+    Monitoring.spawn_task(state[:planified])
   end
 
   def spawning(state) do
@@ -34,16 +72,14 @@ defmodule PmLogin.TaskSpawner do
         Utilities.next_end(dt_start, period)
     end
 
+    IO.inspect(next_end)
+
     until_next_end = NaiveDateTime.diff(next_end, NaiveDateTime.local_now())
+    IO.inspect(until_next_end)
     Process.send_after(self(), :spawn_work,  until_next_end * 1000)
 
   end
 
-  def handle_info(:spawn_work, state) do
-    Monitoring.spawn_task(state[:planified])
-    spawning(state)
-    {:noreply, state}
-  end
 
   def handle_info(:work, state) do
     recurrent_work(state)

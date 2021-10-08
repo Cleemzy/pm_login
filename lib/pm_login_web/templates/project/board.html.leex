@@ -15,7 +15,7 @@
         <div class="row">
           <p><u><b> Description:</b></u> <%= @board.project.description %></p>
         </div>
-        <%= @show_planified %>
+        <%= @show_planified_list %>
         <div class="my_row">
             <%= if @is_admin or @is_attributor do%>
               <div class="my_col">
@@ -117,6 +117,9 @@
         <%= if @is_admin or @is_attributor do %>
           <div>
               <a id="show__task__modal__btn" href="#" phx-click="show_planified" class="btn btn-lg btn-success"><span class="material-icons">add_task</span> Planifier tâche</a>
+          </div>
+          <div style="margin-top: 10px;">
+              <a id="show__task__modal__btn" href="#" phx-click="show_planified_list" class="btn btn-lg btn-warning">Tâches planifiées <span class="material-icons">alarm</span></a>
           </div>
         <% end %>
 

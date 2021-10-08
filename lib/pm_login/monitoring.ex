@@ -366,6 +366,13 @@ def validate_start_deadline(changeset) do
     Repo.all(query)
   end
 
+  def list_planified_by_project(project_id) do
+    query = from p in Planified,
+        order_by: [desc: :inserted_at],
+        where: p.project_id == ^project_id
+    Repo.all(query)
+  end
+
   def create_planified(attrs \\ %{}) do
     %Planified{}
     |> Planified.create_changeset(attrs)

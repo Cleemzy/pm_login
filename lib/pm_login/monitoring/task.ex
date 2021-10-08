@@ -55,12 +55,12 @@ defmodule PmLogin.Monitoring.Task do
         # |> Monitoring.validate_dates_without_dtend
         # |> Monitoring.validate_start_deadline
         # |> Monitoring.validate_positive_estimated
-        # |> put_change(:progression, 0)
-        # |> put_change(:performed_duration, 0)
-        # |> put_change(:priority_id, 2)
-        # |> put_change(:status_id, 1)
+        |> put_change(:progression, 0)
+        |> put_change(:performed_duration, 0)
+        |> put_change(:priority_id, 2)
+        |> put_change(:status_id, 1)
         # |> put_change(:date_start, Services.current_date |> NaiveDateTime.to_date)
-        # |> put_change(:inserted_at, Services.current_date)
+        |> put_change(:inserted_at, Services.current_date)
   end
 
   @doc false

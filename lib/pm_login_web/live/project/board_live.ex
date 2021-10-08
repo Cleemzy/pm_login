@@ -56,9 +56,11 @@ defmodule PmLoginWeb.Project.BoardLive do
 
     planified_changeset = Monitoring.change_planified(%Planified{})
 
+    planified_list = Monitoring.list_planified_by_project(project.id)
+
     {:ok, socket |> assign(is_attributor: Monitoring.is_attributor?(curr_user_id),is_admin: Monitoring.is_admin?(curr_user_id), show_plus_modal: false,curr_user_id: curr_user_id, pro_id: pro_id, show_secondary: false, showing_primaries: true,
-                    contributors: list_contributors, priorities: list_priorities, board: primary_board, show_task_modal: false, show_modif_modal: false, card: nil, show_planified: false, planified_changeset: planified_changeset,
-                    primaries: list_primaries, is_contributor: Monitoring.is_contributor?(curr_user_id),task_changeset: task_changeset, modif_changeset: modif_changeset, show_comments_modal: false, card_with_comments: nil,
+                    contributors: list_contributors, priorities: list_priorities, board: primary_board, show_task_modal: false, show_modif_modal: false, card: nil, show_planified: false, planified_changeset: planified_changeset, show_planified_list: false,
+                    primaries: list_primaries, is_contributor: Monitoring.is_contributor?(curr_user_id),task_changeset: task_changeset, modif_changeset: modif_changeset, show_comments_modal: false, card_with_comments: nil, planified_list: planified_list,
                     show_modal: false, arch_id: nil,show_notif: false, notifs: Services.list_my_notifications_with_limit(curr_user_id, 4), secondary_changeset: secondary_changeset, comment_changeset: Monitoring.change_comment(%Comment{}), day_period: false, week_period: false, month_period: false,
                     no_selected_hidden: false, show_hidden_modal: false, hidden_tasks: Monitoring.list_hidden_tasks(pro_id), project_contributors: Monitoring.list_project_contributors(board), project_attributors: Monitoring.list_project_attributors(board))
                     |> allow_upload(:file, accept: ~w(.png .jpeg .jpg .pdf .txt .odt .ods .odp .odg .csv .xml .xls .xlsx .xlsm .ppt .pptx .doc .docx), max_entries: 5),
@@ -423,10 +425,13 @@ defmodule PmLoginWeb.Project.BoardLive do
     # IO.puts("#{multiplier}")
 
     case Monitoring.create_planified(new_map) do
+
       {:ok, result} ->
         DynamicSupervisor.start_child(PmLogin.SpawnerSupervisor, %{id: PmLogin.TaskSpawner, start: {PmLogin.TaskSpawner, :start_link, [%{planified: result}]} })
-        {:noreply, socket |> assign(planified_changeset: Monitoring.change_planified(%Planified{}), show_planified: false)}
-      {:error, %Ecto.Changeset{} = changeset} ->
+        {:noreply, socket |> assign(planified_changeset: Monitoring.change_planified(%Planified{}), show_planified: false)
+                          |> put_flash(:info, "Tâche \" #{result.description} \" planifiée!")}
+
+        {:error, %Ecto.Changeset{} = changeset} ->
         {:noreply, socket |> assign(planified_changeset: changeset)}
     end
 
@@ -434,6 +439,10 @@ defmodule PmLoginWeb.Project.BoardLive do
 
   def handle_event("show_planified", _params, socket) do
     {:noreply, socket |> assign(show_planified: true)}
+  end
+
+  def handle_event("show_planified_list", _params, socket) do
+    {:noreply, socket |> assign(show_planified_list: true)}
   end
 
   def handle_event("close_planified_modal", _params, socket) do
