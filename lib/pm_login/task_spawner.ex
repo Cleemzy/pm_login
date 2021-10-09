@@ -28,9 +28,11 @@ defmodule PmLogin.TaskSpawner do
 
     next_end = cond do
       diff > 0 ->
+        IO.puts "dt_start"
         dt_start
 
       true ->
+        IO.puts "next_end"
         Utilities.next_end(dt_start, period)
     end
 

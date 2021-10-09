@@ -122,9 +122,9 @@ defmodule PmLogin.Utilities do
 
     cond do
 
-      NaiveDateTime.compare(now, start_date) == :lt or NaiveDateTime.compare(now, start_date) == :eq -> start_date
-      NaiveDateTime.compare(now, start_date) == :gt and (NaiveDateTime.compare(now, curr_next_end) == :lt or NaiveDateTime.compare(now, curr_next_end) == :eq) -> curr_next_end
-      NaiveDateTime.compare(now, curr_next_end) == :gt -> next_end(curr_next_end, days_period)
+      NaiveDateTime.compare(now, start_date) == :lt -> start_date
+      (NaiveDateTime.compare(now, start_date) == :gt or NaiveDateTime.compare(now, start_date) == :eq) and (NaiveDateTime.compare(now, curr_next_end) == :lt) -> curr_next_end
+      NaiveDateTime.compare(now, curr_next_end) == :gt or NaiveDateTime.compare(now, curr_next_end) == :eq -> next_end(curr_next_end, days_period)
 
     end
 
