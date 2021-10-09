@@ -356,8 +356,47 @@ def validate_start_deadline(changeset) do
 
   #PLANIFIED
 
+  def list_spawners do
+    Supervisor.which_children(PmLogin.SpawnerSupervisor)
+  end
+
+  def list_spawners_states do
+    for {_, pid, _, _} <- list_spawners() do
+      :sys.get_state(pid)
+    end
+  end
+
+  def list_spawners_pids do
+    for {_, pid, _, _} <- list_spawners() do
+      pid
+    end
+  end
+
+  def get_planified_pid(planified_id) do
+    pids = list_spawners_pids()
+    Enum.find(pids, fn pid ->
+      state_map = :sys.get_state(pid)
+      planified_id == state_map[:planified].id
+     end)
+  end
+
+  def terminate_spawner(planified_id) do
+    pid = get_planified_pid(planified_id)
+    DynamicSupervisor.terminate_child(PmLogin.SpawnerSupervisor, pid)
+  end
+
   def change_planified(%Planified{} = planified, attrs \\ %{}) do
     Planified.changeset(planified, attrs)
+  end
+
+  def get_planified!(id) do
+    query = from p in Planified,
+            where: p.id == ^id
+    Repo.one(query)
+  end
+
+  def delete_planified(%Planified{} = planified) do
+    Repo.delete(planified)
   end
 
   def list_planified() do
@@ -367,7 +406,11 @@ def validate_start_deadline(changeset) do
   end
 
   def list_planified_by_project(project_id) do
+    attributor_query = from u in User
+    contributor_query = from us in User
+
     query = from p in Planified,
+        preload: [attributor: ^attributor_query, contributor: ^contributor_query],
         order_by: [desc: :inserted_at],
         where: p.project_id == ^project_id
     Repo.all(query)
@@ -377,6 +420,14 @@ def validate_start_deadline(changeset) do
     %Planified{}
     |> Planified.create_changeset(attrs)
     |> Repo.insert()
+  end
+
+  def broadcast_planified({:ok, result}) do
+    broadcast_change({:ok, result}, [:planified, :created])
+  end
+
+  def broadcast_planified_deletion({:ok, result}) do
+    broadcast_change({:ok, result}, [:planified, :deleted])
   end
 
   alias PmLogin.Monitoring.Project

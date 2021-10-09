@@ -15,7 +15,6 @@
         <div class="row">
           <p><u><b> Description:</b></u> <%= @board.project.description %></p>
         </div>
-        <%= @show_planified_list %>
         <div class="my_row">
             <%= if @is_admin or @is_attributor do%>
               <div class="my_col">
@@ -493,4 +492,90 @@
 
   </div>
 
+</div>
+
+<div class="my__modal__container" style="visibility: <%= if @show_planified_list, do: "visible", else: "hidden" %>; opacity: <%= if @show_planified_list, do: "1 !important", else: "0" %>;">
+  <div class="container my__modal__card planified__modal__card">
+  <a class="x__close" title="Fermer" phx-click="close_planified_list"><i class="bi bi-x"></i></a>
+
+    <div class="row">
+      <div class="column" style="padding-bottom: -20px !important;">
+        <h3 style="text-align: center;"> <span class="material-icons">alarm</span> Tâches planifiées</h3>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="column">
+
+      <table id="planified_list">
+      <thead>
+          <th>Description</th>
+          <th>Première instanciation</th>
+          <th>Se répète chaque</th>
+          <th>Par</th>
+          <th>Pour</th>
+          <th>Durée estimée</th>
+          <th>Sans contrôle</th>
+          <th></th>
+        </thead>
+        <tbody>
+          <%= for task <- @planified_list do %>
+          <tr>
+            <td><%= task.description %></td>
+            <td><%= Utilities.letters_date_format_with_hours(task.dt_start) %></td>
+            <td><%= task.period %> jours</td>
+            <td>
+              <img class="profile-pic-mini" src="<%= Routes.static_path(@socket, "/#{task.attributor.profile_picture}") %>" width="50" style="position: relative;"/>
+              <%= task.attributor.username %>
+            </td>
+            <td>
+              <%= if is_nil(task.contributor) do %>
+                -
+              <% else %>
+                <img class="profile-pic-mini" src="<%= Routes.static_path(@socket, "/#{task.contributor.profile_picture}") %>" width="50" style="position: relative;"/>
+                task.contributor.username
+              <% end %>
+            </td>
+            <td><%= task.estimated_duration %> h</td>
+            <td>
+              <%= if task.without_control do %>
+                Oui
+              <% else %>
+              Non
+              <% end %>
+            </td>
+          <td>
+            <i class="bi bi-x btn btn-danger btn-lg archive__user" style="font-size: 15px;" phx-click="go_del_planified" phx-value-id="<%= task.id %>"></i>
+          </td>
+          </tr>
+          <% end %>
+        </tbody>
+      </table>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="my__modal__container" style="visibility: <%= if @show_del_plan, do: "visible", else: "hidden" %>; opacity: <%= if @show_del_plan, do: "1 !important", else: "0" %>;">
+  <div class="container my__modal__card archive__modal__card">
+  <a class="x__close" title="Fermer" phx-click="close_del_plan"><i class="bi bi-x"></i></a>
+    <div class="row">
+      <div class="column">
+        <h3 style="text-align: center;">Retirer?</h3>
+        <p style="text-align: center;">Êtes-vous sûr(e) de retirer la tâche planifiée <%= if not is_nil(@del_plan_id), do: PmLogin.Monitoring.get_planified!(@del_plan_id).description %> ?</p>
+
+            <div class="modal-buttons" style="margin-bottom: 20px;">
+                <!-- Left Button -->
+                <a href="#" class="btn btn-lg left-button" type="button" phx-click="close_del_plan">
+                  <div>NON</div>
+                </a>
+                <!-- Right Button -->
+                <a href="#" class="btn btn-lg btn-primary right-button" type="button" phx-click="del_planified" phx-value-id="<%= @del_plan_id %>">
+                  <div>OUI</div>
+                </a>
+            </div>
+      </div>
+    </div>
+  </div>
 </div>

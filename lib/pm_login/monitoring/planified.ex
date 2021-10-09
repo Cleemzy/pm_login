@@ -1,16 +1,20 @@
 defmodule PmLogin.Monitoring.Planified do
   use Ecto.Schema
   import Ecto.Changeset
+  alias PmLogin.Login.User
 
   schema "planified" do
     field :description, :string
     field :dt_start, :naive_datetime
     field :period, :integer
-    field :attributor_id, :integer
-    field :contributor_id, :integer
+    # field :attributor_id, :integer
+    # field :contributor_id, :integer
     field :project_id, :integer
     field :estimated_duration, :integer
     field :without_control, :boolean, default: false
+
+    belongs_to :attributor, User
+    belongs_to :contributor, User
 
     timestamps()
   end

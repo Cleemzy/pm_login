@@ -61,7 +61,7 @@ defmodule PmLoginWeb.Project.BoardLive do
     {:ok, socket |> assign(is_attributor: Monitoring.is_attributor?(curr_user_id),is_admin: Monitoring.is_admin?(curr_user_id), show_plus_modal: false,curr_user_id: curr_user_id, pro_id: pro_id, show_secondary: false, showing_primaries: true,
                     contributors: list_contributors, priorities: list_priorities, board: primary_board, show_task_modal: false, show_modif_modal: false, card: nil, show_planified: false, planified_changeset: planified_changeset, show_planified_list: false,
                     primaries: list_primaries, is_contributor: Monitoring.is_contributor?(curr_user_id),task_changeset: task_changeset, modif_changeset: modif_changeset, show_comments_modal: false, card_with_comments: nil, planified_list: planified_list,
-                    show_modal: false, arch_id: nil,show_notif: false, notifs: Services.list_my_notifications_with_limit(curr_user_id, 4), secondary_changeset: secondary_changeset, comment_changeset: Monitoring.change_comment(%Comment{}), day_period: false, week_period: false, month_period: false,
+                    show_modal: false, show_del_plan: false, del_plan_id: nil, arch_id: nil,show_notif: false, notifs: Services.list_my_notifications_with_limit(curr_user_id, 4), secondary_changeset: secondary_changeset, comment_changeset: Monitoring.change_comment(%Comment{}), day_period: false, week_period: false, month_period: false,
                     no_selected_hidden: false, show_hidden_modal: false, hidden_tasks: Monitoring.list_hidden_tasks(pro_id), project_contributors: Monitoring.list_project_contributors(board), project_attributors: Monitoring.list_project_attributors(board))
                     |> allow_upload(:file, accept: ~w(.png .jpeg .jpg .pdf .txt .odt .ods .odp .odg .csv .xml .xls .xlsx .xlsm .ppt .pptx .doc .docx), max_entries: 5),
                      layout: layout
@@ -98,6 +98,10 @@ defmodule PmLoginWeb.Project.BoardLive do
   #   IO.inspect(board)
   #   {:noreply, socket}
   # end
+
+  def handle_event("close_planified_list", params, socket) do
+    {:noreply, socket |> assign(show_planified_list: false)}
+  end
 
   def handle_event("achieve", params, socket) do
     # IO.puts "achevement"
@@ -427,14 +431,46 @@ defmodule PmLoginWeb.Project.BoardLive do
     case Monitoring.create_planified(new_map) do
 
       {:ok, result} ->
+        Monitoring.broadcast_planified({:ok, result})
         DynamicSupervisor.start_child(PmLogin.SpawnerSupervisor, %{id: PmLogin.TaskSpawner, start: {PmLogin.TaskSpawner, :start_link, [%{planified: result}]} })
         {:noreply, socket |> assign(planified_changeset: Monitoring.change_planified(%Planified{}), show_planified: false)
-                          |> put_flash(:info, "Tâche \" #{result.description} \" planifiée!")}
+                          |> put_flash(:info, "Tâche \" #{result.description} \" planifiée!")
+                          |> push_event("AnimateAlert", %{})}
 
         {:error, %Ecto.Changeset{} = changeset} ->
         {:noreply, socket |> assign(planified_changeset: changeset)}
     end
 
+  end
+
+  def handle_event("go_del_planified", %{"id" => id}, socket) do
+
+    # planified_id = String.to_integer(id)
+    # IO.inspect(planified_id)
+    # IO.inspect(Monitoring.get_planified_pid(planified_id))
+
+    {:noreply, socket |> assign(del_plan_id: id, show_del_plan: true)}
+  end
+
+  def handle_event("del_planified", %{"id" => id}, socket) do
+
+    planified_id = String.to_integer(id)
+    planified = Monitoring.get_planified!(planified_id)
+
+    IO.inspect(Monitoring.get_planified_pid(planified_id))
+
+    {:ok, result} = Monitoring.delete_planified(planified)
+    Monitoring.broadcast_planified_deletion({:ok, result})
+    Monitoring.terminate_spawner(planified_id)
+
+    {:noreply, socket |> assign(show_del_plan: false)
+                      |> put_flash(:info, "Tâche planifiée #{planified.description} retirée.")
+                      |> push_event("AnimateAlert", %{})}
+
+  end
+
+  def handle_event("close_del_plan", _params, socket) do
+    {:noreply, socket |> assign(show_del_plan: false)}
   end
 
   def handle_event("show_planified", _params, socket) do
@@ -460,6 +496,12 @@ defmodule PmLoginWeb.Project.BoardLive do
   def handle_event("change-comment", params, socket) do
     # IO.inspect params
     {:noreply, socket}
+  end
+
+  def handle_info({Monitoring, [:planified, _], _}, socket) do
+    project_id = socket.assigns.board.project.id
+    planified_list = Monitoring.list_planified_by_project(project_id)
+    {:noreply, socket |> assign(planified_list: planified_list)}
   end
 
   def handle_info({"hidden_subscription", [:task, :hidden], _}, socket) do
@@ -551,7 +593,8 @@ defmodule PmLoginWeb.Project.BoardLive do
     show_modal = socket.assigns.show_modal
     show_hidden_modal = socket.assigns.show_hidden_modal
     show_planified = socket.assigns.show_planified
-
+    show_planified_list = socket.assigns.show_planified_list
+    show_del_plan = socket.assigns.show_del_plan
 
     s_task_modal = if (key == "Escape" and show_task_modal == true) ,do: false ,else: show_task_modal
     s_secondary = if (key == "Escape" and show_secondary == true) ,do: false ,else: show_secondary
@@ -561,6 +604,8 @@ defmodule PmLoginWeb.Project.BoardLive do
     s_modal = if (key == "Escape" and show_modal == true) ,do: false ,else: show_modal
     s_hidden_modal = if (key == "Escape" and show_hidden_modal == true) ,do: false ,else: show_hidden_modal
     s_planified = if (key == "Escape" and show_planified == true) ,do: false ,else: show_planified
+    s_planified_list = if (key == "Escape" and show_planified_list == true) ,do: false ,else: show_planified_list
+    s_del_plan = if (key == "Escape" and show_del_plan == true) ,do: false ,else: show_del_plan
 
     {:noreply, socket
                |> assign(show_task_modal: s_task_modal,
@@ -570,7 +615,9 @@ defmodule PmLoginWeb.Project.BoardLive do
                           show_comments_modal: s_comments_modal,
                           show_modal: s_modal,
                           show_hidden_modal: s_hidden_modal,
-                          show_planified: s_planified)}
+                          show_planified: s_planified,
+                          show_planified_list: s_planified_list,
+                          show_del_plan: s_del_plan)}
   end
 
   def handle_event("show_alert_test", _params, socket) do
