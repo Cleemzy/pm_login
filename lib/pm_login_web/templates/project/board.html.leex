@@ -162,7 +162,7 @@
   <section id="the_board" class="board" phx-hook="Board" style="">
     <%= for stage <- @board.stages do %>
       <div data-stage-id="<%= stage.id %>" class="stage basecontents__without__shadow__and__radius">
-        <div class="stage__header basecontents__without__radius">
+        <div class="stage__header basecontents__without__radius" id="stage__header__sticked">
           <div class="stage__name"><%= stage.name %></div>
           <span class="stage__counter"><b class="counter__nb"><%= length(stage.cards) %></b></span>
         </div>

@@ -60,6 +60,12 @@
   border-radius: 8px;
 }
 
+#stage__header__sticked{
+  position: sticky;
+  z-index: 5;
+  top: 0;
+}
+
 .stage__name {
   color: #666;
   text-transform: uppercase;

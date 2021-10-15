@@ -41,6 +41,14 @@
     display:block;
 }
 
+
+#planified_list th{
+    position: sticky;
+    background-color: white;
+    z-index: 1200;
+    top: 0;
+}
+
 .hidden__contents__container{
     height: 250px;
     max-height: 250px;
