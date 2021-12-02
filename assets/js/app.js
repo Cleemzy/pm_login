@@ -53,10 +53,10 @@ Hooks.Board = {
         mirror: {
           constrainDimensions: true
         },
-        swapAnimation: {
-          duration: 200,
-          easingFunction: "ease-in-out"
-        },
+        // swapAnimation: {
+        //   duration: 200,
+        //   easingFunction: "ease-in-out"
+        // },
         plugins: [Plugins.SwapAnimation]
       }
     );
