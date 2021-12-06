@@ -1,0 +1,32 @@
+.btn__resized{
+    font-size: 9px;
+}
+
+.select__resized{
+    height: 27px;
+    margin-bottom: 0px !important;
+}
+
+.filter__icon__resized{
+    font-size: 25px !important;
+}
+
+.generic_fieldset{
+    border: 1px solid gray; 
+    padding: 5px;
+    margin-bottom: 0px;
+}
+
+.fs_legend_resized{
+    font-size: 12px;
+}
+
+.form_under_fieldset{
+    display: inline;
+    margin-bottom: 0px;
+  }
+  
+/* .field_under_form_under_fieldset{
+    height: 30px;
+    margin-bottom: 0px !important; 
+} */
