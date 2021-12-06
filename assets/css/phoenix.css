@@ -357,10 +357,10 @@ justify-content: center;
 }
 
 .profile-pic-header{
-  width: 50px;
-  height: 50px;
-  max-width: 50px;
-  max-height: 50px;
+  width: 35px;
+  height: 35px;
+  max-width: 35px;
+  max-height: 35px;
   border: 1px solid gray;
   border-style: solid;
   border-radius: 60%;
