@@ -42,7 +42,7 @@ defmodule PmLoginWeb.LiveComponent.TaskModalLive do
               <div class="modal-body">
                 <%= f = form_for @task_changeset, "#", [phx_submit: :save] %>
                   <%= label f, "Tâche" %>
-                  <%= text_input f, :title %>
+                  <%= text_input f, :title, autocomplete: "off" %>
                   <%= error_tag f, :title %>
                   <%= hidden_input f, :project_id, value: @pro_id %>
                   <%= hidden_input f, :attributor_id, value: @curr_user_id %>
