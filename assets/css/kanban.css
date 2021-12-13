@@ -29,22 +29,24 @@
   border: 1px solid #eeeeee;
   border-radius: 4px;
   padding: 1rem;
-  /* height: 75vh; */
+  height: 75vh;
   position: relative;
   /* left: -0; */
   /* width: 130.0rem; */
+  /* max-height: 500px; */
   background-color: #F3EBF6;
 }
 
 .stage {
-  min-width: 300px;
-  max-width: 300px;
+  min-width: 240px;
+  max-width: 240px;
+  overflow: auto;
   background-color: #f5f5f5;
   border: 1px solid rgb(238, 238, 238);
   border-radius: 3px;
   margin-right: 1.5rem;
-  min-height: 800px;
-  height: auto;
+  /* min-height: 800px; */
+  /* height: auto !important; */
 }
 
 .stage__header {
@@ -58,6 +60,8 @@
   border: 1px solid gray;
   margin-bottom: 30px;
   border-radius: 8px;
+  height: 35px;
+  width: 200px;
 }
 
 #stage__header__sticked{
@@ -69,7 +73,7 @@
 .stage__name {
   color: #666;
   text-transform: uppercase;
-  font-size: 1.7rem;
+  font-size: 1.3rem;
 }
 
 .stage__counter {
@@ -84,6 +88,7 @@
 .counter__nb{
   position: relative;
   top: 2px;
+  font-size: 12px;
 }
 
 .delete__icon{
@@ -91,8 +96,8 @@
   cursor: pointer;
   font-size: 30px;
   position: relative;
-  left: 139px;
-  top: -55px;
+  left: 90px;
+  top: -32px;
 }
 .delete__icon:hover{
   color : lightgray;
@@ -101,10 +106,10 @@
 .modif__icon{
   color: gray;
   cursor: pointer;
-  font-size: 20px;
+  font-size: 17px;
   position: relative;
-  left: 168px;
-  top: -85px;
+  left: 117px;
+  top: -60px;
 }
 .modif__icon:hover{
   color : lightgray;
@@ -113,10 +118,10 @@
 .comment__icon{
   color: gray;
   cursor: pointer;
-  font-size: 20px;
+  font-size: 15px;
   position: relative;
-  left: 192px;
-  top: -115px;
+  left: 137px;
+  top: -80px;
 }
 .comment__icon:hover{
   color : lightgray;
@@ -125,10 +130,10 @@
 .plus__icon{
   color: gray;
   cursor: pointer;
-  font-size: 30px;
+  font-size: 25px;
   position: relative;
-  left: 220px;
-  top: -140px;
+  left: 160px;
+  top: -100px;
 }
 .plus__icon:hover{
   color : lightgray;
@@ -174,12 +179,11 @@
 }
 
 .card__date{
-  font-size: 75%;
+  font-size: 65%;
 }
 
 .stage__cards {
   padding: 0.3rem;
-  height: 100%;
 }
 
 .card {
@@ -189,7 +193,7 @@
   background-color: #ffffff;
   padding: 1em;
   cursor: move;
-  width: 80%;
+  width: 75%;
   height: auto;
   margin-bottom: -10px;
 }
@@ -209,6 +213,7 @@
 }
 
 .card__name {
+  font-size: 12px;  
   font-weight: bold;
 }
 
@@ -232,3 +237,10 @@
 .secondary__kanban{
   background-color: lightgray !important;
 }
+
+@media (min-width: 1500px){
+  .stage{
+   margin-right: 150px !important;
+  }
+}
+

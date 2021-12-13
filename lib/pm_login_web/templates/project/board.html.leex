@@ -7,7 +7,19 @@
 
           </div>
           <%= cond do %>
-          <% @is_admin or @is_attributor-> %><div class="row"><h2 style="margin: 0; font-size: 20px;"><span class="material-icons">checklist_rtl</span> <%= @board.project.title %></h2><i style="margin-left: 20px; font-size: 13px;"><%= @board.project.description %></i></div>
+          <% @is_admin or @is_attributor-> %>
+          <div class="row">
+            <h2 style="margin: 0; font-size: 20px;"><span class="material-icons">checklist_rtl</span> <%= @board.project.title %></h2>
+            <i style="margin-left: 20px; font-size: 13px;"><%= @board.project.description %></i>
+
+            <div class="basecontents__without__radius pro__company__card" style="margin-left: 300px;">
+                <p style="font-size: 10px;margin-top: -20px;">pour <b><%= @board.project.active_client.company.name %></b><img class="profile-pic-header" src="<%= Routes.static_path(@socket, "/#{@board.project.active_client.company.logo}") %>" width="50" style="position: relative; top: 10px; margin-left: 10px;"/>
+                 <%= "(#{@board.project.active_client.user.username})" %>
+                </p>
+
+            </div>
+
+          </div>
           <% @is_contributor -> %><h2><i class="bi bi-list-task"></i> Mes tâches sur  "<%= @board.project.title %>"</h2>
           <% true -> %><h2></h2>
           <% end %>
@@ -227,8 +239,8 @@
 
                 <i class="card__date">Créee le <%= Utilities.simple_date_format_with_hours(card.task.inserted_at) %>, par</i>
                 <br/>
-                <i><img class="profile-pic-mini" src="<%= Routes.static_path(@socket, "/#{card.task.attributor.profile_picture}") %>" width="50" style="position: relative; top:10px;"/>
-                 <%= if card.task.contributor != nil do %>pour <img class="profile-pic-mini" src="<%= Routes.static_path(@socket, "/#{card.task.contributor.profile_picture}") %>" width="50" style="position: relative; top:10px;"/><% end %></i>
+                <i style="font-size: 10px;"><img class="profile-pic-mini-resized" src="<%= Routes.static_path(@socket, "/#{card.task.attributor.profile_picture}") %>" width="50" style="position: relative; top:10px;"/>
+                 <%= if card.task.contributor != nil do %>pour <img class="profile-pic-mini-resized" src="<%= Routes.static_path(@socket, "/#{card.task.contributor.profile_picture}") %>" width="50" style="position: relative; top:10px;"/><% end %></i>
 
                  <%= if !is_nil(card.task.parent_id) do %>
 
@@ -236,7 +248,7 @@
                   <div class="column column-20">
                   </div>
                   <div class="column column-80" style="">
-                    <i style="font-size: 80%;white-space: normal;">Tâche mère: <%= card.task.parent.title %></i>
+                    <i style="font-size: 60%;white-space: normal;">Tâche mère: <%= card.task.parent.title %></i>
                   </div>
                  </div>
 
@@ -246,7 +258,7 @@
                     <div class="row">
                       <div class="column">
                       </div>
-                      <div class="column" style="margin-left: 100px;">
+                      <div class="column" style="margin-left: 60px;">
                         <i style="font-size: 80%;white-space: nowrap;"><%= card.task.progression %> %</i>
                       </div>
                     </div>

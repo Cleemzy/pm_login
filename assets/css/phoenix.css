@@ -45,7 +45,7 @@ pre{padding: 1em;}
   padding: 0 2.0rem;
   position: relative;
   width: 100%;
-  padding-top: 35px !important;
+  padding-top: 30px !important;
   /* background-color: black; */
 }
 
@@ -358,10 +358,10 @@ justify-content: center;
 }
 
 .profile-pic-header{
-  width: 35px;
-  height: 35px;
-  max-width: 35px;
-  max-height: 35px;
+  width: 33px;
+  height: 33px;
+  max-width: 33px;
+  max-height: 33px;
   border: 1px solid gray;
   border-style: solid;
   border-radius: 60%;
