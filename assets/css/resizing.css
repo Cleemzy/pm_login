@@ -3,12 +3,13 @@
 }
 
 .select__resized{
-    height: 27px;
+    height: 23px !important;
+    font-size: 10px;
     margin-bottom: 0px !important;
 }
 
 .filter__icon__resized{
-    font-size: 25px !important;
+    font-size: 18px !important;
 }
 
 .generic_fieldset{
@@ -25,6 +26,14 @@
     display: inline;
     margin-bottom: 0px;
   }
+
+.vue__form__resized{
+    margin-bottom: 0px;
+}
+
+.vues__fs__content{
+    margin-bottom: 8px;
+}
   
 /* .field_under_form_under_fieldset{
     height: 30px;

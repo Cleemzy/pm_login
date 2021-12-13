@@ -22,10 +22,9 @@
               </fieldset>
 
 
-              <fieldset class="generic_fieldset">
+               <!-- <fieldset class="generic_fieldset">
                   <legend class="fs_legend_resized">Filtres et recherche</legend>
                   <div class="my_col">
-                    <!-- <b style="position: relative; top: 8px;">Filtre :</b> -->
                     <span class="material-icons-round filter__icon__resized filt__and__sort__ico">person</span>
                     <form class="form_under_fieldset" phx-change="attributor_selected">
 
@@ -41,7 +40,6 @@
                   </div>
 
                   <div class="my_col">
-                    <!-- <b style="position: relative; top: 8px;">Filtre :</b> -->
                     <span class="material-icons-round filter__icon__resized filt__and__sort__ico">supervisor_account</span>
                     <form class="form_under_fieldset" phx-change="contributor_selected">
 
@@ -65,19 +63,61 @@
                 </form>
               </div>
               </fieldset>
+              -->
 
+            <fieldset class="generic_fieldset">
+                  <legend class="fs_legend_resized">Filtres et recherche</legend>
+                    <%= if @is_admin or @is_attributor do%>
 
+                          <span class="material-icons-round filter__icon filt__and__sort__ico filter__icon__resized">person</span>
+                          <form class="form_under_fieldset" phx-change="attributor_selected">
+
+                            <select class="field_under_form_under_fieldset select__resized" id="task_filter" name="attributor_select">
+                            <option value="" selected disabled hidden>Attributeur</option>
+                            <option value="9000">Tout</option>
+                            <%= for attributor <- @project_attributors do %>
+                              <option value="<%= attributor.id %>"><%= attributor.username %></option>
+                            <% end %>
+                            </select>
+
+                          </form>
+
+                          <!-- <b style="position: relative; top: 8px;">Filtre :</b> -->
+                          <span class="material-icons-round filter__icon filt__and__sort__ico filter__icon__resized">supervisor_account</span>
+                          <form class="form_under_fieldset" phx-change="contributor_selected">
+
+                            <select class="field_under_form_under_fieldset select__resized" id="task_filter" name="contributor_select">
+                            <option value="" selected disabled hidden>Contributeur</option>
+                            <option value="9000">Tout</option>
+                            <%= for contributor <- @project_contributors do %>
+                              <option value="<%= contributor.id %>"><%= contributor.username %></option>
+                            <% end %>
+                            <option value="-1">Sans contributeur</option>
+                            </select>
+
+                          </form>
+
+                    <% end %>
+                          <span class="material-icons-round filt__and__sort__ico filter__icon__resized">search</span>
+                          <form class="form_under_fieldset" phx-change="search_task">
+                              <input class="field_under_form_under_fieldset select__resized" autocomplete="off" type="text" name="search-a" style="width: 125px; line-height: 10px;">
+                          </form>
+                </fieldset>
 
 
             <div class="my_col">
-              <form phx-change="distinct_task">
-              <div class="row">
-                  <label for="primary" style="font-size: 12px;">Tâches</label>
-                  <input type="radio" id="primary" name="task_view" value="task" <%= if @showing_primaries,do: "checked" %> >
-                  <label for="secondary" style="font-size: 12px;">Sous-tâches</label>
-                  <input type="radio" id="secondary" name="task_view" value="subtask" <%= if not @showing_primaries,do: "checked" %>>
-              </div>
-              </form>
+              <fieldset class="generic_fieldset">
+                <legend class="fs_legend_resized">Vues</legend>
+                <form class="vue__form__resized" phx-change="distinct_task">
+                <div class="row" style="margin-left: 0px;">
+                    <label class="vues__fs__content" for="primary" style="font-size: 12px;">Tâches</label>
+                    <input class="vues__fs__content" type="radio" id="primary" name="task_view" value="task" <%= if @showing_primaries,do: "checked" %> >
+                    <label class="vues__fs__content" for="secondary" style="font-size: 12px;">Sous-tâches</label>
+                    <input class="vues__fs__content" type="radio" id="secondary" name="task_view" value="subtask" <%= if not @showing_primaries,do: "checked" %>>
+                </div>
+                </form>
+
+              </fieldset>
             </div>
 
         </div>
