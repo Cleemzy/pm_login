@@ -36,6 +36,7 @@ pre{padding: 1em;}
   max-width: 80.0rem;
   padding: 0 2.0rem;
   position: relative;
+  /* padding-top: 50px !important;  */
   width: 100%
 }
 
@@ -45,7 +46,7 @@ pre{padding: 1em;}
   padding: 0 2.0rem;
   position: relative;
   width: 100%;
-  padding-top: 30px !important;
+  /* padding-top: 30px !important; */
   /* background-color: black; */
 }
 
