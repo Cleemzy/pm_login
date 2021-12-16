@@ -58,8 +58,19 @@
               </div>
             </li>
 
-            <li class="nav__item"><a href="<%= Routes.user_path(@socket, :show, @curr_user_id) %>" class="nav__item__link"><span class="material-icons mat__ico">account_circle</span><p><%= PmLogin.Login.get_user!(@curr_user_id).username %></p></a></li>
-          </ul>
+            <li class="nav__item">
+              <a href="<%= Routes.user_path(@socket, :show, @curr_user_id) %>" class="nav__item__link">
+              <span class="material-icons mat__ico">account_circle</span>
+              <p><%= PmLogin.Login.get_user!(@curr_user_id).username %></p></a>
+            </li>
+
+            <li class="nav__item">
+              <a href="<%= Routes.auth_path(@socket, :sign_out) %>" class="nav__item__link deconnexion__link" title="Se déconnecter">
+                <i title="Se déconnecter" class="bi bi-box-arrow-right deconnexion__icon"></i>
+              </a>
+            </li>
+
+            </ul>
         </nav>
       </div>
 
@@ -115,9 +126,12 @@
       <br/>
       <br/>
 
+      <!--
       <span>
         <a href="<%= Routes.auth_path(@socket, :sign_out) %>" class="btn btn-outline-danger btn-lg"><i class="bi bi-box-arrow-left"></i> Déconnexion</a>
       </span>
+      -->
+
         </main>
   </body>
   <footer id="foot" class="container-fluid">

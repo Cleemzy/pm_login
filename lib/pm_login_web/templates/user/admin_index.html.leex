@@ -1,4 +1,4 @@
-<h1>Bienvenue administrateur <%= @current_user.username %>!</h1>
+
   <div class="row">
     <div class="column">
       <h3 style="text-align: left;"><a href="<%= Routes.company_path(@socket, :services) %>" class="" style="padding-bottom: : 10px;" id="adm"><%= "<<Services<<" %></a></h3>
@@ -19,7 +19,7 @@
         <h3 class="header__link__title"><p id="adm">Projets <br/><span class="material-icons mat__ico mat__ico__growing">insert_chart</span></p></h3>
       </a>
     <a href="<%= Routes.company_path(@socket, :index) %>" class="column basecontents__without__radius esp__adm__col">
-      <h3 class="header__link__title"><p id="adm">Sociétés <br/><span class="material-icons mat__ico">maps_home_work</span></p></h3>
+      <h3 class="header__link__title"><p id="adm">Sociétés / Financeurs <br/><span class="material-icons mat__ico">maps_home_work</span></p></h3>
     </a>
   </div>
 
@@ -37,13 +37,13 @@
       <h3 class="header__link__title"><p id="adm">Clients actifs <br/><i class="bi bi-people-fill"></i></p></h3>
     </a>
     <a href="<%= Routes.active_client_path(@socket, :new) %>" class="column basecontents__without__radius esp__adm__col">
-      <h3 class="header__link__title"><p id="adm">Clients inactifs <br/><i class="bi bi-people"></i></p></h3>
+      <h3 class="header__link__title"><p id="adm">Inactifs <br/><i class="bi bi-people"></i></p></h3>
     </a>
   </div>
 
   <div class="row">
       <a href="<%= Routes.project_path(@socket, :contributors) %>" class="column basecontents__without__radius esp__adm__col">
-        <h3 class="header__link__title"><p id="adm">Contributeurs</p></h3>
+        <h3 class="header__link__title"><p id="adm">Tâches des contributeurs</p></h3>
       </a>
   </div>
 

@@ -15,16 +15,24 @@ defmodule PmLoginWeb.UserController do
     if Login.is_connected?(conn) do
       # current_user = Login.get_user!(current_id)
         cond do
-          # Login.is_admin?(conn) -> render(conn, "admin_index.html", current_user: Login.get_curr_user(conn), layout: {PmLoginWeb.LayoutView, "admin_layout.html"})
-          Login.is_admin?(conn) -> LiveView.Controller.live_render(conn, PmLoginWeb.User.AdminIndexLive, session: %{"current_user" => Login.get_curr_user(conn),"curr_user_id" => Login.get_curr_user(conn).id}, router: PmLoginWeb.Router)
-          # Login.is_attributor?(conn) -> render(conn, "attributor_index.html", current_user: Login.get_curr_user(conn))
+          # old working main admin route
+          # Login.is_admin?(conn) -> LiveView.Controller.live_render(conn, PmLoginWeb.User.AdminIndexLive, session: %{"current_user" => Login.get_curr_user(conn),"curr_user_id" => Login.get_curr_user(conn).id}, router: PmLoginWeb.Router)
+
+          # new main admin route
+          Login.is_admin?(conn) -> LiveView.Controller.live_render(conn, PmLoginWeb.User.MainAdminIndexLive, session: %{"current_user" => Login.get_curr_user(conn),"curr_user_id" => Login.get_curr_user(conn).id}, router: PmLoginWeb.Router)
+
           Login.is_attributor?(conn) -> LiveView.Controller.live_render(conn, PmLoginWeb.User.AttributorIndexLive, session: %{"current_user" => Login.get_curr_user(conn),"curr_user_id" => Login.get_curr_user(conn).id}, router: PmLoginWeb.Router)
-          # Login.is_contributor?(conn) -> render(conn, "contributor_index.html", current_user: Login.get_curr_user(conn), layout: {PmLoginWeb.LayoutView, "contributor_layout.html"})
+
           Login.is_contributor?(conn) -> LiveView.Controller.live_render(conn, PmLoginWeb.User.ContributorIndexLive, session: %{"current_user" => Login.get_curr_user(conn),"curr_user_id" => Login.get_curr_user(conn).id}, router: PmLoginWeb.Router)
+
           Login.is_active_client?(conn) -> LiveView.Controller.live_render(conn, PmLoginWeb.User.ActiveClientIndexLive, session: %{"current_user" => Login.get_curr_user(conn),"curr_user_id" => Login.get_curr_user(conn).id}, router: PmLoginWeb.Router)
+
           Login.is_client?(conn) -> LiveView.Controller.live_render(conn, PmLoginWeb.User.ClientIndexLive, session: %{"current_user" => Login.get_curr_user(conn),"curr_user_id" => Login.get_curr_user(conn).id}, router: PmLoginWeb.Router)
+
           Login.is_not_attributed?(conn) -> LiveView.Controller.live_render(conn, PmLoginWeb.User.UnattributedIndexLive, session: %{"current_user" => Login.get_curr_user(conn),"curr_user_id" => Login.get_curr_user(conn).id}, router: PmLoginWeb.Router)
+
           Login.is_archived?(conn) -> conn |> put_flash(:error, "Votre compte a été archivé!")|> delete_session(:curr_user_id) |>redirect(to: Routes.page_path(conn, :index))
+
           true -> redirect(conn, to: Routes.page_path(conn, :index))
         end
 
@@ -37,6 +45,25 @@ defmodule PmLoginWeb.UserController do
     #OLD ROUTE
     # auths = Login.list_all_auth
     # render(conn, "index.html", users: auths)
+  end
+
+  def admin_space(conn, _paras) do
+    if Login.is_connected?(conn) do
+      cond do
+        Login.is_admin?(conn) ->
+          LiveView.Controller.live_render(conn, PmLoginWeb.User.AdminIndexLive, session: %{"current_user" => Login.get_curr_user(conn),"curr_user_id" => Login.get_curr_user(conn).id}, router: PmLoginWeb.Router)
+
+        true ->
+        conn
+          |> put_flash(:error, "Désolé, vous n'êtes pas administrateur!")
+          |> redirect(to: Routes.user_path(conn, :index))
+      end
+
+    else
+      conn
+      |> put_flash(:error, "Connectez-vous d'abord!")
+      |> redirect(to: Routes.page_path(conn, :index))
+    end
   end
 
   def list(conn, _params) do

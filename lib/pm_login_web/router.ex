@@ -37,6 +37,7 @@ COMMENTED ROUTES ARE NOT TO BE DELETED BUT JUST NOT USED AT THE TIME
     #Login context
     resources "/rights", RightController
     resources "/users", UserController
+    get "/admin_space", UserController, :admin_space
 
     #Services context
     resources "/companies", CompanyController

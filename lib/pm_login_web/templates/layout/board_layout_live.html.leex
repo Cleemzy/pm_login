@@ -23,7 +23,7 @@
 
             <li class="nav__item">
               <div class="dropdown">
-                <a href="<%= Routes.user_path(@socket, :index) %>" class="nav__item__link"><span class="material-icons mat__ico">admin_panel_settings</span> <p>Espace administrateur</p></a>
+                <a href="<%= Routes.user_path(@socket, :admin_space) %>" class="nav__item__link"><span class="material-icons mat__ico" style="display: inline;">admin_panel_settings</span> <p class="header_link_text">Espace administrateur</p></a>
                 <div class="dropdown-content basecontents__without__radius">
                   <a href="<%= Routes.project_path(@socket, :index) %>" class="admin__links">Projets | <span class="material-icons mat__ico">insert_chart</span></a>
                   <a href="<%= Routes.company_path(@socket, :index) %>" class="admin__links">Sociétés | <span class="material-icons mat__ico">maps_home_work</span></a>
@@ -74,8 +74,26 @@
               </div>
             </li>
 
-            <li class="nav__item"><a href="<%= Routes.user_path(@socket, :show, @curr_user_id) %>" class="nav__item__link"><span class="material-icons mat__ico">account_circle</span> <p><%= PmLogin.Login.get_user!(@curr_user_id).username %></p></a></li>
-          </ul>
+            <li class="nav__item">
+              <a href="<%= Routes.user_path(@socket, :show, @curr_user_id) %>" class="nav__item__link">
+                <!--  <div class="dropdown-content basecontents__without__radius">
+                        <a href="<%= Routes.project_path(@socket, :index) %>" class="admin__links">Projets | <span class="material-icons mat__ico">insert_chart</span></a>
+                        <a href="<%= Routes.company_path(@socket, :index) %>" class="admin__links">Sociétés | <span class="material-icons mat__ico">maps_home_work</span></a>
+                  </div>
+                -->
+              <span class="material-icons mat__ico">account_circle</span>
+              <p><%= PmLogin.Login.get_user!(@curr_user_id).username %></p></a>
+
+
+            </li>
+
+            <li class="nav__item">
+              <a href="<%= Routes.auth_path(@socket, :sign_out) %>" class="nav__item__link deconnexion__link" title="Se déconnecter">
+                <i class="bi bi-box-arrow-right deconnexion__icon"></i>
+              </a>
+            </li>
+
+            </ul>
         </nav>
       </div>
 
@@ -134,9 +152,12 @@
       <br/>
       <br/>
 
-      <span>
-        <a href="<%= Routes.auth_path(@socket, :sign_out) %>" class="btn btn-outline-danger btn-lg"><i class="bi bi-box-arrow-left"></i> Déconnexion</a>
-      </span>
+      <!--
+        <span>
+          <a href="<%= Routes.auth_path(@socket, :sign_out) %>" class="btn btn-outline-danger btn-lg"><i class="bi bi-box-arrow-left"></i> Déconnexion</a>
+        </span>
+      -->
+
         </main>
   </body>
   <footer id="foot" class="boardcontainer">
