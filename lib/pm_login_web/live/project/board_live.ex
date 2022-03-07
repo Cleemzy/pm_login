@@ -1127,7 +1127,12 @@ defmodule PmLoginWeb.Project.BoardLive do
     # IO.inspect params
     # IO.inspect params["estimated_duration"]
     # IO.puts("#{is_integer(params["estimated_duration"])}")
-    case Monitoring.create_task_with_card(params) do
+
+    new_params = if Login.get_user!(params["attributor_id"]).right_id == 3, do: Map.put(params, "contributor_id", params["attributor_id"]) , else: params
+
+    # IO.inspect new_params
+
+    case Monitoring.create_task_with_card(new_params) do
       {:ok, task} ->
         this_board = socket.assigns.board
 

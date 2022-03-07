@@ -70,7 +70,7 @@ defmodule PmLoginWeb.ProjectController do
 
     if Login.is_connected?(conn) do
       cond do
-        Login.is_admin?(conn) ->
+        Login.is_admin?(conn) or Login.is_attributor?(conn) ->
           changeset = Monitoring.change_project(%Project{})
           ac_list = Services.list_active_clients
           ac_ids = Enum.map(ac_list, fn(%ActiveClient{} = ac) -> {ac.user.username, ac.id} end )
@@ -127,7 +127,7 @@ end
   def edit(conn, %{"id" => id}) do
     if Login.is_connected?(conn) do
       cond do
-        Login.is_admin?(conn) ->
+        Login.is_admin?(conn) or Login.is_attributor?(conn) ->
           project = Monitoring.get_project!(id)
           changeset = Monitoring.change_project(project)
 

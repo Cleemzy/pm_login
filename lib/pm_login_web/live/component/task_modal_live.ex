@@ -56,12 +56,13 @@ defmodule PmLoginWeb.LiveComponent.TaskModalLive do
                       <%= error_tag f, :deadline_before_dtstart %>
                     </div>
 
+                  <%= if not @is_contributor do %>
                     <div class="column">
                         <%= label f, "Assigner intervenant" %>
                         <%= select f, :contributor_id, @contributors, prompt: "Contributeurs:" %>
                         <%= error_tag f, :contributor_id %>
                     </div>
-
+                  <% end %>
                   </div>
 
                   <div class="row">
