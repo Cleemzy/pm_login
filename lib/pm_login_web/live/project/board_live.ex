@@ -1162,6 +1162,7 @@ defmodule PmLoginWeb.Project.BoardLive do
     #progression to int
     # IO.puts "OIIIIIIIIII"
     # IO.inspect params
+
     int_progression = params["progression"] |> Float.parse |> elem(0) |> trunc
     attrs = %{params | "progression" => int_progression}
           #UPDATING
@@ -1171,6 +1172,8 @@ defmodule PmLoginWeb.Project.BoardLive do
     # IO.inspect Monitoring.update_task(task, params)
     case Monitoring.update_task(task, attrs) do
       {:ok, updated_task} ->
+        current_card = Monitoring.get_task_with_card!(updated_task.id).card
+        Kanban.update_card(current_card, %{name: updated_task.title})
         # IO.inspect task
         # IO.inspect attrs
         {:ok, updated_task} |> Monitoring.broadcast_updated_task

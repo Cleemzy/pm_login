@@ -53,7 +53,8 @@ defmodule PmLoginWeb.LiveComponent.ModifModalLive do
                           <label>Nom: </label>
                           </div>
                           <div class="column column-65">
-                          <%= @card.name %>
+                          <%= text_input f, :title, [value: @card.name] %>
+                          <%= error_tag f, :title %>
                           </div>
                       </div>
                     </div>
