@@ -238,10 +238,15 @@
 
                 <div class="card__name"><%= card.task.title %></div>
 
-                <i class="card__date">Créee le <%= Utilities.simple_date_format_with_hours(card.task.inserted_at) %>, par</i>
+                <i class="card__date">Créée le <%= Utilities.simple_date_format_with_hours(card.task.inserted_at) %>, par</i>
                 <br/>
-                <i style="font-size: 10px;"><img class="profile-pic-mini-resized" src="<%= Routes.static_path(@socket, "/#{card.task.attributor.profile_picture}") %>" width="50" style="position: relative; top:10px;"/>
-                 <%= if card.task.contributor != nil do %>pour <img class="profile-pic-mini-resized" src="<%= Routes.static_path(@socket, "/#{card.task.contributor.profile_picture}") %>" width="50" style="position: relative; top:10px;"/><% end %></i>
+                <i style="font-size: 10px;"><img class="profile-pic-mini-resized" src="<%= Routes.static_path(@socket, "/#{card.task.attributor.profile_picture}") %>" width="50" style="position: relative; top:10px;"/><%= "(#{card.task.attributor.username})" %>
+                 <%= if card.task.contributor != nil do %>
+                 <br/>pour
+                  <img class="profile-pic-mini-resized" src="<%= Routes.static_path(@socket, "/#{card.task.contributor.profile_picture}") %>" width="50" style="position: relative; top:10px;"/>
+                      <%= "(#{card.task.contributor.username})" %>
+                 <% end %>
+                 </i>
 
                  <%= if !is_nil(card.task.parent_id) do %>
 
@@ -260,7 +265,7 @@
                       <div class="column">
                       </div>
                       <div class="column" style="margin-left: 60px;">
-                        <i style="font-size: 80%;white-space: nowrap;"><%= card.task.progression %> %</i>
+                        <i style="font-size: 80%;white-space: nowrap;"><%= card.task.progression %> % <p style="display: inline; font-size: 10px;"><%= "(#{length(card.task.children)})" %></p></i>
                       </div>
                     </div>
                  <% end %>
